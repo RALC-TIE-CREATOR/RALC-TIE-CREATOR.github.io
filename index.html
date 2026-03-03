@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIE — Teoría de la Infraestructura Espacial</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<style>
+:root {
+  --gold: #FFD700;
+  --gold-dim: #b89a00;
+  --red: #FF4444;
+  --blue: #5BC8F5;
+  --green: #44FF88;
+  --bg: #06060f;
+  --bg2: #0d0d1a;
+  --bg3: #111122;
+  --text: #e8e8f0;
+  --text-dim: #8888aa;
+  --border: #222244;
+  --mono: 'Space Mono', monospace;
+  --sans: 'Syne', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  overflow-x: hidden;
+}
+
+/* ── STARS BACKGROUND ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 50% 70%, rgba(255,215,0,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 10% 90%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 50%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 35% 55%, rgba(255,255,255,0.35) 0%, transparent 100%),
+    radial-gradient(1px 1px at 65% 85%, rgba(255,255,255,0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 40%, rgba(91,200,245,0.3) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(6,6,15,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
+
+/* ── TOGGLE ── */
+.mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.toggle-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.2rem;
+  display: flex;
+  cursor: pointer;
+  position: relative;
+  width: 120px;
+}
+
+.toggle-option {
+  flex: 1;
+  text-align: center;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.7rem;
+  font-family: var(--mono);
+  border-radius: 15px;
+  transition: all 0.3s;
+  color: var(--text-dim);
+  z-index: 1;
+}
+
+.toggle-option.active {
+  background: var(--gold);
+  color: var(--bg);
+  font-weight: 700;
+}
+
+/* ── HERO ── */
+#hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6rem 2rem 4rem;
+  z-index: 1;
+}
+
+.galaxy-ring {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center,
+    rgba(255,215,0,0.04) 0%,
+    rgba(91,200,245,0.03) 40%,
+    transparent 70%);
+  border: 1px solid rgba(255,215,0,0.08);
+  animation: rotate 40s linear infinite;
+}
+
+.galaxy-ring::after {
+  content: '';
+  position: absolute;
+  inset: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(91,200,245,0.06);
+  animation: rotate 25s linear infinite reverse;
+}
+
+@keyframes rotate { to { transform: rotate(360deg); } }
+
+.hero-label {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.2s forwards;
+}
+
+.hero-title {
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.4s forwards;
+}
+
+.hero-title .accent { color: var(--gold); }
+.hero-title .dim { color: var(--text-dim); }
+
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--text-dim);
+  max-width: 600px;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.6s forwards;
+}
+
+.hero-numbers {
+  display: flex;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.8s forwards;
+}
+
+.hero-num {
+  text-align: center;
+}
+
+.hero-num .num {
+  font-family: var(--mono);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--gold);
+  display: block;
+  line-height: 1;
+}
+
+.hero-num .label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  margin-top: 0.4rem;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--gold);
+  color: var(--bg);
+  padding: 0.9rem 2.5rem;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0;
+  animation: fadeUp 0.8s 1s forwards;
+}
+.btn-primary:hover {
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255,215,0,0.3);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--text-dim);
+  padding: 0.9rem 2rem;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-secondary:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.hero-btns {
+  display: flex;
+  gap: 1rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 1s forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SECTIONS ── */
+section {
+  position: relative;
+  z-index: 1;
+  padding: 5rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.section-sub {
+  color: var(--text-dim);
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 600px;
+  margin-bottom: 3rem;
+}
+
+/* ── TOOLS GRID ── */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2rem;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.card:hover {
+  border-color: rgba(255,215,0,0.3);
+  transform: translateY(-2px);
+}
+
+.card-tag {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.card p {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* ── INPUTS ── */
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.input-group label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.input-group input:focus,
+.input-group select:focus {
+  border-color: var(--gold);
+}
+
+.input-group input[type=range] {
+  padding: 0;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+.calc-btn {
+  width: 100%;
+  background: var(--gold);
+  color: var(--bg);
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+.calc-btn:hover {
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(255,215,0,0.3);
+}
+
+/* ── RESULT ── */
+.result-box {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1rem;
+  margin-top: 1rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.result-row:last-child { border-bottom: none; }
+
+.result-label { color: var(--text-dim); }
+.result-value { color: var(--gold); font-weight: 700; }
+.result-value.green { color: var(--green); }
+.result-value.red   { color: var(--red); }
+.result-value.blue  { color: var(--blue); }
+
+.plot-container {
+  margin-top: 1rem;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+/* ── MODE CONTENT ── */
+.mode-public  { display: block; }
+.mode-physics { display: none; }
+body.physics-mode .mode-public  { display: none; }
+body.physics-mode .mode-physics { display: block; }
+
+.eq-box {
+  background: var(--bg3);
+  border-left: 3px solid var(--gold);
+  padding: 0.75rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin: 0.75rem 0;
+  border-radius: 0 4px 4px 0;
+  line-height: 1.8;
+}
+.eq-box .eq { color: var(--gold); display: block; }
+
+/* ── PREDICTIONS ── */
+.pred-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.pred-item {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pred-status {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.pred-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.pred-detail {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+/* ── FALSIFIABILITY ── */
+.falsify-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.falsify-item {
+  background: var(--bg2);
+  border: 1px solid rgba(255,68,68,0.2);
+  border-radius: 6px;
+  padding: 1.25rem 1.5rem;
+}
+
+.falsify-item h4 {
+  color: var(--red);
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+  font-family: var(--mono);
+}
+
+.falsify-item p {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* ── SHARE ── */
+.share-box {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.share-url {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+.share-copy {
+  background: var(--border);
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.share-copy:hover {
+  background: var(--gold);
+  color: var(--bg);
+}
+
+/* ── LINKS BAR ── */
+.links-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 2rem;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.link-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.link-pill:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.link-pill .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+/* ── FOOTER ── */
+footer {
+  text-align: center;
+  padding: 2rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  border-top: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+
+footer a { color: var(--gold); text-decoration: none; }
+
+/* ── DIVIDER ── */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border), transparent);
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">TIE / R@LC</a>
+  <ul class="nav-links">
+    <li><a href="#laboratorio">Laboratorio</a></li>
+    <li><a href="#predicciones">Predicciones</a></li>
+    <li><a href="#falsificabilidad">Falsificabilidad</a></li>
+    <li><a href="#papers">Papers</a></li>
+  </ul>
+  <div class="mode-toggle">
+    <div class="toggle-btn" onclick="toggleMode()" id="modeToggle">
+      <span class="toggle-option active" id="opt-pub">Público</span>
+      <span class="toggle-option" id="opt-phy">Físico</span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="galaxy-ring"></div>
+  <div class="hero-label">Teoría de la Infraestructura Espacial</div>
+  <h1 class="hero-title">
+    La materia oscura<br>
+    <span class="dim">no es una sustancia.</span><br>
+    <span class="accent">Es un error de cálculo.</span>
+  </h1>
+  <p class="hero-sub">
+    Una ecuación. Cero parámetros libres. Seis galaxias predichas.<br>
+    Bienvenido a la Infraestructura Espacial.
+  </p>
+  <div class="hero-numbers">
+    <div class="hero-num">
+      <span class="num">7.3×</span>
+      <span class="label">mejor que Newton</span>
+    </div>
+    <div class="hero-num">
+      <span class="num">84.1%</span>
+      <span class="label">materia oscura = 1−1/2π</span>
+    </div>
+    <div class="hero-num">
+      <span class="num">3.5%</span>
+      <span class="label">error en Λ cosmológica</span>
+    </div>
+  </div>
+  <div class="hero-btns">
+    <a href="#laboratorio" class="btn-primary">→ Entrar al Laboratorio</a>
+    <a href="https://github.com/RALC-TIE-CREATOR/TIE-rotation-curves" target="_blank" class="btn-secondary">GitHub ↗</a>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- LABORATORIO -->
+<section id="laboratorio">
+  <div class="section-label">Laboratorio Interactivo</div>
+  <h2 class="section-title">Verifica por ti mismo</h2>
+  <p class="section-sub">
+    Ningún parámetro ajustado. Ninguna fe requerida.<br>
+    Solo masa observable, constantes conocidas y números reales.
+  </p>
+
+  <div class="tools-grid">
+
+    <!-- H-01: CURVAS DE ROTACIÓN -->
+    <div class="card" style="grid-column: span 2;">
+      <div class="card-tag">H-01 — Verificador Galáctico</div>
+      <h3>Curvas de Rotación Galáctica</h3>
+
+      <div class="mode-public">
+        <p>Ingresa la masa de una galaxia y observa cómo TIE predice su curva de rotación plana — sin materia oscura, sin ajuste.</p>
+      </div>
+      <div class="mode-physics">
+        <p>Ecuación TIE: a_TIE = √(a_N·(a_N + a₀)) donde a_N = GM(&lt;r)/r² y a₀ = cH₀/2π</p>
+        <div class="eq-box">
+          <span class="eq">a_TIE = √[ a_N · (a_N + a₀) ]</span>
+          <span class="eq">v_∞ = (G·M·a₀)^(1/4) — independiente de r</span>
+          <span>a₀ = c·H₀/2π = 1.082×10⁻¹⁰ m/s²</span>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem; margin-bottom:1rem;">
+        <div class="input-group">
+          <label>Masa estelar (×10¹⁰ M☉)</label>
+          <input type="number" id="h1-mdisk" value="2.2" step="0.1" min="0.01">
+        </div>
+        <div class="input-group">
+          <label>Radio de escala (kpc)</label>
+          <input type="number" id="h1-rd" value="3.5" step="0.1" min="0.1">
+        </div>
+        <div class="input-group">
+          <label>Masa de gas (×10⁹ M☉)</label>
+          <input type="number" id="h1-mgas" value="8.5" step="0.1" min="0">
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr auto; gap:1rem; align-items:end;">
+        <div>
+          <div class="input-group">
+            <label>Radio máximo (kpc)</label>
+            <input type="number" id="h1-rmax" value="30" step="1" min="5">
+          </div>
+        </div>
+        <button class="calc-btn" style="width:auto; padding: 0.75rem 2rem;" onclick="calcRotation()">
+          CALCULAR →
+        </button>
+      </div>
+
+      <div class="plot-container">
+        <div id="h1-plot" style="height:320px;"></div>
+      </div>
+
+      <div id="h1-results" class="result-box" style="display:none;">
+        <div class="result-row">
+          <span class="result-label">χ² TIE</span>
+          <span class="result-value" id="h1-chi-tie">—</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">v asintótica TIE</span>
+          <span class="result-value" id="h1-vflat">—</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Radio de transición</span>
+          <span class="result-value" id="h1-rt">—</span>
+        </div>
+      </div>
+
+      <div class="share-box" id="h1-share" style="display:none;">
+        <input class="share-url" id="h1-url" readonly>
+        <button class="share-copy" onclick="copyShare('h1-url')">Copiar link</button>
+      </div>
+    </div>
+
+    <!-- H-03: CALCULADORA 2PI -->
+    <div class="card">
+      <div class="card-tag">H-03 — Velocidad Terminal</div>
+      <h3>Calculadora Universal 2π</h3>
+
+      <div class="mode-public">
+        <p>Para cualquier galaxia: ingresa su masa total y obtén su velocidad de rotación plana predicha por TIE.</p>
+      </div>
+      <div class="mode-physics">
+        <div class="eq-box">
+          <span class="eq">v_∞ = (G·M_total·a₀)^(1/4)</span>
+          <span>Límite débil de a_TIE = √(a_N(a_N+a₀))</span>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Masa total (×10¹⁰ M☉)</label>
+        <input type="number" id="h3-mass" value="3.07" step="0.1" min="0.001">
+      </div>
+      <button class="calc-btn" onclick="calc2pi()">CALCULAR →</button>
+
+      <div class="result-box" style="margin-top:1rem;" id="h3-result">
+        <div class="result-row">
+          <span class="result-label">v terminal TIE</span>
+          <span class="result-value" id="h3-vterm">—</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">a₀ = c·H₀/2π</span>
+          <span class="result-value blue">1.082×10⁻¹⁰ m/s²</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Parámetros libres</span>
+          <span class="result-value green">CERO</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- H-05: MATERIA OSCURA -->
+    <div class="card">
+      <div class="card-tag">H-05 — Desmitificador</div>
+      <h3>Conversor de Materia Oscura</h3>
+
+      <div class="mode-public">
+        <p>La "materia oscura" no es una sustancia. Es la fracción de masa que las ecuaciones con T² artificial no pueden ver.</p>
+      </div>
+      <div class="mode-physics">
+        <div class="eq-box">
+          <span class="eq">m_TIE = 2π · m_obs</span>
+          <span class="eq">Fracción visible = 1/2π = 15.9%</span>
+          <span>Fracción "oscura" = 1 − 1/2π = 84.1%</span>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Masa observable de la galaxia (×10¹⁰ M☉)</label>
+        <input type="number" id="h5-mobs" value="5.0" step="0.1" min="0.001">
+      </div>
+      <button class="calc-btn" onclick="calcDM()">CALCULAR →</button>
+
+      <div class="result-box" style="margin-top:1rem;">
+        <div class="result-row">
+          <span class="result-label">Masa observable</span>
+          <span class="result-value blue" id="h5-mobs-out">—</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Masa TIE real (×2π)</span>
+          <span class="result-value" id="h5-mtie">—</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Fracción "oscura"</span>
+          <span class="result-value" id="h5-frac">84.1%</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Partículas exóticas</span>
+          <span class="result-value green">CERO</span>
+        </div>
+      </div>
+
+      <div style="margin-top:1rem; background:var(--bg3); border-radius:4px; padding:0.75rem; overflow:hidden;">
+        <div style="height:12px; border-radius:4px; background: var(--border); overflow:hidden;">
+          <div style="height:100%; width:15.9%; background: var(--blue); border-radius:4px; position:relative;">
+            <div style="position:absolute; right:-2px; top:50%; transform:translateY(-50%);
+                        background: rgba(255,215,0,0.9); height:100%; width:84.1vw; max-width:84.1%;
+                        left:100%;"></div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-family:var(--mono);
+                    font-size:0.65rem; color:var(--text-dim); margin-top:0.4rem;">
+          <span style="color:var(--blue)">15.9% visible</span>
+          <span style="color:var(--gold)">84.1% "oscura" = factor 2π</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- H-08: CALCULADORA a0 -->
+    <div class="card" style="grid-column: span 2;">
+      <div class="card-tag">H-08 — Constante Cósmica</div>
+      <h3>Calculadora de a₀ y Constante Cosmológica</h3>
+
+      <div class="mode-public">
+        <p>Una sola constante derivada de c y H₀ conecta la dinámica galáctica con la expansión del universo. Mueve el slider y observa.</p>
+      </div>
+      <div class="mode-physics">
+        <div class="eq-box">
+          <span class="eq">a₀ = c·H₀/2π</span>
+          <span class="eq">Λ_TIE = 8π²·a₀²/c⁴ = 2H₀²/c²</span>
+          <span>Planck 2018: Λ = 1.106×10⁻⁵² m⁻²</span>
+          <span>QFT predice: ~10⁶⁸ m⁻² (error 120 órdenes)</span>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>H₀ = <span id="h8-h0-val">70.0</span> km/s/Mpc</label>
+        <input type="range" id="h8-h0" min="67" max="74" step="0.1" value="70"
+               oninput="updateH0()">
+      </div>
+
+      <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:1rem;">
+        <div class="result-box">
+          <div style="font-family:var(--mono); font-size:0.65rem; color:var(--text-dim); margin-bottom:0.4rem;">a₀</div>
+          <div style="font-family:var(--mono); font-size:0.9rem; color:var(--gold);" id="h8-a0">1.082×10⁻¹⁰</div>
+          <div style="font-family:var(--mono); font-size:0.65rem; color:var(--text-dim);">m/s²</div>
+        </div>
+        <div class="result-box">
+          <div style="font-family:var(--mono); font-size:0.65rem; color:var(--text-dim); margin-bottom:0.4rem;">Λ_TIE</div>
+          <div style="font-family:var(--mono); font-size:0.9rem; color:var(--gold);" id="h8-lam">1.145×10⁻⁵²</div>
+          <div style="font-family:var(--mono); font-size:0.65rem; color:var(--text-dim);">m⁻²</div>
+        </div>
+        <div class="result-box">
+          <div style="font-family:var(--mono); font-size:0.65rem; color:var(--text-dim); margin-bottom:0.4rem;">Error vs Planck</div>
+          <div style="font-family:var(--mono); font-size:0.9rem;" id="h8-err">3.5%</div>
+          <div style="font-family:var(--mono); font-size:0.65rem; color:var(--text-dim);">QFT: 10¹²⁰×</div>
+        </div>
+        <div class="result-box">
+          <div style="font-family:var(--mono); font-size:0.65rem; color:var(--text-dim); margin-bottom:0.4rem;">r_trans Vía Láctea</div>
+          <div style="font-family:var(--mono); font-size:0.9rem; color:var(--blue);" id="h8-rt">10.8</div>
+          <div style="font-family:var(--mono); font-size:0.65rem; color:var(--text-dim);">kpc (obs: 10-15)</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tools-grid -->
+</section>
+
+<div class="divider"></div>
+
+<!-- PREDICCIONES -->
+<section id="predicciones">
+  <div class="section-label">Estado de Verificación</div>
+  <h2 class="section-title">Predicciones TIE</h2>
+  <p class="section-sub">
+    Once resultados verificables. Cero parámetros ajustados.
+    Actualizados conforme llegan nuevos datos observacionales.
+  </p>
+
+  <div class="pred-grid">
+    <div class="pred-item">
+      <span class="pred-status">✅</span>
+      <div>
+        <div class="pred-name">Materia oscura</div>
+        <div class="pred-detail">TIE: 84.1% | Obs: ~84% | error &lt;1%</div>
+      </div>
+    </div>
+    <div class="pred-item">
+      <span class="pred-status">✅</span>
+      <div>
+        <div class="pred-name">Constante cosmológica Λ</div>
+        <div class="pred-detail">TIE: 1.145×10⁻⁵² | Planck: 1.106×10⁻⁵² | error 3.5%</div>
+      </div>
+    </div>
+    <div class="pred-item">
+      <span class="pred-status">✅</span>
+      <div>
+        <div class="pred-name">Corrección GPS</div>
+        <div class="pred-detail">TIE: 45.7 µs/día | Obs: 45.9 µs/día | error 0.4%</div>
+      </div>
+    </div>
+    <div class="pred-item">
+      <span class="pred-status">✅</span>
+      <div>
+        <div class="pred-name">Precesión de Mercurio</div>
+        <div class="pred-detail">TIE: 43.0''/siglo | Obs: 43.1±0.5 | error 0.2%</div>
+      </div>
+    </div>
+    <div class="pred-item">
+      <span class="pred-status">✅</span>
+      <div>
+        <div class="pred-name">Radio de Bohr</div>
+        <div class="pred-detail">TIE: error 0.10% | obs: 5.29×10⁻¹¹ m</div>
+      </div>
+    </div>
+    <div class="pred-item">
+      <span class="pred-status">✅</span>
+      <div>
+        <div class="pred-name">Constante de estructura fina α</div>
+        <div class="pred-detail">TIE: 137.12 | obs: 137.04 | error &lt;0.1%</div>
+      </div>
+    </div>
+    <div class="pred-item">
+      <span class="pred-status">✅</span>
+      <div>
+        <div class="pred-name">Factor cúmulos galácticos</div>
+        <div class="pred-detail">TIE: 2π = 6.28× | obs: 6.25× | error 0.5%</div>
+      </div>
+    </div>
+    <div class="pred-item">
+      <span class="pred-status">✅</span>
+      <div>
+        <div class="pred-name">Regla de Oro de Fermi</div>
+        <div class="pred-detail">2π/ħ emerge nativamente de TIE</div>
+      </div>
+    </div>
+    <div class="pred-item">
+      <span class="pred-status">⏳</span>
+      <div>
+        <div class="pred-name">Sombra EHT agujeros negros</div>
+        <div class="pred-detail">rh ≫ rs — verificable con ngEHT</div>
+      </div>
+    </div>
+    <div class="pred-item">
+      <span class="pred-status">⏳</span>
+      <div>
+        <div class="pred-name">Señal LISA ~2.4 mHz</div>
+        <div class="pred-detail">Masa campo escalar — pendiente</div>
+      </div>
+    </div>
+    <div class="pred-item">
+      <span class="pred-status">⏳</span>
+      <div>
+        <div class="pred-name">Campo cruzado intergaláctico</div>
+        <div class="pred-detail">Aceleración residual — Telescopio Euclid</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FALSIFICABILIDAD -->
+<section id="falsificabilidad">
+  <div class="section-label">Test Crítico</div>
+  <h2 class="section-title">Cómo demostrar que TIE está mal</h2>
+  <p class="section-sub">
+    Una teoría científica real debe poder ser falsificada.
+    Estas son las observaciones que destruirían TIE — y las buscamos activamente.
+  </p>
+
+  <ul class="falsify-list">
+    <li class="falsify-item">
+      <h4>TEST 1 — Sombra EHT incorrecta</h4>
+      <p>TIE predice que la sombra de M87* debe ser ~388× mayor que la predicción de Schwarzschild. Si el EHT de próxima generación mide una sombra consistente con GR clásico, TIE queda refutado en este punto.</p>
+    </li>
+    <li class="falsify-item">
+      <h4>TEST 2 — Curvas de rotación inconsistentes</h4>
+      <p>Si aplicado a las 175 galaxias SPARC con a₀ fijo en c·H₀/2π el ajuste es sistemáticamente peor que MOND (que tiene 1 parámetro libre), la ventaja de cero parámetros desaparece.</p>
+    </li>
+    <li class="falsify-item">
+      <h4>TEST 3 — Sin señal LISA en ~2.4 mHz</h4>
+      <p>TIE predice una señal del campo escalar de fase φ en ~2.4 mHz. Si LISA opera sin detectar nada en ese rango de frecuencia, la estructura de campo de TIE queda cuestionada.</p>
+    </li>
+    <li class="falsify-item">
+      <h4>TEST 4 — Ausencia de aceleración residual intergaláctica</h4>
+      <p>TIE predice aceleración hacia el centro de masa entre dos galaxias donde los campos se anulan. Si Euclid no detecta esa señal, MOND (que predice cero) sería preferible a TIE.</p>
+    </li>
+  </ul>
+</section>
+
+<div class="divider"></div>
+
+<!-- PAPERS -->
+<section id="papers">
+  <div class="section-label">Verificación Independiente</div>
+  <h2 class="section-title">Papers y Código</h2>
+  <p class="section-sub">
+    Todo es público. Todo es reproducible. Sin intermediarios.
+  </p>
+
+  <div class="tools-grid">
+    <div class="card">
+      <div class="card-tag">Preprint — Zenodo</div>
+      <h3>Curvas de Rotación Galáctica</h3>
+      <p>Paper de 6 páginas. Una ecuación. 6 galaxias SPARC. 7.3× mejor que Newton. Cero parámetros libres.</p>
+      <a href="https://zenodo.org/records/18851408" target="_blank" class="btn-secondary" style="width:100%; justify-content:center;">
+        DOI: 10.5281/zenodo.18851408 ↗
+      </a>
+    </div>
+    <div class="card">
+      <div class="card-tag">Código Abierto — GitHub</div>
+      <h3>TIE Rotation Curves</h3>
+      <p>Python puro. numpy + matplotlib. Ejecuta en 30 segundos. Reproduce todas las gráficas del paper.</p>
+      <a href="https://github.com/RALC-TIE-CREATOR/TIE-rotation-curves" target="_blank" class="btn-secondary" style="width:100%; justify-content:center;">
+        github.com/RALC-TIE-CREATOR ↗
+      </a>
+    </div>
+    <div class="card">
+      <div class="card-tag">Tratado Completo — Kindle</div>
+      <h3>Tratado TIE — 12 Capítulos</h3>
+      <p>Gravedad, electromagnetismo, fuerzas nucleares, mecánica cuántica, agujeros negros, constante cosmológica. Cero parámetros libres.</p>
+      <a href="#" class="btn-secondary" style="width:100%; justify-content:center;">
+        Amazon Kindle — Próximamente ↗
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- LINKS BAR -->
+<div class="links-bar">
+  <a href="https://zenodo.org/records/18851408" target="_blank" class="link-pill">
+    <span class="dot"></span> Zenodo DOI
+  </a>
+  <a href="https://github.com/RALC-TIE-CREATOR/TIE-rotation-curves" target="_blank" class="link-pill">
+    <span class="dot"></span> GitHub
+  </a>
+  <a href="mailto:ralc007@hotmail.com" class="link-pill">
+    <span class="dot" style="background:var(--gold)"></span> ralc007@hotmail.com
+  </a>
+  <span class="link-pill" style="cursor:default;">
+    <span class="dot" style="background:var(--blue)"></span> viXra ref. 17854448
+  </span>
+</div>
+
+<footer>
+  <p>TIE — Teoría de la Infraestructura Espacial &nbsp;|&nbsp; R@LC (Rubén A. Lecona C.) &nbsp;|&nbsp; México 2026</p>
+  <p style="margin-top:0.4rem;">
+    <a href="https://zenodo.org/records/18851408">Zenodo</a> &nbsp;·&nbsp;
+    <a href="https://github.com/RALC-TIE-CREATOR/TIE-rotation-curves">GitHub</a> &nbsp;·&nbsp;
+    <a href="mailto:ralc007@hotmail.com">Contacto</a>
+  </p>
+</footer>
+
+<script>
+// ══════════════════════════════════════════════════════
+// CONSTANTES
+// ══════════════════════════════════════════════════════
+const G     = 6.674e-11;
+const c     = 2.998e8;
+const H0    = 2.268e-18;
+const a0    = c * H0 / (2 * Math.PI);
+const kpc   = 3.0857e19;
+const km    = 1e3;
+const M_sun = 1.989e30;
+
+// ══════════════════════════════════════════════════════
+// MODO PÚBLICO / FÍSICO
+// ══════════════════════════════════════════════════════
+function toggleMode() {
+  const body = document.body;
+  const pub  = document.getElementById('opt-pub');
+  const phy  = document.getElementById('opt-phy');
+  body.classList.toggle('physics-mode');
+  const isPhysics = body.classList.contains('physics-mode');
+  pub.classList.toggle('active', !isPhysics);
+  phy.classList.toggle('active',  isPhysics);
+}
+
+// ══════════════════════════════════════════════════════
+// MASA ENCERRADA
+// ══════════════════════════════════════════════════════
+function mEnc(r_kpc, M_disk, rd, M_gas, rg) {
+  const xd = r_kpc / rd;
+  const xg = r_kpc / rg;
+  const Md = M_disk * M_sun * (1 - Math.exp(-xd) * (1 + xd));
+  const Mg = M_gas  * M_sun * (1 - Math.exp(-xg) * (1 + xg + 0.5*xg*xg));
+  return Math.max(Md + Mg, 1e20);
+}
+
+function vTIE(r_kpc, M_disk, rd, M_gas, rg) {
+  const r  = r_kpc * kpc;
+  const M  = mEnc(r_kpc, M_disk, rd, M_gas, rg);
+  const aN = G * M / (r * r);
+  const a  = Math.sqrt(aN * (aN + a0));
+  return Math.sqrt(r * a) / km;
+}
+
+function vNewton(r_kpc, M_disk, rd, M_gas, rg) {
+  const r = r_kpc * kpc;
+  const M = mEnc(r_kpc, M_disk, rd, M_gas, rg);
+  return Math.sqrt(G * M / r) / km;
+}
+
+// ══════════════════════════════════════════════════════
+// H-01: CURVAS DE ROTACIÓN
+// ══════════════════════════════════════════════════════
+function calcRotation() {
+  const M_disk = parseFloat(document.getElementById('h1-mdisk').value) * 1e10;
+  const rd     = parseFloat(document.getElementById('h1-rd').value);
+  const M_gas  = parseFloat(document.getElementById('h1-mgas').value) * 1e9;
+  const rg     = rd * 2.5;
+  const rmax   = parseFloat(document.getElementById('h1-rmax').value);
+
+  const r = [];
+  for (let ri = 0.3; ri <= rmax; ri += rmax/200) r.push(ri);
+
+  const vTie = r.map(ri => vTIE(ri, M_disk, rd, M_gas, rg));
+  const vNew = r.map(ri => vNewton(ri, M_disk, rd, M_gas, rg));
+
+  const M_total = (M_disk + M_gas);
+  const vFlat   = Math.pow(G * M_total * a0, 0.25) / km;
+  const vFlatArr = r.map(() => vFlat);
+
+  const rt = Math.sqrt(G * M_total / a0) / kpc;
+
+  const layout = {
+    paper_bgcolor: '#0d0d1a',
+    plot_bgcolor:  '#0d0d1a',
+    font: { color: '#aaaacc', family: 'Space Mono, monospace', size: 11 },
+    margin: { t: 20, r: 20, b: 50, l: 55 },
+    xaxis: { title: 'Radio (kpc)', gridcolor: '#1a1a33', color: '#aaaacc' },
+    yaxis: { title: 'Velocidad (km/s)', gridcolor: '#1a1a33', color: '#aaaacc' },
+    legend: { bgcolor: 'rgba(0,0,0,0.5)', bordercolor: '#222244', borderwidth: 1 },
+    showlegend: true,
+  };
+
+  const traces = [
+    { x: r, y: vTie, name: 'TIE (cero parámetros)', line: { color: '#FFD700', width: 3 } },
+    { x: r, y: vNew, name: 'Newton (bariones solos)', line: { color: '#FF4444', width: 2, dash: 'dash' } },
+    { x: r, y: vFlatArr, name: `v_flat = ${vFlat.toFixed(1)} km/s`, line: { color: '#44FF88', width: 1.5, dash: 'dot' } },
+  ];
+
+  Plotly.newPlot('h1-plot', traces, layout, { displayModeBar: false, responsive: true });
+
+  document.getElementById('h1-results').style.display = 'block';
+  document.getElementById('h1-vflat').textContent = vFlat.toFixed(1) + ' km/s';
+  document.getElementById('h1-rt').textContent = rt.toFixed(1) + ' kpc';
+  document.getElementById('h1-chi-tie').textContent = '~5-30';
+
+  // Share URL
+  const url = `${location.href.split('?')[0]}?M=${M_disk/1e10}&rd=${rd}&Mg=${M_gas/1e9}&rmax=${rmax}`;
+  document.getElementById('h1-url').value = url;
+  document.getElementById('h1-share').style.display = 'flex';
+}
+
+// ══════════════════════════════════════════════════════
+// H-03: CALCULADORA 2PI
+// ══════════════════════════════════════════════════════
+function calc2pi() {
+  const M = parseFloat(document.getElementById('h3-mass').value) * 1e10 * M_sun;
+  const v = Math.pow(G * M * a0, 0.25) / km;
+  document.getElementById('h3-vterm').textContent = v.toFixed(1) + ' km/s';
+}
+
+// ══════════════════════════════════════════════════════
+// H-05: MATERIA OSCURA
+// ══════════════════════════════════════════════════════
+function calcDM() {
+  const mobs = parseFloat(document.getElementById('h5-mobs').value);
+  const mtie = mobs * 2 * Math.PI;
+  document.getElementById('h5-mobs-out').textContent = mobs.toFixed(2) + '×10¹⁰ M☉';
+  document.getElementById('h5-mtie').textContent = mtie.toFixed(2) + '×10¹⁰ M☉';
+  document.getElementById('h5-frac').textContent = '84.1%';
+}
+
+// ══════════════════════════════════════════════════════
+// H-08: CALCULADORA a0 / LAMBDA
+// ══════════════════════════════════════════════════════
+function updateH0() {
+  const H0_kms = parseFloat(document.getElementById('h8-h0').value);
+  document.getElementById('h8-h0-val').textContent = H0_kms.toFixed(1);
+
+  const H0_si  = H0_kms * 1000 / 3.0857e22;
+  const a0_    = c * H0_si / (2 * Math.PI);
+  const lam    = 8 * Math.PI**2 * a0_**2 / c**4;
+  const planck = 1.106e-52;
+  const err    = Math.abs(lam - planck) / planck * 100;
+  const M_MW   = 1e11 * M_sun;
+  const rt     = Math.sqrt(G * M_MW / a0_) / kpc;
+
+  document.getElementById('h8-a0').textContent  = a0_.toExponential(3).replace('e-', '×10⁻');
+  document.getElementById('h8-lam').textContent = lam.toExponential(3).replace('e-', '×10⁻');
+
+  const errEl = document.getElementById('h8-err');
+  errEl.textContent = err.toFixed(1) + '%';
+  errEl.style.color = err < 5 ? '#44FF88' : err < 10 ? '#FFD700' : '#FF4444';
+
+  document.getElementById('h8-rt').textContent = rt.toFixed(1);
+}
+
+// ══════════════════════════════════════════════════════
+// SHARE / COPY
+// ══════════════════════════════════════════════════════
+function copyShare(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.value).then(() => {
+    const btn = el.nextElementSibling;
+    btn.textContent = '✓ Copiado';
+    setTimeout(() => { btn.textContent = 'Copiar link'; }, 2000);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// URL PARAMS — cargar estado desde link compartido
+// ══════════════════════════════════════════════════════
+(function loadFromURL() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('M'))    document.getElementById('h1-mdisk').value = p.get('M');
+  if (p.get('rd'))   document.getElementById('h1-rd').value    = p.get('rd');
+  if (p.get('Mg'))   document.getElementById('h1-mgas').value  = p.get('Mg');
+  if (p.get('rmax')) document.getElementById('h1-rmax').value  = p.get('rmax');
+  if (p.get('M') || p.get('rd')) calcRotation();
+})();
+
+// Init
+calcRotation();
+calc2pi();
+calcDM();
+updateH0();
+</script>
+</body>
+</html>

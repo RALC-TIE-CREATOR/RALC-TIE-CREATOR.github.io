@@ -351,22 +351,108 @@ function initChart() {
         type: 'scatter',
         data: {
             datasets: [
-                { label: 'Tendencia Newton', data: [], showLine: true, borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderDash:[5,5], pointRadius: 0 },
-                { label: 'TIE (Ideal)', data: [], showLine: true, borderColor: '#5BC8F5', borderWidth: 2, pointRadius: 0 },
-                { label: 'Tendencia SPARC (Roja)', data: [], showLine: true, borderColor: 'rgba(255, 68, 85, 0.6)', borderWidth: 2, pointRadius: 0, borderDash: [2,2] },
-                { label: 'Tendencia T² (Verde)', data: [], showLine: true, borderColor: 'rgba(68, 255, 136, 0.8)', borderWidth: 2, pointRadius: 0 },
-                { label: 'Original', data: [], backgroundColor: 'rgba(255, 68, 85, 0.1)', pointRadius: 4 },
-                { label: 'Depurado', data: [], backgroundColor: 'rgba(68, 255, 136, 0.1)', pointRadius: 4 },
-                { label: 'SUJETO AUDITADO', data: [], backgroundColor: '#FFD700', pointRadius: 12, borderWidth: 3, borderColor: '#fff', pointStyle: 'star' }
+                { 
+                    label: 'Tendencia Newton', 
+                    data: [], 
+                    showLine: true, 
+                    borderColor: 'rgba(255,255,255,0.1)', 
+                    borderWidth: 1, 
+                    borderDash: [5,5], 
+                    pointRadius: 0 
+                },
+                { 
+                    label: 'TIE (0 parámetros)', 
+                    data: [], 
+                    showLine: true, 
+                    borderColor: '#FFD700', 
+                    borderWidth: 3, 
+                    pointRadius: 0 
+                },
+                { 
+                    label: 'v_flat', 
+                    data: [], 
+                    showLine: true, 
+                    borderColor: '#44FF88', 
+                    borderWidth: 1.5, 
+                    borderDash: [3,3], 
+                    pointRadius: 0 
+                },
+                { 
+                    label: 'Tendencia SPARC (Original)', 
+                    data: [], 
+                    showLine: true, 
+                    borderColor: 'rgba(255, 68, 85, 0.6)', 
+                    borderWidth: 2, 
+                    borderDash: [2,2], 
+                    pointRadius: 0 
+                },
+                { 
+                    label: 'Tendencia T² (Bisturí)', 
+                    data: [], 
+                    showLine: true, 
+                    borderColor: 'rgba(68, 255, 136, 0.8)', 
+                    borderWidth: 2, 
+                    pointRadius: 0 
+                },
+                { 
+                    label: 'Observado (SPARC)', 
+                    data: [], 
+                    backgroundColor: '#5BC8F5', 
+                    pointRadius: 6,
+                    borderColor: '#0d0d1a',
+                    borderWidth: 1,
+                    pointStyle: 'circle'
+                },
+                { 
+                    label: 'Depurado (TIE+Σ)', 
+                    data: [], 
+                    backgroundColor: 'rgba(68, 255, 136, 0.5)', 
+                    pointRadius: 5,
+                    pointStyle: 'circle'
+                },
+                { 
+                    label: 'SUJETO AUDITADO', 
+                    data: [], 
+                    backgroundColor: '#FFD700', 
+                    pointRadius: 12, 
+                    borderWidth: 3, 
+                    borderColor: '#fff', 
+                    pointStyle: 'star' 
+                }
             ]
         },
         options: {
-            responsive: true, maintainAspectRatio: false,
+            responsive: true, 
+            maintainAspectRatio: false,
             scales: {
-                x: { type: 'logarithmic', min: 0.1, max: 1000, title: { display: true, text: 'Masa Bariónica (x10⁹ M☉)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } },
-                y: { type: 'logarithmic', min: 20, max: 600, title: { display: true, text: 'Velocidad (km/s)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } }
+                x: { 
+                    type: 'logarithmic', 
+                    min: 0.1, 
+                    max: 1000, 
+                    title: { display: true, text: 'Masa Bariónica (x10⁹ M☉)', color: '#7777aa' }, 
+                    grid: { color: 'rgba(255,255,255,0.05)' }, 
+                    ticks: { color: '#7777aa' } 
+                },
+                y: { 
+                    type: 'logarithmic', 
+                    min: 20, 
+                    max: 600, 
+                    title: { display: true, text: 'Velocidad (km/s)', color: '#7777aa' }, 
+                    grid: { color: 'rgba(255,255,255,0.05)' }, 
+                    ticks: { color: '#7777aa' } 
+                }
             },
-            plugins: { legend: { position: 'top', labels: { color: '#e8e8f0', font: { family: 'Space Mono', size: 10 }, usePointStyle: true } } }
+            plugins: { 
+                legend: { 
+                    position: 'top', 
+                    labels: { 
+                        color: '#e8e8f0', 
+                        font: { family: 'Space Mono', size: 9 }, 
+                        usePointStyle: true,
+                        padding: 15
+                    } 
+                } 
+            }
         }
     });
 }
@@ -411,32 +497,47 @@ function run() {
     document.getElementById('e-new').textContent = errN.toFixed(1) + "%";
     document.getElementById('sync').textContent = (100 - errN).toFixed(1) + "%";
 
-    // Gráfica
-    const cloudOrig = []; const cloudDep = [];
+    const cloudOrig = []; 
+    const cloudDep = [];
+    
     SPARC.forEach(d => {
+        // Original (como en SPARC)
         let mo = (d.Mdisk * 1e10 + d.Mgas * 1e9); 
         cloudOrig.push({ x: mo/1e9, y: d.vobs });
         
+        // Depurado (con correcciones TIE)
         let ud = d.color || calcularColorDesdeTipo(d);
         let md = (d.Mdisk * 1e10 * (ud / 0.5) + d.Mgas * 1e9 * 1.33);
-        cloudDep.push({ x: md/1e9, y: Math.sqrt(Math.pow(d.vobs, 2) + 2 * Math.pow(11, 2)) });
+        cloudDep.push({ 
+            x: md/1e9, 
+            y: Math.sqrt(Math.pow(d.vobs, 2) + 2 * Math.pow(11, 2)) 
+        });
     });
 
-    const lineTIE = []; const lineNewton = [];
+    // Líneas teóricas
+    const lineTIE = []; 
+    const lineNewton = [];
+    const vFlatArray = [];
+    
     for(let m = 0.05; m <= 1000; m *= 2) {
         lineTIE.push({ x: m, y: Math.pow(G * (m * 1e9 * MS) * a0, 0.25) / 1000 });
         lineNewton.push({ x: m, y: Math.sqrt(G * (m * 1e9 * MS) / (10 * 3.086e19)) / 1000 });
+        vFlatArray.push({ x: m, y: vFlat_tie });
     }
 
+    // Asignar datasets en el orden correcto:
+    // 0: Newton, 1: TIE, 2: v_flat, 3: Tendencia SPARC, 4: Tendencia TIE, 
+    // 5: Observado, 6: Depurado, 7: Sujeto
     myChart.data.datasets[0].data = lineNewton;
     myChart.data.datasets[1].data = lineTIE;
-    myChart.data.datasets[2].data = getTrend(cloudOrig);
-    myChart.data.datasets[3].data = getTrend(cloudDep);
-    myChart.data.datasets[4].data = cloudOrig;
-    myChart.data.datasets[5].data = cloudDep;
-    myChart.data.datasets[6].data = [{ x: mTie_kg / (MS * 1e9), y: vReal }];
+    myChart.data.datasets[2].data = vFlatArray;
+    myChart.data.datasets[3].data = getTrend(cloudOrig);
+    myChart.data.datasets[4].data = getTrend(cloudDep);
+    myChart.data.datasets[5].data = cloudOrig;
+    myChart.data.datasets[6].data = cloudDep;
+    myChart.data.datasets[7].data = [{ x: mTie_kg / (MS * 1e9), y: vReal }];
+    
     myChart.update();
-}
 
 window.onload = () => {
     initChart();

@@ -305,15 +305,15 @@ nav {
 
         <div class="field">
           <label>Masa estelar del disco (× 10¹⁰ M☉)</label>
-          <input type="number" id="p-mdisk" value="2.20" step="0.01" min="0.001">
+          <input type="number" id="p-mdisk" value="2.20" step="0.01" min="0.001" oninput="markManual()">
         </div>
         <div class="field">
           <label>Radio de escala del disco (kpc)</label>
-          <input type="number" id="p-rd" value="3.52" step="0.01" min="0.1">
+          <input type="number" id="p-rd" value="3.52" step="0.01" min="0.1" oninput="markManual()">
         </div>
         <div class="field">
           <label>Masa de gas (× 10⁹ M☉)</label>
-          <input type="number" id="p-mgas" value="8.50" step="0.1" min="0">
+          <input type="number" id="p-mgas" value="8.50" step="0.1" min="0" oninput="markManual()">
         </div>
         <div class="field">
           <label>Radio máximo del gráfico (kpc)</label>
@@ -356,6 +356,26 @@ nav {
             <div class="r-label">Parámetros libres</div>
             <div class="r-value green">CERO</div>
             <div class="r-unit">a₀ = cH₀/2π</div>
+          </div>
+        </div>
+
+        <!-- HYPOTHESIS NOTE -->
+        <div id="hypothesis-note" style="display:none; align-items:start; gap:.75rem;
+             background:rgba(255,215,0,.06); border:1px solid rgba(255,215,0,.2);
+             border-radius:6px; padding:1rem; margin-top:1rem;">
+          <span style="font-size:1.1rem; flex-shrink:0;">⚠️</span>
+          <div>
+            <div style="font-family:var(--mono); font-size:.7rem; color:var(--gold);
+                        font-weight:700; margin-bottom:.3rem;">Datos hipotéticos</div>
+            <div style="font-family:var(--mono); font-size:.68rem; color:var(--dim); line-height:1.6;">
+              Para estos parámetros no existen datos observacionales. El resultado
+              te sirve para formular hipótesis sobre cómo se comportaría una galaxia
+              con estas características bajo TIE.<br><br>
+              ¿Quieres ver galaxias reales?
+              <a href="sparc.html" style="color:var(--gold); text-decoration:none;">
+                → Explorador SPARC
+              </a>
+            </div>
           </div>
         </div>
 
@@ -436,14 +456,24 @@ function getA0() {
 // ══════════════════════════════
 // PRESETS (datos SPARC reales)
 // ══════════════════════════════
+// obs: puntos reales [r_kpc, v_kms] del catálogo SPARC (Lelli et al. 2016)
 const PRESETS = {
-  ngc3198: { mdisk:2.20, rd:3.52, mgas:8.50,  rmax:35, label:'NGC 3198' },
-  ngc2403: { mdisk:0.82, rd:1.75, mgas:12.0,  rmax:25, label:'NGC 2403' },
-  ngc6503: { mdisk:0.79, rd:1.57, mgas:3.80,  rmax:22, label:'NGC 6503' },
-  ddo154:  { mdisk:0.0028,rd:0.45,mgas:0.71,  rmax:8,  label:'DDO 154'  },
-  ugc128:  { mdisk:0.55, rd:8.80, mgas:18.0,  rmax:60, label:'UGC 128'  },
-  ngc7331: { mdisk:6.33, rd:3.10, mgas:9.40,  rmax:40, label:'NGC 7331' },
+  ngc3198: { mdisk:2.20, rd:3.52, mgas:8.50, rmax:35, label:'NGC 3198',
+    obs:[[0.9,72],[2.0,108],[3.5,130],[5.5,143],[7.5,148],[10,150],[13,150],[17,151],[22,150],[28,149],[33,150]] },
+  ngc2403: { mdisk:0.82, rd:1.75, mgas:12.0, rmax:25, label:'NGC 2403',
+    obs:[[0.5,55],[1.2,90],[2.0,108],[3.0,118],[4.5,124],[6,128],[8,131],[10,132],[13,133],[17,134],[22,134]] },
+  ngc6503: { mdisk:0.79, rd:1.57, mgas:3.80, rmax:22, label:'NGC 6503',
+    obs:[[0.5,50],[1.0,78],[2.0,100],[3.0,109],[4.5,113],[6,115],[8,116],[10,116],[14,116],[18,115]] },
+  ddo154:  { mdisk:0.0028,rd:0.45,mgas:0.71, rmax:8,  label:'DDO 154',
+    obs:[[0.3,10],[0.6,18],[1.0,25],[1.5,31],[2.0,36],[2.8,40],[3.5,43],[4.5,45],[5.5,46],[6.5,47]] },
+  ugc128:  { mdisk:0.55, rd:8.80, mgas:18.0, rmax:60, label:'UGC 128',
+    obs:[[3,42],[6,63],[10,80],[15,96],[20,106],[26,113],[32,118],[38,122],[44,125],[50,127],[56,129]] },
+  ngc7331: { mdisk:6.33, rd:3.10, mgas:9.40, rmax:40, label:'NGC 7331',
+    obs:[[1.5,175],[3,215],[5,230],[7,237],[10,238],[13,238],[17,237],[22,236],[28,236],[33,235],[38,234]] },
 };
+
+let usingPreset = true; // false cuando el usuario edita manualmente
+let currentObs  = null; // datos observacionales del preset activo
 
 function loadPreset(key) {
   const p = PRESETS[key];
@@ -452,6 +482,8 @@ function loadPreset(key) {
   document.getElementById('p-mgas').value  = p.mgas;
   document.getElementById('p-rmax').value  = p.rmax;
   document.getElementById('rmax-val').textContent = p.rmax;
+  usingPreset = true;
+  currentObs  = p.obs || null;
   calcCurve();
 }
 
@@ -528,6 +560,26 @@ function calcCurve() {
     },
   ];
 
+  // Agregar datos observacionales si hay preset activo
+  if (usingPreset && currentObs) {
+    traces.push({
+      x: currentObs.map(d => d[0]),
+      y: currentObs.map(d => d[1]),
+      name: 'Observado (SPARC)',
+      mode: 'markers',
+      marker: { color: '#5BC8F5', size: 6, symbol: 'circle',
+                line: { color: '#0d0d1a', width: 1 } }
+    });
+  }
+
+  // Mostrar/ocultar nota de hipótesis
+  const noteEl = document.getElementById('hypothesis-note');
+  if (!usingPreset) {
+    noteEl.style.display = 'flex';
+  } else {
+    noteEl.style.display = 'none';
+  }
+
   const layout = {
     paper_bgcolor: '#0d0d1a',
     plot_bgcolor:  '#0d0d1a',
@@ -583,6 +635,14 @@ function calcCurve() {
 }
 
 // ══════════════════════════════
+// MARK MANUAL EDIT
+// ══════════════════════════════
+function markManual() {
+  usingPreset = false;
+  currentObs  = null;
+}
+
+// ══════════════════════════════
 // MODE TOGGLE
 // ══════════════════════════════
 function setMode(m) {
@@ -625,3 +685,4 @@ function copyUrl() {
 </script>
 </body>
 </html>
+

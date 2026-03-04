@@ -13,7 +13,6 @@
   --red:    #FF4455;
   --bg:     #06060f;
   --bg2:    #0d0d1a;
-  --bg3:    #111122;
   --text:   #e8e8f0;
   --dim:    #7777aa;
   --border: #1e1e3a;
@@ -23,224 +22,202 @@
 
 * { margin:0; padding:0; box-sizing:border-box; }
 body { 
-    background: var(--bg); 
-    color: var(--text); 
-    font-family: var(--sans); 
-    line-height: 1.6;
-    background-image: radial-gradient(circle at 50% 50%, #1a1a33 0%, #06060f 100%);
-    background-attachment: fixed;
+    background: var(--bg); color: var(--text); font-family: var(--sans); 
+    height: 100vh; overflow: hidden; /* Evita el scroll general */
+    display: flex; flex-direction: column;
 }
 
-.container { max-width: 1000px; margin: 0 auto; padding: 4rem 2rem; }
-
-/* HEADER DESIGN */
-header { border-left: 4px solid var(--gold); padding-left: 1.5rem; margin-bottom: 4rem; }
-.tag { font-family: var(--mono); color: var(--gold); font-size: 0.8rem; letter-spacing: 0.3em; text-transform: uppercase; }
-h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1; margin: 0.5rem 0; text-transform: uppercase; }
-.subtitle { color: var(--dim); max-width: 600px; font-size: 1.1rem; }
-
-/* SURGERY SECTIONS */
-.surgery-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 3rem;
-    margin-bottom: 3rem;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-}
-.surgery-card::before {
-    content: 'T²';
-    position: absolute;
-    top: -20px;
-    right: -10px;
-    font-size: 8rem;
-    font-weight: 900;
-    color: rgba(255, 215, 0, 0.03);
-    font-family: var(--sans);
+.dashboard { 
+    flex: 1; display: grid; 
+    grid-template-rows: auto 1fr auto; 
+    padding: 1.5rem; gap: 1rem;
 }
 
-.card-num { font-family: var(--mono); color: var(--gold); font-size: 1rem; margin-bottom: 1rem; display: block; }
-h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 15px; }
-h2 span { color: var(--gold); }
+header { border-left: 4px solid var(--gold); padding-left: 1rem; }
+h1 { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; }
+.tag { font-family: var(--mono); color: var(--gold); font-size: 0.7rem; letter-spacing: 0.2em; }
 
-p { margin-bottom: 1.5rem; color: var(--text); font-size: 1.05rem; }
-b { color: var(--gold); }
-
-/* FORMULA STYLING */
-.formula-box {
-    background: #000;
-    border: 1px solid var(--blue);
-    padding: 2rem;
-    border-radius: 8px;
-    margin: 2rem 0;
-    position: relative;
-    box-shadow: 0 10px 30px rgba(91, 200, 245, 0.1);
-}
-.formula-label { 
-    position: absolute; top: -10px; left: 20px; background: var(--blue); 
-    color: var(--bg); font-family: var(--mono); font-size: 0.6rem; 
-    padding: 2px 10px; font-weight: 700; border-radius: 4px;
-}
-.formula-content {
-    font-family: var(--mono);
-    font-size: 1.4rem;
-    color: var(--blue);
-    text-align: center;
-}
-
-/* RESULT GRID */
-.result-grid {
+/* GRID DE TRES COLUMNAS PARA EVITAR SCROLL */
+.surgery-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    background: var(--bg3);
-    padding: 2rem;
-    border-radius: 8px;
-    border: 1px dashed var(--border);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    align-items: stretch;
 }
-.res-item h4 { font-family: var(--mono); font-size: 0.7rem; color: var(--dim); text-transform: uppercase; margin-bottom: 0.5rem; }
-.res-val { font-size: 1.5rem; font-weight: 700; color: var(--text); }
-.res-val.highlight { color: var(--gold); }
 
-/* FINAL SECTION */
+.card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.2rem;
+    display: flex; flex-direction: column; justify-content: space-between;
+}
+
+.card-num { font-family: var(--mono); color: var(--gold); font-size: 0.7rem; margin-bottom: 0.5rem; display: block; }
+h2 { font-size: 1rem; font-weight: 800; margin-bottom: 1rem; color: var(--blue); }
+
+.formula {
+    background: #000; border: 1px solid rgba(91, 200, 245, 0.3);
+    padding: 0.8rem; border-radius: 4px; font-family: var(--mono);
+    font-size: 0.85rem; color: var(--blue); text-align: center; margin: 1rem 0;
+}
+
+.res-box { background: var(--bg); padding: 0.8rem; border-radius: 4px; border: 1px solid var(--border); }
+.res-label { font-family: var(--mono); font-size: 0.6rem; color: var(--dim); text-transform: uppercase; }
+.res-val { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+.res-val.gold { color: var(--gold); }
+
+/* FOOTER / REPORTE FINAL */
 .final-report {
-    background: linear-gradient(135deg, var(--bg2) 0%, #1a1a33 100%);
-    border: 2px solid var(--gold);
-    padding: 4rem;
-    border-radius: 20px;
-    text-align: center;
-}
-.final-formula {
-    font-size: 2rem;
-    color: var(--gold);
-    font-family: var(--mono);
-    margin: 2rem 0;
-    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    background: var(--bg2); border: 2px solid var(--gold);
+    padding: 1rem; border-radius: 8px;
+    display: flex; align-items: center; justify-content: space-around;
 }
 
-.sync-badge {
-    background: var(--green);
-    color: var(--bg);
-    padding: 0.5rem 2rem;
-    border-radius: 100px;
-    font-weight: 800;
-    font-family: var(--mono);
-    display: inline-block;
-    margin-bottom: 2rem;
+.sync-status { text-align: center; }
+.error-compare { display: flex; gap: 2rem; font-family: var(--mono); }
+.err-item { text-align: center; }
+.err-val { font-size: 1.5rem; font-weight: 700; }
+
+.btn-back {
+    font-family: var(--mono); font-size: 0.7rem; color: var(--bg);
+    background: var(--gold); padding: 0.5rem 1rem; border-radius: 4px;
+    text-decoration: none; font-weight: 700;
 }
 
-@media (max-width: 768px) {
-    .result-grid { grid-template-columns: 1fr; }
-    h1 { font-size: 2.5rem; }
+@media (max-width: 1000px) {
+    .surgery-grid { grid-template-columns: 1fr; overflow-y: auto; }
+    body { overflow: auto; }
 }
 </style>
 </head>
 <body>
 
-<div class="container">
+<div class="dashboard">
     <header>
-        <div class="tag">Ref. Técnica H-02.1</div>
-        <h1>El Bisturí T²</h1>
-        <p class="subtitle">Protocolo de depuración de datos observacionales para la sincronía total con la Infraestructura Espacial.</p>
+        <div class="tag">Reporte de Sincronía TIE / H-02.1</div>
+        <h1>Bisturí T²: <span id="galaxy-name" style="color:var(--gold)">Seleccionando...</span></h1>
     </header>
 
-    <section class="surgery-card">
-        <span class="card-num">PASO 01</span>
-        <h2><span>/</span> Corrección de Inclinación (i)</h2>
-        <p>Los astrónomos ven la galaxia proyectada en el cielo. Si la galaxia está inclinada, la velocidad que miden (V<sub>obs</sub>) es menor que la real.</p>
-        
-        <div class="formula-box">
-            <span class="formula-label">ECUACIÓN GEOMÉTRICA</span>
-            <div class="formula-content">V<sub>rot</sub> = V<sub>obs</sub> / sin(i)</div>
-        </div>
+    <div class="surgery-grid">
+        <section class="card">
+            <div>
+                <span class="card-num">PASO 01</span>
+                <h2>CORRECCIÓN GEOMÉTRICA</h2>
+                <p style="font-size: 0.75rem; color:var(--dim)">Compensación por ángulo de inclinación observacional.</p>
+                <div class="formula">V<sub>rot</sub> = V<sub>obs</sub> / sin(i)</div>
+            </div>
+            <div class="res-box">
+                <div class="res-label">Estado de Fidelidad (i = <span id="val-i">0</span>°)</div>
+                <div class="res-val" id="res-geo">Analizando...</div>
+            </div>
+        </section>
 
-        <div class="result-grid">
-            <div class="res-item">
-                <h4>Diagnóstico Base</h4>
-                <div class="res-val" id="fix1-base">Calculando...</div>
+        <section class="card">
+            <div>
+                <span class="card-num">PASO 02</span>
+                <h2>AJUSTE DE MASA (Υ)</h2>
+                <p style="font-size: 0.75rem; color:var(--dim)">Corrección dinámica de la población estelar (Masa-Luz).</p>
+                <div class="formula">Υ<sub>corr</sub> = 10<sup>(-0.44 + 0.94·(B-V))</sup></div>
             </div>
-            <div class="res-item">
-                <h4>Filtro de Fidelidad</h4>
-                <div class="res-val highlight" id="fix1-res">Escaneando i...</div>
+            <div class="res-box">
+                <div class="res-label">Masa Bariónica Corregida</div>
+                <div class="res-val gold" id="res-masa">--- M☉</div>
             </div>
-        </div>
-        <p style="margin-top: 2rem; font-size: 0.9rem; color: var(--dim);">
-            <b>El Problema:</b> Si el ángulo <i>i</i> es pequeño (< 30°), un error de solo 2 grados en la medición puede desviar la velocidad en un 50%. TIE marca estos datos como ruidosos.
-        </p>
-    </section>
+        </section>
 
-    <section class="surgery-card">
-        <span class="card-num">PASO 02</span>
-        <h2><span>/</span> Ajuste de Masa (Upsilon)</h2>
-        <p>No todas las estrellas tienen la misma densidad. El estándar de 0.5 es impreciso; las galaxias azules son más ligeras y las rojas más masivas.</p>
-        
-        <div class="formula-box" style="border-color: var(--gold);">
-            <span class="formula-label" style="background: var(--gold);">ECUACIÓN DE MASA DINÁMICA</span>
-            <div class="formula-content" style="color: var(--gold);">log₁₀(Υ) = -0.44 + 0.94 · (B-V)</div>
-        </div>
+        <section class="card">
+            <div>
+                <span class="card-num">PASO 03</span>
+                <h2>COMPENSACIÓN TÉRMICA</h2>
+                <p style="font-size: 0.75rem; color:var(--dim)">Suma cuadrática de la deriva asimétrica (presión de gas).</p>
+                <div class="formula">V<sub>real</sub> = √(V<sub>rot</sub>² + σ²)</div>
+            </div>
+            <div class="res-box">
+                <div class="res-label">Velocidad Circular Real</div>
+                <div class="res-val gold" id="res-vel">--- km/s</div>
+            </div>
+        </section>
+    </div>
 
-        <div class="result-grid">
-            <div class="res-item">
-                <h4>Masa Estelar (0.5)</h4>
-                <div class="res-val" id="fix2-base">--- M☉</div>
-            </div>
-            <div class="res-item">
-                <h4>Masa T² Corregida</h4>
-                <div class="res-val highlight" id="fix2-res">Analizando Color...</div>
-            </div>
-        </div>
-        
-    </section>
-
-    <section class="surgery-card">
-        <span class="card-num">PASO 03</span>
-        <h2><span>/</span> Compensación de Presión</h2>
-        <p>En galaxias enanas, el gas tiene presión térmica. El gas rota más lento de lo que la gravedad exige porque la presión lo sostiene.</p>
-        
-        <div class="formula-box" style="border-color: var(--green);">
-            <span class="formula-label" style="background: var(--green);">SUMA CUADRÁTICA DE ENERGÍA</span>
-            <div class="formula-content" style="color: var(--green);">V<sub>real</sub> = √(V<sub>obs</sub>² + V<sub>presion</sub>²)</div>
-        </div>
-
-        <div class="result-grid">
-            <div class="res-item">
-                <h4>V. Rotación Pura</h4>
-                <div class="res-val" id="fix3-base">--- km/s</div>
-            </div>
-            <div class="res-item">
-                <h4>V. Circular Total</h4>
-                <div class="res-val highlight" id="fix3-res">+0 km/s (Drift)</div>
-            </div>
+    <footer class="final-report">
+        <div class="sync-status">
+            <div class="tag" style="margin-bottom: 0.2rem;">Veredicto de Infraestructura</div>
+            <div style="font-weight: 800; font-size: 1.2rem; color:var(--green);" id="status-txt">DATOS PROCESADOS</div>
         </div>
         
-    </section>
-
-    <section class="final-report">
-        <div class="sync-badge">SINCRONÍA TOTAL DETECTADA</div>
-        <h2>SINCRONÍA DE INFRAESTRUCTURA</h2>
-        <p>Tras eliminar el ruido observacional, aplicamos la Ley TIE sobre el dato depurado:</p>
-        
-        <div class="final-formula">
-            V<sub>TIE</sub> = [ G · M<sub>corr</sub> · a₀ ]<sup>1/4</sup>
-        </div>
-
-        <div class="result-grid" style="background: rgba(0,0,0,0.3); margin-top: 3rem;">
-            <div class="res-item">
-                <h4>Error Original</h4>
-                <div class="res-val" style="color: var(--red);" id="err-old">--%</div>
+        <div class="error-compare">
+            <div class="err-item">
+                <div class="res-label">Error Original</div>
+                <div class="err-val" style="color:var(--red);" id="err-old">--%</div>
             </div>
-            <div class="res-item">
-                <h4>Error T² (Bisturí)</h4>
-                <div class="res-val" style="color: var(--green);" id="err-new">--%</div>
+            <div class="err-item">
+                <div class="res-label">Error T²</div>
+                <div class="err-val" style="color:var(--green);" id="err-new">--%</div>
             </div>
         </div>
-        <p style="margin-top: 2rem; font-family: var(--mono); font-size: 0.8rem; color: var(--gold);">
-            LA MATERIA OSCURA NO EXISTE. SOLO EXISTÍAN DATOS SIN EL BISTURÍ T².
-        </p>
-    </section>
+
+        <a href="sparc.html" class="btn-back">VOLVER AL CATÁLOGO</a>
+    </footer>
 </div>
 
+<script>
+// --- MOTOR LÓGICO DEL BISTURÍ T² ---
+
+// Necesitamos una copia mínima de SPARC para los cálculos
+const SPARC_DATA = [
+    { name:"NGC 3198", type:"Espiral", inc:72, Mdisk:2.20, Mgas:8.5, vobs:150 },
+    { name:"DDO 154",  type:"Enana",   inc:66, Mdisk:0.0028, Mgas:0.71, vobs:47 },
+    { name:"UGC 2885", type:"Gigante", inc:65, Mdisk:17.5, Mgas:82.0, vobs:300 },
+    // Socio: Asegúrate de que esta lista tenga los mismos nombres que en sparc.html
+];
+
+// Constantes TIE
+const G = 6.674e-11;
+const a0 = 1.082e-10;
+const M_sun = 1.989e30;
+
+function ejecutarCirugia() {
+    const params = new URLSearchParams(window.location.search);
+    const gName = params.get('galaxy');
+    
+    if (!gName) {
+        document.getElementById('galaxy-name').textContent = "ERROR: No hay galaxia";
+        return;
+    }
+
+    // Buscar galaxia en los datos
+    const g = SPARC_DATA.find(x => x.name === decodeURIComponent(gName)) || SPARC_DATA[0];
+    document.getElementById('galaxy-name').textContent = g.name;
+
+    // --- PASO 1: GEOMETRÍA ---
+    document.getElementById('val-i').textContent = g.inc;
+    const geoStatus = g.inc < 35 ? "RUIDOSO (Baja Inclinación)" : "CONFIABLE / ÓPTIMO";
+    document.getElementById('res-geo').textContent = geoStatus;
+    if(g.inc < 35) document.getElementById('res-geo').style.color = "var(--red)";
+
+    // --- PASO 2: MASA (Simulando ajuste de Upsilon por tipo) ---
+    let ups = 0.5;
+    if (g.type === "Enana") ups = 0.35;
+    if (g.type === "Gigante") ups = 0.7;
+    const mCorr = (g.Mdisk * 1e10 * (ups/0.5)) + (g.Mgas * 1e9);
+    document.getElementById('res-masa').textContent = (mCorr / 1e9).toFixed(2) + " x10⁹ M☉";
+
+    // --- PASO 3: PRESIÓN (Drift) ---
+    let sigma = 0;
+    if (g.vobs < 70) sigma = 12; // Compensación típica para enanas
+    const vReal = Math.sqrt(Math.pow(g.vobs, 2) + Math.pow(sigma, 2));
+    document.getElementById('res-vel').textContent = vReal.toFixed(1) + " km/s";
+
+    // --- RESULTADO FINAL ---
+    const vTIE = Math.pow(G * (mCorr * M_sun) * a0, 0.25) / 1000;
+    const errOld = Math.abs(vTIE - g.vobs) / g.vobs * 100;
+    const errNew = Math.abs(vTIE - vReal) / vReal * 100;
+
+    document.getElementById('err-old').textContent = errOld.toFixed(1) + "%";
+    document.getElementById('err-new').textContent = errNew.toFixed(1) + "%";
+    document.getElementById('status-txt').textContent = "SINCRONÍA T²: " + (100 - errNew).toFixed(1) + "%";
+}
+
+window.onload = ejecutarCirugia;
+</script>
 </body>
 </html>

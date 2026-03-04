@@ -32,7 +32,6 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
 
 .data-block { background:#0d0d1a; padding:12px; border-radius:6px; border:1px solid #1e1e3a; }
 .val { font-family:var(--mono); font-size:1.35rem; font-weight:700; margin-top: 4px; display: block; }
-.status { font-family:var(--mono); font-size:0.65rem; padding:3px 10px; border-radius:4px; margin-top:8px; display:inline-block; font-weight:700; }
 
 .visual-section { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:1.5rem; height: 500px; position: relative; margin: 0.5rem 0; }
 
@@ -49,7 +48,7 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
     <header>
         <div><p class="label" style="color:var(--gold)">AUDITORÍA DE TENDENCIAS AXON</p><h1>El Bisturí T²</h1></div>
         <div class="selector-box">
-            <span class="label">Galaxia:</span>
+            <span class="label">Sujeto:</span>
             <select id="gSelect" onchange="run()"></select>
         </div>
     </header>
@@ -60,13 +59,11 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
             <div class="data-block">
                 <div class="label">Obs. Cruda (V_obs / sin i)</div>
                 <div class="val" id="v1-raw">---</div>
-                <div id="s1-raw" class="status">---</div>
             </div>
             <div class="bridge-text">La inclinación proyecta una sombra en la velocidad. TIE identifica que <b>pequeños errores angulares</b> crean <b>ruido masivo</b> en el cálculo. Depuramos el vector para obtener la rotación intrínseca.</div>
             <div class="data-block" style="border-color:var(--blue)">
                 <div class="label">Obs. Corregida (TIE)</div>
                 <div class="val" style="color:var(--blue)" id="v1-tie">---</div>
-                <div class="status" style="background:var(--blue); color:#000">DE-PROYECCIÓN OK</div>
             </div>
         </div>
 
@@ -132,44 +129,26 @@ const DATA = [
 
 let myChart;
 
-function getTrendline(points) {
-    let n = points.length;
-    let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
-    points.forEach(p => {
-        let x = Math.log10(p.x); let y = Math.log10(p.y);
-        sumX += x; sumY += y; sumXY += x * y; sumX2 += x * x;
-    });
-    let slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-    let intercept = (sumY - slope * sumX) / n;
-    let line = [];
-    for(let m = 0.05; m <= 800; m *= 4) {
-        line.push({ x: m, y: Math.pow(10, intercept + slope * Math.log10(m)) });
-    }
-    return line;
-}
-
 function initChart() {
     const ctx = document.getElementById('mainChart').getContext('2d');
     myChart = new Chart(ctx, {
         type: 'scatter',
         data: {
             datasets: [
-                { label: 'Tendencia Newton (1/2)', data: [], showLine: true, borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, pointRadius: 0, borderDash: [5, 5], fill: false },
-                { label: 'Teoría TIE (1/4)', data: [], showLine: true, borderColor: '#5BC8F5', borderWidth: 2, pointRadius: 0, fill: false },
-                { label: 'Ajuste SPARC', data: [], showLine: true, borderColor: 'rgba(255, 68, 85, 0.6)', borderWidth: 1.5, pointRadius: 0, borderDash: [2, 2], fill: false },
-                { label: 'Ajuste T²', data: [], showLine: true, borderColor: 'rgba(68, 255, 136, 0.6)', borderWidth: 1.5, pointRadius: 0, borderDash: [2, 2], fill: false },
-                { label: 'Catálogo Original', data: [], backgroundColor: 'rgba(255, 68, 85, 0.15)', pointRadius: 3 },
-                { label: 'Catálogo Depurado', data: [], backgroundColor: 'rgba(68, 255, 136, 0.15)', pointRadius: 3 },
-                { label: 'Sujeto Auditado', data: [], backgroundColor: '#FFD700', pointRadius: 10, borderWidth: 2, borderColor: '#fff', pointStyle: 'star' }
+                { label: 'Newton', data: [], showLine: true, borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, pointRadius: 0, borderDash: [5, 5] },
+                { label: 'Predicción TIE', data: [], showLine: true, borderColor: '#5BC8F5', borderWidth: 2, pointRadius: 0 },
+                { label: 'Catálogo SPARC', data: [], backgroundColor: 'rgba(255, 68, 85, 0.2)', pointRadius: 4 },
+                { label: 'Sujeto Original', data: [], backgroundColor: '#FF4455', pointRadius: 10, borderWidth: 2, borderColor: '#fff' },
+                { label: 'Sujeto T² (Mejorado)', data: [], backgroundColor: '#44FF88', pointRadius: 12, borderWidth: 2, borderColor: '#fff', pointStyle: 'rectRot' }
             ]
         },
         options: {
             responsive: true, maintainAspectRatio: false,
             scales: {
-                x: { type: 'logarithmic', min: 0.1, max: 1000, title: { display: true, text: 'Masa Bariónica (x10⁹ M☉)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa', callback: value => value } },
+                x: { type: 'logarithmic', min: 0.1, max: 1000, title: { display: true, text: 'Masa Bariónica (x10⁹ M☉)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } },
                 y: { type: 'logarithmic', min: 20, max: 500, title: { display: true, text: 'Velocidad (km/s)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } }
             },
-            plugins: { legend: { position: 'top', labels: { color: '#e8e8f0', font: { family: 'Space Mono', size: 9 }, usePointStyle: true } } }
+            plugins: { legend: { labels: { color: '#e8e8f0', font: { family: 'Space Mono', size: 10 } } } }
         }
     });
 }
@@ -198,27 +177,18 @@ function run() {
     document.getElementById('e-new').textContent = errN.toFixed(1) + "%";
     document.getElementById('sync').textContent = (100 - errN).toFixed(1) + "%";
 
-    const cloudOrig = []; const cloudDep = [];
-    DATA.forEach(d => {
-        let mo = (d.Mdisk * 1e10 + d.Mgas * 1e9); cloudOrig.push({ x: mo/1e9, y: d.vobs });
-        let ud = Math.pow(10, -0.44 + (0.94 * d.color));
-        let md = (d.Mdisk * 1e10 * (ud / 0.5) + d.Mgas * 1e9 * 1.33);
-        cloudDep.push({ x: md/1e9, y: Math.sqrt(Math.pow(d.vobs, 2) + 2 * Math.pow(11, 2)) });
-    });
-
     const lineTIE = []; const lineNewton = [];
     for(let m = 0.1; m <= 1000; m *= 2) {
         lineTIE.push({ x: m, y: Math.pow(G * (m * 1e9 * MS) * a0, 0.25) / 1000 });
         lineNewton.push({ x: m, y: Math.sqrt(G * (m * 1e9 * MS) / (10 * 3.086e19)) / 1000 });
     }
+    const cloudOrig = DATA.map(d => ({ x: (d.Mdisk*1e10 + d.Mgas*1e9)/1e9, y: d.vobs }));
 
     myChart.data.datasets[0].data = lineNewton;
     myChart.data.datasets[1].data = lineTIE;
-    myChart.data.datasets[2].data = getTrendline(cloudOrig);
-    myChart.data.datasets[3].data = getTrendline(cloudDep);
-    myChart.data.datasets[4].data = cloudOrig;
-    myChart.data.datasets[5].data = cloudDep;
-    myChart.data.datasets[6].data = [{ x: mTie_kg / (MS * 1e9), y: vReal }];
+    myChart.data.datasets[2].data = cloudOrig;
+    myChart.data.datasets[3].data = [{ x: mStd_kg / (MS * 1e9), y: g.vobs }];
+    myChart.data.datasets[4].data = [{ x: mTie_kg / (MS * 1e9), y: vReal }];
     myChart.update();
 }
 
@@ -229,6 +199,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let o = document.createElement('option');
         o.value = x.name; o.textContent = x.name; sel.appendChild(o);
     });
+    const p = new URLSearchParams(window.location.search);
+    const gal = p.get('galaxy');
+    if (gal) sel.value = decodeURIComponent(gal);
     run();
 });
 </script>

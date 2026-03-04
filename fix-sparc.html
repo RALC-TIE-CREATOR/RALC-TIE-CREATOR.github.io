@@ -109,9 +109,23 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
         </div>
     </div>
 
-    <div class="visual-section">
-        <canvas id="mainChart"></canvas>
+<div style="display: flex; flex-direction: column; gap: 1rem;">
+    <div class="visual-section" style="height: 280px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span class="label">Curva de rotación - <span id="curve-gal-name">NGC 3198</span></span>
+            <span class="label" style="color: var(--gold);">Eje X: Radio (kpc)</span>
+        </div>
+        <canvas id="curveChart"></canvas>
     </div>
+    
+    <div class="visual-section" style="height: 280px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span class="label">Diagrama masa-velocidad (Tully-Fisher)</span>
+            <span class="label" style="color: var(--gold);">Eje X: Masa bariónica (×10⁹ M☉)</span>
+        </div>
+        <canvas id="massChart"></canvas>
+    </div>
+</div>
 
     <footer class="final">
         <div><div class="label">Sincronía Final T²</div><div id="sync" style="color:var(--green); font-size:1.8rem; font-weight:800;">---</div></div>
@@ -341,13 +355,39 @@ function getTrend(points) {
 }
 
 // ═══════════════════════════════════════════════════
-// INICIALIZACIÓN GRÁFICA
+// GRÁFICAS
 // ═══════════════════════════════════════════════════
-let myChart;
+let curveChart, massChart;
 
-function initChart() {
-    const ctx = document.getElementById('mainChart').getContext('2d');
-    myChart = new Chart(ctx, {
+function initCharts() {
+    // Gráfica 1: Curva de rotación (Radio vs Velocidad) - como SPARC
+    const ctx1 = document.getElementById('curveChart').getContext('2d');
+    curveChart = new Chart(ctx1, {
+        type: 'scatter',
+        data: {
+            datasets: [
+                { label: 'TIE (0 parámetros)', data: [], showLine: true, borderColor: '#FFD700', borderWidth: 3, pointRadius: 0 },
+                { label: 'Newton', data: [], showLine: true, borderColor: 'rgba(255,255,255,0.2)', borderWidth: 1, borderDash: [5,5], pointRadius: 0 },
+                { label: 'v_flat', data: [], showLine: true, borderColor: '#44FF88', borderWidth: 1.5, borderDash: [3,3], pointRadius: 0 },
+                { label: 'Observado (SPARC)', data: [], backgroundColor: '#5BC8F5', pointRadius: 6, borderColor: '#0d0d1a', borderWidth: 1 }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            scales: {
+                x: { type: 'linear', min: 0, title: { display: true, text: 'Radio (kpc)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } },
+                y: { min: 0, title: { display: true, text: 'Velocidad (km/s)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } }
+            },
+            plugins: { 
+                legend: { position: 'top', labels: { color: '#e8e8f0', font: { family: 'Space Mono', size: 9 }, usePointStyle: true } },
+                tooltip: { enabled: true }
+            }
+        }
+    });
+
+    // Gráfica 2: Diagrama masa-velocidad (Tully-Fisher) - corrección global
+    const ctx2 = document.getElementById('massChart').getContext('2d');
+    massChart = new Chart(ctx2, {
         type: 'scatter',
         data: {
             datasets: [
@@ -364,10 +404,13 @@ function initChart() {
         options: {
             responsive: true, maintainAspectRatio: false,
             scales: {
-                x: { type: 'logarithmic', min: 0.1, max: 1000, title: { display: true, text: 'Masa Bariónica (x10⁹ M☉)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } },
+                x: { type: 'logarithmic', min: 0.1, max: 1000, title: { display: true, text: 'Masa Bariónica (×10⁹ M☉)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } },
                 y: { type: 'logarithmic', min: 20, max: 600, title: { display: true, text: 'Velocidad (km/s)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } }
             },
-            plugins: { legend: { position: 'top', labels: { color: '#e8e8f0', font: { family: 'Space Mono', size: 9 }, usePointStyle: true, padding: 15 } } }
+            plugins: { 
+                legend: { position: 'top', labels: { color: '#e8e8f0', font: { family: 'Space Mono', size: 8 }, usePointStyle: true, padding: 10 } },
+                tooltip: { enabled: true }
+            }
         }
     });
 }
@@ -403,6 +446,74 @@ function run() {
     const vFlat_tie = Math.pow(G * mTie_kg * a0, 0.25) / 1000;
     const errN = (Math.abs(vFlat_tie - vReal) / vReal) * 100;
 
+  // --- GRÁFICA 1: Curva de rotación (Radio vs Velocidad) ---
+if (gRaw.obs) {
+    document.getElementById('curve-gal-name').textContent = gRaw.name;
+    
+    // Datos observados
+    const obsData = gRaw.obs.map(p => ({ x: p[0], y: p[1] }));
+    
+    // Generar curva TIE para esta galaxia
+    const rMax = Math.max(...gRaw.obs.map(p => p[0])) * 1.2;
+    const rCurve = [];
+    for (let r = 0.1; r <= rMax; r += rMax/100) {
+        rCurve.push(r);
+    }
+    
+    // Función para calcular vTIE (necesitas implementarla)
+    function vTIE_curve(r_kpc) {
+        const rg = gRaw.rd * 2.5;
+        const r = r_kpc * kpc;
+        const xd = r_kpc / gRaw.rd;
+        const xg = r_kpc / rg;
+        const Md_kg = gRaw.Mdisk * 1e10 * MS * (1 - Math.exp(-xd)*(1+xd));
+        const Mg_kg = gRaw.Mgas * 1e9 * MS * (1 - Math.exp(-xg)*(1+xg+0.5*xg*xg));
+        const M = Math.max(Md_kg + Mg_kg, 1e20);
+        const aN = G * M / (r * r);
+        const a = Math.sqrt(aN * (aN + a0));
+        return Math.sqrt(r * a) / km;
+    }
+    
+    const tieCurve = rCurve.map(r => ({ x: r, y: vTIE_curve(r) }));
+    const newtonCurve = rCurve.map(r => ({ x: r, y: Math.sqrt(G * (gRaw.Mdisk*1e10 + gRaw.Mgas*1e9) * MS / (r * kpc)) / km }));
+    const vFlat = Math.pow(G * (gRaw.Mdisk*1e10 + gRaw.Mgas*1e9) * MS * a0, 0.25) / km;
+    const vFlatCurve = rCurve.map(r => ({ x: r, y: vFlat }));
+
+    curveChart.data.datasets[0].data = tieCurve;
+    curveChart.data.datasets[1].data = newtonCurve;
+    curveChart.data.datasets[2].data = vFlatCurve;
+    curveChart.data.datasets[3].data = obsData;
+    curveChart.update();
+}
+
+// --- GRÁFICA 2: Diagrama masa-velocidad (código existente adaptado) ---
+const cloudOrig = []; const cloudDep = [];
+SPARC.forEach(d => {
+    let mo = (d.Mdisk * 1e10 + d.Mgas * 1e9); 
+    cloudOrig.push({ x: mo/1e9, y: d.vobs });
+    
+    let ud = d.color || calcularColorDesdeTipo(d);
+    let md = (d.Mdisk * 1e10 * (ud / 0.5) + d.Mgas * 1e9 * 1.33);
+    cloudDep.push({ x: md/1e9, y: Math.sqrt(Math.pow(d.vobs, 2) + 2 * Math.pow(11, 2)) });
+});
+
+const lineTIE = []; const lineNewton = []; const vFlatArray = [];
+for(let m = 0.05; m <= 1000; m *= 2) {
+    lineTIE.push({ x: m, y: Math.pow(G * (m * 1e9 * MS) * a0, 0.25) / 1000 });
+    lineNewton.push({ x: m, y: Math.sqrt(G * (m * 1e9 * MS) / (10 * 3.086e19)) / 1000 });
+    vFlatArray.push({ x: m, y: vFlat_tie });
+}
+
+massChart.data.datasets[0].data = lineNewton;
+massChart.data.datasets[1].data = lineTIE;
+massChart.data.datasets[2].data = vFlatArray;
+massChart.data.datasets[3].data = getTrend(cloudOrig);
+massChart.data.datasets[4].data = getTrend(cloudDep);
+massChart.data.datasets[5].data = cloudOrig;
+massChart.data.datasets[6].data = cloudDep;
+massChart.data.datasets[7].data = [{ x: mTie_kg / (MS * 1e9), y: vReal }];
+massChart.update();
+  
     // UI
     const sin_dirty = Math.sin((g.inc - 2) * Math.PI / 180) || 0.1;
     document.getElementById('v1-raw').textContent = (g.vobs / sin_dirty).toFixed(1) + " km/s";
@@ -450,7 +561,7 @@ function run() {
 // INICIO
 // ═══════════════════════════════════════════════════
 window.onload = () => {
-    initChart();
+    initCharts();  // Cambiado de initChart a initCharts
     const sel = document.getElementById('gSelect');
     SPARC.forEach(x => {
         let o = document.createElement('option');

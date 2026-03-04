@@ -34,7 +34,7 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
 .val { font-family:var(--mono); font-size:1.35rem; font-weight:700; margin-top: 4px; display: block; }
 .status { font-family:var(--mono); font-size:0.65rem; padding:3px 10px; border-radius:4px; margin-top:8px; display:inline-block; font-weight:700; }
 
-.visual-section { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:1.5rem; height: 450px; position: relative; margin: 1rem 0; }
+.visual-section { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:1.5rem; height: 450px; position: relative; margin: 0.5rem 0; }
 
 .final { background:var(--bg2); border:2px solid var(--gold); padding:1.2rem 2.5rem; border-radius:12px; display:flex; justify-content:space-between; align-items:center; margin-top: auto; }
 .err-val { font-family:var(--mono); font-size:2rem; font-weight:700; }
@@ -49,7 +49,7 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
     <header>
         <div><p class="label" style="color:var(--gold)">AUDITORÍA DE INFRAESTRUCTURA AXON</p><h1>El Bisturí T²</h1></div>
         <div class="selector-box">
-            <span class="label">Galaxia:</span>
+            <span class="label">Sujeto:</span>
             <select id="gSelect" onchange="run()"></select>
         </div>
     </header>
@@ -124,7 +124,7 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
 </div>
 
 <script>
-// --- MOTOR FÍSICO ---
+// --- MOTOR FÍSICO AXON ---
 const G = 6.674e-11; const MS = 1.989e30;
 const a0 = (2.998e8 * (70 * 1000 / 3.0857e22)) / (2 * Math.PI); 
 
@@ -193,19 +193,19 @@ function initChart() {
         type: 'scatter',
         data: {
             datasets: [
-                { label: 'Predicción Newton', data: [], showLine: true, borderColor: '#555', borderWidth: 1.5, pointRadius: 0, borderDash: [10, 5], fill: false },
-                { label: 'Ley de Infraestructura (TIE)', data: [], showLine: true, borderColor: '#5BC8F5', borderWidth: 2, pointRadius: 0, fill: false },
-                { label: 'Tendencia SPARC (Catálogo)', data: [], backgroundColor: 'rgba(255, 68, 85, 0.2)', pointRadius: 4, pointHoverRadius: 6 },
-                { label: 'Tendencia T² (Depurada)', data: [], backgroundColor: 'rgba(68, 255, 136, 0.2)', pointRadius: 4, pointHoverRadius: 6 },
-                { label: 'Sujeto Original', data: [], backgroundColor: '#FF4455', pointRadius: 10, pointHoverRadius: 12, borderWidth: 2, borderColor: '#fff' },
-                { label: 'Sujeto Depurado', data: [], backgroundColor: '#44FF88', pointRadius: 12, pointHoverRadius: 14, borderWidth: 2, borderColor: '#fff', pointStyle: 'rectRot' }
+                { label: 'Predicción Newton', data: [], showLine: true, borderColor: 'rgba(255,255,255,0.2)', borderWidth: 1.5, pointRadius: 0, borderDash: [10, 5], fill: false },
+                { label: 'Infraestructura TIE', data: [], showLine: true, borderColor: '#5BC8F5', borderWidth: 2, pointRadius: 0, fill: false },
+                { label: 'Nube Original', data: [], backgroundColor: 'rgba(255, 68, 85, 0.1)', pointRadius: 4 },
+                { label: 'Nube Depurada', data: [], backgroundColor: 'rgba(68, 255, 136, 0.1)', pointRadius: 4 },
+                { label: 'Sujeto Original', data: [], backgroundColor: '#FF4455', pointRadius: 10, borderWidth: 2, borderColor: '#fff' },
+                { label: 'Sujeto T²', data: [], backgroundColor: '#44FF88', pointRadius: 12, borderWidth: 2, borderColor: '#fff', pointStyle: 'rectRot' }
             ]
         },
         options: {
             responsive: true, maintainAspectRatio: false,
             scales: {
-                x: { type: 'logarithmic', title: { display: true, text: 'Masa Bariónica (x10⁹ M☉)', color: '#7777aa', font: { family: 'Space Mono' } }, grid: { color: 'rgba(30, 30, 58, 0.5)' }, ticks: { color: '#7777aa' } },
-                y: { type: 'logarithmic', title: { display: true, text: 'Velocidad (km/s)', color: '#7777aa', font: { family: 'Space Mono' } }, grid: { color: 'rgba(30, 30, 58, 0.5)' }, ticks: { color: '#7777aa' } }
+                x: { type: 'logarithmic', title: { display: true, text: 'Masa Bariónica (x10⁹ M☉)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } },
+                y: { type: 'logarithmic', title: { display: true, text: 'Velocidad (km/s)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } }
             },
             plugins: { legend: { position: 'top', labels: { color: '#e8e8f0', font: { family: 'Space Mono', size: 10 }, usePointStyle: true } } }
         }
@@ -216,19 +216,18 @@ function run() {
     const sel = document.getElementById('gSelect');
     const g = DATA.find(x => x.name === sel.value) || DATA[0];
 
-    // Cálculos para el Sujeto Seleccionado
+    // Cálculos Sujeto
     const mStd_kg = (g.Mdisk * 1e10 + g.Mgas * 1e9) * MS;
     const vFlat_orig = Math.pow(G * mStd_kg * a0, 0.25) / 1000;
     const errO = (Math.abs(vFlat_orig - g.vobs) / g.vobs) * 100;
 
     const ups = Math.pow(10, -0.44 + (0.94 * g.color));
     const mTie_kg = (g.Mdisk * 1e10 * (ups / 0.5) + g.Mgas * 1e9 * 1.33) * MS;
-    const sigma = 11;
-    const vReal = Math.sqrt(Math.pow(g.vobs, 2) + 2 * Math.pow(sigma, 2));
+    const vReal = Math.sqrt(Math.pow(g.vobs, 2) + 2 * Math.pow(11, 2));
     const vFlat_tie = Math.pow(G * mTie_kg * a0, 0.25) / 1000;
     const errN = (Math.abs(vFlat_tie - vReal) / vReal) * 100;
 
-    // Actualizar Interfaz de Texto
+    // Actualizar Textos
     const sin_dirty = Math.sin((g.inc - 2) * Math.PI / 180) || 0.1;
     document.getElementById('v1-raw').textContent = (g.vobs / sin_dirty).toFixed(1) + " km/s";
     document.getElementById('v1-tie').textContent = g.vobs.toFixed(1) + " km/s";
@@ -241,26 +240,21 @@ function run() {
     document.getElementById('sync').textContent = (100 - errN).toFixed(1) + "%";
 
     // --- ACTUALIZAR GRÁFICA ---
-    
-    // 1. Líneas de Referencia (TIE y Newton)
     const lineTIE = []; const lineNewton = [];
     for(let m = 0.01; m <= 1000; m *= 1.5) {
-        let m_kg = m * 1e9 * MS;
-        lineTIE.push({ x: m, y: Math.pow(G * m_kg * a0, 0.25) / 1000 });
-        // Newton: V = sqrt(GM/R). Para la gráfica usamos una referencia de R ~ 10kpc
-        lineNewton.push({ x: m, y: Math.sqrt(G * m_kg / (10 * 3.086e19)) / 1000 });
+        let mk = m * 1e9 * MS;
+        lineTIE.push({ x: m, y: Math.pow(G * mk * a0, 0.25) / 1000 });
+        lineNewton.push({ x: m, y: Math.sqrt(G * mk / (10 * 3.086e19)) / 1000 });
     }
 
-    // 2. Nubes de Tendencia (Todo el Catálogo)
     const cloudOrig = []; const cloudDep = [];
-    DATA.forEach(item => {
-        let m_orig = (item.Mdisk * 1e10 + item.Mgas * 1e9);
-        cloudOrig.push({ x: m_orig/1e9, y: item.vobs });
-        
-        let u_item = Math.pow(10, -0.44 + (0.94 * item.color));
-        let m_dep = (item.Mdisk * 1e10 * (u_item / 0.5) + item.Mgas * 1e9 * 1.33);
-        let v_dep = Math.sqrt(Math.pow(item.vobs, 2) + 2 * Math.pow(11, 2));
-        cloudDep.push({ x: m_dep/1e9, y: v_dep });
+    DATA.forEach(d => {
+        let mo = (d.Mdisk * 1e10 + d.Mgas * 1e9);
+        cloudOrig.push({ x: mo/1e9, y: d.vobs });
+        let ud = Math.pow(10, -0.44 + (0.94 * d.color));
+        let md = (d.Mdisk * 1e10 * (ud / 0.5) + d.Mgas * 1e9 * 1.33);
+        let vd = Math.sqrt(Math.pow(d.vobs, 2) + 2 * Math.pow(11, 2));
+        cloudDep.push({ x: md/1e9, y: vd });
     });
 
     myChart.data.datasets[0].data = lineNewton;

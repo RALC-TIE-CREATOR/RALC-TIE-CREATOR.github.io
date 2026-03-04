@@ -125,17 +125,13 @@ const DATA = [
   { name:"NGC 5055", type:"Espiral", inc:59, Mdisk:4.10, Mgas:11.0, vobs:183, color:0.73 },
   { name:"NGC 4736", type:"Espiral", inc:35, Mdisk:1.10, Mgas:1.8, vobs:180, color:0.68 },
   { name:"NGC 3031", type:"Espiral", inc:59, Mdisk:4.60, Mgas:7.0, vobs:220, color:0.74 },
-  { name:"NGC 300", type:"Espiral", inc:42, Mdisk:0.15, Mgas:2.8, vobs:90, color:0.55 },
-  { name:"NGC 7793", type:"Espiral", inc:50, Mdisk:0.28, Mgas:2.1, vobs:100, color:0.58 },
-  { name:"NGC 2976", type:"Espiral", inc:36, Mdisk:0.28, Mgas:0.9, vobs:87, color:0.56 },
+  { name:"DDO 154",  type:"Enana",   inc:66, Mdisk:0.0028, Mgas:0.71, vobs:47, color:0.35 },
   { name:"UGC 2885", type:"Gigante", inc:80.4, Mdisk:17.5, Mgas:82.0, vobs:300, color:0.85 },
-  { name:"DDO 154", type:"Enana", inc:66, Mdisk:0.0028, Mgas:0.71, vobs:47, color:0.35 },
   { name:"NGC 6946", type:"Espiral", inc:33, Mdisk:3.20, Mgas:12.0, vobs:195, color:0.70 }
 ];
 
 let myChart;
 
-// Función para calcular regresión lineal en escala logarítmica
 function getTrendline(points) {
     let n = points.length;
     let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
@@ -145,9 +141,8 @@ function getTrendline(points) {
     });
     let slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
     let intercept = (sumY - slope * sumX) / n;
-    
     let line = [];
-    for(let m = 0.01; m <= 1000; m *= 5) {
+    for(let m = 0.05; m <= 800; m *= 4) {
         line.push({ x: m, y: Math.pow(10, intercept + slope * Math.log10(m)) });
     }
     return line;
@@ -159,20 +154,20 @@ function initChart() {
         type: 'scatter',
         data: {
             datasets: [
-                { label: 'Tendencia Newton', data: [], showLine: true, borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1, pointRadius: 0, borderDash: [10, 5], fill: false },
-                { label: 'Teoría TIE (Ideal)', data: [], showLine: true, borderColor: 'rgba(91, 200, 245, 0.6)', borderWidth: 3, pointRadius: 0, fill: false },
-                { label: 'Tendencia SPARC (Catálogo)', data: [], showLine: true, borderColor: 'rgba(255, 68, 85, 0.8)', borderWidth: 2, pointRadius: 0, fill: false },
-                { label: 'Tendencia T² (Bisturí)', data: [], showLine: true, borderColor: 'rgba(68, 255, 136, 0.8)', borderWidth: 2, pointRadius: 0, fill: false },
-                { label: 'Obs. Originales', data: [], backgroundColor: 'rgba(255, 68, 85, 0.1)', pointRadius: 4 },
-                { label: 'Obs. Depuradas', data: [], backgroundColor: 'rgba(68, 255, 136, 0.1)', pointRadius: 4 },
-                { label: 'Sujeto Actual', data: [], backgroundColor: '#FFD700', pointRadius: 12, borderWidth: 3, borderColor: '#fff', pointStyle: 'star' }
+                { label: 'Tendencia Newton (1/2)', data: [], showLine: true, borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, pointRadius: 0, borderDash: [5, 5], fill: false },
+                { label: 'Teoría TIE (1/4)', data: [], showLine: true, borderColor: '#5BC8F5', borderWidth: 2, pointRadius: 0, fill: false },
+                { label: 'Ajuste SPARC', data: [], showLine: true, borderColor: 'rgba(255, 68, 85, 0.6)', borderWidth: 1.5, pointRadius: 0, borderDash: [2, 2], fill: false },
+                { label: 'Ajuste T²', data: [], showLine: true, borderColor: 'rgba(68, 255, 136, 0.6)', borderWidth: 1.5, pointRadius: 0, borderDash: [2, 2], fill: false },
+                { label: 'Catálogo Original', data: [], backgroundColor: 'rgba(255, 68, 85, 0.15)', pointRadius: 3 },
+                { label: 'Catálogo Depurado', data: [], backgroundColor: 'rgba(68, 255, 136, 0.15)', pointRadius: 3 },
+                { label: 'Sujeto Auditado', data: [], backgroundColor: '#FFD700', pointRadius: 10, borderWidth: 2, borderColor: '#fff', pointStyle: 'star' }
             ]
         },
         options: {
             responsive: true, maintainAspectRatio: false,
             scales: {
-                x: { type: 'logarithmic', title: { display: true, text: 'Masa Bariónica (x10⁹ M☉)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } },
-                y: { type: 'logarithmic', title: { display: true, text: 'Velocidad (km/s)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } }
+                x: { type: 'logarithmic', min: 0.1, max: 1000, title: { display: true, text: 'Masa Bariónica (x10⁹ M☉)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa', callback: value => value } },
+                y: { type: 'logarithmic', min: 20, max: 500, title: { display: true, text: 'Velocidad (km/s)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } }
             },
             plugins: { legend: { position: 'top', labels: { color: '#e8e8f0', font: { family: 'Space Mono', size: 9 }, usePointStyle: true } } }
         }
@@ -183,18 +178,17 @@ function run() {
     const sel = document.getElementById('gSelect');
     const g = DATA.find(x => x.name === sel.value) || DATA[0];
 
-    // Cálculos Sujeto
     const mStd_kg = (g.Mdisk * 1e10 + g.Mgas * 1e9) * MS;
     const vFlat_orig = Math.pow(G * mStd_kg * a0, 0.25) / 1000;
     const errO = (Math.abs(vFlat_orig - g.vobs) / g.vobs) * 100;
+
     const ups = Math.pow(10, -0.44 + (0.94 * g.color));
     const mTie_kg = (g.Mdisk * 1e10 * (ups / 0.5) + g.Mgas * 1e9 * 1.33) * MS;
     const vReal = Math.sqrt(Math.pow(g.vobs, 2) + 2 * Math.pow(11, 2));
     const vFlat_tie = Math.pow(G * mTie_kg * a0, 0.25) / 1000;
     const errN = (Math.abs(vFlat_tie - vReal) / vReal) * 100;
 
-    // Actualizar Textos
-    document.getElementById('v1-raw').textContent = (g.vobs / Math.sin((g.inc - 2) * Math.PI / 180)).toFixed(1) + " km/s";
+    document.getElementById('v1-raw').textContent = (g.vobs / Math.sin((g.inc-2)*Math.PI/180)).toFixed(1) + " km/s";
     document.getElementById('v1-tie').textContent = g.vobs.toFixed(1) + " km/s";
     document.getElementById('v2-raw').textContent = (mStd_kg / (MS * 1e9)).toFixed(2) + " x10⁹";
     document.getElementById('v2-tie').textContent = (mTie_kg / (MS * 1e9)).toFixed(2) + " x10⁹";
@@ -204,24 +198,20 @@ function run() {
     document.getElementById('e-new').textContent = errN.toFixed(1) + "%";
     document.getElementById('sync').textContent = (100 - errN).toFixed(1) + "%";
 
-    // --- GENERAR TENDENCIAS ---
     const cloudOrig = []; const cloudDep = [];
     DATA.forEach(d => {
-        let mo = (d.Mdisk * 1e10 + d.Mgas * 1e9);
-        cloudOrig.push({ x: mo/1e9, y: d.vobs });
+        let mo = (d.Mdisk * 1e10 + d.Mgas * 1e9); cloudOrig.push({ x: mo/1e9, y: d.vobs });
         let ud = Math.pow(10, -0.44 + (0.94 * d.color));
         let md = (d.Mdisk * 1e10 * (ud / 0.5) + d.Mgas * 1e9 * 1.33);
         cloudDep.push({ x: md/1e9, y: Math.sqrt(Math.pow(d.vobs, 2) + 2 * Math.pow(11, 2)) });
     });
 
-    // Líneas Teóricas
     const lineTIE = []; const lineNewton = [];
-    for(let m = 0.01; m <= 1000; m *= 2) {
+    for(let m = 0.1; m <= 1000; m *= 2) {
         lineTIE.push({ x: m, y: Math.pow(G * (m * 1e9 * MS) * a0, 0.25) / 1000 });
         lineNewton.push({ x: m, y: Math.sqrt(G * (m * 1e9 * MS) / (10 * 3.086e19)) / 1000 });
     }
 
-    // Actualizar datasets
     myChart.data.datasets[0].data = lineNewton;
     myChart.data.datasets[1].data = lineTIE;
     myChart.data.datasets[2].data = getTrendline(cloudOrig);

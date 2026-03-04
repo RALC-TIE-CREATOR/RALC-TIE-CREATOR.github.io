@@ -1550,7 +1550,9 @@ function selectGalaxy(name) {
       line: { color: '#44FF88', width: 1.5, dash: 'dot' } },
   ];
 
-  Plotly.newPlot('sparc-plot', traces, layout, { displayModeBar: false, responsive: true });
+  setTimeout(() => {
+    Plotly.newPlot('sparc-plot', traces, layout, { displayModeBar: false, responsive: true });
+  }, 50);
 
   // Metrics
   document.getElementById('sparc-vtie').textContent = vFlat.toFixed(0);
@@ -1591,3 +1593,4 @@ renderSPARCList(SPARC);
 </script>
 </body>
 </html>
+

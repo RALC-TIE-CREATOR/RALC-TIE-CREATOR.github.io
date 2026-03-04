@@ -13,17 +13,17 @@
   --border: #1e1e3a; --mono: 'Space Mono', monospace;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { background:var(--bg); color:var(--text); font-family:'Syne', sans-serif; min-height:100vh; overflow-y:auto; display:flex; flex-direction:column; }
-.dashboard { flex:1; display:flex; flex-direction:column; padding:1.5rem; gap:1.2rem; max-width: 1400px; margin: 0 auto; width: 100%; }
+body { background:var(--bg); color:var(--text); font-family:'Syne', sans-serif; min-height:100vh; overflow-x:hidden; display:flex; flex-direction:column; }
+.dashboard { flex:1; display:flex; flex-direction:column; padding:1.5rem; gap:1.2rem; max-width: 1600px; margin: 0 auto; width: 100%; }
 
-header { border-left:5px solid var(--gold); padding-left:1.2rem; display:flex; justify-content:space-between; align-items:center; margin-bottom: 1rem; }
+header { border-left:5px solid var(--gold); padding-left:1.2rem; display:flex; justify-content:space-between; align-items:center; }
 h1 { font-size:1.8rem; font-weight:800; text-transform:uppercase; letter-spacing:-1px; }
 .label { font-family:var(--mono); font-size:0.75rem; color:var(--dim); text-transform:uppercase; }
 
 .selector-box { background:var(--bg2); border:1px solid var(--gold); padding:8px 20px; border-radius:6px; }
 select { background:transparent; color:var(--gold); border:none; font-family:var(--mono); font-size:1rem; outline:none; cursor:pointer; font-weight:700; }
 
-.surgery-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:1.2rem; margin-bottom: 1.5rem; }
+.surgery-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:1.2rem; }
 .card { background:var(--bg2); border:1px solid var(--border); padding:1.5rem; border-radius:10px; display:flex; flex-direction:column; gap:12px; }
 h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-bottom:1px solid var(--border); padding-bottom:8px; }
 
@@ -34,20 +34,20 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
 .val { font-family:var(--mono); font-size:1.35rem; font-weight:700; margin-top: 4px; display: block; }
 .status { font-family:var(--mono); font-size:0.65rem; padding:3px 10px; border-radius:4px; margin-top:8px; display:inline-block; font-weight:700; }
 
-.visual-section { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:1.5rem; height: 500px; position: relative; margin-bottom: 1.5rem; }
+.visual-section { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:1.5rem; height: 500px; position: relative; margin: 0.5rem 0; }
 
-.final { background:var(--bg2); border:2px solid var(--gold); padding:1.5rem 2.5rem; border-radius:12px; display:flex; justify-content:space-between; align-items:center; margin-top: auto; }
+.final { background:var(--bg2); border:2px solid var(--gold); padding:1.2rem 2.5rem; border-radius:12px; display:flex; justify-content:space-between; align-items:center; margin-top: auto; }
 .err-val { font-family:var(--mono); font-size:2rem; font-weight:700; }
 .btn { background:var(--gold); color:#000; padding:12px 25px; border-radius:6px; text-decoration:none; font-family:var(--mono); font-size:0.85rem; font-weight:700; }
 
-@media (max-width:1100px) { .surgery-grid { grid-template-columns:1fr; } .visual-section { height: 400px; } }
+@media (max-width:1100px) { .surgery-grid { grid-template-columns:1fr; } body { overflow-y:auto; } .dashboard { height:auto; } .visual-section { height: 350px; } }
 </style>
 </head>
 <body>
 
 <div class="dashboard">
     <header>
-        <div><p class="label" style="color:var(--gold)">AUDITORÍA DE INFRAESTRUCTURA AXON</p><h1>El Bisturí T²</h1></div>
+        <div><p class="label" style="color:var(--gold)">AUDITORÍA DE TENDENCIAS AXON</p><h1>El Bisturí T²</h1></div>
         <div class="selector-box">
             <span class="label">Sujeto:</span>
             <select id="gSelect" onchange="run()"></select>
@@ -62,7 +62,11 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
                 <div class="val" id="v1-raw">---</div>
                 <div id="s1-raw" class="status">---</div>
             </div>
-            <div class="bridge-text">La inclinación proyecta una sombra en la velocidad. TIE identifica que <b>pequeños errores angulares</b> crean <b>ruido masivo</b> en el cálculo. Depuramos el vector para obtener la rotación intrínseca.</div>
+            
+            <div class="bridge-text">
+                La inclinación proyecta una sombra en la velocidad. TIE identifica que <b>pequeños errores angulares</b> crean <b>ruido masivo</b> en el cálculo. Depuramos el vector para obtener la rotación intrínseca.
+            </div>
+
             <div class="data-block" style="border-color:var(--blue)">
                 <div class="label">Obs. Corregida (TIE)</div>
                 <div class="val" style="color:var(--blue)" id="v1-tie">---</div>
@@ -76,7 +80,11 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
                 <div class="label">Masa Catálogo (Υ=0.5)</div>
                 <div class="val" id="v2-raw">---</div>
             </div>
-            <div class="bridge-text">No toda la materia brilla igual. El modelo estándar es rígido, pero TIE ajusta el <b>ratio Masa-Luz dinámico</b> según el color estelar para revelar la verdadera infraestructura bariónica.</div>
+
+            <div class="bridge-text">
+                No toda la materia brilla igual. El modelo estándar es rígido, pero TIE ajusta el <b>ratio Masa-Luz dinámico</b> según el color estelar para revelar la verdadera infraestructura bariónica.
+            </div>
+
             <div class="data-block" style="border-color:var(--gold)">
                 <div class="label">Masa T² (Υ Dinámico)</div>
                 <div class="val" style="color:var(--gold)" id="v2-tie">---</div>
@@ -89,7 +97,11 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
                 <div class="label">Velocidad Rotación</div>
                 <div class="val" id="v3-raw">---</div>
             </div>
-            <div class="bridge-text">El gas no solo gira, también empuja. La <b>presión térmica</b> sostiene parte de la galaxia, restando velocidad. TIE suma esta energía oculta ($\sigma$) para hallar la aceleración circular total.</div>
+
+            <div class="bridge-text">
+                El gas no solo gira, también empuja. La <b>presión térmica</b> sostiene parte de la galaxia, restando velocidad. TIE suma esta energía oculta ($\sigma$) para hallar la aceleración circular total.
+            </div>
+
             <div class="data-block" style="border-color:var(--green)">
                 <div class="label">V_Circular Real (TIE+Σ)</div>
                 <div class="val" style="color:var(--green)" id="v3-tie">---</div>
@@ -107,7 +119,7 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
             <div style="text-align:center;"><div class="label">Error Original (SPARC)</div><div id="e-old" style="color:var(--red);" class="err-val">--%</div></div>
             <div style="text-align:center;"><div class="label">Error T² (Bisturí)</div><div id="e-new" style="color:var(--green);" class="err-val">--%</div></div>
         </div>
-        <a href="sparc.html" class="btn">VOLVER</a>
+        <a href="sparc.html" class="btn">VOLVER AL CATÁLOGO</a>
     </footer>
 </div>
 
@@ -116,7 +128,7 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
 const G = 6.674e-11; const MS = 1.989e30;
 const a0 = (2.998e8 * (70 * 1000 / 3.0857e22)) / (2 * Math.PI); 
 
-// DATA COMPLETA (Sincronizada)
+// DATA COMPLETA (Sincronizada con explorador)
 const DATA = [
   { name:"NGC 3198", type:"Espiral", inc:72, Mdisk:2.20, Mgas:8.5, vobs:150, color:0.65 },
   { name:"NGC 2403", type:"Espiral", inc:62, Mdisk:0.82, Mgas:12.0, vobs:134, color:0.60 },
@@ -124,6 +136,9 @@ const DATA = [
   { name:"NGC 7331", type:"Espiral", inc:75, Mdisk:6.33, Mgas:9.4, vobs:240, color:0.75 },
   { name:"NGC 2841", type:"Espiral", inc:68, Mdisk:8.40, Mgas:6.1, vobs:280, color:0.80 },
   { name:"NGC 3521", type:"Espiral", inc:72, Mdisk:5.50, Mgas:9.2, vobs:230, color:0.71 },
+  { name:"NGC 5055", type:"Espiral", inc:59, Mdisk:4.10, Mgas:11.0, vobs:183, color:0.73 },
+  { name:"NGC 4736", type:"Espiral", inc:35, Mdisk:1.10, Mgas:1.8, vobs:180, color:0.68 },
+  { name:"NGC 3031", type:"Espiral", inc:59, Mdisk:4.60, Mgas:7.0, vobs:220, color:0.74 },
   { name:"DDO 154",  type:"Enana",   inc:66, Mdisk:0.0028, Mgas:0.71, vobs:47, color:0.35 },
   { name:"UGC 2885", type:"Gigante", inc:80.4, Mdisk:17.5, Mgas:82.0, vobs:300, color:0.85 },
   { name:"NGC 6946", type:"Espiral", inc:33, Mdisk:3.20, Mgas:12.0, vobs:195, color:0.70 }
@@ -131,19 +146,19 @@ const DATA = [
 
 let myChart;
 
-// Función para calcular tendencia logarítmica
-function calculateTrend(points) {
+// Función de Tendencia (Regresión en espacio logarítmico)
+function getTrend(points) {
     let n = points.length;
     let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
     points.forEach(p => {
-        let lx = Math.log10(p.x); let ly = Math.log10(p.y);
-        sumX += lx; sumY += ly; sumXY += lx * ly; sumX2 += lx * lx;
+        let x = Math.log10(p.x); let y = Math.log10(p.y);
+        sumX += x; sumY += y; sumXY += x * y; sumX2 += x * x;
     });
     let m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
     let b = (sumY - m * sumX) / n;
     let line = [];
-    for(let xVal = 0.05; xVal <= 1000; xVal *= 5) {
-        line.push({ x: xVal, y: Math.pow(10, m * Math.log10(xVal) + b) });
+    for(let val = 0.05; val <= 1000; val *= 4) {
+        line.push({ x: val, y: Math.pow(10, m * Math.log10(val) + b) });
     }
     return line;
 }
@@ -154,9 +169,9 @@ function initChart() {
         type: 'scatter',
         data: {
             datasets: [
-                { label: 'Newton (Caída)', data: [], showLine: true, borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderDash: [5,5], pointRadius: 0 },
-                { label: 'Línea TIE (Ideal)', data: [], showLine: true, borderColor: '#5BC8F5', borderWidth: 2, pointRadius: 0 },
-                { label: 'Tendencia SPARC (Roja)', data: [], showLine: true, borderColor: 'rgba(255, 68, 85, 0.8)', borderWidth: 2, pointRadius: 0, borderDash: [2,2] },
+                { label: 'Tendencia Newton', data: [], showLine: true, borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderDash:[5,5], pointRadius: 0 },
+                { label: 'TIE (Ideal)', data: [], showLine: true, borderColor: '#5BC8F5', borderWidth: 2, pointRadius: 0 },
+                { label: 'Tendencia SPARC (Roja)', data: [], showLine: true, borderColor: 'rgba(255, 68, 85, 0.6)', borderWidth: 2, pointRadius: 0, borderDash: [2,2] },
                 { label: 'Tendencia T² (Verde)', data: [], showLine: true, borderColor: 'rgba(68, 255, 136, 0.8)', borderWidth: 2, pointRadius: 0 },
                 { label: 'Original', data: [], backgroundColor: 'rgba(255, 68, 85, 0.1)', pointRadius: 4 },
                 { label: 'Depurado', data: [], backgroundColor: 'rgba(68, 255, 136, 0.1)', pointRadius: 4 },
@@ -169,7 +184,7 @@ function initChart() {
                 x: { type: 'logarithmic', min: 0.1, max: 1000, title: { display: true, text: 'Masa Bariónica (x10⁹ M☉)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } },
                 y: { type: 'logarithmic', min: 20, max: 600, title: { display: true, text: 'Velocidad (km/s)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } }
             },
-            plugins: { legend: { labels: { color: '#e8e8f0', font: { family: 'Space Mono', size: 10 }, usePointStyle: true } } }
+            plugins: { legend: { position: 'top', labels: { color: '#e8e8f0', font: { family: 'Space Mono', size: 10 }, usePointStyle: true } } }
         }
     });
 }
@@ -178,18 +193,19 @@ function run() {
     const sel = document.getElementById('gSelect');
     const g = DATA.find(x => x.name === sel.value) || DATA[0];
 
-    // Cálculos de Sujeto
+    // Cálculos Originales
     const mStd_kg = (g.Mdisk * 1e10 + g.Mgas * 1e9) * MS;
     const vFlat_orig = Math.pow(G * mStd_kg * a0, 0.25) / 1000;
     const errO = (Math.abs(vFlat_orig - g.vobs) / g.vobs) * 100;
 
+    // Cálculos Bisturí
     const ups = Math.pow(10, -0.44 + (0.94 * g.color));
     const mTie_kg = (g.Mdisk * 1e10 * (ups / 0.5) + g.Mgas * 1e9 * 1.33) * MS;
     const vReal = Math.sqrt(Math.pow(g.vobs, 2) + 2 * Math.pow(11, 2));
     const vFlat_tie = Math.pow(G * mTie_kg * a0, 0.25) / 1000;
     const errN = (Math.abs(vFlat_tie - vReal) / vReal) * 100;
 
-    // Actualización de UI
+    // UI
     const sin_dirty = Math.sin((g.inc - 2) * Math.PI / 180) || 0.1;
     document.getElementById('v1-raw').textContent = (g.vobs / sin_dirty).toFixed(1) + " km/s";
     document.getElementById('v1-tie').textContent = g.vobs.toFixed(1) + " km/s";
@@ -201,7 +217,7 @@ function run() {
     document.getElementById('e-new').textContent = errN.toFixed(1) + "%";
     document.getElementById('sync').textContent = (100 - errN).toFixed(1) + "%";
 
-    // --- ACTUALIZAR GRÁFICA ---
+    // --- GRÁFICA ---
     const cloudOrig = []; const cloudDep = [];
     DATA.forEach(d => {
         let mo = (d.Mdisk * 1e10 + d.Mgas * 1e9); cloudOrig.push({ x: mo/1e9, y: d.vobs });
@@ -218,15 +234,15 @@ function run() {
 
     myChart.data.datasets[0].data = lineNewton;
     myChart.data.datasets[1].data = lineTIE;
-    myChart.data.datasets[2].data = calculateTrend(cloudOrig);
-    myChart.data.datasets[3].data = calculateTrend(cloudDep);
+    myChart.data.datasets[2].data = getTrend(cloudOrig);
+    myChart.data.datasets[3].data = getTrend(cloudDep);
     myChart.data.datasets[4].data = cloudOrig;
     myChart.data.datasets[5].data = cloudDep;
     myChart.data.datasets[6].data = [{ x: mTie_kg / (MS * 1e9), y: vReal }];
     myChart.update();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+window.onload = () => {
     initChart();
     const sel = document.getElementById('gSelect');
     DATA.forEach(x => {
@@ -237,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gal = p.get('galaxy');
     if (gal) sel.value = decodeURIComponent(gal);
     run();
-});
+};
 </script>
 </body>
 </html>

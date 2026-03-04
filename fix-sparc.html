@@ -131,6 +131,9 @@ const G = 6.674e-11;
 const MS = 1.989e30;
 const H0_si = 70 * 1000 / 3.0857e22;
 const a0 = (2.998e8 * H0_si) / (2 * Math.PI);
+const c = 2.998e8;
+const kpc = 3.0857e19;
+const km = 1e3;
 
 // ═══════════════════════════════════════════════════
 // BASE DE DATOS COMPLETA — 55 galaxias SPARC (Lelli et al. 2016)
@@ -301,32 +304,26 @@ const SPARC = [
 // FUNCIONES AUXILIARES
 // ═══════════════════════════════════════════════════
 
-// Calcular color basado en tipo y masa (aproximación)
 function calcularColorDesdeTipo(g) {
     if (g.type.includes("Enana")) return 0.35;
     if (g.type.includes("LSB")) return 0.3;
     if (g.type.includes("Gigante")) return 0.8;
     if (g.type.includes("Irregular")) return 0.4;
-    // Espirales: color basado en masa
     return 0.5 + (g.Mdisk / 15) * 0.3;
 }
 
-// Estimar radio de escala si no está presente
 function getRd(g) {
     if (g.rd) return g.rd;
-    // Estimación basada en masa estelar
     return Math.pow(g.Mdisk * 1e10, 0.2) * 0.8;
 }
 
-// Inclinación por defecto (ajustable según tipo)
 function getInc(g) {
     if (g.inc) return g.inc;
     if (g.type.includes("Enana")) return 66;
     if (g.type.includes("LSB")) return 70;
-    return 72; // valor típico para espirales
+    return 72;
 }
 
-// Función de Tendencia (regresión logarítmica)
 function getTrend(points) {
     let n = points.length;
     let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
@@ -343,6 +340,9 @@ function getTrend(points) {
     return line;
 }
 
+// ═══════════════════════════════════════════════════
+// INICIALIZACIÓN GRÁFICA
+// ═══════════════════════════════════════════════════
 let myChart;
 
 function initChart() {
@@ -351,117 +351,35 @@ function initChart() {
         type: 'scatter',
         data: {
             datasets: [
-                { 
-                    label: 'Tendencia Newton', 
-                    data: [], 
-                    showLine: true, 
-                    borderColor: 'rgba(255,255,255,0.1)', 
-                    borderWidth: 1, 
-                    borderDash: [5,5], 
-                    pointRadius: 0 
-                },
-                { 
-                    label: 'TIE (0 parámetros)', 
-                    data: [], 
-                    showLine: true, 
-                    borderColor: '#FFD700', 
-                    borderWidth: 3, 
-                    pointRadius: 0 
-                },
-                { 
-                    label: 'v_flat', 
-                    data: [], 
-                    showLine: true, 
-                    borderColor: '#44FF88', 
-                    borderWidth: 1.5, 
-                    borderDash: [3,3], 
-                    pointRadius: 0 
-                },
-                { 
-                    label: 'Tendencia SPARC (Original)', 
-                    data: [], 
-                    showLine: true, 
-                    borderColor: 'rgba(255, 68, 85, 0.6)', 
-                    borderWidth: 2, 
-                    borderDash: [2,2], 
-                    pointRadius: 0 
-                },
-                { 
-                    label: 'Tendencia T² (Bisturí)', 
-                    data: [], 
-                    showLine: true, 
-                    borderColor: 'rgba(68, 255, 136, 0.8)', 
-                    borderWidth: 2, 
-                    pointRadius: 0 
-                },
-                { 
-                    label: 'Observado (SPARC)', 
-                    data: [], 
-                    backgroundColor: '#5BC8F5', 
-                    pointRadius: 6,
-                    borderColor: '#0d0d1a',
-                    borderWidth: 1,
-                    pointStyle: 'circle'
-                },
-                { 
-                    label: 'Depurado (TIE+Σ)', 
-                    data: [], 
-                    backgroundColor: 'rgba(68, 255, 136, 0.5)', 
-                    pointRadius: 5,
-                    pointStyle: 'circle'
-                },
-                { 
-                    label: 'SUJETO AUDITADO', 
-                    data: [], 
-                    backgroundColor: '#FFD700', 
-                    pointRadius: 12, 
-                    borderWidth: 3, 
-                    borderColor: '#fff', 
-                    pointStyle: 'star' 
-                }
+                { label: 'Tendencia Newton', data: [], showLine: true, borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderDash:[5,5], pointRadius: 0 },
+                { label: 'TIE (0 parámetros)', data: [], showLine: true, borderColor: '#FFD700', borderWidth: 3, pointRadius: 0 },
+                { label: 'v_flat', data: [], showLine: true, borderColor: '#44FF88', borderWidth: 1.5, borderDash: [3,3], pointRadius: 0 },
+                { label: 'Tendencia SPARC (Original)', data: [], showLine: true, borderColor: 'rgba(255, 68, 85, 0.6)', borderWidth: 2, borderDash: [2,2], pointRadius: 0 },
+                { label: 'Tendencia T² (Bisturí)', data: [], showLine: true, borderColor: 'rgba(68, 255, 136, 0.8)', borderWidth: 2, pointRadius: 0 },
+                { label: 'Observado (SPARC)', data: [], backgroundColor: '#5BC8F5', pointRadius: 6, borderColor: '#0d0d1a', borderWidth: 1 },
+                { label: 'Depurado (TIE+Σ)', data: [], backgroundColor: 'rgba(68, 255, 136, 0.5)', pointRadius: 5 },
+                { label: 'SUJETO AUDITADO', data: [], backgroundColor: '#FFD700', pointRadius: 12, borderWidth: 3, borderColor: '#fff', pointStyle: 'star' }
             ]
         },
         options: {
-            responsive: true, 
-            maintainAspectRatio: false,
+            responsive: true, maintainAspectRatio: false,
             scales: {
-                x: { 
-                    type: 'logarithmic', 
-                    min: 0.1, 
-                    max: 1000, 
-                    title: { display: true, text: 'Masa Bariónica (x10⁹ M☉)', color: '#7777aa' }, 
-                    grid: { color: 'rgba(255,255,255,0.05)' }, 
-                    ticks: { color: '#7777aa' } 
-                },
-                y: { 
-                    type: 'logarithmic', 
-                    min: 20, 
-                    max: 600, 
-                    title: { display: true, text: 'Velocidad (km/s)', color: '#7777aa' }, 
-                    grid: { color: 'rgba(255,255,255,0.05)' }, 
-                    ticks: { color: '#7777aa' } 
-                }
+                x: { type: 'logarithmic', min: 0.1, max: 1000, title: { display: true, text: 'Masa Bariónica (x10⁹ M☉)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } },
+                y: { type: 'logarithmic', min: 20, max: 600, title: { display: true, text: 'Velocidad (km/s)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } }
             },
-            plugins: { 
-                legend: { 
-                    position: 'top', 
-                    labels: { 
-                        color: '#e8e8f0', 
-                        font: { family: 'Space Mono', size: 9 }, 
-                        usePointStyle: true,
-                        padding: 15
-                    } 
-                } 
-            }
+            plugins: { legend: { position: 'top', labels: { color: '#e8e8f0', font: { family: 'Space Mono', size: 9 }, usePointStyle: true, padding: 15 } } }
         }
     });
 }
 
+// ═══════════════════════════════════════════════════
+// FUNCIÓN PRINCIPAL
+// ═══════════════════════════════════════════════════
 function run() {
     const sel = document.getElementById('gSelect');
     const gRaw = SPARC.find(x => x.name === sel.value) || SPARC[0];
 
-    // Preparar parámetros para el depurador (calcular los que faltan)
+    // Preparar parámetros
     const g = {
         name: gRaw.name,
         type: gRaw.type,
@@ -497,37 +415,25 @@ function run() {
     document.getElementById('e-new').textContent = errN.toFixed(1) + "%";
     document.getElementById('sync').textContent = (100 - errN).toFixed(1) + "%";
 
-    const cloudOrig = []; 
-    const cloudDep = [];
+    // --- GRÁFICA ---
+    const cloudOrig = []; const cloudDep = [];
     
     SPARC.forEach(d => {
-        // Original (como en SPARC)
         let mo = (d.Mdisk * 1e10 + d.Mgas * 1e9); 
         cloudOrig.push({ x: mo/1e9, y: d.vobs });
         
-        // Depurado (con correcciones TIE)
         let ud = d.color || calcularColorDesdeTipo(d);
         let md = (d.Mdisk * 1e10 * (ud / 0.5) + d.Mgas * 1e9 * 1.33);
-        cloudDep.push({ 
-            x: md/1e9, 
-            y: Math.sqrt(Math.pow(d.vobs, 2) + 2 * Math.pow(11, 2)) 
-        });
+        cloudDep.push({ x: md/1e9, y: Math.sqrt(Math.pow(d.vobs, 2) + 2 * Math.pow(11, 2)) });
     });
 
-    // Líneas teóricas
-    const lineTIE = []; 
-    const lineNewton = [];
-    const vFlatArray = [];
-    
+    const lineTIE = []; const lineNewton = []; const vFlatArray = [];
     for(let m = 0.05; m <= 1000; m *= 2) {
         lineTIE.push({ x: m, y: Math.pow(G * (m * 1e9 * MS) * a0, 0.25) / 1000 });
         lineNewton.push({ x: m, y: Math.sqrt(G * (m * 1e9 * MS) / (10 * 3.086e19)) / 1000 });
         vFlatArray.push({ x: m, y: vFlat_tie });
     }
 
-    // Asignar datasets en el orden correcto:
-    // 0: Newton, 1: TIE, 2: v_flat, 3: Tendencia SPARC, 4: Tendencia TIE, 
-    // 5: Observado, 6: Depurado, 7: Sujeto
     myChart.data.datasets[0].data = lineNewton;
     myChart.data.datasets[1].data = lineTIE;
     myChart.data.datasets[2].data = vFlatArray;
@@ -538,7 +444,11 @@ function run() {
     myChart.data.datasets[7].data = [{ x: mTie_kg / (MS * 1e9), y: vReal }];
     
     myChart.update();
+}
 
+// ═══════════════════════════════════════════════════
+// INICIO
+// ═══════════════════════════════════════════════════
 window.onload = () => {
     initChart();
     const sel = document.getElementById('gSelect');

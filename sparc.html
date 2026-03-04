@@ -171,6 +171,15 @@ nav {
 .m-value.blue  { color:var(--blue); }
 .m-value.red   { color:var(--red); }
 
+/* FIX TIE BUTTON */
+.fix-btn {
+  display:block; margin-top:.7rem; padding:.3rem;
+  font-family:var(--mono); font-size:.55rem; color:var(--gold);
+  border:1px solid var(--gold); border-radius:3px; text-decoration:none;
+  text-align:center; transition:all .2s;
+}
+.fix-btn:hover { background:var(--gold); color:var(--bg); }
+
 /* DETAIL FOOTER */
 .detail-footer {
   padding:1rem 1.5rem;
@@ -226,7 +235,6 @@ nav {
 
   <div class="main-grid">
 
-    <!-- SIDEBAR -->
     <div class="sidebar">
 
       <div class="panel">
@@ -252,7 +260,6 @@ nav {
 
     </div>
 
-    <!-- DETAIL -->
     <div class="detail-panel">
 
       <div class="placeholder" id="sparc-placeholder">
@@ -293,6 +300,7 @@ nav {
             <div class="m-label">Error vs observado</div>
             <div class="m-value" id="d-err">—</div>
             <div class="m-unit">sin ajuste</div>
+            <a href="Modulo Nuevo.html" class="fix-btn">FIX TIE H-02.1</a>
           </div>
           <div class="metric">
             <div class="m-label">Radio de transición</div>
@@ -317,9 +325,7 @@ nav {
       </div>
     </div>
 
-  </div><!-- /main-grid -->
-
-  <div class="page-footer">
+  </div><div class="page-footer">
     <a href="index.html">← Inicio</a> &nbsp;·&nbsp;
     <a href="curvas.html">Curvas de Rotación</a> &nbsp;·&nbsp;
     <a href="2pi.html">Calculadora 2π →</a> &nbsp;·&nbsp;

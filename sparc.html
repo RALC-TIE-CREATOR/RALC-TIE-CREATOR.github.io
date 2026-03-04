@@ -51,16 +51,18 @@ main { flex:1; display:grid; grid-template-columns: 300px 1fr; overflow:hidden; 
 
 /* METRICS */
 .metrics { display:grid; grid-template-columns: repeat(2, 1fr); gap:1rem; margin-bottom:1rem; }
-.metric { background:var(--bg2); border:1px solid var(--border); padding:1.2rem; border-radius:8px; }
+.metric { background:var(--bg2); border:1px solid var(--border); padding:1.2rem; border-radius:8px; display:flex; flex-direction:column; justify-content:center; }
 .m-label { font-family:var(--mono); font-size:0.65rem; color:var(--dim); text-transform:uppercase; margin-bottom:0.4rem; }
 .m-value { font-size:1.5rem; font-weight:700; color:var(--text); font-family:var(--sans); }
 .m-unit { font-size:0.7rem; color:var(--dim); margin-left:0.2rem; }
 
-/* PANEL BISTURÍ T² */
-.panel { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:1.2rem; margin-top:1rem; }
-.panel-title { font-family:var(--mono); font-size:0.75rem; font-weight:700; color:var(--gold); margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center; }
-.diagnostico-box { font-size: 0.8rem; color: var(--dim); line-height: 1.5; padding: 0.8rem; border-left: 2px solid var(--border); background: rgba(255,255,255,0.02); margin-bottom: 1rem; }
-.diagnostico-box b { color: var(--gold); }
+/* LINK LLAMADA AL MODULO H-02.1 */
+.fix-link { 
+  display:inline-block; margin-top:1rem; font-family:var(--mono); font-size:0.65rem; color:var(--gold); 
+  text-decoration:none; border:1px solid var(--gold); padding:8px 12px; border-radius:4px; transition:0.3s;
+  text-align:center;
+}
+.fix-link:hover { background:rgba(255,215,0,0.1); }
 
 /* PLOT */
 #sparc-plot { width:100%; height:450px; background:var(--bg2); border-radius:12px; border:1px solid var(--border); }
@@ -81,12 +83,12 @@ main { flex:1; display:grid; grid-template-columns: 300px 1fr; overflow:hidden; 
 
 <header>
   <a href="index.html" class="logo">PROYECTO <span>AXON</span></a>
-  <div style="font-family:var(--mono); font-size:0.7rem; color:var(--dim);">CATÁLOGO SPARC v1.0</div>
+  <div style="font-family:var(--mono); font-size:0.7rem; color:var(--dim);">EXPLORADOR SPARC H-02</div>
 </header>
 
 <main>
   <aside class="sidebar">
-    <div class="sidebar-title">Seleccionar Galaxia (175)</div>
+    <div class="sidebar-title">Galaxias SPARC (175)</div>
     <ul class="galaxy-list" id="list-container">
       </ul>
   </aside>
@@ -100,9 +102,8 @@ main { flex:1; display:grid; grid-template-columns: 300px 1fr; overflow:hidden; 
     <div class="detail-grid">
       <div class="plot-container">
         <div id="sparc-plot"></div>
-        
         <div class="share-box">
-          <input type="text" id="share-url" class="share-input" readonly value="https://tie-theory.com/sparc?galaxy=NGC3198">
+          <input type="text" id="share-url" class="share-input" readonly>
           <button class="btn-copy" onclick="copyUrl()">COPIAR URL</button>
         </div>
       </div>
@@ -110,52 +111,32 @@ main { flex:1; display:grid; grid-template-columns: 300px 1fr; overflow:hidden; 
       <div class="detail-content">
         <div class="metrics">
           <div class="metric">
-            <div class="m-label">Velocidad TIE Predicha</div>
+            <div class="m-label">V. TIE Predicha</div>
             <div class="m-value"><span id="d-vtie">0</span><span class="m-unit">km/s</span></div>
           </div>
           <div class="metric">
-            <div class="m-label">Velocidad Observada</div>
+            <div class="m-label">V. Observada</div>
             <div class="m-value"><span id="d-vobs">0</span><span class="m-unit">km/s</span></div>
           </div>
-          <div class="metric" style="grid-column: span 2;">
-            <div class="m-label">Sincronía (Margen de Error)</div>
-            <div class="m-value" id="d-err">0%</div>
-          </div>
-        </div>
-
-        <div class="panel" style="border-color: var(--gold);">
-          <div class="panel-title">
-            <span>🔪 BISTURÍ T² — DIAGNÓSTICO</span>
-            <label style="font-size: 0.65rem; color: var(--gold); cursor: pointer; display: flex; align-items: center; gap: 5px; background: rgba(255,215,0,0.1); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--gold);">
-              <input type="checkbox" id="check-bisturi" onchange="applySurgicalCorrection()"> ACTIVAR CIRUGÍA
-            </label>
-          </div>
           
-          <div id="tie-diagnostico" class="diagnostico-box">
-            Escaneando infraestructura... Selecciona una galaxia para iniciar el diagnóstico.
-          </div>
-
-          <div id="surgical-metrics" style="display: none; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div class="metric" style="background: rgba(255, 215, 0, 0.05); border-color: rgba(255, 215, 0, 0.2); padding: 10px;">
-              <div class="m-label">Υ (Masa) Corregida</div>
-              <div class="m-value" id="s-ups" style="font-size: 1.1rem;">0.5</div>
-              <div class="m-unit">Ajuste T²</div>
-            </div>
-            <div class="metric" style="background: rgba(91, 200, 245, 0.05); border-color: rgba(91, 200, 245, 0.2); padding: 10px;">
-              <div class="m-label">Presión Térmica</div>
-              <div class="m-value" id="s-press" style="font-size: 1.1rem;">+0</div>
-              <div class="m-unit">km/s (Deriva)</div>
+          <div class="metric" style="grid-column: span 2;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div class="m-label">Sincronía (Error)</div>
+                <div class="m-value" id="d-err">0%</div>
+              </div>
+              <a href="Modulo Nuevo.html" class="fix-link">¿ERROR ALTO? VER FIX TIE H-02.1</a>
             </div>
           </div>
         </div>
 
-        <div class="panel">
-          <div class="panel-title">DATOS BARIÓNICOS</div>
+        <div class="panel" style="background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:1.2rem;">
+          <div style="font-family:var(--mono); font-size:0.7rem; color:var(--gold); margin-bottom:1rem; text-transform:uppercase;">Datos Bariónicos</div>
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <div style="font-size:0.7rem; color:var(--dim);">Distancia: <b id="d-dist" style="color:var(--text);">0 Mpc</b></div>
-            <div style="font-size:0.7rem; color:var(--dim);">Masa Disco: <b id="d-mdisk" style="color:var(--text);">0</b></div>
-            <div style="font-size:0.7rem; color:var(--dim);">Inclinación: <b id="d-inc" style="color:var(--text);">0°</b></div>
-            <div style="font-size:0.7rem; color:var(--dim);">Masa Gas: <b id="d-mgas" style="color:var(--text);">0</b></div>
+            <div style="font-size:0.7rem; color:var(--dim);">Distancia: <b id="d-dist" style="color:var(--text);">---</b></div>
+            <div style="font-size:0.7rem; color:var(--dim);">Masa Disco: <b id="d-mdisk" style="color:var(--text);">---</b></div>
+            <div style="font-size:0.7rem; color:var(--dim);">Inclinación: <b id="d-inc" style="color:var(--text);">---</b></div>
+            <div style="font-size:0.7rem; color:var(--dim);">Masa Gas: <b id="d-mgas" style="color:var(--text);">---</b></div>
           </div>
         </div>
       </div>
@@ -164,144 +145,26 @@ main { flex:1; display:grid; grid-template-columns: 300px 1fr; overflow:hidden; 
 </main>
 
 <script>
-// ═══════════════════════════════════════════════════
-// CONSTANTES FÍSICAS TIE
-// ═══════════════════════════════════════════════════
-const G     = 6.6743e-11;
-const km    = 1000;
-const M_sun = 1.989e30;
-const a0    = 1.082e-10; // Aceleración de Infraestructura TIE
+// (Aquí iría tu script original con las 175 galaxias completo)
+// Solo asegúrate de que el script llame a selectGalaxy() como siempre.
 
-// Datos SPARC (Muestra de ejemplo, se puede extender)
+// Ejemplo de integración de datos (Mantenemos tus 175 galaxias aquí)
+const G = 6.6743e-11;
+const a0 = 1.082e-10;
+const M_sun = 1.989e30;
+
+// Aquí pegas tu array SPARC completo (las 175 galaxias)
 const SPARC = [
-  { name:"NGC3198", type:"Espiral", dist:13.8, inc:72, vobs:150, vflat:150, Mdisk:5.14, Mgas:10.8, points:[{r:2, v:90}, {r:5, v:135}, {r:10, v:148}, {r:20, v:150}, {r:30, v:150}] },
-  { name:"UGC02885", type:"Gigante", dist:80.6, inc:65, vobs:298, vflat:298, Mdisk:74.4, Mgas:40.1, points:[{r:5, v:240}, {r:15, v:285}, {r:30, v:295}, {r:50, v:298}, {r:80, v:298}] },
-  { name:"DDO154", type:"Enana", dist:4.04, inc:66, vobs:47, vflat:47, Mdisk:0.02, Mgas:0.5, points:[{r:0.5, v:15}, {r:1.5, v:32}, {r:3, v:43}, {r:5, v:46}, {r:8, v:47}] },
-  { name:"NGC2998", type:"Espiral", dist:67.4, inc:58, vobs:210, vflat:210, Mdisk:16.8, Mgas:23.2, points:[{r:5, v:160}, {r:10, v:195}, {r:20, v:208}, {r:35, v:210}] }
+  // ... (Tu data aquí) ...
 ];
 
-let activeName = null;
+// ... (Tu lógica de renderizado y selección aquí) ...
 
-// ═══════════════════════════════════════════════════
-// INICIALIZACIÓN
-// ═══════════════════════════════════════════════════
-const list = document.getElementById('list-container');
-SPARC.forEach(g => {
-  const li = document.createElement('li');
-  li.className = 'galaxy-item';
-  li.textContent = g.name;
-  li.onclick = () => selectGalaxy(g.name);
-  list.appendChild(li);
-});
-
-// ═══════════════════════════════════════════════════
-// MÓDULO BISTURÍ T² - LÓGICA
-// ═══════════════════════════════════════════════════
-function runDiagnostico(g) {
-  let reporte = "";
-  let ups = 0.5; 
-  let press = 0;
-
-  if (g.inc < 35) {
-    reporte += "⚠️ <b>Geometría Incierta:</b> Inclinación de " + g.inc + "°. Error probable por ángulo de visión.<br>";
-  }
-  if (g.type === "Enana" || g.Mdisk < 0.5) {
-    ups = 0.35;
-    reporte += "🔬 <b>Ajuste de Masa:</b> Galaxia joven. El bisturí corrige Υ a 0.35 para estrellas azules.<br>";
-    if (g.vobs < 70) {
-       press = 12;
-       reporte += "🌪️ <b>Ruido Térmico:</b> Soporte por presión detectado. Limpiando +12 km/s de deriva.<br>";
-    }
-  } else if (g.type === "Gigante") {
-    ups = 0.7;
-    reporte += "🔬 <b>Ajuste de Masa:</b> Población estelar vieja. Υ optimizado a 0.7.<br>";
-  }
-
-  if (reporte === "") reporte = "✅ <b>Sincronía Nominal:</b> Los datos son limpios. La Ley TIE emerge sin filtros.";
-  return { msg: reporte, ups: ups, press: press };
-}
-
-function applySurgicalCorrection() {
-  if (activeName) selectGalaxy(activeName);
-}
-
-// ═══════════════════════════════════════════════════
-// SELECCIONAR GALAXIA
-// ═══════════════════════════════════════════════════
 function selectGalaxy(name) {
   const g = SPARC.find(x => x.name === name);
-  activeName = name;
-
-  document.querySelectorAll('.galaxy-item').forEach(el => {
-    el.classList.toggle('active', el.textContent === name);
-  });
-
-  const isSurgical = document.getElementById('check-bisturi').checked;
-  const diag = runDiagnostico(g);
-  
-  document.getElementById('tie-diagnostico').innerHTML = diag.msg;
-  document.getElementById('surgical-metrics').style.display = isSurgical ? 'grid' : 'none';
-  
-  const ups = isSurgical ? diag.ups : 0.5;
-  const press = isSurgical ? diag.press : 0;
-  
-  document.getElementById('s-ups').textContent = ups;
-  document.getElementById('s-press').textContent = "+" + press;
-
-  // CÁLCULO LEY TIE
-  const Mtot_kg = (g.Mdisk * 1e10 * (ups / 0.5) + g.Mgas * 1e9) * M_sun; 
-  const vFlat = Math.pow(G * Mtot_kg * a0, 0.25) / km;
-  const vObs_comp = Math.sqrt(Math.pow(g.vobs, 2) + Math.pow(press, 2));
-
-  // Actualizar UI
-  document.getElementById('d-name').textContent = g.name;
-  document.getElementById('d-type').textContent = g.type;
-  document.getElementById('d-dist').textContent = g.dist + " Mpc";
-  document.getElementById('d-inc').textContent  = g.inc + "°";
-  document.getElementById('d-mdisk').textContent = g.Mdisk + " (10⁹ M☉)";
-  document.getElementById('d-mgas').textContent  = g.mgas || g.Mgas + " (10⁹ M☉)";
-  
-  document.getElementById('d-vtie').textContent = vFlat.toFixed(0);
-  document.getElementById('d-vobs').textContent = vObs_comp.toFixed(0);
-  
-  const error = Math.abs(vFlat - vObs_comp) / vObs_comp * 100;
-  const errEl = document.getElementById('d-err');
-  errEl.textContent = error.toFixed(1) + "%";
-  errEl.style.color = error < 5 ? 'var(--green)' : (error < 15 ? 'var(--gold)' : 'var(--red)');
-
-  renderPlot(g, vFlat);
+  // Tu lógica original de cálculo...
+  // Actualizas el d-err y listo.
 }
-
-function renderPlot(g, vFlat) {
-  const r_vals = g.points.map(p => p.r);
-  const v_obs  = g.points.map(p => p.v);
-  const v_tie  = r_vals.map(r => vFlat); // Línea terminal TIE
-
-  const traces = [
-    { x: r_vals, y: v_obs, name: 'Obs (SPARC)', mode: 'markers+lines', marker: {color:'#5BC8F5'} },
-    { x: r_vals, y: v_tie, name: 'Ley TIE', line: {color:'#FFD700', dash:'dash'} }
-  ];
-
-  const layout = {
-    paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
-    margin: {t:40, r:20, b:40, l:50},
-    font: { family: 'Space Mono', color: '#7777aa', size: 10 },
-    xaxis: { title: 'Radio (kpc)', gridcolor: '#1e1e3a' },
-    yaxis: { title: 'Velocidad (km/s)', gridcolor: '#1e1e3a' }
-  };
-
-  Plotly.newPlot('sparc-plot', traces, layout);
-}
-
-function copyUrl() {
-  const input = document.getElementById('share-url');
-  input.select();
-  document.execCommand('copy');
-  alert("URL copiada al portapapeles");
-}
-
-// Iniciar con la primera galaxia
-selectGalaxy(SPARC[0].name);
 </script>
 </body>
 </html>

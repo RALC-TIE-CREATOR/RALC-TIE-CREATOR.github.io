@@ -8,7 +8,7 @@
 <style>
 :root {
   --gold: #FFD700; --blue: #5BC8F5; --green: #44FF88; --red: #FF4455;
-  --bg: #06060f; --bg2: #0d0d1a; --text: #e8e8f0; --dim: #7777aa;
+  --bg: #06060f; --bg2: #0d0d1a; --bg3: #111122; --text: #e8e8f0; --dim: #7777aa;
   --border: #1e1e3a; --mono: 'Space Mono', monospace;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -16,30 +16,31 @@ body { background:var(--bg); color:var(--text); font-family:'Syne', sans-serif; 
 .dashboard { flex:1; display:grid; grid-template-rows:auto 1fr auto; padding:1.5rem; gap:1rem; }
 
 header { border-left:4px solid var(--gold); padding-left:1rem; display:flex; justify-content:space-between; align-items:center; }
+h1 { font-size:1.6rem; font-weight:800; text-transform:uppercase; }
 .selector-box { background:var(--bg2); border:1px solid var(--gold); padding:5px 15px; border-radius:4px; }
 select { background:transparent; color:var(--gold); border:none; font-family:var(--mono); font-size:0.85rem; outline:none; cursor:pointer; }
 
 .surgery-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:1rem; }
-.card { background:var(--bg2); border:1px solid var(--border); padding:1.2rem; border-radius:8px; display:flex; flex-direction:column; gap:10px; }
+.card { background:var(--bg2); border:1px solid var(--border); padding:1.2rem; border-radius:8px; display:flex; flex-direction:column; gap:8px; }
 h2 { font-size:0.85rem; font-weight:800; color:var(--blue); text-transform:uppercase; }
 
 .data-block { background:#0d0d1a; padding:10px; border-radius:4px; border:1px solid #1e1e3a; }
 .label { font-family:var(--mono); font-size:0.55rem; color:var(--dim); text-transform:uppercase; }
-.val { font-family:var(--mono); font-size:1.1rem; font-weight:700; color:var(--text); }
+.val { font-family:var(--mono); font-size:1.1rem; font-weight:700; }
 .status { font-family:var(--mono); font-size:0.6rem; padding:2px 8px; border-radius:3px; margin-top:5px; display:inline-block; font-weight:700; }
 
 .final { background:var(--bg2); border:2px solid var(--gold); padding:1rem 2rem; border-radius:8px; display:flex; justify-content:space-between; align-items:center; }
 .err-val { font-family:var(--mono); font-size:1.5rem; font-weight:700; }
 .btn { background:var(--gold); color:#000; padding:8px 15px; border-radius:4px; text-decoration:none; font-family:var(--mono); font-size:0.7rem; font-weight:700; }
 
-@media (max-width:1000px) { .surgery-grid { grid-template-columns:1fr; overflow-y:auto; } body { overflow:auto; } }
+@media (max-width:1100px) { .surgery-grid { grid-template-columns:1fr; overflow-y:auto; } body { overflow:auto; } }
 </style>
 </head>
 <body>
 
 <div class="dashboard">
     <header>
-        <div><p class="label" style="color:var(--gold)">H-02.1 / FIX TIE</p><h1>Bisturí T²</h1></div>
+        <div><p class="label" style="color:var(--gold)">AUDITORÍA T² / PASO A PASO</p><h1>Bisturí T²</h1></div>
         <div class="selector-box">
             <span class="label">Sujeto:</span>
             <select id="gSelect" onchange="run()"></select>
@@ -48,14 +49,14 @@ h2 { font-size:0.85rem; font-weight:800; color:var(--blue); text-transform:upper
 
     <div class="surgery-grid">
         <div class="card">
-            <h2>01. Geometría (Inclinación)</h2>
+            <h2>01. Corrección Geométrica</h2>
             <div class="data-block">
-                <div class="label">Observación Cruda (V_obs / sin i)</div>
+                <div class="label">Obs. Geométrica (Sin TIE)</div>
                 <div class="val" id="v1-raw">---</div>
                 <div id="s1-raw" class="status">---</div>
             </div>
             <div class="data-block" style="border-color:var(--blue)">
-                <div class="label">Dato TIE (Infraestructura)</div>
+                <div class="label">Obs. Geométrica (Con TIE)</div>
                 <div class="val" style="color:var(--blue)" id="v1-tie">---</div>
                 <div id="s1-tie" class="status" style="background:var(--blue); color:#000">---</div>
             </div>
@@ -64,46 +65,56 @@ h2 { font-size:0.85rem; font-weight:800; color:var(--blue); text-transform:upper
         <div class="card">
             <h2>02. Ajuste de Masa (Υ)</h2>
             <div class="data-block">
-                <div class="label">Masa Estándar (Υ = 0.5)</div>
+                <div class="label">Masa Bariónica (Fija Υ=0.5)</div>
                 <div class="val" id="v2-raw">---</div>
             </div>
             <div class="data-block" style="border-color:var(--gold)">
-                <div class="label">Masa T² (Υ Dinámico)</div>
+                <div class="label">Masa Bariónica (TIE Dinámica)</div>
                 <div class="val" style="color:var(--gold)" id="v2-tie">---</div>
             </div>
         </div>
 
         <div class="card">
-            <h2>03. Compensación de Presión</h2>
+            <h2>03. Compensación Térmica</h2>
             <div class="data-block">
-                <div class="label">Rotación Observada</div>
+                <div class="label">Velocidad Rotación (Obs)</div>
                 <div class="val" id="v3-raw">---</div>
             </div>
             <div class="data-block" style="border-color:var(--green)">
-                <div class="label">V_Circular Real (TIE)</div>
+                <div class="label">Velocidad Circular (TIE)</div>
                 <div class="val" style="color:var(--green)" id="v3-tie">---</div>
             </div>
         </div>
     </div>
 
     <footer class="final">
-        <div><div class="label">Sincronía Final</div><div id="sync" style="color:var(--green); font-size:1.4rem; font-weight:800;">---</div></div>
+        <div><div class="label">Sincronía Infraestructura</div><div id="sync" style="color:var(--green); font-size:1.4rem; font-weight:800;">---</div></div>
         <div style="display:flex; gap:30px;">
             <div style="text-align:center;"><div class="label">Error Original</div><div id="e-old" style="color:var(--red);" class="err-val">--%</div></div>
             <div style="text-align:center;"><div class="label">Error T²</div><div id="e-new" style="color:var(--green);" class="err-val">--%</div></div>
         </div>
-        <a href="sparc.html" class="btn">REGRESAR</a>
+        <a href="sparc.html" class="btn">VOLVER AL CATÁLOGO</a>
     </footer>
 </div>
 
 <script>
+// BASE DE DATOS SINCRONIZADA
 const DATA = [
-  { n:"NGC 3198", t:"Espiral", i:72, md:2.2, mg:8.5, v:150 },
-  { n:"DDO 154",  t:"Enana",   i:4,  md:0.0028, mg:0.71, v:47 },
-  { n:"UGC 2885", t:"Gigante", i:65, md:17.5, mg:82.0, v:300 },
-  { n:"NGC 6946", t:"Espiral", i:33, md:3.2, mg:12.0, v:195 },
+  { n:"NGC 3198", t:"Espiral", i:72, md:2.20, mg:8.5, v:150 },
   { n:"NGC 2403", t:"Espiral", i:62, md:0.82, mg:12.0, v:134 },
-  { n:"UGC 1230", t:"LSB",     i:15, md:0.42, mg:14.5, v:107 }
+  { n:"NGC 6503", t:"Espiral", i:74, md:0.79, mg:3.8, v:116 },
+  { n:"NGC 7331", t:"Espiral", i:75, md:6.33, mg:9.4, v:240 },
+  { n:"NGC 2841", t:"Espiral", i:68, md:8.40, mg:6.1, v:280 },
+  { n:"NGC 3521", t:"Espiral", i:72, md:5.50, mg:9.2, v:230 },
+  { n:"NGC 5055", t:"Espiral", i:59, md:4.10, mg:11.0, v:183 },
+  { n:"NGC 4736", t:"Espiral", i:35, md:1.10, mg:1.8, v:180 },
+  { n:"NGC 3031", t:"Espiral", i:59, md:4.60, mg:7.0, v:220 },
+  { n:"NGC 300",  t:"Espiral", i:42, md:0.15, mg:2.8, v:90 },
+  { n:"NGC 7793", t:"Espiral", i:50, md:0.28, mg:2.1, v:100 },
+  { n:"NGC 2976", t:"Espiral", i:65, md:0.28, mg:0.9, v:87 },
+  { n:"DDO 154",  t:"Enana",   i:66, md:0.0028,mg:0.71,v:47 },
+  { n:"UGC 2885", t:"Gigante", i:65, md:17.5, mg:82.0, v:300 },
+  { n:"NGC 6946", t:"Espiral", i:33, md:3.2, mg:12.0, v:195 }
 ];
 
 const G = 6.674e-11, a0 = 1.082e-10, MS = 1.989e30;
@@ -112,39 +123,42 @@ function run() {
     const sel = document.getElementById('gSelect');
     const g = DATA.find(x => x.n === sel.value) || DATA[0];
 
-    // PASO 1: Geometría (Simulación de error de 2 grados)
-    const sin_real = Math.sin(g.i * Math.PI / 180) || 0.1;
-    const sin_err = Math.sin((g.i - 2) * Math.PI / 180) || 0.05;
-    const vSucio = g.v / sin_err; 
-    
-    document.getElementById('v1-raw').textContent = vSucio.toFixed(1) + " km/s";
+    // PASO 1: GEOMETRÍA
+    // Sin TIE: Componente proyectada (v/sin i)
+    const sin_i = Math.sin(g.i * Math.PI / 180) || 0.1;
+    const vProyectada = g.v / sin_i;
+    document.getElementById('v1-raw').textContent = vProyectada.toFixed(1) + " km/s";
     const s1r = document.getElementById('s1-raw');
-    s1r.textContent = g.i + "°: " + (g.i < 35 ? "RUIDOSO" : "CONFIABLE");
+    s1r.textContent = "INC: " + g.i + "° " + (g.i < 35 ? "RUIDOSO" : "CONFIABLE");
     s1r.style.background = g.i < 35 ? "var(--red)" : "var(--green)";
     s1r.style.color = "#000";
 
+    // Con TIE: Velocidad circular de infraestructura
     document.getElementById('v1-tie').textContent = g.v.toFixed(1) + " km/s";
-    document.getElementById('s1-tie').textContent = "INFRAESTRUCTURA T²";
+    document.getElementById('s1-tie').textContent = "INC: " + g.i + "° TIE-FIX";
 
-    // PASO 2: Masa
-    const mRaw = (g.md * 10) + g.mg; 
+    // PASO 2: MASA
+    const mRaw = (g.md * 10) + g.mg; // Masa estándar (x10^9)
     document.getElementById('v2-raw').textContent = mRaw.toFixed(2) + " x10⁹ M☉";
-    let ups = (g.t === "Enana" || g.t === "LSB") ? 0.35 : (g.t === "Gigante" ? 0.7 : 0.5);
+    
+    let ups = (g.t === "Enana") ? 0.35 : (g.t === "Gigante" ? 0.7 : 0.5);
     const mTie = (g.md * 10 * (ups/0.5)) + g.mg;
     document.getElementById('v2-tie').textContent = mTie.toFixed(2) + " x10⁹ M☉";
 
-    // PASO 3: Presión
+    // PASO 3: PRESIÓN
     document.getElementById('v3-raw').textContent = g.v.toFixed(1) + " km/s";
     let sig = (g.v < 70) ? 12 : 0;
-    const vT = Math.sqrt(g.v**2 + sig**2);
-    document.getElementById('v3-tie').textContent = vT.toFixed(1) + " km/s";
+    const vReal = Math.sqrt(g.v**2 + sig**2);
+    document.getElementById('v3-tie').textContent = vReal.toFixed(1) + " km/s";
 
-    // Errores
-    const vtFinal = Math.pow(G * (mTie*1e9 * MS) * a0, 0.25) / 1000;
+    // CÁLCULO DE ERRORES (Alineado con sparc.html)
+    // Error Original = |V_TIE(M_std) - V_obs| / V_obs
     const vtOrig = Math.pow(G * (mRaw*1e9 * MS) * a0, 0.25) / 1000;
+    const errO = Math.abs(vtOrig - g.v) / g.v * 100;
     
-    const errO = Math.abs(vtOrig - vSucio) / vSucio * 100;
-    const errN = Math.abs(vtFinal - vT) / vT * 100;
+    // Error T² = |V_TIE(M_tie) - V_real| / V_real
+    const vtFinal = Math.pow(G * (mTie*1e9 * MS) * a0, 0.25) / 1000;
+    const errN = Math.abs(vtFinal - vReal) / vReal * 100;
 
     document.getElementById('e-old').textContent = errO.toFixed(1) + "%";
     document.getElementById('e-new').textContent = errN.toFixed(1) + "%";

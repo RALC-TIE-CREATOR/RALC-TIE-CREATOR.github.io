@@ -20,7 +20,7 @@ h1 { font-size:1.6rem; font-weight:800; text-transform:uppercase; }
 .label { font-family:var(--mono); font-size:0.55rem; color:var(--dim); text-transform:uppercase; }
 
 .selector-box { background:var(--bg2); border:1px solid var(--gold); padding:5px 15px; border-radius:4px; }
-select { background:transparent; color:var(--gold); border:none; font-family:var(--mono); font-size:0.85rem; outline:none; cursor:pointer; }
+select { background:transparent; color:var(--gold); border:none; font-family:var(--mono); font-size:0.85rem; outline:none; cursor:pointer; font-weight:700; }
 
 .surgery-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:1rem; }
 .card { background:var(--bg2); border:1px solid var(--border); padding:1.2rem; border-radius:8px; display:flex; flex-direction:column; gap:8px; }
@@ -41,36 +41,36 @@ h2 { font-size:0.85rem; font-weight:800; color:var(--blue); text-transform:upper
 
 <div class="dashboard">
     <header>
-        <div><p class="label" style="color:var(--gold)">AUDITORÍA T² / MOTOR DE INFRAESTRUCTURA</p><h1>Bisturí T²</h1></div>
+        <div><p class="label" style="color:var(--gold)">AUDITORÍA T² / SINCRONÍA DE FÓRMULAS</p><h1>Bisturí T²</h1></div>
         <div class="selector-box">
-            <span class="label">Auditar Galaxia:</span>
+            <span class="label">Auditar:</span>
             <select id="gSelect" onchange="run()"></select>
         </div>
     </header>
 
     <div class="surgery-grid">
         <div class="card">
-            <h2>01. Geometría (Inclinación)</h2>
+            <h2>01. Geometría de Inclinación</h2>
             <div class="data-block">
-                <div class="label">V_ROT Proyectada (Con Ruido)</div>
+                <div class="label">V_ROT Proyectada (Obs / sin i)</div>
                 <div class="val" id="v1-raw">---</div>
                 <div id="s1-raw" class="status">---</div>
             </div>
             <div class="data-block" style="border-color:var(--blue)">
-                <div class="label">V_ROT De-proyectada (TIE)</div>
+                <div class="label">V_ROT TIE (Infraestructura)</div>
                 <div class="val" style="color:var(--blue)" id="v1-tie">---</div>
-                <div class="status" style="background:var(--blue); color:#000">SINERGIA ANGULAR</div>
+                <div class="status" style="background:var(--blue); color:#000">DE-PROYECCIÓN OK</div>
             </div>
         </div>
 
         <div class="card">
-            <h2>02. Masa Bariónica (Dynamic Υ)</h2>
+            <h2>02. Ajuste de Masa (Υ)</h2>
             <div class="data-block">
-                <div class="label">Masa con Υ = 0.5 (Modelo Fijo)</div>
+                <div class="label">Masa Bariónica (Υ=0.5 Fijo)</div>
                 <div class="val" id="v2-raw">---</div>
             </div>
             <div class="data-block" style="border-color:var(--gold)">
-                <div class="label">Masa T² (Υ Dinámico)</div>
+                <div class="label">Masa T² (10<sup>f(Color)</sup>)</div>
                 <div class="val" style="color:var(--gold)" id="v2-tie">---</div>
             </div>
         </div>
@@ -78,7 +78,7 @@ h2 { font-size:0.85rem; font-weight:800; color:var(--blue); text-transform:upper
         <div class="card">
             <h2>03. Compensación de Presión</h2>
             <div class="data-block">
-                <div class="label">V_Rotación Pura (Observada)</div>
+                <div class="label">V_Circular (Observada)</div>
                 <div class="val" id="v3-raw">---</div>
             </div>
             <div class="data-block" style="border-color:var(--green)">
@@ -89,68 +89,75 @@ h2 { font-size:0.85rem; font-weight:800; color:var(--blue); text-transform:upper
     </div>
 
     <footer class="final">
-        <div><div class="label">Veredicto de Sincronía</div><div id="sync" style="color:var(--green); font-size:1.4rem; font-weight:800;">---</div></div>
+        <div><div class="label">Sincronía Final TIE</div><div id="sync" style="color:var(--green); font-size:1.4rem; font-weight:800;">---</div></div>
         <div style="display:flex; gap:30px;">
             <div style="text-align:center;"><div class="label">Error Original (SPARC)</div><div id="e-old" style="color:var(--red);" class="err-val">--%</div></div>
             <div style="text-align:center;"><div class="label">Error T² (Depurado)</div><div id="e-new" style="color:var(--green);" class="err-val">--%</div></div>
         </div>
-        <a href="sparc.html" class="btn">REGRESAR AL CATÁLOGO</a>
+        <a href="sparc.html" class="btn">VOLVER AL CATÁLOGO</a>
     </footer>
 </div>
 
 <script>
-// BASE DE DATOS SINCRONIZADA CON SPARC.HTML
-const DATA = [
-  { n:"NGC 3198", t:"Espiral", i:72, Mdisk:2.20, Mgas:8.5, vobs:150, color:0.65 },
-  { n:"NGC 2403", t:"Espiral", i:62, Mdisk:0.82, Mgas:12.0, vobs:134, color:0.60 },
-  { n:"NGC 6503", t:"Espiral", i:74, Mdisk:0.79, Mgas:3.8, vobs:116, color:0.62 },
-  { n:"NGC 7331", t:"Espiral", i:75, Mdisk:6.33, Mgas:9.4, vobs:240, color:0.75 },
-  { n:"NGC 2841", t:"Espiral", i:68, Mdisk:8.40, Mgas:6.1, vobs:280, color:0.80 },
-  { n:"UGC 2885", t:"Gigante", i:65, Mdisk:17.5, Mgas:82.0, vobs:300, color:0.85 },
-  { n:"DDO 154",  t:"Enana",   i:66, Mdisk:0.0028, Mgas:0.71, vobs:47, color:0.35 },
-  { n:"NGC 6946", t:"Espiral", i:33, Mdisk:3.20, Mgas:12.0, vobs:195, color:0.68 },
-  { n:"UGC 1230", t:"LSB",     i:15, Mdisk:0.42, Mgas:14.5, vobs:107, color:0.45 }
-];
+// CONSTANTES EXACTAS DE TU SPARC.HTML
+const G = 6.674e-11;
+const c = 2.998e8;
+const M_sun = 1.989e30;
+const H0_si = 70 * 1000 / 3.0857e22;
+const a0 = c * H0_si / (2 * Math.PI); // Sincronizado: ~1.08154e-10
 
-const G = 6.674e-11, a0 = 1.082e-10, MS = 1.989e30;
+// DATOS SINCRONIZADOS
+const DATA = [
+  { n:"NGC 3198", t:"Espiral", i:72, md:2.20, mg:8.5, v:150, color:0.65 },
+  { n:"NGC 2403", t:"Espiral", i:62, md:0.82, mg:12.0, v:134, color:0.60 },
+  { n:"NGC 6503", t:"Espiral", i:74, md:0.79, mg:3.8, v:116, color:0.62 },
+  { n:"NGC 7331", t:"Espiral", i:75, md:6.33, mg:9.4, v:240, color:0.75 },
+  { n:"NGC 2841", t:"Espiral", i:68, md:8.40, mg:6.1, v:280, color:0.80 },
+  { n:"UGC 2885", t:"Gigante", i:65, md:17.5, mg:82.0, v:300, color:0.85 },
+  { n:"DDO 154",  t:"Enana",   i:66, md:0.0028, mg:0.71, v:47, color:0.35 },
+  { n:"NGC 6946", t:"Espiral", i:33, md:3.20, mg:12.0, v:195, color:0.68 },
+  { n:"UGC 1230", t:"LSB",     i:15, md:0.42, mg:14.5, v:107, color:0.45 }
+];
 
 function run() {
     const sel = document.getElementById('gSelect');
     const g = DATA.find(x => x.n === sel.value) || DATA[0];
 
     // PASO 1: GEOMETRÍA
-    // Simulamos el ruido Doppler proyectado (v / sin(i-2)) frente al dato real de infraestructura
-    const sin_dirty = Math.sin((g.i - 2) * Math.PI / 180);
-    const vSucio = g.vobs / sin_dirty;
+    const sin_i = Math.sin(g.i * Math.PI / 180) || 0.1;
+    const vSucio = g.v / sin_i;
     document.getElementById('v1-raw').textContent = vSucio.toFixed(1) + " km/s";
     const s1r = document.getElementById('s1-raw');
-    s1r.textContent = "INC: " + g.i + "° " + (g.i < 35 ? "RUIDOSO" : "ÓPTIMO");
+    s1r.textContent = "INC: " + g.i + "° " + (g.i < 35 ? "RUIDOSO" : "OK");
     s1r.style.background = g.i < 35 ? "var(--red)" : "var(--green)";
     s1r.style.color = "#000";
-    document.getElementById('v1-tie').textContent = g.vobs.toFixed(1) + " km/s";
+    document.getElementById('v1-tie').textContent = g.v.toFixed(1) + " km/s";
 
-    // PASO 2: MASA (Fórmula Dinámica)
+    // PASO 2: MASA (Fórmula Dinámica T²)
+    // Masa Original (SPARC): (md * 10^10 + mg * 10^9)
+    const mStandard_kg = (g.md * 1e10 + g.mg * 1e9) * M_sun;
+    document.getElementById('v2-raw').textContent = (mStandard_kg / (M_sun * 1e9)).toFixed(2) + " x10⁹ M☉";
+
+    // Masa Depurada: Υ = 10^(-0.44 + 0.94 * Color)
     const ups = Math.pow(10, -0.44 + 0.94 * g.color);
-    const mStandard = (g.Mdisk * 10 + g.Mgas) * 1e9; 
-    const mTie = (g.Mdisk * 10 * (ups / 0.5) + g.Mgas * 1.33) * 1e9;
-    
-    document.getElementById('v2-raw').textContent = (mStandard/1e9).toFixed(2) + " x10⁹ M☉";
-    document.getElementById('v2-tie').textContent = (mTie/1e9).toFixed(2) + " x10⁹ M☉ (Υ=" + ups.toFixed(2) + ")";
+    const mTie_kg = (g.md * 1e10 * (ups / 0.5) + g.mg * 1.33 * 1e9) * M_sun;
+    document.getElementById('v2-tie').textContent = (mTie_kg / (M_sun * 1e9)).toFixed(2) + " x10⁹ M☉ (Υ=" + ups.toFixed(2) + ")";
 
-    // PASO 3: PRESIÓN (Fórmula Exponencial)
-    const sigma = 12 * Math.exp(-g.vobs / 200);
-    const vReal = Math.sqrt(Math.pow(g.vobs, 2) + Math.pow(sigma, 2));
-    document.getElementById('v3-raw').textContent = g.vobs.toFixed(1) + " km/s";
-    document.getElementById('v3-tie').textContent = vReal.toFixed(1) + " km/s (σ=" + sigma.toFixed(1) + ")";
+    // PASO 3: PRESIÓN (Σ Dinámica)
+    const sigma = 12 * Math.exp(-g.v / 200);
+    const vCircular_real = Math.sqrt(Math.pow(g.v, 2) + Math.pow(sigma, 2));
+    document.getElementById('v3-raw').textContent = g.v.toFixed(1) + " km/s";
+    document.getElementById('v3-tie').textContent = vCircular_real.toFixed(1) + " km/s (σ=" + sigma.toFixed(1) + ")";
 
-    // CÁLCULO DE ERRORES (Sincronizado con sparc.html)
-    // vtOrig: La predicción que lanza el explorador SPARC con masa estándar
-    const vtOrig = Math.pow(G * (mStandard * MS) * a0, 0.25) / 1000;
-    const errO = Math.abs(vtOrig - g.vobs) / g.vobs * 100;
+    // CÁLCULO DE ERRORES (CALCO DEL EXPLORADOR)
     
-    // vtFinal: La predicción tras aplicar el bisturí T²
-    const vtFinal = Math.pow(G * (mTie * MS) * a0, 0.25) / 1000;
-    const errN = Math.abs(vtFinal - vReal) / vReal * 100;
+    // 1. Error Original (Exacto al SPARC.html)
+    const vFlat_sparc = Math.pow(G * mStandard_kg * a0, 0.25) / 1000;
+    const errO = Math.abs(vFlat_sparc - g.v) / g.v * 100;
+
+    // 2. Error T² (Depurado por fórmulas)
+    const vFlat_tie = Math.pow(G * mTie_kg * a0, 0.25) / 1000;
+    const errN = Math.abs(vFlat_tie - vCircular_real) / vCircular_real * 100;
 
     document.getElementById('e-old').textContent = errO.toFixed(1) + "%";
     document.getElementById('e-new').textContent = errN.toFixed(1) + "%";

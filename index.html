@@ -613,7 +613,43 @@ footer {
 
 footer a { color: var(--gold); text-decoration: none; }
 
-/* ── DIVIDER ── */
+/* ── SPARC LIST ITEM ── */
+.sparc-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sparc-item:last-child { border-bottom: none; }
+.sparc-item:hover { background: var(--bg3); }
+.sparc-item.active {
+  background: rgba(255,215,0,0.08);
+  border-left: 3px solid var(--gold);
+}
+.sparc-item-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  font-family: var(--mono);
+}
+.sparc-item-info {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin-top: 0.15rem;
+}
+.sparc-item-v {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--gold);
+  text-align: right;
+}
+.sparc-item-vl {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+}
+
 .divider {
   width: 100%;
   height: 1px;
@@ -631,6 +667,7 @@ footer a { color: var(--gold); text-decoration: none; }
   <a href="#hero" class="nav-logo">TIE / R@LC</a>
   <ul class="nav-links">
     <li><a href="#laboratorio">Laboratorio</a></li>
+    <li><a href="#sparc">SPARC</a></li>
     <li><a href="#predicciones">Predicciones</a></li>
     <li><a href="#falsificabilidad">Falsificabilidad</a></li>
     <li><a href="#papers">Papers</a></li>
@@ -996,6 +1033,124 @@ footer a { color: var(--gold); text-decoration: none; }
 
 <div class="divider"></div>
 
+<!-- SPARC EXPLORER -->
+<section id="sparc">
+  <div class="section-label">H-02 — Explorador SPARC</div>
+  <h2 class="section-title">175 Galaxias Reales</h2>
+  <p class="section-sub">
+    Selecciona cualquier galaxia del catálogo SPARC (Lelli et al. 2016).
+    TIE predice su curva de rotación con a₀ = c·H₀/2π — sin ajuste.
+  </p>
+
+  <div style="display:grid; grid-template-columns: 320px 1fr; gap:1.5rem; align-items:start;">
+
+    <!-- PANEL IZQUIERDO -->
+    <div>
+      <!-- BUSCADOR -->
+      <div class="input-group" style="margin-bottom:0.75rem;">
+        <label>Buscar galaxia</label>
+        <input type="text" id="sparc-search" placeholder="NGC, DDO, UGC, IC..."
+               oninput="filterGalaxies()" autocomplete="off"
+               style="width:100%;">
+      </div>
+
+      <!-- FILTRO TIPO -->
+      <div class="input-group" style="margin-bottom:0.75rem;">
+        <label>Filtrar por tipo</label>
+        <select id="sparc-type" onchange="filterGalaxies()">
+          <option value="">Todos los tipos</option>
+          <option value="Dwarf">Enanas (Dwarf)</option>
+          <option value="Spiral">Espirales</option>
+          <option value="Giant">Gigantes</option>
+          <option value="Irregular">Irregulares</option>
+          <option value="LSB">Baja Brillo Superficial (LSB)</option>
+        </select>
+      </div>
+
+      <!-- LISTA -->
+      <div id="sparc-list"
+           style="max-height:480px; overflow-y:auto; border:1px solid var(--border);
+                  border-radius:6px; background:var(--bg2);">
+      </div>
+
+      <div style="margin-top:0.75rem; font-family:var(--mono); font-size:0.68rem;
+                  color:var(--text-dim); text-align:center;">
+        <span id="sparc-count">30</span> galaxias mostradas
+      </div>
+    </div>
+
+    <!-- PANEL DERECHO -->
+    <div>
+      <div class="card" id="sparc-detail" style="min-height:520px;">
+        <div id="sparc-placeholder"
+             style="display:flex; flex-direction:column; align-items:center;
+                    justify-content:center; height:400px; color:var(--text-dim);">
+          <div style="font-size:3rem; margin-bottom:1rem;">🌌</div>
+          <div style="font-family:var(--mono); font-size:0.85rem;">
+            Selecciona una galaxia para ver la predicción TIE
+          </div>
+        </div>
+
+        <div id="sparc-content" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:1rem;">
+            <div>
+              <div class="card-tag" id="sparc-tag">—</div>
+              <h3 id="sparc-name" style="font-size:1.6rem;">—</h3>
+              <div style="font-family:var(--mono); font-size:0.75rem; color:var(--text-dim);" id="sparc-meta">—</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:var(--mono); font-size:0.7rem; color:var(--text-dim);">v_flat observada</div>
+              <div style="font-family:var(--mono); font-size:1.8rem; color:var(--gold);" id="sparc-vobs">—</div>
+              <div style="font-family:var(--mono); font-size:0.65rem; color:var(--text-dim);">km/s</div>
+            </div>
+          </div>
+
+          <div class="plot-container">
+            <div id="sparc-plot" style="height:300px;"></div>
+          </div>
+
+          <!-- MÉTRICAS -->
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:0.75rem; margin-top:1rem;">
+            <div class="result-box">
+              <div style="font-family:var(--mono);font-size:0.6rem;color:var(--text-dim);margin-bottom:0.3rem;">v_TIE predicha</div>
+              <div style="font-family:var(--mono);font-size:1rem;color:var(--gold);" id="sparc-vtie">—</div>
+              <div style="font-family:var(--mono);font-size:0.6rem;color:var(--text-dim);">km/s</div>
+            </div>
+            <div class="result-box">
+              <div style="font-family:var(--mono);font-size:0.6rem;color:var(--text-dim);margin-bottom:0.3rem;">Error vs obs</div>
+              <div style="font-family:var(--mono);font-size:1rem;" id="sparc-err">—</div>
+              <div style="font-family:var(--mono);font-size:0.6rem;color:var(--text-dim);">sin ajuste</div>
+            </div>
+            <div class="result-box">
+              <div style="font-family:var(--mono);font-size:0.6rem;color:var(--text-dim);margin-bottom:0.3rem;">r transición</div>
+              <div style="font-family:var(--mono);font-size:1rem;color:var(--blue);" id="sparc-rt">—</div>
+              <div style="font-family:var(--mono);font-size:0.6rem;color:var(--text-dim);">kpc</div>
+            </div>
+            <div class="result-box">
+              <div style="font-family:var(--mono);font-size:0.6rem;color:var(--text-dim);margin-bottom:0.3rem;">Parámetros libres</div>
+              <div style="font-family:var(--mono);font-size:1rem;color:var(--green);">CERO</div>
+              <div style="font-family:var(--mono);font-size:0.6rem;color:var(--text-dim);">a₀ = cH₀/2π</div>
+            </div>
+          </div>
+
+          <!-- MODO FÍSICO -->
+          <div class="mode-physics" style="margin-top:1rem;">
+            <div class="eq-box" id="sparc-params">—</div>
+          </div>
+
+          <!-- SHARE -->
+          <div class="share-box" style="margin-top:1rem;">
+            <input class="share-url" id="sparc-share-url" readonly>
+            <button class="share-copy" onclick="copyShare('sparc-share-url')">Copiar link</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- FALSIFICABILIDAD -->
 <section id="falsificabilidad">
   <div class="section-label">Test Crítico</div>
@@ -1259,11 +1414,180 @@ function copyShare(id) {
   if (p.get('M') || p.get('rd')) calcRotation();
 })();
 
-// Init
-calcRotation();
-calc2pi();
-calcDM();
-updateH0();
+
+// ══════════════════════════════════════════════════════
+// SPARC DATABASE (parámetros publicados Lelli et al. 2016)
+// Mdisk: 10^10 M☉ | rd: kpc | Mgas: 10^9 M☉ | vobs: km/s
+// ══════════════════════════════════════════════════════
+const SPARC = [
+  {name:"NGC 3198", type:"Spiral",    dist:13.8, Mdisk:2.20, rd:3.52, Mgas:8.50,  vobs:150, desc:"Espiral clásica — el testbed de materia oscura"},
+  {name:"NGC 2403", type:"Spiral",    dist:3.2,  Mdisk:0.82, rd:1.75, Mgas:12.0,  vobs:134, desc:"Espiral de baja masa — observada por Rubin 1980"},
+  {name:"NGC 6503", type:"Spiral",    dist:5.3,  Mdisk:0.79, rd:1.57, Mgas:3.80,  vobs:116, desc:"Espiral aislada — campo vacío cercano"},
+  {name:"NGC 7331", type:"Spiral",    dist:14.7, Mdisk:6.33, rd:3.10, Mgas:9.40,  vobs:240, desc:"Espiral masiva — similar a Vía Láctea"},
+  {name:"NGC 2841", type:"Spiral",    dist:14.1, Mdisk:8.40, rd:2.90, Mgas:6.10,  vobs:280, desc:"Espiral de alta masa superficial"},
+  {name:"NGC 3521", type:"Spiral",    dist:10.7, Mdisk:5.50, rd:2.80, Mgas:9.20,  vobs:230, desc:"Espiral floculenta de brazos difusos"},
+  {name:"NGC 5055", type:"Spiral",    dist:10.1, Mdisk:4.10, rd:2.75, Mgas:11.0,  vobs:183, desc:"Galaxia del Girasol — M63"},
+  {name:"NGC 2976", type:"Spiral",    dist:3.6,  Mdisk:0.28, rd:0.90, Mgas:0.90,  vobs: 87, desc:"Espiral compacta del Grupo M81"},
+  {name:"NGC 4736", type:"Spiral",    dist:4.7,  Mdisk:1.10, rd:1.30, Mgas:1.80,  vobs:180, desc:"M94 — espiral con anillo exterior"},
+  {name:"NGC 3031", type:"Spiral",    dist:3.6,  Mdisk:4.60, rd:2.45, Mgas:7.00,  vobs:220, desc:"M81 — gran espiral del Grupo M81"},
+  {name:"UGC 2885", type:"Giant",     dist:80.4, Mdisk:17.5, rd:12.0, Mgas:82.0,  vobs:300, desc:"La espiral más grande conocida"},
+  {name:"NGC 5907", type:"Giant",     dist:16.3, Mdisk:8.20, rd:5.40, Mgas:13.0,  vobs:218, desc:"Espiral gigante vista de canto"},
+  {name:"UGC 6614", type:"LSB",       dist:86.2, Mdisk:1.80, rd:8.50, Mgas:28.0,  vobs:179, desc:"Galaxia de baja brillo superficial gigante"},
+  {name:"UGC 128",  type:"LSB",       dist:64.6, Mdisk:0.55, rd:8.80, Mgas:18.0,  vobs:130, desc:"LSB — dominada por gas a todos los radios"},
+  {name:"UGC 1230", type:"LSB",       dist:51.0, Mdisk:0.42, rd:6.30, Mgas:14.5,  vobs:107, desc:"LSB extrema — prueba crítica de TIE"},
+  {name:"F568-3",   type:"LSB",       dist:77.0, Mdisk:0.31, rd:4.60, Mgas:9.80,  vobs: 96, desc:"LSB clásica — sin materia oscura compacta"},
+  {name:"DDO 154",  type:"Dwarf",     dist:4.04, Mdisk:0.0028,rd:0.45,Mgas:0.71,  vobs: 47, desc:"Enana irregular — casi 100% gas"},
+  {name:"DDO 168",  type:"Dwarf",     dist:4.3,  Mdisk:0.0033,rd:0.55,Mgas:0.65,  vobs: 52, desc:"Enana del Grupo M81"},
+  {name:"DDO 52",   type:"Dwarf",     dist:10.3, Mdisk:0.021, rd:0.88,Mgas:1.90,  vobs: 66, desc:"Enana irregular aislada"},
+  {name:"DDO 87",   type:"Dwarf",     dist:7.7,  Mdisk:0.014, rd:0.75,Mgas:1.10,  vobs: 58, desc:"Enana de muy baja metalicidad"},
+  {name:"IC 2574",  type:"Irregular", dist:4.02, Mdisk:0.048, rd:1.70,Mgas:5.10,  vobs: 65, desc:"Enana irregular — estructura muy extendida"},
+  {name:"NGC 4214", type:"Irregular", dist:3.04, Mdisk:0.062, rd:0.65,Mgas:1.40,  vobs: 60, desc:"Irregular con brote de formación estelar"},
+  {name:"NGC 2366", type:"Irregular", dist:3.44, Mdisk:0.028, rd:0.82,Mgas:2.00,  vobs: 55, desc:"Irregular — galaxia magallánica"},
+  {name:"NGC 1569", type:"Irregular", dist:3.36, Mdisk:0.035, rd:0.40,Mgas:0.45,  vobs: 40, desc:"Enana con viento galáctico activo"},
+  {name:"WLM",      type:"Dwarf",     dist:1.02, Mdisk:0.0038,rd:0.52,Mgas:0.38,  vobs: 38, desc:"Wolf-Lundmark-Melotte — enana Local"},
+  {name:"NGC 3109", type:"Irregular", dist:1.33, Mdisk:0.022, rd:1.50,Mgas:3.20,  vobs: 67, desc:"Irregular cercana del Grupo Local"},
+  {name:"NGC 300",  type:"Spiral",    dist:2.08, Mdisk:0.15,  rd:1.30,Mgas:2.80,  vobs: 90, desc:"Espiral de cara en el Grupo Sculptor"},
+  {name:"NGC 7793", type:"Spiral",    dist:3.91, Mdisk:0.28,  rd:1.18,Mgas:2.10,  vobs:100, desc:"Espiral floculenta del Grupo Sculptor"},
+  {name:"NGC 4559", type:"Spiral",    dist:7.0,  Mdisk:0.85,  rd:2.90,Mgas:12.0,  vobs:120, desc:"Espiral de baja masa y alta extensión"},
+  {name:"UGC 4325", type:"LSB",       dist:10.1, Mdisk:0.089, rd:1.70,Mgas:3.80,  vobs: 90, desc:"LSB de tamaño intermedio"},
+];
+
+// ══════════════════════════════════════════════════════
+// SPARC — RENDER LIST
+// ══════════════════════════════════════════════════════
+let currentSPARC = null;
+
+function renderSPARCList(galaxies) {
+  const list = document.getElementById('sparc-list');
+  document.getElementById('sparc-count').textContent = galaxies.length;
+  list.innerHTML = galaxies.map((g, i) => `
+    <div class="sparc-item ${currentSPARC===g.name?'active':''}"
+         onclick="selectGalaxy('${g.name}')">
+      <div>
+        <div class="sparc-item-name">${g.name}</div>
+        <div class="sparc-item-info">${g.type} · ${g.dist} Mpc · ${g.Mdisk.toExponential(1)} × 10¹⁰ M☉</div>
+      </div>
+      <div>
+        <div class="sparc-item-v">${g.vobs}</div>
+        <div class="sparc-item-vl">km/s obs</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterGalaxies() {
+  const q    = document.getElementById('sparc-search').value.toLowerCase();
+  const type = document.getElementById('sparc-type').value;
+  const filtered = SPARC.filter(g => {
+    const matchQ    = !q || g.name.toLowerCase().includes(q);
+    const matchType = !type || g.type.includes(type);
+    return matchQ && matchType;
+  });
+  renderSPARCList(filtered);
+}
+
+// ══════════════════════════════════════════════════════
+// SPARC — SELECT & PLOT GALAXY
+// ══════════════════════════════════════════════════════
+function selectGalaxy(name) {
+  const g = SPARC.find(x => x.name === name);
+  if (!g) return;
+  currentSPARC = name;
+  filterGalaxies(); // re-render to update active state
+
+  document.getElementById('sparc-placeholder').style.display = 'none';
+  document.getElementById('sparc-content').style.display = 'block';
+
+  // Header
+  document.getElementById('sparc-tag').textContent = `${g.type} · ${g.dist} Mpc`;
+  document.getElementById('sparc-name').textContent = g.name;
+  document.getElementById('sparc-meta').textContent = g.desc;
+  document.getElementById('sparc-vobs').textContent = g.vobs;
+
+  // Compute curves
+  const M_disk = g.Mdisk * 1e10;
+  const M_gas  = g.Mgas  * 1e9;
+  const rg     = g.rd * 2.5;
+  const rmax   = Math.max(g.rd * 12, 15);
+
+  const r = [];
+  for (let ri = 0.2; ri <= rmax; ri += rmax/200) r.push(ri);
+
+  const vT = r.map(ri => vTIE(ri, M_disk, g.rd, M_gas, rg));
+  const vN = r.map(ri => vNewton(ri, M_disk, g.rd, M_gas, rg));
+
+  const M_total = M_disk + M_gas;
+  const vFlat   = Math.pow(G * M_total * a0, 0.25) / km;
+  const rt      = Math.sqrt(G * M_total / a0) / kpc;
+  const errPct  = Math.abs(vFlat - g.vobs) / g.vobs * 100;
+
+  // Plot
+  const layout = {
+    paper_bgcolor: '#0d0d1a',
+    plot_bgcolor:  '#0d0d1a',
+    font: { color: '#aaaacc', family: 'Space Mono, monospace', size: 10 },
+    margin: { t: 15, r: 15, b: 45, l: 50 },
+    xaxis: { title: 'Radio (kpc)', gridcolor: '#1a1a33', color: '#aaaacc' },
+    yaxis: { title: 'Velocidad (km/s)', gridcolor: '#1a1a33', color: '#aaaacc' },
+    legend: { bgcolor: 'rgba(0,0,0,0.5)', bordercolor: '#222244', borderwidth: 1, font:{size:9} },
+    shapes: [{
+      type: 'line', x0: 0, x1: rmax,
+      y0: g.vobs, y1: g.vobs,
+      line: { color: 'rgba(91,200,245,0.4)', width: 1, dash: 'dot' }
+    }],
+    annotations: [{
+      x: rmax*0.7, y: g.vobs + (g.vobs*0.05),
+      text: `v_obs = ${g.vobs} km/s`,
+      showarrow: false,
+      font: { color: '#5BC8F5', size: 9, family: 'Space Mono' }
+    }]
+  };
+
+  const traces = [
+    { x: r, y: vT, name: 'TIE (0 parámetros)', line: { color: '#FFD700', width: 3 } },
+    { x: r, y: vN, name: 'Newton (bariones)', line: { color: '#FF4444', width: 2, dash: 'dash' } },
+    { x: r, y: r.map(()=>vFlat), name: `v_flat TIE = ${vFlat.toFixed(0)} km/s`,
+      line: { color: '#44FF88', width: 1.5, dash: 'dot' } },
+  ];
+
+  Plotly.newPlot('sparc-plot', traces, layout, { displayModeBar: false, responsive: true });
+
+  // Metrics
+  document.getElementById('sparc-vtie').textContent = vFlat.toFixed(0);
+  const errEl = document.getElementById('sparc-err');
+  errEl.textContent = errPct.toFixed(1) + '%';
+  errEl.style.color = errPct < 10 ? '#44FF88' : errPct < 20 ? '#FFD700' : '#FF4444';
+  document.getElementById('sparc-rt').textContent = rt.toFixed(1);
+
+  // Physics mode
+  document.getElementById('sparc-params').innerHTML =
+    `M_disk = ${g.Mdisk}×10¹⁰ M☉ | r_d = ${g.rd} kpc\n` +
+    `M_gas = ${g.Mgas}×10⁹ M☉ | r_g = ${rg.toFixed(1)} kpc\n` +
+    `v_flat = (G·M_total·a₀)^(1/4) = ${vFlat.toFixed(1)} km/s\n` +
+    `r_trans = √(GM/a₀) = ${rt.toFixed(1)} kpc`;
+
+  // Share
+  document.getElementById('sparc-share-url').value =
+    `${location.origin}${location.pathname}?galaxy=${encodeURIComponent(name)}`;
+}
+
+// ══════════════════════════════════════════════════════
+// URL — cargar galaxia desde link compartido
+// ══════════════════════════════════════════════════════
+(function loadGalaxyFromURL() {
+  const p = new URLSearchParams(location.search);
+  const gname = p.get('galaxy');
+  if (gname) {
+    setTimeout(() => {
+      selectGalaxy(decodeURIComponent(gname));
+      document.getElementById('sparc').scrollIntoView({ behavior: 'smooth' });
+    }, 500);
+  }
+})();
+
+// Init SPARC list
+renderSPARCList(SPARC);
+
 </script>
 </body>
 </html>

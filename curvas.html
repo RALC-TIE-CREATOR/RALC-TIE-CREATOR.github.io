@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curvas de Rotación — TIE</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<style>
+:root {
+  --gold:   #FFD700;
+  --blue:   #5BC8F5;
+  --green:  #44FF88;
+  --red:    #FF4455;
+  --bg:     #06060f;
+  --bg2:    #0d0d1a;
+  --bg3:    #111122;
+  --text:   #e8e8f0;
+  --dim:    #7777aa;
+  --border: #1e1e3a;
+  --mono:   'Space Mono', monospace;
+  --sans:   'Syne', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--bg); color:var(--text);
+  font-family:var(--sans); min-height:100vh;
+}
+
+/* NAV */
+nav {
+  position:sticky; top:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:.9rem 2rem;
+  background:rgba(6,6,15,.95);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo { font-family:var(--mono); font-size:.9rem;
+            color:var(--gold); letter-spacing:.2em; text-decoration:none; }
+.nav-back  { font-family:var(--mono); font-size:.78rem;
+             color:var(--dim); text-decoration:none; transition:color .2s; }
+.nav-back:hover { color:var(--gold); }
+.nav-tag   { font-family:var(--mono); font-size:.68rem;
+             color:var(--dim); letter-spacing:.1em; }
+
+/* LAYOUT */
+.page { max-width:1100px; margin:0 auto; padding:2.5rem 2rem 4rem; }
+
+/* HEADER */
+.page-header { margin-bottom:2.5rem; }
+.page-tag {
+  font-family:var(--mono); font-size:.68rem;
+  letter-spacing:.3em; color:var(--gold);
+  text-transform:uppercase; margin-bottom:.5rem;
+}
+.page-title { font-size:clamp(1.6rem,3vw,2.5rem); font-weight:800; margin-bottom:.5rem; }
+.page-sub   { color:var(--dim); font-size:.92rem; line-height:1.7; }
+
+/* GRID LAYOUT */
+.tool-layout {
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:1.5rem;
+  align-items:start;
+}
+
+/* PANEL */
+.panel {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:8px; padding:1.75rem;
+}
+.panel-title {
+  font-family:var(--mono); font-size:.7rem;
+  letter-spacing:.2em; color:var(--gold);
+  text-transform:uppercase; margin-bottom:1.25rem;
+  padding-bottom:.75rem; border-bottom:1px solid var(--border);
+}
+
+/* INPUTS */
+.field { margin-bottom:1.1rem; }
+.field label {
+  display:block; font-family:var(--mono);
+  font-size:.68rem; color:var(--dim);
+  letter-spacing:.08em; margin-bottom:.4rem;
+}
+.field input, .field select {
+  width:100%;
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:4px; padding:.6rem .85rem;
+  color:var(--text); font-family:var(--mono); font-size:.85rem;
+  outline:none; transition:border-color .2s;
+}
+.field input:focus, .field select:focus { border-color:var(--gold); }
+
+.field input[type=range] {
+  padding:0; accent-color:var(--gold); cursor:pointer;
+  height:4px; background:var(--border);
+}
+
+.slider-row {
+  display:flex; justify-content:space-between;
+  font-family:var(--mono); font-size:.65rem;
+  color:var(--dim); margin-top:.3rem;
+}
+
+/* PRESETS */
+.preset-title {
+  font-family:var(--mono); font-size:.65rem;
+  color:var(--dim); letter-spacing:.1em;
+  margin-bottom:.6rem;
+}
+.preset-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:.4rem; margin-bottom:1.25rem;
+}
+.preset-btn {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:4px; padding:.45rem .5rem;
+  font-family:var(--mono); font-size:.65rem;
+  color:var(--dim); cursor:pointer; transition:all .2s;
+  text-align:left; line-height:1.4;
+}
+.preset-btn:hover { border-color:var(--gold); color:var(--gold); }
+.preset-btn strong { display:block; color:var(--text); font-size:.7rem; }
+
+/* CALC BUTTON */
+.calc-btn {
+  width:100%; background:var(--gold); color:var(--bg);
+  border:none; border-radius:4px; padding:.8rem;
+  font-family:var(--mono); font-size:.88rem; font-weight:700;
+  cursor:pointer; transition:all .2s; letter-spacing:.05em;
+}
+.calc-btn:hover { background:#fff; box-shadow:0 4px 20px rgba(255,215,0,.3); }
+
+/* RESULTS */
+.results {
+  margin-top:1.25rem;
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:.6rem;
+}
+.result-card {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:4px; padding:.85rem;
+}
+.result-card .r-label {
+  font-family:var(--mono); font-size:.6rem;
+  color:var(--dim); margin-bottom:.3rem;
+}
+.result-card .r-value {
+  font-family:var(--mono); font-size:1.05rem;
+  font-weight:700; color:var(--gold);
+}
+.result-card .r-unit {
+  font-family:var(--mono); font-size:.6rem;
+  color:var(--dim); margin-top:.1rem;
+}
+.r-value.green { color:var(--green); }
+.r-value.blue  { color:var(--blue);  }
+.r-value.red   { color:var(--red);   }
+
+/* SHARE */
+.share-row {
+  display:flex; gap:.5rem; margin-top:1rem;
+}
+.share-input {
+  flex:1; background:var(--bg3); border:1px solid var(--border);
+  border-radius:4px; padding:.5rem .7rem;
+  font-family:var(--mono); font-size:.65rem; color:var(--dim);
+  outline:none;
+}
+.share-copy {
+  background:var(--border); border:none; border-radius:4px;
+  padding:.5rem .85rem; font-family:var(--mono); font-size:.65rem;
+  color:var(--dim); cursor:pointer; transition:all .2s; white-space:nowrap;
+}
+.share-copy:hover { background:var(--gold); color:var(--bg); }
+
+/* MODE TOGGLE */
+.mode-bar {
+  display:flex; gap:.5rem; margin-bottom:1.5rem;
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:6px; padding:.35rem; width:fit-content;
+}
+.mode-opt {
+  padding:.35rem 1rem; border-radius:4px; cursor:pointer;
+  font-family:var(--mono); font-size:.72rem; color:var(--dim);
+  transition:all .2s; border:none; background:transparent;
+}
+.mode-opt.active { background:var(--gold); color:var(--bg); font-weight:700; }
+
+/* PLOT AREA */
+.plot-panel {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:8px; overflow:hidden;
+}
+.plot-header {
+  padding:1rem 1.5rem;
+  border-bottom:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center;
+}
+.plot-title { font-family:var(--mono); font-size:.75rem; color:var(--dim); }
+.plot-legend-note { font-family:var(--mono); font-size:.65rem; color:var(--dim); }
+#rotation-plot { width:100%; height:420px; }
+
+/* PHYSICS BOX */
+.physics-box {
+  background:var(--bg3); border-left:3px solid var(--gold);
+  border-radius:0 6px 6px 0; padding:1rem 1.25rem;
+  margin-top:1rem; display:none;
+}
+.physics-box.visible { display:block; }
+.physics-box .eq-line {
+  font-family:var(--mono); font-size:.78rem;
+  color:var(--dim); line-height:2;
+}
+.physics-box .eq-line .hi { color:var(--gold); }
+
+/* INFO ROW */
+.info-row {
+  display:flex; gap:1rem; margin-top:1rem; flex-wrap:wrap;
+}
+.info-pill {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:100px; padding:.3rem .9rem;
+  font-family:var(--mono); font-size:.65rem; color:var(--dim);
+}
+.info-pill span { color:var(--gold); }
+
+/* FOOTER */
+.page-footer {
+  border-top:1px solid var(--border); margin-top:3rem;
+  padding-top:1.5rem; text-align:center;
+  font-family:var(--mono); font-size:.68rem; color:var(--dim);
+}
+.page-footer a { color:var(--gold); text-decoration:none; }
+
+/* RESPONSIVE */
+@media (max-width:760px) {
+  .tool-layout { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-back">← TIE / R@LC</a>
+  <span class="nav-tag">H-01 · Curvas de Rotación</span>
+  <div style="display:flex; gap:.5rem;">
+    <button class="mode-opt active" id="opt-pub" onclick="setMode('pub')">Público</button>
+    <button class="mode-opt"        id="opt-phy" onclick="setMode('phy')">Físico</button>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="page-tag">H-01 · Verificador Galáctico</div>
+    <h1 class="page-title">Curvas de Rotación Galáctica</h1>
+    <p class="page-sub" id="sub-pub">
+      Ingresa la masa de una galaxia y su radio. TIE predice la curva de rotación plana
+      sin materia oscura y sin ajustar ningún parámetro. Newton falla — TIE no.
+    </p>
+    <p class="page-sub" id="sub-phy" style="display:none;">
+      a<sub>TIE</sub> = √[a<sub>N</sub>(a<sub>N</sub>+a<sub>0</sub>)] donde
+      a<sub>N</sub>=GM(&lt;r)/r², a<sub>0</sub>=cH<sub>0</sub>/2π=1.082×10⁻¹⁰ m/s².
+      Masa encerrada: perfil exponencial de disco + gas. Parámetros libres: CERO.
+    </p>
+  </div>
+
+  <!-- TOOL LAYOUT -->
+  <div class="tool-layout">
+
+    <!-- LEFT: CONTROLS -->
+    <div>
+      <div class="panel">
+        <div class="panel-title">Galaxias de ejemplo</div>
+
+        <div class="preset-grid">
+          <button class="preset-btn" onclick="loadPreset('ngc3198')">
+            <strong>NGC 3198</strong>Espiral clásica
+          </button>
+          <button class="preset-btn" onclick="loadPreset('ngc2403')">
+            <strong>NGC 2403</strong>Espiral Rubin 1980
+          </button>
+          <button class="preset-btn" onclick="loadPreset('ngc6503')">
+            <strong>NGC 6503</strong>Espiral aislada
+          </button>
+          <button class="preset-btn" onclick="loadPreset('ddo154')">
+            <strong>DDO 154</strong>Enana · ~100% gas
+          </button>
+          <button class="preset-btn" onclick="loadPreset('ugc128')">
+            <strong>UGC 128</strong>Baja brillo (LSB)
+          </button>
+          <button class="preset-btn" onclick="loadPreset('ngc7331')">
+            <strong>NGC 7331</strong>Espiral masiva
+          </button>
+        </div>
+
+        <div class="panel-title" style="margin-top:.5rem;">Parámetros</div>
+
+        <div class="field">
+          <label>Masa estelar del disco (× 10¹⁰ M☉)</label>
+          <input type="number" id="p-mdisk" value="2.20" step="0.01" min="0.001">
+        </div>
+        <div class="field">
+          <label>Radio de escala del disco (kpc)</label>
+          <input type="number" id="p-rd" value="3.52" step="0.01" min="0.1">
+        </div>
+        <div class="field">
+          <label>Masa de gas (× 10⁹ M☉)</label>
+          <input type="number" id="p-mgas" value="8.50" step="0.1" min="0">
+        </div>
+        <div class="field">
+          <label>Radio máximo del gráfico (kpc)</label>
+          <input type="range" id="p-rmax" min="5" max="80" value="30" step="1"
+                 oninput="document.getElementById('rmax-val').textContent=this.value">
+          <div class="slider-row">
+            <span>5 kpc</span>
+            <span id="rmax-val">30</span> kpc
+            <span>80 kpc</span>
+          </div>
+        </div>
+
+        <div class="field" id="field-h0" style="display:none;">
+          <label>H₀ (km/s/Mpc) — <span id="h0-val">70.0</span></label>
+          <input type="range" id="p-h0" min="67" max="74" value="70" step="0.1"
+                 oninput="document.getElementById('h0-val').textContent=parseFloat(this.value).toFixed(1)">
+          <div class="slider-row"><span>67</span><span>74</span></div>
+        </div>
+
+        <button class="calc-btn" onclick="calcCurve()">CALCULAR →</button>
+
+        <!-- RESULTS -->
+        <div class="results">
+          <div class="result-card">
+            <div class="r-label">v asintótica TIE</div>
+            <div class="r-value" id="r-vflat">—</div>
+            <div class="r-unit">km/s</div>
+          </div>
+          <div class="result-card">
+            <div class="r-label">Radio de transición</div>
+            <div class="r-value blue" id="r-rt">—</div>
+            <div class="r-unit">kpc</div>
+          </div>
+          <div class="result-card">
+            <div class="r-label">Masa total</div>
+            <div class="r-value" id="r-mtot">—</div>
+            <div class="r-unit">× 10¹⁰ M☉</div>
+          </div>
+          <div class="result-card">
+            <div class="r-label">Parámetros libres</div>
+            <div class="r-value green">CERO</div>
+            <div class="r-unit">a₀ = cH₀/2π</div>
+          </div>
+        </div>
+
+        <!-- SHARE -->
+        <div class="share-row">
+          <input class="share-input" id="share-url" readonly placeholder="Calcula para obtener link...">
+          <button class="share-copy" onclick="copyUrl()">Copiar link</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: PLOT -->
+    <div>
+      <div class="plot-panel">
+        <div class="plot-header">
+          <div class="plot-title">Velocidad de rotación vs Radio</div>
+          <div class="plot-legend-note">
+            <span style="color:var(--gold)">━</span> TIE &nbsp;
+            <span style="color:var(--red)">╌</span> Newton &nbsp;
+            <span style="color:var(--green)">┈</span> v_flat
+          </div>
+        </div>
+        <div id="rotation-plot"></div>
+      </div>
+
+      <!-- PHYSICS BOX -->
+      <div class="physics-box" id="physics-box">
+        <div class="eq-line">
+          <span class="hi">a_TIE</span> = √[ a_N · (a_N + a₀) ]
+        </div>
+        <div class="eq-line">
+          <span class="hi">a_N</span> = G·M(&lt;r) / r² &nbsp;·&nbsp;
+          <span class="hi">a₀</span> = c·H₀ / 2π
+        </div>
+        <div class="eq-line">
+          <span class="hi">v_flat</span> = (G·M_total·a₀)^(1/4) &nbsp;·&nbsp;
+          <span class="hi">r_trans</span> = √(G·M_total / a₀)
+        </div>
+        <div class="eq-line" id="phy-values" style="margin-top:.5rem; color:var(--dim);">—</div>
+      </div>
+
+      <!-- INFO ROW -->
+      <div class="info-row">
+        <div class="info-pill">a₀ = <span id="a0-display">1.082×10⁻¹⁰</span> m/s²</div>
+        <div class="info-pill">H₀ = <span id="h0-display">70.0</span> km/s/Mpc</div>
+        <div class="info-pill">Fuente: <span>SPARC · Lelli et al. 2016</span></div>
+      </div>
+    </div>
+
+  </div><!-- /tool-layout -->
+
+  <!-- FOOTER -->
+  <div class="page-footer">
+    <a href="index.html">← Volver al inicio</a> &nbsp;·&nbsp;
+    <a href="sparc.html">Explorador SPARC →</a> &nbsp;·&nbsp;
+    <a href="https://zenodo.org/records/18851408" target="_blank">DOI: 10.5281/zenodo.18851408</a>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+// ══════════════════════════════
+// CONSTANTES FÍSICAS
+// ══════════════════════════════
+const G     = 6.674e-11;   // m³/kg/s²
+const c     = 2.998e8;     // m/s
+const M_sun = 1.989e30;    // kg
+const kpc   = 3.0857e19;   // m/kpc
+const km    = 1e3;         // m/km
+
+// a₀ se recalcula con H₀
+function getA0() {
+  const H0_kms = parseFloat(document.getElementById('p-h0').value);
+  const H0_si  = H0_kms * 1000 / 3.0857e22;
+  return c * H0_si / (2 * Math.PI);
+}
+
+// ══════════════════════════════
+// PRESETS (datos SPARC reales)
+// ══════════════════════════════
+const PRESETS = {
+  ngc3198: { mdisk:2.20, rd:3.52, mgas:8.50,  rmax:35, label:'NGC 3198' },
+  ngc2403: { mdisk:0.82, rd:1.75, mgas:12.0,  rmax:25, label:'NGC 2403' },
+  ngc6503: { mdisk:0.79, rd:1.57, mgas:3.80,  rmax:22, label:'NGC 6503' },
+  ddo154:  { mdisk:0.0028,rd:0.45,mgas:0.71,  rmax:8,  label:'DDO 154'  },
+  ugc128:  { mdisk:0.55, rd:8.80, mgas:18.0,  rmax:60, label:'UGC 128'  },
+  ngc7331: { mdisk:6.33, rd:3.10, mgas:9.40,  rmax:40, label:'NGC 7331' },
+};
+
+function loadPreset(key) {
+  const p = PRESETS[key];
+  document.getElementById('p-mdisk').value = p.mdisk;
+  document.getElementById('p-rd').value    = p.rd;
+  document.getElementById('p-mgas').value  = p.mgas;
+  document.getElementById('p-rmax').value  = p.rmax;
+  document.getElementById('rmax-val').textContent = p.rmax;
+  calcCurve();
+}
+
+// ══════════════════════════════
+// MASA ENCERRADA — perfil exponencial
+// ══════════════════════════════
+function mEncKg(r_kpc, Mdisk_1e10, rd_kpc, Mgas_1e9, rg_kpc) {
+  const xd = r_kpc / rd_kpc;
+  const xg = r_kpc / rg_kpc;
+  const Md = Mdisk_1e10 * 1e10 * M_sun * (1 - Math.exp(-xd) * (1 + xd));
+  const Mg = Mgas_1e9  * 1e9  * M_sun * (1 - Math.exp(-xg) * (1 + xg + 0.5*xg*xg));
+  return Math.max(Md + Mg, 1e20);
+}
+
+function vTIE_kms(r_kpc, Mdisk, rd, Mgas, rg) {
+  const a0 = getA0();
+  const r  = r_kpc * kpc;
+  const M  = mEncKg(r_kpc, Mdisk, rd, Mgas, rg);
+  const aN = G * M / (r * r);
+  const a  = Math.sqrt(aN * (aN + a0));
+  return Math.sqrt(r * a) / km;
+}
+
+function vNewton_kms(r_kpc, Mdisk, rd, Mgas, rg) {
+  const r = r_kpc * kpc;
+  const M = mEncKg(r_kpc, Mdisk, rd, Mgas, rg);
+  return Math.sqrt(G * M / r) / km;
+}
+
+// ══════════════════════════════
+// CALCULAR Y GRAFICAR
+// ══════════════════════════════
+function calcCurve() {
+  const Mdisk = parseFloat(document.getElementById('p-mdisk').value);
+  const rd    = parseFloat(document.getElementById('p-rd').value);
+  const Mgas  = parseFloat(document.getElementById('p-mgas').value);
+  const rg    = rd * 2.5;
+  const rmax  = parseFloat(document.getElementById('p-rmax').value);
+  const a0    = getA0();
+
+  // Build arrays
+  const r = [];
+  const step = rmax / 200;
+  for (let ri = 0.1; ri <= rmax; ri += step) r.push(ri);
+
+  const vT = r.map(ri => vTIE_kms(ri, Mdisk, rd, Mgas, rg));
+  const vN = r.map(ri => vNewton_kms(ri, Mdisk, rd, Mgas, rg));
+
+  // Derived quantities
+  const M_total_kg = (Mdisk*1e10 + Mgas*1e9) * M_sun;
+  const vFlat = Math.pow(G * M_total_kg * a0, 0.25) / km;
+  const rt    = Math.sqrt(G * M_total_kg / a0) / kpc;
+  const vFArr = r.map(() => vFlat);
+
+  // Plot
+  const traces = [
+    {
+      x: r, y: vT,
+      name: 'TIE — 0 parámetros',
+      mode: 'lines',
+      line: { color: '#FFD700', width: 3 }
+    },
+    {
+      x: r, y: vN,
+      name: 'Newton — bariones solos',
+      mode: 'lines',
+      line: { color: '#FF4455', width: 2, dash: 'dash' }
+    },
+    {
+      x: r, y: vFArr,
+      name: 'v_flat = ' + vFlat.toFixed(0) + ' km/s',
+      mode: 'lines',
+      line: { color: '#44FF88', width: 1.5, dash: 'dot' }
+    },
+  ];
+
+  const layout = {
+    paper_bgcolor: '#0d0d1a',
+    plot_bgcolor:  '#0d0d1a',
+    font: { color:'#aaaacc', family:'Space Mono, monospace', size:11 },
+    margin: { t:20, r:20, b:55, l:60 },
+    xaxis: {
+      title: 'Radio (kpc)',
+      gridcolor: '#1a1a33', color:'#aaaacc',
+      zeroline: false, linecolor:'#1e1e3a'
+    },
+    yaxis: {
+      title: 'Velocidad (km/s)',
+      gridcolor: '#1a1a33', color:'#aaaacc',
+      zeroline: false, linecolor:'#1e1e3a',
+      rangemode: 'tozero'
+    },
+    legend: {
+      bgcolor: 'rgba(6,6,15,0.8)',
+      bordercolor: '#1e1e3a', borderwidth:1,
+      font: { size:10 }, x:0.02, y:0.98
+    },
+    shapes: [{
+      type:'line', x0:rt, x1:rt, y0:0, y1:vFlat*1.05,
+      line:{ color:'rgba(91,200,245,0.3)', width:1, dash:'dot' }
+    }],
+    annotations: [{
+      x: rt, y: vFlat*1.1,
+      text: 'r_trans',
+      showarrow: false,
+      font: { color:'#5BC8F5', size:9, family:'Space Mono' }
+    }]
+  };
+
+  Plotly.react('rotation-plot', traces, layout, { displayModeBar:false, responsive:true });
+
+  // Update metrics
+  document.getElementById('r-vflat').textContent = vFlat.toFixed(1);
+  document.getElementById('r-rt').textContent    = rt.toFixed(1);
+  document.getElementById('r-mtot').textContent  = (Mdisk + Mgas/10).toFixed(2);
+
+  // Physics box
+  const H0_kms = parseFloat(document.getElementById('p-h0').value);
+  document.getElementById('phy-values').textContent =
+    `M_disk=${Mdisk}e10 M☉  r_d=${rd}kpc  M_gas=${Mgas}e9 M☉  H₀=${H0_kms}  a₀=${a0.toExponential(3)} m/s²`;
+
+  // Info pills
+  document.getElementById('a0-display').textContent = a0.toExponential(3).replace('e-','×10⁻');
+  document.getElementById('h0-display').textContent = H0_kms.toFixed(1);
+
+  // Share URL
+  const url = `${location.origin}${location.pathname}?Md=${Mdisk}&rd=${rd}&Mg=${Mgas}&rmax=${rmax}`;
+  document.getElementById('share-url').value = url;
+}
+
+// ══════════════════════════════
+// MODE TOGGLE
+// ══════════════════════════════
+function setMode(m) {
+  const isPhy = m === 'phy';
+  document.getElementById('opt-pub').classList.toggle('active', !isPhy);
+  document.getElementById('opt-phy').classList.toggle('active',  isPhy);
+  document.getElementById('sub-pub').style.display   = isPhy ? 'none'  : '';
+  document.getElementById('sub-phy').style.display   = isPhy ? ''      : 'none';
+  document.getElementById('field-h0').style.display  = isPhy ? 'block' : 'none';
+  document.getElementById('physics-box').classList.toggle('visible', isPhy);
+}
+
+// ══════════════════════════════
+// SHARE / COPY
+// ══════════════════════════════
+function copyUrl() {
+  const el  = document.getElementById('share-url');
+  const btn = el.nextElementSibling;
+  if (!el.value || el.value.includes('Calcula')) return;
+  navigator.clipboard.writeText(el.value).then(() => {
+    btn.textContent = '✓ Copiado';
+    setTimeout(() => { btn.textContent = 'Copiar link'; }, 2000);
+  });
+}
+
+// ══════════════════════════════
+// LOAD FROM URL PARAMS
+// ══════════════════════════════
+(function init() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('Md'))   document.getElementById('p-mdisk').value = p.get('Md');
+  if (p.get('rd'))   document.getElementById('p-rd').value    = p.get('rd');
+  if (p.get('Mg'))   document.getElementById('p-mgas').value  = p.get('Mg');
+  if (p.get('rmax')) {
+    document.getElementById('p-rmax').value = p.get('rmax');
+    document.getElementById('rmax-val').textContent = p.get('rmax');
+  }
+  calcCurve();
+})();
+</script>
+</body>
+</html>

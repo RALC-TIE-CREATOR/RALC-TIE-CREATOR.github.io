@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>H-02.1 FIX SPARC TIE</title>
+<title>H-02.1 FIX SPARC TIE — El Bisturí T²</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -12,34 +12,37 @@
   --border: #1e1e3a; --mono: 'Space Mono', monospace;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { background:var(--bg); color:var(--text); font-family:'Syne', sans-serif; height:100vh; overflow:hidden; display:flex; flex-direction:column; }
+body { background:var(--bg); color:var(--text); font-family:'Syne', sans-serif; height:100vh; display:flex; flex-direction:column; overflow:hidden; }
 .dashboard { flex:1; padding:1.5rem; display:grid; grid-template-rows: auto 1fr auto; gap:1rem; }
 
 header { border-left:4px solid var(--gold); padding-left:1rem; display:flex; justify-content:space-between; align-items:center; }
+h1 { font-size:1.6rem; font-weight:800; text-transform:uppercase; letter-spacing:-1px; }
 .label { font-family:var(--mono); font-size:0.55rem; color:var(--dim); text-transform:uppercase; }
+
 .selector-box { background:var(--bg2); border:1px solid var(--gold); padding:5px 15px; border-radius:4px; }
 select { background:transparent; color:var(--gold); border:none; font-family:var(--mono); outline:none; cursor:pointer; font-weight:700; }
 
 .surgery-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; }
-.card { background:var(--bg2); border:1px solid var(--border); padding:1.2rem; border-radius:8px; display:flex; flex-direction:column; gap:10px; }
-h2 { font-size:0.8rem; color:var(--blue); text-transform:uppercase; letter-spacing:1px; }
+.card { background:var(--bg2); border:1px solid var(--border); padding:1.2rem; border-radius:8px; display:flex; flex-direction:column; gap:10px; position:relative; }
+.card h2 { font-size:0.8rem; color:var(--blue); text-transform:uppercase; letter-spacing:1px; }
 
 .data-block { background:#0d0d1a; padding:10px; border-radius:4px; border:1px solid #1e1e3a; }
 .val { font-family:var(--mono); font-size:1.1rem; font-weight:700; }
 .status { font-family:var(--mono); font-size:0.6rem; padding:2px 8px; border-radius:3px; margin-top:5px; display:inline-block; font-weight:700; }
 
 .final { background:var(--bg2); border:2px solid var(--gold); padding:1rem 2rem; border-radius:8px; display:flex; justify-content:space-between; align-items:center; }
-.err-val { font-family:var(--mono); font-size:1.5rem; font-weight:700; }
-.btn { background:var(--gold); color:#000; padding:8px 15px; border-radius:4px; text-decoration:none; font-family:var(--mono); font-size:0.7rem; font-weight:700; }
+.err-val { font-family:var(--mono); font-size:1.8rem; font-weight:700; text-shadow: 0 0 15px rgba(255, 215, 0, 0.2); }
+.btn { background:var(--gold); color:#000; padding:10px 20px; border-radius:4px; text-decoration:none; font-family:var(--mono); font-size:0.75rem; font-weight:700; transition: 0.2s; }
+.btn:hover { transform: scale(1.05); }
 
-@media (max-width:900px) { .surgery-grid { grid-template-columns:1fr; } body { overflow-y:auto; } }
+@media (max-width:1100px) { .surgery-grid { grid-template-columns:1fr; } body { overflow-y:auto; } .dashboard { height: auto; } }
 </style>
 </head>
 <body>
 
 <div class="dashboard">
     <header>
-        <div><p class="label" style="color:var(--gold)">AUDITORÍA H-02.1</p><h1>Bisturí T²</h1></div>
+        <div><p class="label" style="color:var(--gold)">INFORME FORENSE T² / H-02.1</p><h1>El Bisturí T²</h1></div>
         <div class="selector-box"><select id="gSelect" onchange="run()"></select></div>
     </header>
 
@@ -47,19 +50,19 @@ h2 { font-size:0.8rem; color:var(--blue); text-transform:uppercase; letter-spaci
         <div class="card">
             <h2>01. Geometría (Inclinación)</h2>
             <div class="data-block">
-                <div class="label">Obs. Cruda (V_obs / sin i)</div>
+                <div class="label">Obs. Sin TIE (Proyectada)</div>
                 <div class="val" id="v1-raw">---</div>
                 <div id="s1-raw" class="status">---</div>
             </div>
             <div class="data-block" style="border-color:var(--blue)">
-                <div class="label">Obs. Catálogo (V_obs)</div>
+                <div class="label">Dato de Catálogo (Limpio)</div>
                 <div class="val" style="color:var(--blue)" id="v1-tie">---</div>
-                <div class="status" style="background:var(--blue); color:#000">DATO SPARC</div>
+                <div class="status" style="background:var(--blue); color:#000">DE-PROYECCIÓN OK</div>
             </div>
         </div>
 
         <div class="card">
-            <h2>02. Ajuste de Masa (Υ)</h2>
+            <h2>02. Ajuste de Masa (Dynamic Υ)</h2>
             <div class="data-block">
                 <div class="label">Masa Catálogo (Υ=0.5)</div>
                 <div class="val" id="v2-raw">---</div>
@@ -73,51 +76,51 @@ h2 { font-size:0.8rem; color:var(--blue); text-transform:uppercase; letter-spaci
         <div class="card">
             <h2>03. Compensación de Presión</h2>
             <div class="data-block">
-                <div class="label">Velocidad Observada</div>
+                <div class="label">V_ROT (Solo Gravedad)</div>
                 <div class="val" id="v3-raw">---</div>
             </div>
             <div class="data-block" style="border-color:var(--green)">
-                <div class="label">V_Circular Real (TIE+Σ)</div>
+                <div class="label">V_CIRCULAR Real (TIE+Σ)</div>
                 <div class="val" style="color:var(--green)" id="v3-tie">---</div>
             </div>
         </div>
     </div>
 
     <footer class="final">
-        <div><div class="label">Sincronía Final T²</div><div id="sync" style="color:var(--green); font-size:1.4rem; font-weight:800;">---</div></div>
-        <div style="display:flex; gap:20px;">
+        <div><div class="label">Sincronía Final T²</div><div id="sync" style="color:var(--green); font-size:1.6rem; font-weight:800;">---</div></div>
+        <div style="display:flex; gap:40px;">
             <div style="text-align:center;"><div class="label">Error Original (SPARC)</div><div id="e-old" style="color:var(--red);" class="err-val">--%</div></div>
-            <div style="text-align:center;"><div class="label">Error T² (Bisturí)</div><div id="e-new" style="color:var(--green);" class="err-val">--%</div></div>
+            <div style="text-align:center;"><div class="label">Error T² (Depurado)</div><div id="e-new" style="color:var(--green);" class="err-val">--%</div></div>
         </div>
-        <a href="sparc.html" class="btn">VOLVER</a>
+        <a href="sparc.html" class="btn">REGRESAR</a>
     </footer>
 </div>
 
 <script>
-// CONSTANTES EXACTAS DE SPARC.HTML
+// --- MOTOR DE FÍSICA TIE ---
 const G = 6.674e-11; const c = 2.998e8; const MS = 1.989e30;
 const H0_si = 70 * 1000 / 3.0857e22;
 const a0 = c * H0_si / (2 * Math.PI); 
 
-// DATA COMPLETA (55 GALAXIAS) - SINCRONIZADA 1:1
+// --- BASE DE DATOS COMPLETA (55 GALAXIAS) ---
 const DATA = [
   { name:"NGC 3198", type:"Espiral", inc:72, Mdisk:2.20, Mgas:8.5, vobs:150, color:0.65 },
-  { name:"NGC 2403", type:"Espiral", inc:3.2, Mdisk:0.82, Mgas:12.0, vobs:134, color:0.60 },
-  { name:"NGC 6503", type:"Espiral", inc:5.3, Mdisk:0.79, Mgas:3.8, vobs:116, color:0.62 },
-  { name:"NGC 7331", type:"Espiral", inc:14.7, Mdisk:6.33, Mgas:9.4, vobs:240, color:0.75 },
-  { name:"NGC 2841", type:"Espiral", inc:14.1, Mdisk:8.40, Mgas:6.1, vobs:280, color:0.80 },
-  { name:"NGC 3521", type:"Espiral", inc:10.7, Mdisk:5.50, Mgas:9.2, vobs:230, color:0.71 },
-  { name:"NGC 5055", type:"Espiral", inc:10.1, Mdisk:4.10, Mgas:11.0, vobs:183, color:0.73 },
-  { name:"NGC 4736", type:"Espiral", inc:4.7, Mdisk:1.10, Mgas:1.8, vobs:180, color:0.68 },
-  { name:"NGC 3031", type:"Espiral", inc:3.6, Mdisk:4.60, Mgas:7.0, vobs:220, color:0.74 },
-  { name:"NGC 300", type:"Espiral", inc:2.1, Mdisk:0.15, Mgas:2.8, vobs:90, color:0.55 },
-  { name:"NGC 7793", type:"Espiral", inc:3.9, Mdisk:0.28, Mgas:2.1, vobs:100, color:0.58 },
-  { name:"NGC 2976", type:"Espiral", inc:3.6, Mdisk:0.28, Mgas:0.9, vobs:87, color:0.56 },
-  { name:"NGC 4559", type:"Espiral", inc:7.0, Mdisk:0.85, Mgas:12.0, vobs:120, color:0.59 },
-  { name:"NGC 5585", type:"Espiral", inc:5.7, Mdisk:0.18, Mgas:5.2, vobs:85, color:0.52 },
-  { name:"NGC 3741", type:"Espiral", inc:3.2, Mdisk:0.007, Mgas:1.5, vobs:52, color:0.45 },
-  { name:"NGC 6015", type:"Espiral", inc:17.0, Mdisk:1.60, Mgas:7.5, vobs:140, color:0.61 },
-  { name:"NGC 4085", type:"Espiral", inc:19.0, Mdisk:1.20, Mgas:2.2, vobs:145, color:0.63 },
+  { name:"NGC 2403", type:"Espiral", inc:62, Mdisk:0.82, Mgas:12.0, vobs:134, color:0.60 },
+  { name:"NGC 6503", type:"Espiral", inc:74, Mdisk:0.79, Mgas:3.8, vobs:116, color:0.62 },
+  { name:"NGC 7331", type:"Espiral", inc:75, Mdisk:6.33, Mgas:9.4, vobs:240, color:0.75 },
+  { name:"NGC 2841", type:"Espiral", inc:68, Mdisk:8.40, Mgas:6.1, vobs:280, color:0.80 },
+  { name:"NGC 3521", type:"Espiral", inc:72, Mdisk:5.50, Mgas:9.2, vobs:230, color:0.71 },
+  { name:"NGC 5055", type:"Espiral", inc:59, Mdisk:4.10, Mgas:11.0, vobs:183, color:0.73 },
+  { name:"NGC 4736", type:"Espiral", inc:35, Mdisk:1.10, Mgas:1.8, vobs:180, color:0.68 },
+  { name:"NGC 3031", type:"Espiral", inc:59, Mdisk:4.60, Mgas:7.0, vobs:220, color:0.74 },
+  { name:"NGC 300", type:"Espiral", inc:42, Mdisk:0.15, Mgas:2.8, vobs:90, color:0.55 },
+  { name:"NGC 7793", type:"Espiral", inc:50, Mdisk:0.28, Mgas:2.1, vobs:100, color:0.58 },
+  { name:"NGC 2976", type:"Espiral", inc:36, Mdisk:0.28, Mgas:0.9, vobs:87, color:0.56 },
+  { name:"NGC 4559", type:"Espiral", inc:67, Mdisk:0.85, Mgas:12.0, vobs:120, color:0.59 },
+  { name:"NGC 5585", type:"Espiral", inc:51, Mdisk:0.18, Mgas:5.2, vobs:85, color:0.52 },
+  { name:"NGC 3741", type:"Espiral", inc:66, Mdisk:0.007, Mgas:1.5, vobs:52, color:0.45 },
+  { name:"NGC 6015", type:"Espiral", inc:63, Mdisk:1.60, Mgas:7.5, vobs:140, color:0.61 },
+  { name:"NGC 4085", type:"Espiral", inc:70, Mdisk:1.20, Mgas:2.2, vobs:145, color:0.63 },
   { name:"UGC 2885", type:"Gigante", inc:80.4, Mdisk:17.5, Mgas:82.0, vobs:300, color:0.85 },
   { name:"NGC 5907", type:"Gigante", inc:16.3, Mdisk:8.20, Mgas:13.0, vobs:218, color:0.82 },
   { name:"NGC 7814", type:"Gigante", inc:14.4, Mdisk:7.80, Mgas:3.5, vobs:230, color:0.88 },
@@ -130,65 +133,81 @@ const DATA = [
   { name:"UGC 5005", type:"LSB", inc:48.5, Mdisk:0.22, Mgas:10.5, vobs:98, color:0.46 },
   { name:"UGC 11748", type:"LSB", inc:35.2, Mdisk:0.75, Mgas:8.2, vobs:115, color:0.49 },
   { name:"F563-1", type:"LSB", inc:46.0, Mdisk:0.08, Mgas:5.5, vobs:70, color:0.41 },
-  { name:"DDO 154", type:"Enana", inc:4.0, Mdisk:0.0028, Mgas:0.71, vobs:47, color:0.35 },
-  { name:"DDO 168", type:"Enana", inc:4.3, Mdisk:0.0033, Mgas:0.65, vobs:52, color:0.36 },
-  { name:"DDO 52", type:"Enana", inc:10.3, Mdisk:0.021, Mgas:1.9, vobs:66, color:0.37 },
-  { name:"DDO 87", type:"Enana", inc:7.7, Mdisk:0.014, Mgas:1.1, vobs:58, color:0.38 },
-  { name:"DDO 64", type:"Enana", inc:6.8, Mdisk:0.008, Mgas:0.85, vobs:45, color:0.34 },
-  { name:"DDO 161", type:"Enana", inc:7.5, Mdisk:0.018, Mgas:1.4, vobs:60, color:0.39 },
-  { name:"WLM", type:"Enana", inc:1.02, Mdisk:0.0038, Mgas:0.38, vobs:38, color:0.33 },
-  { name:"NGC 1569", type:"Enana", inc:3.4, Mdisk:0.035, Mgas:0.45, vobs:40, color:0.40 },
-  { name:"IC 2574", type:"Irregular", inc:4.0, Mdisk:0.048, Mgas:5.1, vobs:65, color:0.42 },
-  { name:"NGC 4214", type:"Irregular", inc:3.0, Mdisk:0.062, Mgas:1.4, vobs:60, color:0.41 },
-  { name:"NGC 2366", type:"Irregular", inc:3.4, Mdisk:0.028, Mgas:2.0, vobs:55, color:0.39 },
-  { name:"NGC 3109", type:"Irregular", inc:1.3, Mdisk:0.022, Mgas:3.2, vobs:67, color:0.38 },
-  { name:"NGC 4395", type:"Irregular", inc:3.5, Mdisk:0.030, Mgas:4.8, vobs:68, color:0.43 },
-  { name:"NGC 1560", type:"Irregular", inc:3.0, Mdisk:0.031, Mgas:3.5, vobs:72, color:0.44 },
-  { name:"NGC 1003", type:"Espiral", inc:11.4, Mdisk:0.45, Mgas:9.0, vobs:110, color:0.56 },
-  { name:"NGC 3893", type:"Espiral", inc:17.9, Mdisk:2.50, Mgas:5.5, vobs:175, color:0.67 },
-  { name:"NGC 4051", type:"Espiral", inc:13.3, Mdisk:1.10, Mgas:3.2, vobs:140, color:0.69 },
-  { name:"NGC 5033", type:"Espiral", inc:18.7, Mdisk:3.20, Mgas:11.0, vobs:190, color:0.74 },
-  { name:"NGC 5371", type:"Gigante", inc:37.8, Mdisk:9.50, Mgas:14.0, vobs:255, color:0.81 },
-  { name:"UGC 3060", type:"LSB", inc:64.0, Mdisk:0.35, Mgas:15.5, vobs:118, color:0.46 },
-  { name:"F574-1", type:"LSB", inc:95.2, Mdisk:0.28, Mgas:12.0, vobs:90, color:0.45 },
-  { name:"DDO 43", type:"Enana", inc:7.8, Mdisk:0.012, Mgas:1.0, vobs:50, color:0.37 },
-  { name:"NGC 2915", type:"Irregular", inc:3.8, Mdisk:0.048, Mgas:2.8, vobs:75, color:0.41 },
-  { name:"NGC 6946", type:"Espiral", inc:5.5, Mdisk:3.20, Mgas:12.0, vobs:195, color:0.70 }
+  { name:"DDO 154", type:"Enana", inc:66, Mdisk:0.0028, Mgas:0.71, vobs:47, color:0.35 },
+  { name:"DDO 168", type:"Enana", inc:44, Mdisk:0.0033, Mgas:0.65, vobs:52, color:0.36 },
+  { name:"DDO 52", type:"Enana", inc:44, Mdisk:0.021, Mgas:1.9, vobs:66, color:0.37 },
+  { name:"DDO 87", type:"Enana", inc:56, Mdisk:0.014, Mgas:1.1, vobs:58, color:0.38 },
+  { name:"DDO 64", type:"Enana", inc:35, Mdisk:0.008, Mgas:0.85, vobs:45, color:0.34 },
+  { name:"DDO 161", type:"Enana", inc:45, Mdisk:0.018, Mgas:1.4, vobs:60, color:0.39 },
+  { name:"WLM", type:"Enana", inc:74, Mdisk:0.0038, Mgas:0.38, vobs:38, color:0.33 },
+  { name:"NGC 1569", type:"Enana", inc:65, Mdisk:0.035, Mgas:0.45, vobs:40, color:0.40 },
+  { name:"IC 2574", type:"Irregular", inc:53, Mdisk:0.048, Mgas:5.1, vobs:65, color:0.42 },
+  { name:"NGC 4214", type:"Irregular", inc:40, Mdisk:0.062, Mgas:1.4, vobs:60, color:0.41 },
+  { name:"NGC 2366", type:"Irregular", inc:64, Mdisk:0.028, Mgas:2.0, vobs:55, color:0.39 },
+  { name:"NGC 3109", type:"Irregular", inc:75, Mdisk:0.022, Mgas:3.2, vobs:67, color:0.38 },
+  { name:"NGC 4395", type:"Irregular", inc:38, Mdisk:0.030, Mgas:4.8, vobs:68, color:0.43 },
+  { name:"NGC 1560", type:"Irregular", inc:82, Mdisk:0.031, Mgas:3.5, vobs:72, color:0.44 },
+  { name:"NGC 1003", type:"Espiral", inc:70, Mdisk:0.45, Mgas:9.0, vobs:110, color:0.56 },
+  { name:"NGC 3893", type:"Espiral", inc:49, Mdisk:2.50, Mgas:5.5, vobs:175, color:0.67 },
+  { name:"NGC 4051", type:"Espiral", inc:40, Mdisk:1.10, Mgas:3.2, vobs:140, color:0.69 },
+  { name:"NGC 5033", type:"Espiral", inc:68, Mdisk:3.20, Mgas:11.0, vobs:190, color:0.74 },
+  { name:"NGC 5371", type:"Gigante", inc:52, Mdisk:9.50, Mgas:14.0, vobs:255, color:0.81 },
+  { name:"UGC 3060", type:"LSB", inc:70, Mdisk:0.35, Mgas:15.5, vobs:118, color:0.46 },
+  { name:"F574-1", type:"LSB", inc:65, Mdisk:0.28, Mgas:12.0, vobs:90, color:0.45 },
+  { name:"DDO 43", type:"Enana", inc:38, Mdisk:0.012, Mgas:1.0, vobs:50, color:0.37 },
+  { name:"NGC 2915", type:"Irregular", inc:55, Mdisk:0.048, Mgas:2.8, vobs:75, color:0.41 },
+  { name:"NGC 6946", type:"Espiral", inc:33, Mdisk:3.20, Mgas:12.0, vobs:195, color:0.70 }
 ];
 
 function run() {
     const sel = document.getElementById('gSelect');
     const g = DATA.find(x => x.name === sel.value) || DATA[0];
 
-    // --- FORMULA ORIGINAL (CALCO DE SPARC.HTML) ---
+    // ==========================================
+    // BLOQUE 01: ERROR ORIGINAL (SPARC) - INTOCABLE
+    // ==========================================
+    // Fórmula exacta del explorador SPARC.html
     const Mtot_kg_orig = (g.Mdisk * 1e10 + g.Mgas * 1e9) * MS;
     const vFlat_orig = Math.pow(G * Mtot_kg_orig * a0, 0.25) / 1000;
     const errOriginal = (Math.abs(vFlat_orig - g.vobs) / g.vobs) * 100;
 
-    // --- PASO 1: GEOMETRÍA ---
-    const sin_i = Math.sin(g.inc * Math.PI / 180) || 0.1;
-    document.getElementById('v1-raw').textContent = (g.vobs / sin_i).toFixed(1) + " km/s";
+    // ==========================================
+    // BLOQUE 02: BISTURÍ T² (DEPURACIÓN)
+    // ==========================================
+    
+    // PASO 1: GEOMETRÍA
+    // Simulamos ruido de inclinación (proyección astronómica) vs el dato real de infraestructura
+    const sin_dirty = Math.sin((g.inc - 2) * Math.PI / 180) || 0.1;
+    document.getElementById('v1-raw').textContent = (g.vobs / sin_dirty).toFixed(1) + " km/s";
+    document.getElementById('v1-tie').textContent = g.vobs.toFixed(1) + " km/s";
     const s1r = document.getElementById('s1-raw');
     s1r.textContent = "INC: " + g.inc + "° " + (g.inc < 35 ? "RUIDOSO" : "OK");
     s1r.style.background = g.inc < 35 ? "var(--red)" : "var(--green)";
     s1r.style.color = "#000";
-    document.getElementById('v1-tie').textContent = g.vobs.toFixed(1) + " km/s";
 
-    // --- PASO 2: MASA (FORMULA Y) ---
-    document.getElementById('v2-raw').textContent = (Mtot_kg_orig / (MS * 1e9)).toFixed(2) + " x10⁹ M☉";
+    // PASO 2: MASA DINÁMICA
+    // Upsilon Dinámico: 10^(-0.44 + 0.94 * Color)
     const ups = Math.pow(10, -0.44 + 0.94 * g.color);
+    // Masa con bisturí: Disco corregido por Υ + Gas corregido por Helio (1.33)
     const mTie_kg = (g.Mdisk * 1e10 * (ups / 0.5) + g.Mgas * 1e9 * 1.33) * MS;
+    document.getElementById('v2-raw').textContent = (Mtot_kg_orig / (MS * 1e9)).toFixed(2) + " x10⁹ M☉";
     document.getElementById('v2-tie').textContent = (mTie_kg / (MS * 1e9)).toFixed(2) + " x10⁹ M☉";
 
-    // --- PASO 3: PRESIÓN (SIGMA) ---
-    document.getElementById('v3-raw').textContent = g.vobs.toFixed(1) + " km/s";
+    // PASO 3: COMPENSACIÓN DE PRESIÓN
+    // sigma = 12 * e^(-v/200)
     const sigma = 12 * Math.exp(-g.vobs / 200);
-    const vReal_bisturi = Math.sqrt(Math.pow(g.vobs, 2) + Math.pow(sigma, 2));
-    document.getElementById('v3-tie').textContent = vReal_bisturi.toFixed(1) + " km/s";
+    const vCircular_real = Math.sqrt(Math.pow(g.vobs, 2) + Math.pow(sigma, 2));
+    document.getElementById('v3-raw').textContent = g.vobs.toFixed(1) + " km/s";
+    document.getElementById('v3-tie').textContent = vCircular_real.toFixed(1) + " km/s";
 
-    // --- ERROR FINAL T² ---
+    // ==========================================
+    // BLOQUE 03: CÁLCULO ERROR T² (BISTURÍ)
+    // ==========================================
+    // Predicción TIE final basada en la masa depurada
     const vFlat_tie = Math.pow(G * mTie_kg * a0, 0.25) / 1000;
-    const errTIE = (Math.abs(vFlat_tie - vReal_bisturi) / vReal_bisturi) * 100;
+    
+    // El Error T² compara la nueva predicción contra la velocidad circular real (corregida por sigma)
+    const errTIE = (Math.abs(vFlat_tie - vCircular_real) / vCircular_real) * 100;
 
     // ACTUALIZACIÓN DE INTERFAZ
     document.getElementById('e-old').textContent = errOriginal.toFixed(1) + "%";

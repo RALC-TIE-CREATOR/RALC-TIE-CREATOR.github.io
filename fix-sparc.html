@@ -408,8 +408,9 @@ function initCharts() {
             responsive: true, maintainAspectRatio: false,
             scales: {
                 x: { type: 'logarithmic', min: 0.1, max: 1000, title: { display: true, text: 'Masa Bariónica (×10⁹ M☉)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } },
-                y: { type: 'logarithmic', min: 20, max: 600, title: { display: true, text: 'Velocidad (km/s)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } }
-            },
+                y: { title: { display: true, text: 'Velocidad (km/s)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' },
+    suggestedMin: 0  // Opcional: sugiere empezar en 0, pero se ajusta si los datos son más altos
+},
             plugins: { 
                 legend: { position: 'top', labels: { color: '#e8e8f0', font: { family: 'Space Mono', size: 8 }, usePointStyle: true, padding: 10 } },
                 tooltip: { enabled: true }

@@ -1504,73 +1504,65 @@ function selectGalaxy(name) {
   document.getElementById('sparc-meta').textContent = g.desc;
   document.getElementById('sparc-vobs').textContent = g.vobs;
 
-  // Compute curves
-  const M_disk = g.Mdisk * 1e10;
-  const M_gas  = g.Mgas  * 1e9;
-  const rg     = g.rd * 2.5;
-  const rmax   = Math.max(g.rd * 12, 15);
-
-  const r = [];
-  for (let ri = 0.2; ri <= rmax; ri += rmax/200) r.push(ri);
-
-  const vT = r.map(ri => vTIE(ri, M_disk, g.rd, M_gas, rg));
-  const vN = r.map(ri => vNewton(ri, M_disk, g.rd, M_gas, rg));
-
-  const M_total = M_disk + M_gas;
+  // Compute
+  const M_disk  = g.Mdisk * 1e10;
+  const M_gas   = g.Mgas  * 1e9;
+  const rg      = g.rd * 2.5;
+  const rmax    = Math.max(g.rd * 12, 15);
+  const M_total = (M_disk + M_gas) * M_sun;
   const vFlat   = Math.pow(G * M_total * a0, 0.25) / km;
   const rt      = Math.sqrt(G * M_total / a0) / kpc;
   const errPct  = Math.abs(vFlat - g.vobs) / g.vobs * 100;
-
-  // Plot
-  const layout = {
-    paper_bgcolor: '#0d0d1a',
-    plot_bgcolor:  '#0d0d1a',
-    font: { color: '#aaaacc', family: 'Space Mono, monospace', size: 10 },
-    margin: { t: 15, r: 15, b: 45, l: 50 },
-    xaxis: { title: 'Radio (kpc)', gridcolor: '#1a1a33', color: '#aaaacc' },
-    yaxis: { title: 'Velocidad (km/s)', gridcolor: '#1a1a33', color: '#aaaacc' },
-    legend: { bgcolor: 'rgba(0,0,0,0.5)', bordercolor: '#222244', borderwidth: 1, font:{size:9} },
-    shapes: [{
-      type: 'line', x0: 0, x1: rmax,
-      y0: g.vobs, y1: g.vobs,
-      line: { color: 'rgba(91,200,245,0.4)', width: 1, dash: 'dot' }
-    }],
-    annotations: [{
-      x: rmax*0.7, y: g.vobs + (g.vobs*0.05),
-      text: `v_obs = ${g.vobs} km/s`,
-      showarrow: false,
-      font: { color: '#5BC8F5', size: 9, family: 'Space Mono' }
-    }]
-  };
-
-  const traces = [
-    { x: r, y: vT, name: 'TIE (0 parámetros)', line: { color: '#FFD700', width: 3 } },
-    { x: r, y: vN, name: 'Newton (bariones)', line: { color: '#FF4444', width: 2, dash: 'dash' } },
-    { x: r, y: r.map(()=>vFlat), name: `v_flat TIE = ${vFlat.toFixed(0)} km/s`,
-      line: { color: '#44FF88', width: 1.5, dash: 'dot' } },
-  ];
-
-  setTimeout(() => {
-    Plotly.newPlot('sparc-plot', traces, layout, { displayModeBar: false, responsive: true });
-  }, 50);
 
   // Metrics
   document.getElementById('sparc-vtie').textContent = vFlat.toFixed(0);
   const errEl = document.getElementById('sparc-err');
   errEl.textContent = errPct.toFixed(1) + '%';
-  errEl.style.color = errPct < 10 ? '#44FF88' : errPct < 20 ? '#FFD700' : '#FF4444';
+  errEl.style.color = errPct < 15 ? '#44FF88' : errPct < 30 ? '#FFD700' : '#FF4444';
   document.getElementById('sparc-rt').textContent = rt.toFixed(1);
 
-  // Physics mode
+  // Physics params
   document.getElementById('sparc-params').innerHTML =
-    `M_disk = ${g.Mdisk}×10¹⁰ M☉ | r_d = ${g.rd} kpc\n` +
-    `M_gas = ${g.Mgas}×10⁹ M☉ | r_g = ${rg.toFixed(1)} kpc\n` +
-    `v_flat = (G·M_total·a₀)^(1/4) = ${vFlat.toFixed(1)} km/s\n` +
-    `r_trans = √(GM/a₀) = ${rt.toFixed(1)} kpc`;
+    `<span class="eq">a_TIE = sqrt(a_N*(a_N + a0))</span>` +
+    `M_disk=${g.Mdisk}e10 Msun  rd=${g.rd}kpc  Mgas=${g.Mgas}e9 Msun\n` +
+    `v_flat=${vFlat.toFixed(1)} km/s  r_trans=${rt.toFixed(1)} kpc`;
 
-  // Share
+  // Share URL
   document.getElementById('sparc-share-url').value =
-    `${location.origin}${location.pathname}?galaxy=${encodeURIComponent(name)}`;
+    location.origin + location.pathname + '?galaxy=' + encodeURIComponent(name);
+
+  // Build curves
+  const r = [];
+  for (let ri = 0.2; ri <= rmax; ri += rmax/150) r.push(ri);
+  const vT = r.map(ri => vTIE(ri, M_disk, g.rd, M_gas, rg));
+  const vN = r.map(ri => vNewton(ri, M_disk, g.rd, M_gas, rg));
+  const vF = r.map(() => vFlat);
+
+  const traces = [
+    { x:r, y:vT, name:'TIE (0 parámetros)',   mode:'lines', line:{color:'#FFD700',width:3} },
+    { x:r, y:vN, name:'Newton (bariones)',     mode:'lines', line:{color:'#FF4444',width:2,dash:'dash'} },
+    { x:r, y:vF, name:'v_flat = '+vFlat.toFixed(0)+' km/s', mode:'lines', line:{color:'#44FF88',width:1.5,dash:'dot'} },
+  ];
+
+  const layout = {
+    paper_bgcolor:'#0d0d1a', plot_bgcolor:'#0d0d1a',
+    font:{color:'#aaaacc', family:'Space Mono, monospace', size:10},
+    margin:{t:15,r:15,b:45,l:50},
+    xaxis:{title:'Radio (kpc)', gridcolor:'#1a1a33', color:'#aaaacc', zeroline:false},
+    yaxis:{title:'Velocidad (km/s)', gridcolor:'#1a1a33', color:'#aaaacc', zeroline:false},
+    legend:{bgcolor:'rgba(0,0,0,0.5)', bordercolor:'#222244', borderwidth:1, font:{size:9}},
+    shapes:[{type:'line',x0:0,x1:rmax,y0:g.vobs,y1:g.vobs,
+             line:{color:'rgba(91,200,245,0.5)',width:1.5,dash:'dot'}}],
+    annotations:[{x:rmax*0.6, y:g.vobs*1.08,
+      text:'v_obs = '+g.vobs+' km/s', showarrow:false,
+      font:{color:'#5BC8F5',size:9,family:'Space Mono'}}]
+  };
+
+  // Double rAF ensures DOM is visible before Plotly measures the div
+  Plotly.purge('sparc-plot');
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    Plotly.newPlot('sparc-plot', traces, layout, {displayModeBar:false, responsive:true});
+  }));
 }
 
 // ══════════════════════════════════════════════════════
@@ -1593,4 +1585,5 @@ renderSPARCList(SPARC);
 </script>
 </body>
 </html>
+
 

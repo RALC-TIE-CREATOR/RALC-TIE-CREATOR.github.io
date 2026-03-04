@@ -9,88 +9,237 @@
 :root {
   --gold:   #FFD700;
   --blue:   #5BC8F5;
+  --green:  #44FF88;
+  --red:    #FF4455;
   --bg:     #06060f;
   --bg2:    #0d0d1a;
+  --bg3:    #111122;
   --text:   #e8e8f0;
   --dim:    #7777aa;
   --border: #1e1e3a;
   --mono:   'Space Mono', monospace;
   --sans:   'Syne', sans-serif;
 }
+
 * { margin:0; padding:0; box-sizing:border-box; }
-body { background:var(--bg); color:var(--text); font-family:var(--sans); padding: 2rem; line-height: 1.6; }
+body { 
+    background: var(--bg); 
+    color: var(--text); 
+    font-family: var(--sans); 
+    line-height: 1.6;
+    background-image: radial-gradient(circle at 50% 50%, #1a1a33 0%, #06060f 100%);
+    background-attachment: fixed;
+}
 
-.container { max-width: 900px; margin: 0 auto; }
-.tag { font-family: var(--mono); color: var(--gold); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; }
-h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; color: var(--text); }
-.desc { color: var(--dim); margin-bottom: 2rem; font-size: 1.1rem; }
+.container { max-width: 1000px; margin: 0 auto; padding: 4rem 2rem; }
 
-.card { background: var(--bg2); border: 1px solid var(--border); padding: 2rem; border-radius: 12px; margin-bottom: 2rem; }
-h2 { color: var(--gold); font-size: 1.2rem; margin-bottom: 1rem; font-family: var(--mono); display: flex; align-items: center; gap: 10px; }
+/* HEADER DESIGN */
+header { border-left: 4px solid var(--gold); padding-left: 1.5rem; margin-bottom: 4rem; }
+.tag { font-family: var(--mono); color: var(--gold); font-size: 0.8rem; letter-spacing: 0.3em; text-transform: uppercase; }
+h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1; margin: 0.5rem 0; text-transform: uppercase; }
+.subtitle { color: var(--dim); max-width: 600px; font-size: 1.1rem; }
 
-.formula { background: #000; padding: 1.5rem; border-radius: 8px; font-family: var(--mono); color: var(--blue); overflow-x: auto; margin: 1rem 0; border: 1px solid var(--blue); }
+/* SURGERY SECTIONS */
+.surgery-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 3rem;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+.surgery-card::before {
+    content: 'T²';
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    font-size: 8rem;
+    font-weight: 900;
+    color: rgba(255, 215, 0, 0.03);
+    font-family: var(--sans);
+}
 
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
-.factor { border-left: 2px solid var(--gold); padding-left: 1rem; }
-.factor h3 { font-size: 0.9rem; color: var(--text); margin-bottom: 0.5rem; }
-.factor p { font-size: 0.85rem; color: var(--dim); }
+.card-num { font-family: var(--mono); color: var(--gold); font-size: 1rem; margin-bottom: 1rem; display: block; }
+h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 15px; }
+h2 span { color: var(--gold); }
 
-.highlight { color: var(--gold); font-weight: 700; }
+p { margin-bottom: 1.5rem; color: var(--text); font-size: 1.05rem; }
+b { color: var(--gold); }
+
+/* FORMULA STYLING */
+.formula-box {
+    background: #000;
+    border: 1px solid var(--blue);
+    padding: 2rem;
+    border-radius: 8px;
+    margin: 2rem 0;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(91, 200, 245, 0.1);
+}
+.formula-label { 
+    position: absolute; top: -10px; left: 20px; background: var(--blue); 
+    color: var(--bg); font-family: var(--mono); font-size: 0.6rem; 
+    padding: 2px 10px; font-weight: 700; border-radius: 4px;
+}
+.formula-content {
+    font-family: var(--mono);
+    font-size: 1.4rem;
+    color: var(--blue);
+    text-align: center;
+}
+
+/* RESULT GRID */
+.result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    background: var(--bg3);
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px dashed var(--border);
+}
+.res-item h4 { font-family: var(--mono); font-size: 0.7rem; color: var(--dim); text-transform: uppercase; margin-bottom: 0.5rem; }
+.res-val { font-size: 1.5rem; font-weight: 700; color: var(--text); }
+.res-val.highlight { color: var(--gold); }
+
+/* FINAL SECTION */
+.final-report {
+    background: linear-gradient(135deg, var(--bg2) 0%, #1a1a33 100%);
+    border: 2px solid var(--gold);
+    padding: 4rem;
+    border-radius: 20px;
+    text-align: center;
+}
+.final-formula {
+    font-size: 2rem;
+    color: var(--gold);
+    font-family: var(--mono);
+    margin: 2rem 0;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.sync-badge {
+    background: var(--green);
+    color: var(--bg);
+    padding: 0.5rem 2rem;
+    border-radius: 100px;
+    font-weight: 800;
+    font-family: var(--mono);
+    display: inline-block;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .result-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 2.5rem; }
+}
 </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="tag">Referencia H-02.1</div>
-  <h1>FIX SPARC: El Bisturí T²</h1>
-  <p class="desc">
-    ¿Por qué algunas galaxias muestran deltas de error en la TIE? No es una falla de la ley, es el ruido intrínseco de la observación astrofísica. Aquí aplicamos la cirugía para revelar la infraestructura pura.
-  </p>
+    <header>
+        <div class="tag">Ref. Técnica H-02.1</div>
+        <h1>El Bisturí T²</h1>
+        <p class="subtitle">Protocolo de depuración de datos observacionales para la sincronía total con la Infraestructura Espacial.</p>
+    </header>
 
-  <div class="card">
-    <h2><span>01</span> INCERTIDUMBRE GEOMÉTRICA</h2>
-    <p>La velocidad observada depende del ángulo de inclinación ($i$). En galaxias "Face-on" ($i < 30^\circ$), el error en la medición del ángulo se amplifica exponencialmente en el cálculo de la velocidad circular.</p>
-    <div class="formula">V_circ = V_obs / sin(i)</div>
-    <p style="font-size: 0.8rem; color: var(--dim);">* El Bisturí T² marca estas galaxias como "Datos de Baja Fidelidad" para evitar falsos negativos.</p>
-  </div>
-  
-  
+    <section class="surgery-card">
+        <span class="card-num">PASO 01</span>
+        <h2><span>/</span> Corrección de Inclinación (i)</h2>
+        <p>Los astrónomos ven la galaxia proyectada en el cielo. Si la galaxia está inclinada, la velocidad que miden (V<sub>obs</sub>) es menor que la real.</p>
+        
+        <div class="formula-box">
+            <span class="formula-label">ECUACIÓN GEOMÉTRICA</span>
+            <div class="formula-content">V<sub>rot</sub> = V<sub>obs</sub> / sin(i)</div>
+        </div>
 
-  <div class="card">
-    <h2><span>02</span> DERIVA ASIMÉTRICA (Asymmetric Drift)</h2>
-    <p>En las galaxias enanas e irregulares, el gas no solo orbita; también tiene presión térmica. Esta presión "soporta" la galaxia, haciendo que la rotación observada sea menor a la gravedad real predicha por la TIE.</p>
-    <div class="formula">V_real² = V_rot² + 2σ²(∂lnΣ/∂lnR ...)</div>
-    <div class="grid">
-      <div class="factor">
-        <h3>Diagnóstico</h3>
-        <p>Galaxias con V < 70 km/s y alta dispersión gaseosa.</p>
-      </div>
-      <div class="factor">
-        <h3>Corrección</h3>
-        <p>Compensación de +10 a +15 km/s para recuperar el equilibrio de la infraestructura.</p>
-      </div>
-    </div>
-  </div>
+        <div class="result-grid">
+            <div class="res-item">
+                <h4>Diagnóstico Base</h4>
+                <div class="res-val" id="fix1-base">Calculando...</div>
+            </div>
+            <div class="res-item">
+                <h4>Filtro de Fidelidad</h4>
+                <div class="res-val highlight" id="fix1-res">Escaneando i...</div>
+            </div>
+        </div>
+        <p style="margin-top: 2rem; font-size: 0.9rem; color: var(--dim);">
+            <b>El Problema:</b> Si el ángulo <i>i</i> es pequeño (< 30°), un error de solo 2 grados en la medición puede desviar la velocidad en un 50%. TIE marca estos datos como ruidosos.
+        </p>
+    </section>
 
-  
+    <section class="surgery-card">
+        <span class="card-num">PASO 02</span>
+        <h2><span>/</span> Ajuste de Masa (Upsilon)</h2>
+        <p>No todas las estrellas tienen la misma densidad. El estándar de 0.5 es impreciso; las galaxias azules son más ligeras y las rojas más masivas.</p>
+        
+        <div class="formula-box" style="border-color: var(--gold);">
+            <span class="formula-label" style="background: var(--gold);">ECUACIÓN DE MASA DINÁMICA</span>
+            <div class="formula-content" style="color: var(--gold);">log₁₀(Υ) = -0.44 + 0.94 · (B-V)</div>
+        </div>
 
-  <div class="card">
-    <h2><span>03</span> AJUSTE DINÁMICO DE MASA (Upsilon)</h2>
-    <p>Usar una relación Masa-Luz ($\Upsilon$) fija de 0.5 es un error. Las galaxias rojas son más pesadas; las azules son más ligeras.</p>
-    <div class="formula">log₁₀(Υ) = -0.44 + 0.94 · (B-V)</div>
-    <p>El Bisturí T² ajusta dinámicamente la masa bariónica según el tipo Hubble, alineando la teoría con la población estelar real.</p>
-  </div>
+        <div class="result-grid">
+            <div class="res-item">
+                <h4>Masa Estelar (0.5)</h4>
+                <div class="res-val" id="fix2-base">--- M☉</div>
+            </div>
+            <div class="res-item">
+                <h4>Masa T² Corregida</h4>
+                <div class="res-val highlight" id="fix2-res">Analizando Color...</div>
+            </div>
+        </div>
+        
+    </section>
 
-  <div class="card" style="border-color: var(--blue);">
-    <h2 style="color: var(--blue);">LA ECUACIÓN DEPURA TIE</h2>
-    <p>Al aplicar estos tres filtros, la Ley TIE emerge con una sincronía superior al 95% en el catálogo SPARC:</p>
-    <div class="formula" style="border-color: var(--gold); color: var(--gold);">
-      V_TIE = [ G · (M_stars · Υ_corr + M_gas · 1.33) · a₀ ]^0.25
-    </div>
-    <p style="text-align: center; font-weight: 700; margin-top: 1rem;">
-      LA INFRAESTRUCTURA ES LEY. EL RUIDO ES OBSERVACIÓN.
-    </p>
-  </div>
+    <section class="surgery-card">
+        <span class="card-num">PASO 03</span>
+        <h2><span>/</span> Compensación de Presión</h2>
+        <p>En galaxias enanas, el gas tiene presión térmica. El gas rota más lento de lo que la gravedad exige porque la presión lo sostiene.</p>
+        
+        <div class="formula-box" style="border-color: var(--green);">
+            <span class="formula-label" style="background: var(--green);">SUMA CUADRÁTICA DE ENERGÍA</span>
+            <div class="formula-content" style="color: var(--green);">V<sub>real</sub> = √(V<sub>obs</sub>² + V<sub>presion</sub>²)</div>
+        </div>
+
+        <div class="result-grid">
+            <div class="res-item">
+                <h4>V. Rotación Pura</h4>
+                <div class="res-val" id="fix3-base">--- km/s</div>
+            </div>
+            <div class="res-item">
+                <h4>V. Circular Total</h4>
+                <div class="res-val highlight" id="fix3-res">+0 km/s (Drift)</div>
+            </div>
+        </div>
+        
+    </section>
+
+    <section class="final-report">
+        <div class="sync-badge">SINCRONÍA TOTAL DETECTADA</div>
+        <h2>SINCRONÍA DE INFRAESTRUCTURA</h2>
+        <p>Tras eliminar el ruido observacional, aplicamos la Ley TIE sobre el dato depurado:</p>
+        
+        <div class="final-formula">
+            V<sub>TIE</sub> = [ G · M<sub>corr</sub> · a₀ ]<sup>1/4</sup>
+        </div>
+
+        <div class="result-grid" style="background: rgba(0,0,0,0.3); margin-top: 3rem;">
+            <div class="res-item">
+                <h4>Error Original</h4>
+                <div class="res-val" style="color: var(--red);" id="err-old">--%</div>
+            </div>
+            <div class="res-item">
+                <h4>Error T² (Bisturí)</h4>
+                <div class="res-val" style="color: var(--green);" id="err-new">--%</div>
+            </div>
+        </div>
+        <p style="margin-top: 2rem; font-family: var(--mono); font-size: 0.8rem; color: var(--gold);">
+            LA MATERIA OSCURA NO EXISTE. SOLO EXISTÍAN DATOS SIN EL BISTURÍ T².
+        </p>
+    </section>
 </div>
 
 </body>

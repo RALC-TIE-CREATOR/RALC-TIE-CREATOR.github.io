@@ -23,22 +23,20 @@ h1 { font-size:1.6rem; font-weight:800; text-transform:uppercase; }
 select { background:transparent; color:var(--gold); border:none; font-family:var(--mono); font-size:0.85rem; outline:none; cursor:pointer; }
 
 .surgery-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:1rem; }
-.card { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:1.2rem; display:flex; flex-direction:column; gap:0.8rem; }
+.card { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:1.2rem; display:flex; flex-direction:column; gap:0.6rem; }
 
-.step-label { font-family:var(--mono); color:var(--gold); font-size:0.65rem; display:block; margin-bottom:0.2rem; }
-h2 { font-size:0.95rem; font-weight:800; color:var(--blue); text-transform:uppercase; margin-bottom:0.5rem; }
+.step-label { font-family:var(--mono); color:var(--gold); font-size:0.65rem; display:block; }
+h2 { font-size:0.9rem; font-weight:800; color:var(--blue); text-transform:uppercase; margin-bottom:0.3rem; }
 
-.formula-mini { font-family:var(--mono); font-size:0.75rem; color:var(--blue); opacity:0.8; margin-bottom:0.5rem; }
+.formula-mini { font-family:var(--mono); font-size:0.7rem; color:var(--blue); opacity:0.8; margin-bottom:0.2rem; }
 
-/* BLOQUES DE DATOS ANTES/DESPUES */
-.data-block { background:var(--bg3); padding:0.8rem; border-radius:4px; border:1px solid var(--border); }
-.data-label { font-family:var(--mono); font-size:0.55rem; color:var(--dim); text-transform:uppercase; margin-bottom:0.3rem; }
-.data-val { font-size:1.1rem; font-weight:700; color:var(--text); }
-.status-tag { font-family:var(--mono); font-size:0.6rem; font-weight:700; padding:2px 6px; border-radius:3px; margin-top:0.4rem; display:inline-block; }
+.data-block { background:var(--bg3); padding:0.7rem; border-radius:4px; border:1px solid var(--border); }
+.data-label { font-family:var(--mono); font-size:0.5rem; color:var(--dim); text-transform:uppercase; margin-bottom:0.2rem; }
+.data-val { font-size:1rem; font-weight:700; color:var(--text); }
+.status-tag { font-family:var(--mono); font-size:0.55rem; font-weight:700; padding:2px 6px; border-radius:3px; margin-top:0.3rem; display:inline-block; }
 
 .final-report { background:var(--bg2); border:2px solid var(--gold); padding:1rem 2rem; border-radius:8px; display:flex; align-items:center; justify-content:space-between; }
 .btn-back { font-family:var(--mono); font-size:0.7rem; color:var(--bg); background:var(--gold); padding:0.6rem 1.2rem; border-radius:4px; text-decoration:none; font-weight:700; transition:0.2s; }
-.btn-back:hover { transform:scale(1.05); }
 
 @media (max-width:1100px) { .surgery-grid { grid-template-columns:1fr; overflow-y:auto; } body { overflow:auto; } }
 </style>
@@ -48,8 +46,8 @@ h2 { font-size:0.95rem; font-weight:800; color:var(--blue); text-transform:upper
 <div class="dashboard">
     <header>
         <div>
-            <div class="tag">FIX TIE H-02.1 / Auditoría Quirúrgica</div>
-            <h1>Bisturí T² — Análisis de Sincronía</h1>
+            <div class="tag">FIX TIE H-02.1 / Auditoría de Datos</div>
+            <h1>Bisturí T² — Desglose de Sincronía</h1>
         </div>
         <div class="selector-box">
             <span class="tag" style="display:block; margin-bottom:2px; font-size:0.5rem;">Sujeto de Prueba:</span>
@@ -60,46 +58,46 @@ h2 { font-size:0.95rem; font-weight:800; color:var(--blue); text-transform:upper
     <div class="surgery-grid">
         <section class="card">
             <div>
-                <span class="step-label">PROCEDIMIENTO 01</span>
-                <h2>Corrección de Inclinación</h2>
+                <span class="step-label">PASO 01</span>
+                <h2>Geometría de Inclinación</h2>
                 <div class="formula-mini">V<sub>rot</sub> = V<sub>obs</sub> / sin(i)</div>
             </div>
             
             <div class="data-block">
-                <div class="data-label">Observación Estándar</div>
+                <div class="data-label">Observación Estándar (Dato Sucio)</div>
                 <div class="data-val" id="fix1-obs">--- km/s</div>
-                <div id="fix1-status" class="status-tag">---</div>
+                <div id="fix1-status-obs" class="status-tag">---</div>
             </div>
 
             <div class="data-block" style="border-color: var(--blue);">
-                <div class="data-label">Resultado Post-Bisturí TIE</div>
+                <div class="data-label">Resultado TIE (Infraestructura)</div>
                 <div class="data-val" style="color:var(--blue);" id="fix1-tie">--- km/s</div>
-                <div class="status-tag" style="background:var(--blue); color:var(--bg);">INFRAESTRUCTURA PURA</div>
+                <div id="fix1-status-tie" class="status-tag" style="background:var(--blue); color:var(--bg);">---</div>
             </div>
         </section>
 
         <section class="card">
             <div>
-                <span class="step-label">PROCEDIMIENTO 02</span>
+                <span class="step-label">PASO 02</span>
                 <h2>Ajuste de Masa (Υ)</h2>
                 <div class="formula-mini">Υ = 10<sup>(-0.44 + 0.94·Color)</sup></div>
             </div>
             
             <div class="data-block">
-                <div class="data-label">Masa con Υ = 0.5 (Fijo)</div>
+                <div class="data-label">Masa con Υ = 0.5 (Modelo Estándar)</div>
                 <div class="data-val" id="fix2-obs">--- M☉</div>
             </div>
 
             <div class="data-block" style="border-color: var(--gold);">
                 <div class="data-label">Masa T² Dinámica</div>
                 <div class="data-val" style="color:var(--gold);" id="fix2-tie">--- M☉</div>
-                <div class="status-tag" style="background:var(--gold); color:var(--bg);">MASA CORREGIDA</div>
+                <div class="status-tag" style="background:var(--gold); color:var(--bg);">SINCRO-MASA</div>
             </div>
         </section>
 
         <section class="card">
             <div>
-                <span class="step-label">PROCEDIMIENTO 03</span>
+                <span class="step-label">PASO 03</span>
                 <h2>Compensación Térmica</h2>
                 <div class="formula-mini">V = √(V<sub>rot</sub>² + σ²)</div>
             </div>
@@ -110,17 +108,17 @@ h2 { font-size:0.95rem; font-weight:800; color:var(--blue); text-transform:upper
             </div>
 
             <div class="data-block" style="border-color: var(--green);">
-                <div class="data-label">V. Circular Total (TIE)</div>
+                <div class="data-label">V. Circular Real (Ley TIE)</div>
                 <div class="data-val" style="color:var(--green);" id="fix3-tie">--- km/s</div>
-                <div class="status-tag" style="background:var(--green); color:var(--bg);">SIGMA CORRECTO</div>
+                <div class="status-tag" style="background:var(--green); color:var(--bg);">SIGMA-FIX</div>
             </div>
         </section>
     </div>
 
     <footer class="final-report">
         <div style="text-align:left;">
-            <div class="tag" style="margin-bottom:2px;">Veredicto Final</div>
-            <div style="font-weight:800; font-size:1.4rem; color:var(--green); line-height:1;" id="status-txt">PENDIENTE</div>
+            <div class="tag" style="margin-bottom:2px;">Estado Final del Sistema</div>
+            <div style="font-weight:800; font-size:1.4rem; color:var(--green); line-height:1;" id="status-txt">DATOS PROCESADOS</div>
         </div>
         
         <div style="display:flex; gap:3rem;">
@@ -134,16 +132,16 @@ h2 { font-size:0.95rem; font-weight:800; color:var(--blue); text-transform:upper
             </div>
         </div>
 
-        <a href="sparc.html" class="btn-back">REGRESAR AL CATÁLOGO</a>
+        <a href="sparc.html" class="btn-back">VOLVER AL EXPLORADOR</a>
     </footer>
 </div>
 
 <script>
-// SOCIO: Aquí pegamos la base de datos completa de tu explorador
+// --- BASE DE DATOS ROBUSTA ---
 const SPARC_DATA = [
   { name:"NGC 3198", type:"Espiral", inc:72, Mdisk:2.20, Mgas:8.5, vobs:150 },
   { name:"DDO 154",  type:"Enana",   inc:4.0, Mdisk:0.0028, Mgas:0.71, vobs:47 },
-  { name:"UGC 2885", type:"Gigante", inc:80.4, Mdisk:17.5, Mgas:82.0, vobs:300 },
+  { name:"UGC 2885", type:"Gigante", inc:65, Mdisk:17.5, Mgas:82.0, vobs:300 },
   { name:"NGC 2403", type:"Espiral", inc:3.2, Mdisk:0.82, Mgas:12.0, vobs:134 },
   { name:"NGC 6503", type:"Espiral", inc:5.3, Mdisk:0.79, Mgas:3.8, vobs:116 },
   { name:"NGC 7331", type:"Espiral", inc:14.7, Mdisk:6.33, Mgas:9.4, vobs:240 },
@@ -200,6 +198,7 @@ const G = 6.674e-11; const a0 = 1.082e-10; const M_sun = 1.989e30;
 
 function init() {
     const select = document.getElementById('galaxy-select');
+    if (!select) return;
     SPARC_DATA.forEach(g => {
         let opt = document.createElement('option');
         opt.value = g.name; opt.textContent = g.name;
@@ -208,10 +207,9 @@ function init() {
 
     const params = new URLSearchParams(window.location.search);
     const gParam = params.get('galaxy');
-    if (gParam) {
-        select.value = decodeURIComponent(gParam);
-    }
-    ejecutarCirugia(select.value);
+    if (gParam) select.value = decodeURIComponent(gParam);
+    
+    ejecutarCirugia(select.value || SPARC_DATA[0].name);
 }
 
 function seleccionarDeLista() {
@@ -222,22 +220,21 @@ function ejecutarCirugia(gName) {
     const g = SPARC_DATA.find(x => x.name === gName) || SPARC_DATA[0];
     
     // 1. GEOMETRÍA
-    const sin_i = Math.sin(g.inc * Math.PI / 180);
+    const sin_i = Math.sin(g.inc * Math.PI / 180) || 0.1; 
     const vObs_inc = g.vobs / sin_i;
     document.getElementById('fix1-obs').textContent = vObs_inc.toFixed(1) + " km/s";
     
-    const fix1Status = document.getElementById('fix1-status');
-    fix1Status.textContent = "INCLINACIÓN: " + g.inc + "° " + (g.inc < 35 ? "RUIDOSO" : "CONFIABLE");
-    fix1Status.style.background = g.inc < 35 ? "var(--red)" : "var(--green)";
-    fix1Status.style.color = "var(--bg)";
+    const statusObs = document.getElementById('fix1-status-obs');
+    statusObs.textContent = "INCLINACIÓN: " + g.inc + "° " + (g.inc < 35 ? "RUIDOSO" : "CONFIABLE");
+    statusObs.style.background = g.inc < 35 ? "var(--red)" : "var(--green)";
+    statusObs.style.color = "var(--bg)";
 
-    // El Bisturí TIE asume que el dato corregido por infraestructura es el que TIE predice
-    // Pero aquí mostramos el vObs nominal como "limpio"
     document.getElementById('fix1-tie').textContent = g.vobs.toFixed(1) + " km/s";
+    const statusTie = document.getElementById('fix1-status-tie');
+    statusTie.textContent = "INCLINACIÓN: " + g.inc + "° " + (g.inc < 35 ? "RUIDOSO" : "CONFIABLE");
 
     // 2. MASA
     document.getElementById('fix2-obs').textContent = ((g.Mdisk * 1e10 + g.Mgas * 1e9) / 1e9).toFixed(1) + " x10⁹ M☉";
-    
     let ups = (g.type === "Enana" || g.type === "Irregular") ? 0.35 : (g.type === "Gigante" ? 0.7 : 0.5);
     const mTotalCorr = (g.Mdisk * 1e10 * (ups / 0.5)) + (g.Mgas * 1e9);
     document.getElementById('fix2-tie').textContent = (mTotalCorr / 1e9).toFixed(1) + " x10⁹ M☉";
@@ -248,15 +245,12 @@ function ejecutarCirugia(gName) {
     const vReal = Math.sqrt(Math.pow(g.vobs, 2) + Math.pow(sigma, 2));
     document.getElementById('fix3-tie').textContent = vReal.toFixed(1) + " km/s";
 
-    // CÁLCULOS DE ERROR
+    // ERRORES
     const vTIE_final = Math.pow(G * (mTotalCorr * M_sun) * a0, 0.25) / 1000;
-    
-    // Error Original: Basado en masa con 0.5 y vobs sin sigma
     const mOriginal = (g.Mdisk * 1e10) + (g.Mgas * 1e9);
     const vTIE_orig = Math.pow(G * (mOriginal * M_sun) * a0, 0.25) / 1000;
-    const errOld = Math.abs(vTIE_orig - g.vobs) / g.vobs * 100;
     
-    // Error Nuevo: Masa corregida y Velocidad con sigma
+    const errOld = Math.abs(vTIE_orig - g.vobs) / g.vobs * 100;
     const errNew = Math.abs(vTIE_final - vReal) / vReal * 100;
 
     document.getElementById('err-old').textContent = errOld.toFixed(1) + "%";

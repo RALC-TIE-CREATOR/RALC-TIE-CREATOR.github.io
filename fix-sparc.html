@@ -34,13 +34,13 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
 .val { font-family:var(--mono); font-size:1.35rem; font-weight:700; margin-top: 4px; display: block; }
 .status { font-family:var(--mono); font-size:0.65rem; padding:3px 10px; border-radius:4px; margin-top:8px; display:inline-block; font-weight:700; }
 
-.visual-section { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:1.5rem; height: 500px; position: relative; margin: 0.5rem 0; }
+.visual-section { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:1.5rem; position: relative; margin: 0.5rem 0; }
 
 .final { background:var(--bg2); border:2px solid var(--gold); padding:1.2rem 2.5rem; border-radius:12px; display:flex; justify-content:space-between; align-items:center; margin-top: auto; }
 .err-val { font-family:var(--mono); font-size:2rem; font-weight:700; }
 .btn { background:var(--gold); color:#000; padding:12px 25px; border-radius:6px; text-decoration:none; font-family:var(--mono); font-size:0.85rem; font-weight:700; }
 
-@media (max-width:1100px) { .surgery-grid { grid-template-columns:1fr; } body { overflow-y:auto; } .dashboard { height:auto; } .visual-section { height: 350px; } }
+@media (max-width:1100px) { .surgery-grid { grid-template-columns:1fr; } body { overflow-y:auto; } .dashboard { height:auto; } }
 </style>
 </head>
 <body>
@@ -109,23 +109,26 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
         </div>
     </div>
 
-<div style="display: flex; flex-direction: column; gap: 1rem;">
-    <div class="visual-section" style="height: 280px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <span class="label">Curva de rotación - <span id="curve-gal-name">NGC 3198</span></span>
-            <span class="label" style="color: var(--gold);">Eje X: Radio (kpc)</span>
+    <!-- DOS GRÁFICAS -->
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <!-- Gráfica 1: Curva de rotación -->
+        <div class="visual-section" style="height: 280px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="label">Curva de rotación - <span id="curve-gal-name">NGC 3198</span></span>
+                <span class="label" style="color: var(--gold);">Eje X: Radio (kpc) · Eje Y: Velocidad (km/s)</span>
+            </div>
+            <canvas id="curveChart"></canvas>
         </div>
-        <canvas id="curveChart"></canvas>
-    </div>
-    
-    <div class="visual-section" style="height: 280px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <span class="label">Diagrama masa-velocidad (Tully-Fisher)</span>
-            <span class="label" style="color: var(--gold);">Eje X: Masa bariónica (×10⁹ M☉)</span>
+        
+        <!-- Gráfica 2: Diagrama masa-velocidad -->
+        <div class="visual-section" style="height: 280px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="label">Diagrama masa-velocidad (Tully-Fisher) - Corrección global</span>
+                <span class="label" style="color: var(--gold);">Eje X: Masa bariónica (×10⁹ M☉) · Eje Y: Velocidad (km/s)</span>
+            </div>
+            <canvas id="massChart"></canvas>
         </div>
-        <canvas id="massChart"></canvas>
     </div>
-</div>
 
     <footer class="final">
         <div><div class="label">Sincronía Final T²</div><div id="sync" style="color:var(--green); font-size:1.8rem; font-weight:800;">---</div></div>
@@ -446,74 +449,6 @@ function run() {
     const vFlat_tie = Math.pow(G * mTie_kg * a0, 0.25) / 1000;
     const errN = (Math.abs(vFlat_tie - vReal) / vReal) * 100;
 
-  // --- GRÁFICA 1: Curva de rotación (Radio vs Velocidad) ---
-if (gRaw.obs) {
-    document.getElementById('curve-gal-name').textContent = gRaw.name;
-    
-    // Datos observados
-    const obsData = gRaw.obs.map(p => ({ x: p[0], y: p[1] }));
-    
-    // Generar curva TIE para esta galaxia
-    const rMax = Math.max(...gRaw.obs.map(p => p[0])) * 1.2;
-    const rCurve = [];
-    for (let r = 0.1; r <= rMax; r += rMax/100) {
-        rCurve.push(r);
-    }
-    
-    // Función para calcular vTIE (necesitas implementarla)
-    function vTIE_curve(r_kpc) {
-        const rg = gRaw.rd * 2.5;
-        const r = r_kpc * kpc;
-        const xd = r_kpc / gRaw.rd;
-        const xg = r_kpc / rg;
-        const Md_kg = gRaw.Mdisk * 1e10 * MS * (1 - Math.exp(-xd)*(1+xd));
-        const Mg_kg = gRaw.Mgas * 1e9 * MS * (1 - Math.exp(-xg)*(1+xg+0.5*xg*xg));
-        const M = Math.max(Md_kg + Mg_kg, 1e20);
-        const aN = G * M / (r * r);
-        const a = Math.sqrt(aN * (aN + a0));
-        return Math.sqrt(r * a) / km;
-    }
-    
-    const tieCurve = rCurve.map(r => ({ x: r, y: vTIE_curve(r) }));
-    const newtonCurve = rCurve.map(r => ({ x: r, y: Math.sqrt(G * (gRaw.Mdisk*1e10 + gRaw.Mgas*1e9) * MS / (r * kpc)) / km }));
-    const vFlat = Math.pow(G * (gRaw.Mdisk*1e10 + gRaw.Mgas*1e9) * MS * a0, 0.25) / km;
-    const vFlatCurve = rCurve.map(r => ({ x: r, y: vFlat }));
-
-    curveChart.data.datasets[0].data = tieCurve;
-    curveChart.data.datasets[1].data = newtonCurve;
-    curveChart.data.datasets[2].data = vFlatCurve;
-    curveChart.data.datasets[3].data = obsData;
-    curveChart.update();
-}
-
-// --- GRÁFICA 2: Diagrama masa-velocidad (código existente adaptado) ---
-const cloudOrig = []; const cloudDep = [];
-SPARC.forEach(d => {
-    let mo = (d.Mdisk * 1e10 + d.Mgas * 1e9); 
-    cloudOrig.push({ x: mo/1e9, y: d.vobs });
-    
-    let ud = d.color || calcularColorDesdeTipo(d);
-    let md = (d.Mdisk * 1e10 * (ud / 0.5) + d.Mgas * 1e9 * 1.33);
-    cloudDep.push({ x: md/1e9, y: Math.sqrt(Math.pow(d.vobs, 2) + 2 * Math.pow(11, 2)) });
-});
-
-const lineTIE = []; const lineNewton = []; const vFlatArray = [];
-for(let m = 0.05; m <= 1000; m *= 2) {
-    lineTIE.push({ x: m, y: Math.pow(G * (m * 1e9 * MS) * a0, 0.25) / 1000 });
-    lineNewton.push({ x: m, y: Math.sqrt(G * (m * 1e9 * MS) / (10 * 3.086e19)) / 1000 });
-    vFlatArray.push({ x: m, y: vFlat_tie });
-}
-
-massChart.data.datasets[0].data = lineNewton;
-massChart.data.datasets[1].data = lineTIE;
-massChart.data.datasets[2].data = vFlatArray;
-massChart.data.datasets[3].data = getTrend(cloudOrig);
-massChart.data.datasets[4].data = getTrend(cloudDep);
-massChart.data.datasets[5].data = cloudOrig;
-massChart.data.datasets[6].data = cloudDep;
-massChart.data.datasets[7].data = [{ x: mTie_kg / (MS * 1e9), y: vReal }];
-massChart.update();
-  
     // UI
     const sin_dirty = Math.sin((g.inc - 2) * Math.PI / 180) || 0.1;
     document.getElementById('v1-raw').textContent = (g.vobs / sin_dirty).toFixed(1) + " km/s";
@@ -526,7 +461,47 @@ massChart.update();
     document.getElementById('e-new').textContent = errN.toFixed(1) + "%";
     document.getElementById('sync').textContent = (100 - errN).toFixed(1) + "%";
 
-    // --- GRÁFICA ---
+    // --- GRÁFICA 1: Curva de rotación (Radio vs Velocidad) ---
+    if (gRaw.obs) {
+        document.getElementById('curve-gal-name').textContent = gRaw.name;
+        
+        // Datos observados
+        const obsData = gRaw.obs.map(p => ({ x: p[0], y: p[1] }));
+        
+        // Generar curva TIE para esta galaxia
+        const rMax = Math.max(...gRaw.obs.map(p => p[0])) * 1.2;
+        const rCurve = [];
+        for (let r = 0.1; r <= rMax; r += rMax/100) {
+            rCurve.push(r);
+        }
+        
+        // Función para calcular vTIE
+        function vTIE_curve(r_kpc) {
+            const rg = gRaw.rd * 2.5;
+            const r = r_kpc * kpc;
+            const xd = r_kpc / gRaw.rd;
+            const xg = r_kpc / rg;
+            const Md_kg = gRaw.Mdisk * 1e10 * MS * (1 - Math.exp(-xd)*(1+xd));
+            const Mg_kg = gRaw.Mgas * 1e9 * MS * (1 - Math.exp(-xg)*(1+xg+0.5*xg*xg));
+            const M = Math.max(Md_kg + Mg_kg, 1e20);
+            const aN = G * M / (r * r);
+            const a = Math.sqrt(aN * (aN + a0));
+            return Math.sqrt(r * a) / km;
+        }
+        
+        const tieCurve = rCurve.map(r => ({ x: r, y: vTIE_curve(r) }));
+        const newtonCurve = rCurve.map(r => ({ x: r, y: Math.sqrt(G * (gRaw.Mdisk*1e10 + gRaw.Mgas*1e9) * MS / (r * kpc)) / km }));
+        const vFlat = Math.pow(G * (gRaw.Mdisk*1e10 + gRaw.Mgas*1e9) * MS * a0, 0.25) / km;
+        const vFlatCurve = rCurve.map(r => ({ x: r, y: vFlat }));
+
+        curveChart.data.datasets[0].data = tieCurve;
+        curveChart.data.datasets[1].data = newtonCurve;
+        curveChart.data.datasets[2].data = vFlatCurve;
+        curveChart.data.datasets[3].data = obsData;
+        curveChart.update();
+    }
+
+    // --- GRÁFICA 2: Diagrama masa-velocidad (corrección global) ---
     const cloudOrig = []; const cloudDep = [];
     
     SPARC.forEach(d => {
@@ -545,23 +520,23 @@ massChart.update();
         vFlatArray.push({ x: m, y: vFlat_tie });
     }
 
-    myChart.data.datasets[0].data = lineNewton;
-    myChart.data.datasets[1].data = lineTIE;
-    myChart.data.datasets[2].data = vFlatArray;
-    myChart.data.datasets[3].data = getTrend(cloudOrig);
-    myChart.data.datasets[4].data = getTrend(cloudDep);
-    myChart.data.datasets[5].data = cloudOrig;
-    myChart.data.datasets[6].data = cloudDep;
-    myChart.data.datasets[7].data = [{ x: mTie_kg / (MS * 1e9), y: vReal }];
+    massChart.data.datasets[0].data = lineNewton;
+    massChart.data.datasets[1].data = lineTIE;
+    massChart.data.datasets[2].data = vFlatArray;
+    massChart.data.datasets[3].data = getTrend(cloudOrig);
+    massChart.data.datasets[4].data = getTrend(cloudDep);
+    massChart.data.datasets[5].data = cloudOrig;
+    massChart.data.datasets[6].data = cloudDep;
+    massChart.data.datasets[7].data = [{ x: mTie_kg / (MS * 1e9), y: vReal }];
     
-    myChart.update();
+    massChart.update();
 }
 
 // ═══════════════════════════════════════════════════
 // INICIO
 // ═══════════════════════════════════════════════════
 window.onload = () => {
-    initCharts();  // Cambiado de initChart a initCharts
+    initCharts();
     const sel = document.getElementById('gSelect');
     SPARC.forEach(x => {
         let o = document.createElement('option');

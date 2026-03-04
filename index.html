@@ -74,6 +74,45 @@ nav {
 }
 .nav-cta:hover { background:#fff; }
 
+/* DROPDOWN */
+.nav-dropdown { position:relative; }
+.nav-dropdown > a { cursor:pointer; }
+.dropdown-menu {
+  display:none;
+  position:absolute; top:calc(100% + .75rem); left:50%;
+  transform:translateX(-50%);
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:8px; padding:.5rem;
+  min-width:220px; z-index:200;
+  box-shadow:0 16px 40px rgba(0,0,0,.6);
+}
+.nav-dropdown:hover .dropdown-menu { display:block; }
+.dropdown-menu::before {
+  content:''; position:absolute; top:-6px; left:50%;
+  transform:translateX(-50%);
+  border:6px solid transparent;
+  border-bottom-color:var(--border);
+  border-top:none;
+}
+.dropdown-item {
+  display:flex; align-items:center; gap:.75rem;
+  padding:.65rem .85rem; border-radius:6px;
+  text-decoration:none; color:var(--text);
+  transition:background .15s; white-space:nowrap;
+}
+.dropdown-item:hover { background:var(--bg3); }
+.dropdown-item .d-tag {
+  font-family:var(--mono); font-size:.58rem;
+  color:var(--gold); letter-spacing:.1em;
+  flex-shrink:0; width:36px;
+}
+.dropdown-item .d-name {
+  font-size:.82rem; font-weight:600;
+}
+.dropdown-divider {
+  height:1px; background:var(--border); margin:.35rem 0;
+}
+
 /* HERO */
 #hero {
   position:relative; z-index:1;
@@ -309,7 +348,21 @@ footer {
 <nav>
   <a href="index.html" class="nav-logo">TIE / R@LC</a>
   <ul class="nav-links">
-    <li><a href="#laboratorio">Laboratorio</a></li>
+    <li class="nav-dropdown">
+      <a href="#laboratorio">Laboratorio ▾</a>
+      <div class="dropdown-menu">
+        <a href="curvas.html"        class="dropdown-item"><span class="d-tag">H-01</span><span class="d-name">Curvas de Rotación</span></a>
+        <a href="sparc.html"         class="dropdown-item"><span class="d-tag">H-02</span><span class="d-name">Explorador SPARC</span></a>
+        <a href="2pi.html"           class="dropdown-item"><span class="d-tag">H-03</span><span class="d-name">Calculadora 2π</span></a>
+        <div class="dropdown-divider"></div>
+        <a href="materia-oscura.html" class="dropdown-item"><span class="d-tag">H-05</span><span class="d-name">Materia Oscura</span></a>
+        <a href="constante.html"     class="dropdown-item"><span class="d-tag">H-08</span><span class="d-name">a₀ y Lambda</span></a>
+        <div class="dropdown-divider"></div>
+        <a href="agujeros.html"      class="dropdown-item"><span class="d-tag">H-11</span><span class="d-name">Agujeros Negros</span></a>
+        <a href="gps.html"           class="dropdown-item"><span class="d-tag">H-12</span><span class="d-name">Corrección GPS</span></a>
+        <a href="predicciones.html"  class="dropdown-item"><span class="d-tag">★</span><span class="d-name">Predicciones</span></a>
+      </div>
+    </li>
     <li><a href="#teoria">Teoría</a></li>
     <li><a href="#predicciones">Predicciones</a></li>
     <li><a href="#papers">Papers</a></li>
@@ -596,12 +649,6 @@ footer {
     <li><a href="https://zenodo.org/records/18851408" target="_blank">Zenodo DOI</a></li>
     <li><a href="https://github.com/RALC-TIE-CREATOR/TIE-rotation-curves" target="_blank">GitHub</a></li>
     <li><a href="curvas.html">Laboratorio</a></li>
-    <li><a href="mailto:ralc007@hotmail.com">ralc007@hotmail.com</a></li>
+    <li><a href="/cdn-cgi/l/email-protection#f183909d92c1c1c6b1999e859c90989ddf929e9c"><span class="__cf_email__" data-cfemail="daa8bbb6b9eaeaed9ab2b5aeb7bbb3b6f4b9b5b7">[email&#160;protected]</span></a></li>
   </ul>
-  <div class="footer-copy">
-    Rubén A. Lecona C. (R@LC) · México 2026 · Investigador Independiente
-  </div>
-</footer>
-
-</body>
-</html>
+  <div

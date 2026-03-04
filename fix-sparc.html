@@ -13,7 +13,7 @@
   --border: #1e1e3a; --mono: 'Space Mono', monospace;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { background:var(--bg); color:var(--text); font-family:'Syne', sans-serif; min-height:100vh; display:flex; flex-direction:column; overflow-x:hidden; }
+body { background:var(--bg); color:var(--text); font-family:'Syne', sans-serif; min-height:100vh; display:flex; flex-direction:column; }
 .dashboard { flex:1; display:flex; flex-direction:column; padding:1.5rem; gap:1.2rem; max-width: 1600px; margin: 0 auto; width: 100%; }
 
 header { border-left:5px solid var(--gold); padding-left:1.2rem; display:flex; justify-content:space-between; align-items:center; }
@@ -27,29 +27,28 @@ select { background:transparent; color:var(--gold); border:none; font-family:var
 .card { background:var(--bg2); border:1px solid var(--border); padding:1.5rem; border-radius:10px; display:flex; flex-direction:column; gap:12px; }
 h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-bottom:1px solid var(--border); padding-bottom:8px; }
 
-/* TEXTOS DE EXPLICACIÓN - TAMAÑO PULIDO */
-.bridge-text { font-size: 0.9rem; color: var(--dim); line-height: 1.5; padding: 10px 15px; border-left: 3px solid var(--border); font-style: italic; background: rgba(255,255,255,0.03); margin: 5px 0; }
+/* TEXTOS DE EXPLICACIÓN SOLICITADOS */
+.bridge-text { font-size: 0.95rem; color: var(--dim); line-height: 1.5; padding: 12px 15px; border-left: 3px solid var(--border); font-style: italic; background: rgba(255,255,255,0.03); margin: 5px 0; }
 .bridge-text b { color: var(--gold); font-weight: 700; }
 
 .data-block { background:#0d0d1a; padding:12px; border-radius:6px; border:1px solid #1e1e3a; }
 .val { font-family:var(--mono); font-size:1.35rem; font-weight:700; margin-top: 4px; display: block; }
 .status { font-family:var(--mono); font-size:0.65rem; padding:3px 10px; border-radius:4px; margin-top:8px; display:inline-block; font-weight:700; }
 
-/* SECCIÓN GRÁFICA */
-.visual-section { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:1.5rem; height: 500px; position: relative; margin: 0.5rem 0; }
+.visual-section { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:1.5rem; height: 550px; position: relative; margin: 0.5rem 0; }
 
 .final { background:var(--bg2); border:2px solid var(--gold); padding:1.2rem 2.5rem; border-radius:12px; display:flex; justify-content:space-between; align-items:center; margin-top: auto; }
 .err-val { font-family:var(--mono); font-size:2rem; font-weight:700; }
-.btn { background:var(--gold); color:#000; padding:12px 25px; border-radius:6px; text-decoration:none; font-family:var(--mono); font-size:0.85rem; font-weight:700; transition: 0.3s; }
+.btn { background:var(--gold); color:#000; padding:12px 25px; border-radius:6px; text-decoration:none; font-family:var(--mono); font-size:0.85rem; font-weight:700; }
 
-@media (max-width:1100px) { .surgery-grid { grid-template-columns:1fr; } body { overflow-y:auto; } .dashboard { height:auto; } .visual-section { height: 350px; } }
+@media (max-width:1100px) { .surgery-grid { grid-template-columns:1fr; } body { overflow-y:auto; } .dashboard { height:auto; } .visual-section { height: 400px; } }
 </style>
 </head>
 <body>
 
 <div class="dashboard">
     <header>
-        <div><p class="label" style="color:var(--gold)">AUDITORÍA DE INFRAESTRUCTURA AXON</p><h1>El Bisturí T²</h1></div>
+        <div><p class="label" style="color:var(--gold)">AUDITORÍA DE INFRAESTRUCTURA TIE</p><h1>El Bisturí T²</h1></div>
         <div class="selector-box">
             <span class="label">Sujeto:</span>
             <select id="gSelect" onchange="run()"></select>
@@ -121,7 +120,7 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
             <div style="text-align:center;"><div class="label">Error Original (SPARC)</div><div id="e-old" style="color:var(--red);" class="err-val">--%</div></div>
             <div style="text-align:center;"><div class="label">Error T² (Bisturí)</div><div id="e-new" style="color:var(--green);" class="err-val">--%</div></div>
         </div>
-        <a href="sparc.html" class="btn">VOLVER</a>
+        <a href="sparc.html" class="btn">VOLVER AL EXPLORADOR</a>
     </footer>
 </div>
 
@@ -130,16 +129,13 @@ h2 { font-size:1.1rem; color:var(--blue); text-transform:uppercase; border-botto
 const G = 6.674e-11; const MS = 1.989e30;
 const a0 = (2.998e8 * (70 * 1000 / 3.0857e22)) / (2 * Math.PI); 
 
+// DATA COMPLETA PARA TENDENCIAS
 const DATA = [
   { name:"NGC 3198", type:"Espiral", inc:72, Mdisk:2.20, Mgas:8.5, vobs:150, color:0.65 },
   { name:"NGC 2403", type:"Espiral", inc:62, Mdisk:0.82, Mgas:12.0, vobs:134, color:0.60 },
   { name:"NGC 6503", type:"Espiral", inc:74, Mdisk:0.79, Mgas:3.8, vobs:116, color:0.62 },
   { name:"NGC 7331", type:"Espiral", inc:75, Mdisk:6.33, Mgas:9.4, vobs:240, color:0.75 },
   { name:"NGC 2841", type:"Espiral", inc:68, Mdisk:8.40, Mgas:6.1, vobs:280, color:0.80 },
-  { name:"NGC 3521", type:"Espiral", inc:72, Mdisk:5.50, Mgas:9.2, vobs:230, color:0.71 },
-  { name:"NGC 5055", type:"Espiral", inc:59, Mdisk:4.10, Mgas:11.0, vobs:183, color:0.73 },
-  { name:"NGC 4736", type:"Espiral", inc:35, Mdisk:1.10, Mgas:1.8, vobs:180, color:0.68 },
-  { name:"NGC 3031", type:"Espiral", inc:59, Mdisk:4.60, Mgas:7.0, vobs:220, color:0.74 },
   { name:"DDO 154",  type:"Enana",   inc:66, Mdisk:0.0028, Mgas:0.71, vobs:47, color:0.35 },
   { name:"UGC 2885", type:"Gigante", inc:80.4, Mdisk:17.5, Mgas:82.0, vobs:300, color:0.85 },
   { name:"NGC 6946", type:"Espiral", inc:33, Mdisk:3.20, Mgas:12.0, vobs:195, color:0.70 }
@@ -147,7 +143,7 @@ const DATA = [
 
 let myChart;
 
-// Cálculo de Tendencia (Regresión Logarítmica)
+// Cálculo de Tendencia Log-Log (Regresión Lineal)
 function getTrendline(points) {
     let n = points.length;
     let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
@@ -158,7 +154,7 @@ function getTrendline(points) {
     let slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
     let intercept = (sumY - slope * sumX) / n;
     let line = [];
-    for(let m = 0.05; m <= 1000; m *= 4) {
+    for(let m = 0.01; m <= 1000; m *= 4) {
         line.push({ x: m, y: Math.pow(10, intercept + slope * Math.log10(m)) });
     }
     return line;
@@ -170,13 +166,11 @@ function initChart() {
         type: 'scatter',
         data: {
             datasets: [
-                { label: 'Newton', data: [], showLine: true, borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderDash:[5,5], pointRadius: 0 },
-                { label: 'TIE (Ideal)', data: [], showLine: true, borderColor: '#5BC8F5', borderWidth: 3, pointRadius: 0 },
-                { label: 'Tendencia SPARC', data: [], showLine: true, borderColor: 'rgba(255, 68, 85, 0.6)', borderWidth: 2, pointRadius: 0, borderDash: [2,2] },
-                { label: 'Tendencia T²', data: [], showLine: true, borderColor: 'rgba(68, 255, 136, 0.8)', borderWidth: 2, pointRadius: 0 },
-                { label: 'Catálogo', data: [], backgroundColor: 'rgba(255,255,255,0.05)', pointRadius: 3 },
-                { label: 'Sujeto Original', data: [], backgroundColor: '#FF4455', pointRadius: 10, borderWidth: 2, borderColor: '#fff' },
-                { label: 'Sujeto T²', data: [], backgroundColor: '#44FF88', pointRadius: 12, borderWidth: 2, borderColor: '#fff', pointStyle: 'rectRot' }
+                { label: 'Tendencia Newton (1/2)', data: [], showLine: true, borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1.5, borderDash: [5,5], pointRadius: 0 },
+                { label: 'Infraestructura TIE (1/4)', data: [], showLine: true, borderColor: '#5BC8F5', borderWidth: 2.5, pointRadius: 0 },
+                { label: 'Tendencia SPARC (Roja)', data: [], showLine: true, borderColor: 'rgba(255, 68, 85, 0.7)', borderWidth: 2, pointRadius: 0, borderDash: [2,2] },
+                { label: 'Tendencia T² (Verde)', data: [], showLine: true, borderColor: 'rgba(68, 255, 136, 0.7)', borderWidth: 2, pointRadius: 0 },
+                { label: 'Sujeto Auditado', data: [], backgroundColor: '#FFD700', pointRadius: 12, borderWidth: 3, borderColor: '#fff', pointStyle: 'star' }
             ]
         },
         options: {
@@ -194,7 +188,7 @@ function run() {
     const sel = document.getElementById('gSelect');
     const g = DATA.find(x => x.name === sel.value) || DATA[0];
 
-    // Cálculos Sujeto
+    // Cálculos
     const mStd_kg = (g.Mdisk * 1e10 + g.Mgas * 1e9) * MS;
     const vFlat_orig = Math.pow(G * mStd_kg * a0, 0.25) / 1000;
     const errO = (Math.abs(vFlat_orig - g.vobs) / g.vobs) * 100;
@@ -205,7 +199,7 @@ function run() {
     const vFlat_tie = Math.pow(G * mTie_kg * a0, 0.25) / 1000;
     const errN = (Math.abs(vFlat_tie - vReal) / vReal) * 100;
 
-    // Actualizar Texto
+    // Actualizar Interfaz
     const sin_dirty = Math.sin((g.inc - 2) * Math.PI / 180) || 0.1;
     document.getElementById('v1-raw').textContent = (g.vobs / sin_dirty).toFixed(1) + " km/s";
     document.getElementById('v1-tie').textContent = g.vobs.toFixed(1) + " km/s";
@@ -236,9 +230,7 @@ function run() {
     myChart.data.datasets[1].data = lineTIE;
     myChart.data.datasets[2].data = getTrendline(cloudOrig);
     myChart.data.datasets[3].data = getTrendline(cloudDep);
-    myChart.data.datasets[4].data = cloudOrig;
-    myChart.data.datasets[5].data = [{ x: mStd_kg / (MS * 1e9), y: g.vobs }];
-    myChart.data.datasets[6].data = [{ x: mTie_kg / (MS * 1e9), y: vReal }];
+    myChart.data.datasets[4].data = [{ x: mTie_kg / (MS * 1e9), y: vReal }];
     myChart.update();
 }
 
@@ -249,9 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let o = document.createElement('option');
         o.value = x.name; o.textContent = x.name; sel.appendChild(o);
     });
-    const p = new URLSearchParams(window.location.search);
-    const gal = p.get('galaxy');
-    if (gal) sel.value = decodeURIComponent(gal);
     run();
 });
 </script>

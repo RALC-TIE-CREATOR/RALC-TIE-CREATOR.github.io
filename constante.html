@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H-08 · Calculadora a₀ y Λ — TIE</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #FFD700;
+  --blue: #5BC8F5;
+  --green: #44FF88;
+  --red: #FF4455;
+  --bg: #06060f;
+  --bg2: #0d0d1a;
+  --bg3: #111122;
+  --text: #e8e8f0;
+  --dim: #7777aa;
+  --border: #1e1e3a;
+  --mono: 'Space Mono', monospace;
+  --sans: 'Syne', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--bg); color:var(--text);
+  font-family:var(--sans); min-height:100vh;
+}
+
+nav {
+  position:sticky; top:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:.9rem 2rem;
+  background:rgba(6,6,15,.95); backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo { font-family:var(--mono); font-size:.9rem; color:var(--gold); letter-spacing:.2em; text-decoration:none; }
+.nav-back  { font-family:var(--mono); font-size:.78rem; color:var(--dim); text-decoration:none; transition:color .2s; }
+.nav-back:hover { color:var(--gold); }
+.nav-tag   { font-family:var(--mono); font-size:.68rem; color:var(--dim); letter-spacing:.1em; }
+
+.page {
+  max-width:1000px; margin:0 auto; padding:2.5rem 2rem 4rem;
+}
+
+.page-header { margin-bottom:2.5rem; }
+.page-tag {
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.3em; color:var(--gold);
+  text-transform:uppercase; margin-bottom:.5rem;
+}
+.page-title { font-size:clamp(1.6rem,3vw,2.5rem); font-weight:800; margin-bottom:.5rem; }
+.page-sub   { color:var(--dim); font-size:.92rem; line-height:1.7; }
+
+.eq-highlight {
+  background:var(--bg2); border-left:4px solid var(--gold);
+  border-radius:0 8px 8px 0; padding:1.5rem 2rem;
+  margin:2rem 0;
+  font-family:var(--mono); font-size:1.2rem; text-align:center;
+}
+.eq-highlight .gold { color:var(--gold); font-weight:700; }
+.eq-highlight .dim { color:var(--dim); }
+.eq-highlight .small { font-size:0.9rem; margin-top:0.5rem; }
+
+.calculator-panel {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:12px; padding:2rem;
+  margin:2rem 0;
+}
+
+.input-group {
+  margin-bottom:2rem;
+}
+.input-group label {
+  display:block; font-family:var(--mono); font-size:.7rem;
+  color:var(--dim); letter-spacing:.08em; margin-bottom:.5rem;
+}
+.input-group input {
+  width:100%; background:var(--bg3); border:1px solid var(--border);
+  border-radius:6px; padding:.8rem 1rem;
+  color:var(--text); font-family:var(--mono); font-size:1rem;
+  outline:none; transition:border-color .2s;
+}
+.input-group input:focus { border-color:var(--gold); }
+
+.range-group {
+  display:flex; gap:1rem; align-items:center;
+}
+.range-group input[type=range] {
+  flex:1; padding:0; accent-color:var(--gold); cursor:pointer;
+  height:4px; background:var(--border);
+}
+.range-group .range-value {
+  font-family:var(--mono); font-size:.9rem; color:var(--gold);
+  min-width:60px; text-align:right;
+}
+
+.results-grid {
+  display:grid; grid-template-columns:repeat(2, 1fr);
+  gap:1.5rem; margin:2rem 0;
+}
+.result-card {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:8px; padding:1.5rem;
+}
+.result-card.full-width { grid-column:span 2; }
+.result-label {
+  font-family:var(--mono); font-size:.6rem; color:var(--dim);
+  text-transform:uppercase; letter-spacing:.1em; margin-bottom:.5rem;
+}
+.result-value {
+  font-family:var(--mono); font-size:1.8rem; font-weight:700;
+  color:var(--gold); line-height:1.2;
+}
+.result-unit {
+  font-family:var(--mono); font-size:.7rem; color:var(--dim);
+  margin-top:.25rem;
+}
+.result-desc {
+  font-size:.75rem; color:var(--dim);
+  border-top:1px solid var(--border); margin-top:.75rem; padding-top:.75rem;
+}
+
+.comparison-box {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:8px; padding:1.5rem;
+  margin:2rem 0;
+}
+.comparison-title {
+  font-family:var(--mono); font-size:.7rem; color:var(--gold);
+  text-transform:uppercase; margin-bottom:1rem;
+}
+.comparison-grid {
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  gap:1rem;
+  text-align:center;
+}
+.comp-item .source { font-family:var(--mono); font-size:.65rem; color:var(--dim); }
+.comp-item .value { font-family:var(--mono); font-size:1.2rem; font-weight:700; color:var(--text); }
+.comp-item .tie { color:var(--gold); }
+.comp-item .error { font-family:var(--mono); font-size:.7rem; color:var(--dim); }
+
+.constants-box {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:8px; padding:1rem 1.5rem;
+  display:flex; justify-content:space-between; flex-wrap:wrap;
+  gap:1rem; margin:1rem 0;
+}
+.const-item {
+  font-family:var(--mono); font-size:.8rem;
+}
+.const-item .label { color:var(--dim); margin-right:.3rem; }
+.const-item .value { color:var(--gold); }
+
+.explanation-box {
+  background:rgba(255,215,0,.05); border:1px solid rgba(255,215,0,.2);
+  border-radius:8px; padding:1.5rem;
+  margin:2rem 0;
+  line-height:1.8;
+}
+.explanation-box p { margin-bottom:1rem; }
+.explanation-box .highlight { color:var(--gold); font-weight:700; }
+
+.footer-note {
+  text-align:center; font-family:var(--mono); font-size:.7rem;
+  color:var(--dim); margin-top:2rem;
+  border-top:1px solid var(--border); padding-top:1.5rem;
+}
+.footer-note a { color:var(--gold); text-decoration:none; }
+
+@media (max-width:600px) {
+  .results-grid { grid-template-columns:1fr; }
+  .result-card.full-width { grid-column:span 1; }
+  .comparison-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-back">← TIE / R@LC</a>
+  <span class="nav-tag">H-08 · a₀ y Λ</span>
+  <a href="materia-oscura.html" class="nav-back">Materia Oscura →</a>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <div class="page-tag">H-08 · La misma constante conecta galaxias y cosmos</div>
+    <h1 class="page-title">Calculadora a₀ y Λ</h1>
+    <p class="page-sub">
+      La aceleración de transición galáctica <strong style="color:var(--gold)">a₀</strong> y la constante cosmológica 
+      <strong style="color:var(--gold)">Λ</strong> surgen de la misma fórmula: 
+      <strong>a₀ = cH₀/2π</strong> y <strong>Λ = 2H₀²/c²</strong>
+    </p>
+  </div>
+
+  <div class="eq-highlight">
+    <span class="gold">a₀</span> = <span class="gold">c·H₀/2π</span>
+    <div class="small">≈ 1.082×10⁻¹⁰ m/s² (con H₀=70)</div>
+    <div style="margin-top:1rem;">
+      <span class="gold">Λ</span> = <span class="gold">2H₀²/c²</span>
+      <div class="small">≈ 1.148×10⁻⁵² m⁻² (Planck 2018: 1.106×10⁻⁵²)</div>
+    </div>
+  </div>
+
+  <div class="calculator-panel">
+    <div class="input-group">
+      <label>H₀ (km/s/Mpc) — <span id="h0-val">70.0</span></label>
+      <div class="range-group">
+        <input type="range" id="h0" min="67" max="74" value="70" step="0.1" oninput="updateH0()" onchange="calculate()">
+        <span class="range-value" id="h0-display">70.0</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-family:var(--mono); font-size:.65rem; color:var(--dim); margin-top:.3rem;">
+        <span>Riess (SH0ES): 73.0</span>
+        <span>Planck (CMB): 67.4</span>
+        <span>Tensión de Hubble</span>
+      </div>
+    </div>
+
+    <div class="results-grid">
+      <div class="result-card">
+        <div class="result-label">a₀ (aceleración de transición)</div>
+        <div class="result-value" id="a0">1.082×10⁻¹⁰</div>
+        <div class="result-unit">m/s²</div>
+        <div class="result-desc">Régimen galáctico: donde a_N ≈ a₀</div>
+      </div>
+      <div class="result-card">
+        <div class="result-label">Λ (constante cosmológica)</div>
+        <div class="result-value" id="lambda">1.148×10⁻⁵²</div>
+        <div class="result-unit">m⁻²</div>
+        <div class="result-desc">Curvatura de fondo del universo</div>
+      </div>
+      <div class="result-card full-width">
+        <div class="result-label">Relación clave</div>
+        <div class="result-value" style="font-size:1.2rem;">Λ = 8π²·a₀²/c⁴ = 2H₀²/c²</div>
+        <div class="result-desc">La misma H₀ conecta galaxias y cosmología</div>
+      </div>
+    </div>
+
+    <div class="comparison-box">
+      <div class="comparison-title">Comparación con observaciones</div>
+      <div class="comparison-grid">
+        <div class="comp-item">
+          <div class="source">Planck 2018 (CMB)</div>
+          <div class="value">1.106×10⁻⁵²</div>
+          <div class="error error-tie" id="error-planck">error 3.5%</div>
+        </div>
+        <div class="comp-item">
+          <div class="source">TIE (H₀ actual)</div>
+          <div class="value tie" id="lambda-compare">1.148×10⁻⁵²</div>
+          <div class="error">con H₀ = <span id="h0-compare">70.0</span></div>
+        </div>
+        <div class="comp-item">
+          <div class="source">QFT (vacío cuántico)</div>
+          <div class="value">~10⁶⁸</div>
+          <div class="error" style="color:var(--red);">error 120 órdenes ✗</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="constants-box">
+      <div class="const-item"><span class="label">c =</span> <span class="value">2.998×10⁸ m/s</span></div>
+      <div class="const-item"><span class="label">2π =</span> <span class="value">6.283185...</span></div>
+      <div class="const-item"><span class="label">8π² =</span> <span class="value">78.9568...</span></div>
+    </div>
+
+    <div class="explanation-box">
+      <p>🔭 <span class="highlight">¿Qué significa esto?</span></p>
+      <p>La <strong>misma constante H₀</strong> que mide la expansión del universo determina:</p>
+      <ul style="margin-left:1.5rem; line-height:1.8;">
+        <li><span class="highlight">a₀ = cH₀/2π</span> → la escala donde la gravedad cambia en galaxias</li>
+        <li><span class="highlight">Λ = 2H₀²/c²</span> → la curvatura de fondo que acelera el cosmos</li>
+      </ul>
+      <p style="margin-top:1rem;">La "energía oscura" no es una fuerza misteriosa. Es la misma infraestructura espacial manifestándose a escala cósmica. Y el error de 120 órdenes de QFT desaparece porque Λ no es energía del vacío, es geometría.</p>
+    </div>
+
+    <div style="display:flex; gap:1rem; justify-content:center; margin:2rem 0;">
+      <a href="2pi.html" style="color:var(--gold); font-family:var(--mono); font-size:.8rem;">← Calculadora 2π</a>
+      <span style="color:var(--dim);">|</span>
+      <a href="sparc.html" style="color:var(--gold); font-family:var(--mono); font-size:.8rem;">Explorador SPARC →</a>
+    </div>
+
+    <div class="footer-note">
+      <a href="index.html">Volver al inicio</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const c = 2.998e8; // m/s
+
+function getH0_si() {
+  const H0_kms = parseFloat(document.getElementById('h0').value);
+  return H0_kms * 1000 / 3.0857e22; // convertir a s⁻¹
+}
+
+function formatScientific(value) {
+  if (value === 0) return "0";
+  const exp = Math.floor(Math.log10(Math.abs(value)));
+  const mantissa = value / Math.pow(10, exp);
+  return mantissa.toFixed(3) + "×10" + (exp < 0 ? "⁻" + Math.abs(exp) : "⁺" + exp);
+}
+
+function updateH0() {
+  const val = parseFloat(document.getElementById('h0').value).toFixed(1);
+  document.getElementById('h0-display').textContent = val;
+  document.getElementById('h0-val').textContent = val;
+  calculate();
+}
+
+function calculate() {
+  const H0_kms = parseFloat(document.getElementById('h0').value);
+  const H0_si = H0_kms * 1000 / 3.0857e22;
+  
+  // Calcular a₀
+  const a0 = c * H0_si / (2 * Math.PI);
+  
+  // Calcular Λ (dos formas, deben coincidir)
+  const lambda_from_a0 = (8 * Math.PI * Math.PI * a0 * a0) / (c * c * c * c);
+  const lambda_from_h0 = 2 * H0_si * H0_si / (c * c);
+  
+  // Valores de referencia
+  const lambda_planck = 1.106e-52; // m⁻²
+  const error_planck = ((lambda_from_h0 - lambda_planck) / lambda_planck * 100).toFixed(1);
+  
+  // Actualizar UI
+  document.getElementById('a0').innerHTML = a0.toExponential(3).replace('e-', '×10⁻');
+  document.getElementById('lambda').innerHTML = lambda_from_h0.toExponential(3).replace('e-', '×10⁻');
+  document.getElementById('lambda-compare').innerHTML = lambda_from_h0.toExponential(3).replace('e-', '×10⁻');
+  document.getElementById('h0-compare').textContent = H0_kms.toFixed(1);
+  
+  const errorElement = document.getElementById('error-planck');
+  errorElement.textContent = `error ${error_planck}%`;
+  errorElement.style.color = Math.abs(parseFloat(error_planck)) < 5 ? 'var(--green)' : 'var(--red)';
+}
+
+window.onload = () => {
+  calculate();
+  
+  // Agregar evento onchange al input range
+  document.getElementById('h0').addEventListener('change', calculate);
+};
+</script>
+</body>
+</html>

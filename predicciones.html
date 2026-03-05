@@ -165,14 +165,15 @@ h1 {
 </head>
 <body>
 <nav>
-  <span style="color:var(--gold);">TIE · LAB</span>
-  <a href="#" class="nav-link">← Inicio</a>
+  <a href="index.html" class="nav-link">← Volver al menú principal</a>
+  <span style="color:var(--gold); font-family:var(--mono);">H-12.1 · Sincronizador TIE</span>
 </nav>
 
 <div class="container">
   <h1>Sincronizador de Infraestructura</h1>
   <div class="subtitle">
     El Motor Absoluto produce ciclos constantes. Los relojes locales procesan según la gravedad.
+    <br><span style="color:var(--dim); font-size:0.8rem;">✅ CORREGIDO: Menos gravedad = procesamiento MÁS RÁPIDO (factor &lt; 1.0)</span>
   </div>
 
   <div class="grid-2">
@@ -192,25 +193,25 @@ h1 {
       <div class="clock-panel" style="border-left:4px solid var(--gold);">
         <div class="clock-label">TIERRA (referencia)</div>
         <div class="clock-value" id="clock-tierra">12:00:00</div>
-        <div class="clock-tag">procesa TODOS los ciclos del Motor</div>
+        <div class="clock-tag">gravedad 1.0 · procesa TODOS los ciclos</div>
       </div>
 
       <div class="clock-panel" style="border-left:4px solid var(--blue);">
         <div class="clock-label">UBICACIÓN SELECCIONADA</div>
         <div class="clock-value" id="clock-local">12:00:00</div>
-        <div class="clock-tag" id="clock-speed">procesa al ritmo de la gravedad local</div>
+        <div class="clock-tag" id="clock-speed">cargando...</div>
       </div>
 
       <div class="slider-group">
         <div class="slider-label">
-          <span>🌍⚖️ Gravedad local (relativa a Tierra)</span>
+          <span>🌍⚖️ Factor de gravedad local (relativo a Tierra)</span>
           <span id="gravity-value">1.000</span>
         </div>
-        <input type="range" class="slider" id="gravity" min="0.5" max="2.0" value="1.0" step="0.001">
+        <input type="range" class="slider" id="gravity" min="0.001" max="3.0" value="1.0" step="0.001">
         <div style="display:flex; justify-content:space-between; font-family:var(--mono); font-size:.5rem; color:var(--dim); margin-top:.2rem;">
-          <span>0.5× (más rápido)</span>
+          <span>0.001× (más rápido)</span>
           <span>1.0× (Tierra)</span>
-          <span>2.0× (más lento)</span>
+          <span>3.0× (más lento)</span>
         </div>
       </div>
 
@@ -281,7 +282,7 @@ h1 {
   </table>
 
   <div class="footer">
-    ⏳ El Motor Absoluto produce ciclos constantes · Los relojes cuentan según su gravedad local
+    ⏳ El Motor Absoluto produce ciclos constantes · Menos gravedad = procesamiento MÁS RÁPIDO (factor &lt; 1.0)
   </div>
 </div>
 
@@ -308,19 +309,19 @@ function updateClocks() {
   let now = Date.now();
   let dt = (now - lastUpdate) / 1000;
   
-  // Gravedad local (relativa a Tierra)
+  // Factor de gravedad local (CORREGIDO: menor número = más rápido)
   let gravity = parseFloat(document.getElementById('gravity').value);
   document.getElementById('gravity-value').textContent = gravity.toFixed(3);
   
   // El Motor Absoluto produce ciclos a ritmo constante
   cycles += Math.floor(dt * 1000);
   
-  // Tierra: procesa TODOS los ciclos (siempre 1.0)
+  // Tierra: procesa TODOS los ciclos (factor 1.0)
   let cyclesTierra = cycles;
   
   // Local: procesa según su gravedad
-  // Mayor gravedad = procesamiento más lento (MENOS ciclos)
-  // Menor gravedad = procesamiento más rápido (MÁS ciclos)
+  // Mayor gravedad = factor MÁS GRANDE = procesamiento MÁS LENTO (MENOS ciclos)
+  // Menor gravedad = factor MÁS PEQUEÑO = procesamiento MÁS RÁPIDO (MÁS ciclos)
   let cyclesLocal = Math.floor(cycles / gravity);
   
   // Mostrar ciclos
@@ -340,13 +341,14 @@ function updateClocks() {
   // Velocidad de procesamiento local
   let speedText = gravity < 1 ? 'MÁS RÁPIDO' : (gravity > 1 ? 'MÁS LENTO' : 'IGUAL');
   let speedColor = gravity < 1 ? 'var(--green)' : (gravity > 1 ? 'var(--red)' : 'var(--dim)');
-  document.getElementById('clock-speed').innerHTML = `procesa <span style="color:${speedColor}">${speedText}</span> (×${gravity.toFixed(3)})`;
+  let speedRatio = (1/gravity).toFixed(2);
+  document.getElementById('clock-speed').innerHTML = `gravedad ${gravity.toFixed(3)}× · procesa <span style="color:${speedColor}">${speedText}</span> (${speedRatio}× ciclos)`;
   
   // Reloj universal (Motor Absoluto)
   document.getElementById('universal-time').innerHTML = '2π · ' + cycles.toLocaleString();
   document.getElementById('motor-time').textContent = formatMotorTime(cycles);
   
-  // Estado de sincronía (solo importa para el reloj local vs Tierra)
+  // Estado de sincronía
   if (Math.abs(diff) < 100) {
     document.getElementById('sync-status').textContent = 'EN FASE CON TIERRA ✓';
     document.getElementById('sync-status').style.color = 'var(--green)';
@@ -361,17 +363,17 @@ function updateClocks() {
   lastUpdate = now;
 }
 
-// Presets de ubicaciones con valores reales aproximados
+// Presets de ubicaciones con valores CORREGIDOS
 document.querySelectorAll('.location-btn').forEach(btn => {
   btn.addEventListener('click', function() {
     document.querySelectorAll('.location-btn').forEach(b => b.classList.remove('active'));
     this.classList.add('active');
     
     let loc = this.dataset.loc;
-    if (loc === 'tierra') document.getElementById('gravity').value = 1.000;
-    if (loc === 'marte') document.getElementById('gravity').value = 0.998; // Menos gravedad = más rápido
-    if (loc === 'jupiter') document.getElementById('gravity').value = 0.950; // Mucho menos gravedad superficial
-    if (loc === 'espacio') document.getElementById('gravity').value = 1.500; // Espacio profundo: gravedad casi nula = mucho más lento? Revisar
+    if (loc === 'tierra') document.getElementById('gravity').value = 1.0;
+    if (loc === 'marte') document.getElementById('gravity').value = 0.38;  // Menos gravedad = más rápido
+    if (loc === 'jupiter') document.getElementById('gravity').value = 2.5;  // Más gravedad = más lento
+    if (loc === 'espacio') document.getElementById('gravity').value = 0.001; // Casi sin gravedad = rapidísimo
     
     updateClocks();
   });

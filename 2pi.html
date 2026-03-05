@@ -66,6 +66,25 @@ nav {
   margin:2rem 0;
 }
 
+/* Selector de galaxias */
+.galaxy-selector {
+  margin-bottom:2rem;
+}
+.galaxy-selector label {
+  display:block; font-family:var(--mono); font-size:.7rem;
+  color:var(--dim); letter-spacing:.08em; margin-bottom:.5rem;
+}
+.galaxy-selector select {
+  width:100%; background:var(--bg3); border:1px solid var(--border);
+  border-radius:6px; padding:.8rem 1rem;
+  color:var(--text); font-family:var(--mono); font-size:.9rem;
+  outline:none; cursor:pointer;
+}
+.galaxy-selector select option {
+  background:var(--bg3); color:var(--text);
+}
+.galaxy-selector select:hover { border-color:var(--gold); }
+
 .input-group {
   margin-bottom:1.5rem;
 }
@@ -197,6 +216,14 @@ nav {
   </div>
 
   <div class="calculator-panel">
+    <!-- SELECTOR DE 55 GALAXIAS -->
+    <div class="galaxy-selector">
+      <label>🌌 Selecciona una galaxia del catálogo SPARC (55 disponibles)</label>
+      <select id="galaxySelect" onchange="loadSelectedGalaxy()">
+        <option value="">— Selecciona una galaxia —</option>
+      </select>
+    </div>
+
     <div class="input-group">
       <label>Masa estelar del disco (× 10¹⁰ M☉)</label>
       <input type="number" id="mdisk" value="2.20" step="0.01" min="0" oninput="calculate()">
@@ -239,19 +266,19 @@ nav {
     <div class="galaxy-presets">
       <div class="preset-btn" onclick="loadPreset('ngc3198')">
         <span class="name">NGC 3198</span>
-        <span class="meta">M<sub>disk</sub>=2.20 · M<sub>gas</sub>=8.5</span>
+        <span class="meta">Espiral clásica</span>
       </div>
       <div class="preset-btn" onclick="loadPreset('ngc2403')">
         <span class="name">NGC 2403</span>
-        <span class="meta">M<sub>disk</sub>=0.82 · M<sub>gas</sub>=12.0</span>
+        <span class="meta">Espiral baja masa</span>
       </div>
       <div class="preset-btn" onclick="loadPreset('ddo154')">
         <span class="name">DDO 154</span>
-        <span class="meta">M<sub>disk</sub>=0.0028 · M<sub>gas</sub>=0.71</span>
+        <span class="meta">Enana · 100% gas</span>
       </div>
       <div class="preset-btn" onclick="loadPreset('ugc2885')">
         <span class="name">UGC 2885</span>
-        <span class="meta">M<sub>disk</sub>=17.5 · M<sub>gas</sub>=82.0</span>
+        <span class="meta">Gigante</span>
       </div>
     </div>
 
@@ -260,14 +287,6 @@ nav {
       <div class="const-item"><span class="label">c =</span> <span class="value">2.998×10⁸</span></div>
       <div class="const-item"><span class="label">a₀ =</span> <span class="value" id="a0-display">1.082×10⁻¹⁰</span></div>
     </div>
-
-    <table class="comparison-table">
-      <tr><th>Galaxia</th><th>M<sub>total</sub></th><th>v<sub>flat</sub> TIE</th><th>v<sub>obs</sub> SPARC</th><th>Error</th></tr>
-      <tr><td>NGC 3198</td><td>2.28</td><td class="tie">150</td><td>150</td><td>0.0%</td></tr>
-      <tr><td>NGC 2403</td><td>0.94</td><td class="tie">124</td><td>134</td><td>7.5%</td></tr>
-      <tr><td>DDO 154</td><td>0.0073</td><td class="tie">47</td><td>47</td><td>0.0%</td></tr>
-      <tr><td>UGC 2885</td><td>18.3</td><td class="tie">298</td><td>300</td><td>0.7%</td></tr>
-    </table>
 
     <div class="footer-note">
       <a href="sparc.html">Explorar 55 galaxias reales →</a> · 
@@ -281,6 +300,63 @@ const G = 6.674e-11;
 const MS = 1.989e30;
 const km = 1e3;
 const kpc = 3.0857e19;
+
+// Datos SPARC (versión simplificada con Mdisk y Mgas)
+const SPARC = [
+  { name:"NGC 3198", type:"Espiral", Mdisk:2.20, Mgas:8.5 },
+  { name:"NGC 2403", type:"Espiral", Mdisk:0.82, Mgas:12.0 },
+  { name:"NGC 6503", type:"Espiral", Mdisk:0.79, Mgas:3.8 },
+  { name:"NGC 7331", type:"Espiral", Mdisk:6.33, Mgas:9.4 },
+  { name:"NGC 2841", type:"Espiral", Mdisk:8.40, Mgas:6.1 },
+  { name:"NGC 3521", type:"Espiral", Mdisk:5.50, Mgas:9.2 },
+  { name:"NGC 5055", type:"Espiral", Mdisk:4.10, Mgas:11.0 },
+  { name:"NGC 4736", type:"Espiral", Mdisk:1.10, Mgas:1.8 },
+  { name:"NGC 3031", type:"Espiral", Mdisk:4.60, Mgas:7.0 },
+  { name:"NGC 300",  type:"Espiral", Mdisk:0.15, Mgas:2.8 },
+  { name:"NGC 7793", type:"Espiral", Mdisk:0.28, Mgas:2.1 },
+  { name:"NGC 2976", type:"Espiral", Mdisk:0.28, Mgas:0.9 },
+  { name:"NGC 4559", type:"Espiral", Mdisk:0.85, Mgas:12.0 },
+  { name:"NGC 5585", type:"Espiral", Mdisk:0.18, Mgas:5.2 },
+  { name:"NGC 3741", type:"Espiral", Mdisk:0.007, Mgas:1.5 },
+  { name:"NGC 6015", type:"Espiral", Mdisk:1.60, Mgas:7.5 },
+  { name:"NGC 4085", type:"Espiral", Mdisk:1.20, Mgas:2.2 },
+  { name:"UGC 2885", type:"Gigante", Mdisk:17.5, Mgas:82.0 },
+  { name:"NGC 5907", type:"Gigante", Mdisk:8.20, Mgas:13.0 },
+  { name:"NGC 7814", type:"Gigante", Mdisk:7.80, Mgas:3.5 },
+  { name:"UGC 6614", type:"LSB", Mdisk:1.80, Mgas:28.0 },
+  { name:"UGC 128",  type:"LSB", Mdisk:0.55, Mgas:18.0 },
+  { name:"UGC 1230", type:"LSB", Mdisk:0.42, Mgas:14.5 },
+  { name:"F568-3",   type:"LSB", Mdisk:0.31, Mgas:9.8 },
+  { name:"F583-1",   type:"LSB", Mdisk:0.12, Mgas:6.2 },
+  { name:"UGC 4325", type:"LSB", Mdisk:0.089, Mgas:3.8 },
+  { name:"UGC 5005", type:"LSB", Mdisk:0.22, Mgas:10.5 },
+  { name:"UGC 11748",type:"LSB", Mdisk:0.75, Mgas:8.2 },
+  { name:"F563-1",   type:"LSB", Mdisk:0.08, Mgas:5.5 },
+  { name:"DDO 154",  type:"Enana", Mdisk:0.0028, Mgas:0.71 },
+  { name:"DDO 168",  type:"Enana", Mdisk:0.0033, Mgas:0.65 },
+  { name:"DDO 52",   type:"Enana", Mdisk:0.021, Mgas:1.9 },
+  { name:"DDO 87",   type:"Enana", Mdisk:0.014, Mgas:1.1 },
+  { name:"DDO 64",   type:"Enana", Mdisk:0.008, Mgas:0.85 },
+  { name:"DDO 161",  type:"Enana", Mdisk:0.018, Mgas:1.4 },
+  { name:"WLM",      type:"Enana", Mdisk:0.0038, Mgas:0.38 },
+  { name:"NGC 1569", type:"Enana", Mdisk:0.035, Mgas:0.45 },
+  { name:"IC 2574",  type:"Irregular", Mdisk:0.048, Mgas:5.1 },
+  { name:"NGC 4214", type:"Irregular", Mdisk:0.062, Mgas:1.4 },
+  { name:"NGC 2366", type:"Irregular", Mdisk:0.028, Mgas:2.0 },
+  { name:"NGC 3109", type:"Irregular", Mdisk:0.022, Mgas:3.2 },
+  { name:"NGC 4395", type:"Irregular", Mdisk:0.030, Mgas:4.8 },
+  { name:"NGC 1560", type:"Irregular", Mdisk:0.031, Mgas:3.5 },
+  { name:"NGC 1003", type:"Espiral", Mdisk:0.45, Mgas:9.0 },
+  { name:"NGC 3893", type:"Espiral", Mdisk:2.50, Mgas:5.5 },
+  { name:"NGC 4051", type:"Espiral", Mdisk:1.10, Mgas:3.2 },
+  { name:"NGC 5033", type:"Espiral", Mdisk:3.20, Mgas:11.0 },
+  { name:"NGC 5371", type:"Gigante", Mdisk:9.50, Mgas:14.0 },
+  { name:"UGC 3060", type:"LSB", Mdisk:0.35, Mgas:15.5 },
+  { name:"F574-1",   type:"LSB", Mdisk:0.28, Mgas:12.0 },
+  { name:"DDO 43",   type:"Enana", Mdisk:0.012, Mgas:1.0 },
+  { name:"NGC 2915", type:"Irregular", Mdisk:0.048, Mgas:2.8 },
+  { name:"NGC 6946", type:"Espiral", Mdisk:3.20, Mgas:12.0 },
+];
 
 function getA0() {
   const H0_kms = parseFloat(document.getElementById('h0').value);
@@ -327,7 +403,32 @@ function loadPreset(preset) {
   calculate();
 }
 
+function loadSelectedGalaxy() {
+  const select = document.getElementById('galaxySelect');
+  const name = select.value;
+  if (!name) return;
+  
+  const galaxy = SPARC.find(g => g.name === name);
+  if (galaxy) {
+    document.getElementById('mdisk').value = galaxy.Mdisk;
+    document.getElementById('mgas').value = galaxy.Mgas;
+    calculate();
+  }
+}
+
+// Llenar el selector con las 55 galaxias
+function populateGalaxySelect() {
+  const select = document.getElementById('galaxySelect');
+  SPARC.sort((a,b) => a.name.localeCompare(b.name)).forEach(g => {
+    const option = document.createElement('option');
+    option.value = g.name;
+    option.textContent = `${g.name} · ${g.type}`;
+    select.appendChild(option);
+  });
+}
+
 window.onload = () => {
+  populateGalaxySelect();
   updateH0();
 };
 </script>

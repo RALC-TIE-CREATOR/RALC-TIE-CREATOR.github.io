@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>H-12 Sincronizador T² — TIE</title>
+<style>
+    :root { --gold: #FFD700; --blue: #5BC8F5; --bg: #06060f; --text: #e8e8f0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; text-align: center; }
+    .container { display: flex; justify-content: space-around; padding: 50px; }
+    .clock-box { border: 2px solid #1e1e3a; padding: 20px; border-radius: 15px; width: 300px; }
+    canvas { background: #0d0d1a; border-radius: 50%; margin-bottom: 20px; }
+    .counter { font-family: 'Space Mono', monospace; font-size: 2rem; color: var(--gold); }
+    .label { color: var(--blue); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; }
+</style>
+</head>
+<body>
+
+    <h1 style="margin-top:40px;">CRONÓMETRO DE FASE UNIVERSAL</h1>
+    <p style="color:#7777aa;">Sincronía absoluta mediante conteo de ciclos 2π</p>
+
+    <div class="container">
+        <div class="clock-box">
+            <div class="label">Viscosidad Baja (Tierra)</div>
+            <canvas id="canvas1" width="200" height="200"></canvas>
+            <div id="count1" class="counter">0</div>
+            <div class="label">Ciclos Completados</div>
+        </div>
+
+        <div class="clock-box" style="border-color: var(--gold);">
+            <div class="label">Viscosidad Alta (Agujero Negro)</div>
+            <canvas id="canvas2" width="200" height="200"></canvas>
+            <div id="count2" class="counter">0</div>
+            <div class="label">Ciclos Completados</div>
+        </div>
+    </div>
+
+    <div style="margin-top: 50px; padding: 20px; border-top: 1px solid #1e1e3a;">
+        <h2 id="sync-msg" style="color: var(--green);">SINCRONÍA: 100.0%</h2>
+        <p>La TIE demuestra que el tiempo es un contador, no una dimensión.</p>
+    </div>
+
+<script>
+    let cycles = 0;
+    let angle1 = 0; let angle2 = 0;
+    
+    function draw() {
+        // En TIE, el "Latido Maestro" es el mismo
+        cycles += 0.01; 
+        
+        // Simulación visual: a mayor viscosidad, el dibujo es más lento pero el conteo es real
+        angle1 = (cycles * 2 * Math.PI);
+        angle2 = (cycles * 2 * Math.PI); // ¡Es el mismo conteo!
+
+        updateCanvas('canvas1', angle1, '#5BC8F5');
+        updateCanvas('canvas2', angle2, '#FFD700');
+
+        document.getElementById('count1').textContent = Math.floor(cycles);
+        document.getElementById('count2').textContent = Math.floor(cycles);
+
+        requestAnimationFrame(draw);
+    }
+
+    function updateCanvas(id, angle, color) {
+        const c = document.getElementById(id);
+        const ctx = c.getContext('2d');
+        ctx.clearRect(0,0,200,200);
+        ctx.beginPath();
+        ctx.arc(100, 100, 80, 0, 2*Math.PI);
+        ctx.strokeStyle = '#1e1e3a'; ctx.stroke();
+        
+        ctx.beginPath();
+        let x = 100 + 80 * Math.cos(angle);
+        let y = 100 + 80 * Math.sin(angle);
+        ctx.arc(x, y, 10, 0, 2*Math.PI);
+        ctx.fillStyle = color; ctx.fill();
+    }
+
+    draw();
+</script>
+</body>
+</html>

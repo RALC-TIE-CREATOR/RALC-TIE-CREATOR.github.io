@@ -3,423 +3,718 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TIE — Teoría de la Infraestructura Espacial</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<title>TIE · TEORÍA DE LA INFRAESTRUCTURA ESPACIAL</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --gold:   #FFD700;
-  --blue:   #5BC8F5;
-  --green:  #44FF88;
-  --bg:     #06060f;
-  --bg2:    #0d0d1a;
-  --bg3:    #111122;
-  --text:   #e8e8f0;
-  --dim:    #7777aa;
-  --border: #1e1e3a;
-  --mono:   'Space Mono', monospace;
-  --sans:   'Syne', sans-serif;
+  --gold: #FFD700;
+  --blue: #5BC8F5;
+  --green: #44FF88;
+  --red: #FF4455;
+  --bg: #000001;
+  --bg2: rgba(5, 5, 15, 0.6);
+  --bg3: rgba(10, 10, 25, 0.4);
+  --text: #ffffff;
+  --dim: #a0a0b0;
+  --border: rgba(91, 200, 245, 0.15);
+  --mono: 'Space Mono', monospace;
+  --sans: 'Syne', sans-serif;
 }
+
 * { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-body { background:var(--bg); color:var(--text); font-family:var(--sans); overflow-x:hidden; }
 
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ===== CANVAS 3D (Galaxia de fondo) ===== */
+#galaxy-canvas {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120vw;
+  height: 120vh;
+  min-width: 1200px;
+  min-height: 1200px;
+  z-index: -2;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* ===== CAPA DE PROFUNDIDAD ===== */
 body::before {
-  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
-  background-image:
-    radial-gradient(1px 1px at 12% 20%, rgba(255,255,255,.5) 0%, transparent 100%),
-    radial-gradient(1px 1px at 88% 12%, rgba(255,255,255,.4) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 45% 68%, rgba(255,215,0,.25) 0%, transparent 100%),
-    radial-gradient(1px 1px at 72% 82%, rgba(255,255,255,.35) 0%, transparent 100%),
-    radial-gradient(1px 1px at 28% 88%, rgba(91,200,245,.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 94% 48%, rgba(255,255,255,.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 58% 32%, rgba(255,255,255,.2) 0%, transparent 100%),
-    radial-gradient(1px 1px at 6%  58%, rgba(255,215,0,.2)  0%, transparent 100%),
-    radial-gradient(1px 1px at 40% 8%,  rgba(255,255,255,.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 65% 95%, rgba(91,200,245,.2) 0%, transparent 100%);
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(91,200,245,0.08) 0%, transparent 60%),
+              radial-gradient(circle at 70% 60%, rgba(255,215,0,0.08) 0%, transparent 60%);
+  z-index: -1;
+  pointer-events: none;
+  mix-blend-mode: screen;
 }
 
-/* NAV */
+/* ===== NAVBAR ===== */
 nav {
-  position:fixed; top:0; left:0; right:0; z-index:100;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:.9rem 2.5rem;
-  background:rgba(6,6,15,.92); backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 4rem;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(15px);
+  border-bottom: 2px solid rgba(255,215,0,0.2);
+  box-shadow: 0 0 30px rgba(255,215,0,0.1);
 }
-.nav-logo { font-family:var(--mono); font-size:1rem; color:var(--gold); letter-spacing:.2em; text-decoration:none; }
-.nav-links { display:flex; gap:2rem; list-style:none; align-items:center; }
-.nav-links a { color:var(--dim); text-decoration:none; font-size:.82rem; letter-spacing:.05em; transition:color .2s; }
-.nav-links a:hover { color:var(--gold); }
-.nav-cta {
-  background:var(--gold); color:var(--bg);
-  padding:.45rem 1.25rem; border-radius:4px;
-  font-family:var(--mono); font-size:.78rem; font-weight:700;
-  text-decoration:none; transition:all .2s;
+
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-decoration: none;
+  position: relative;
+  font-weight: 700;
+  text-shadow: 0 0 15px rgba(255,215,0,0.5);
 }
-.nav-cta:hover { background:#fff; }
 
-/* DROPDOWN */
-.nav-dropdown { position:relative; }
-.dropdown-trigger { cursor:pointer; user-select:none; }
-.dropdown-menu {
-  display:none;
-  position:absolute; top:calc(100% + .6rem); left:50%;
-  transform:translateX(-50%);
-  background:var(--bg2); border:1px solid var(--border);
-  border-radius:8px; padding:.5rem;
-  min-width:230px; z-index:300;
-  box-shadow:0 16px 40px rgba(0,0,0,.7);
+.nav-status {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--blue);
+  border: 1px solid rgba(91,200,245,0.3);
+  padding: 6px 18px;
+  border-radius: 30px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(91,200,245,0.5);
+  animation: pulse-border 2s infinite;
 }
-.dropdown-menu.open { display:block; }
-.dropdown-menu::before {
-  content:''; position:absolute; top:-6px; left:50%;
-  transform:translateX(-50%);
-  width:0; height:0;
-  border-left:6px solid transparent;
-  border-right:6px solid transparent;
-  border-bottom:6px solid var(--border);
+
+@keyframes pulse-border {
+  0%, 100% { border-color: rgba(91,200,245,0.3); }
+  50% { border-color: rgba(255,215,0,0.5); }
 }
-.dropdown-item {
-  display:flex; align-items:center; gap:.75rem;
-  padding:.6rem .85rem; border-radius:6px;
-  text-decoration:none; color:var(--text);
-  transition:background .15s;
+
+/* ===== HERO SECTION - CORREGIDO CON PADDING TOP ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 120px 2rem 5rem; /* 120px arriba para que el título no quede detrás del navbar */
+  position: relative;
+  z-index: 10;
 }
-.dropdown-item:hover { background:var(--bg3); }
-.d-tag  { font-family:var(--mono); font-size:.58rem; color:var(--gold); letter-spacing:.1em; flex-shrink:0; width:36px; }
-.d-name { font-size:.82rem; font-weight:600; }
-.dropdown-divider { height:1px; background:var(--border); margin:.3rem 0; }
 
-/* HERO */
-#hero {
-  position:relative; z-index:1;
-  min-height:100vh; display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  text-align:center; padding:7rem 2rem 5rem;
+/* ===== TÍTULO PRINCIPAL - CORREGIDO Y POTENCIADO ===== */
+.hero-title {
+  font-family: var(--mono);
+  font-size: 1.5rem; /* Aumentado para autoridad visual */
+  letter-spacing: 8px; /* Más espacio tecnológico */
+  color: var(--gold);
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  border-bottom: 2px solid rgba(255,215,0,0.4); /* Línea más marcada */
+  padding-bottom: 0.8rem;
+  display: inline-block;
+  
+  /* Lógica de visibilidad limpia */
+  opacity: 0;
+  visibility: visible;
+  animation: fadeInUp 1s 0.4s forwards; /* Espera 0.4s a que la galaxia cargue */
+  font-weight: 700;
 }
-.ring { position:absolute; border-radius:50%; border:1px solid rgba(255,215,0,.07); animation:spin linear infinite; pointer-events:none; }
-.ring-1 { width:500px; height:500px; animation-duration:60s; }
-.ring-2 { width:750px; height:380px; border-color:rgba(91,200,245,.05); animation-duration:40s; animation-direction:reverse; }
-.ring-3 { width:950px; height:950px; border-color:rgba(255,255,255,.025); animation-duration:90s; }
-@keyframes spin { to { transform:rotate(360deg); } }
-.glow { position:absolute; width:350px; height:350px; border-radius:50%; background:radial-gradient(circle, rgba(255,215,0,.05) 0%, transparent 70%); pointer-events:none; }
 
-.hero-eyebrow { font-family:var(--mono); font-size:.72rem; letter-spacing:.35em; color:var(--gold); text-transform:uppercase; margin-bottom:1.5rem; opacity:0; animation:up .7s .1s forwards; }
-.hero-title { font-size:clamp(2.2rem,6vw,5rem); font-weight:800; line-height:1.05; margin-bottom:1.75rem; opacity:0; animation:up .7s .3s forwards; }
-.hero-title em  { font-style:normal; color:var(--gold); }
-.hero-title .dim { color:var(--dim); }
-.hero-sub { font-size:clamp(.95rem,1.8vw,1.2rem); color:var(--dim); line-height:1.8; max-width:580px; margin-bottom:3rem; opacity:0; animation:up .7s .5s forwards; }
-.hero-stats { display:flex; gap:3.5rem; margin-bottom:3rem; opacity:0; animation:up .7s .6s forwards; flex-wrap:wrap; justify-content:center; }
-.stat { text-align:center; }
-.stat-num { font-family:var(--mono); font-size:2.8rem; font-weight:700; color:var(--gold); display:block; line-height:1; }
-.stat-label { font-size:.72rem; color:var(--dim); letter-spacing:.04em; margin-top:.5rem; display:block; }
-.hero-btns { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; opacity:0; animation:up .7s .8s forwards; }
-.btn { display:inline-flex; align-items:center; gap:.5rem; padding:.85rem 2rem; border-radius:4px; font-family:var(--mono); font-size:.85rem; font-weight:700; letter-spacing:.05em; text-decoration:none; cursor:pointer; transition:all .2s; border:none; }
-.btn-gold  { background:var(--gold); color:var(--bg); }
-.btn-gold:hover { background:#fff; transform:translateY(-2px); box-shadow:0 8px 30px rgba(255,215,0,.25); }
-.btn-ghost { background:transparent; color:var(--dim); border:1px solid var(--border); }
-.btn-ghost:hover { border-color:var(--gold); color:var(--gold); }
-@keyframes up { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+/* ===== CARRUSEL DE FRASES ===== */
+.hero-rotator {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0 2rem;
+  width: 100%;
+  max-width: 1000px;
+}
 
-/* DIVIDER */
-hr.div { border:none; height:1px; position:relative; z-index:1; background:linear-gradient(to right, transparent, var(--border), transparent); }
+.rotating-phrase {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.2;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(255,215,0,0.3);
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+  width: 100%;
+  text-align: center;
+  padding: 0 2rem;
+}
 
-/* SECTION */
-.section { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:5rem 2rem; }
-.s-label { font-family:var(--mono); font-size:.68rem; letter-spacing:.3em; color:var(--gold); text-transform:uppercase; margin-bottom:.6rem; }
-.s-title { font-size:clamp(1.5rem,3vw,2.4rem); font-weight:800; margin-bottom:.75rem; }
-.s-sub   { color:var(--dim); font-size:.95rem; line-height:1.75; max-width:600px; margin-bottom:3rem; }
+/* ===== ESTADÍSTICAS ===== */
+.stats-container {
+  display: flex;
+  gap: 3rem;
+  margin: 2rem 0 3rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeInUp 1s 0.6s forwards;
+}
 
-/* TOOLS */
-.tools-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:1.25rem; }
-.tool-card { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:1.75rem; text-decoration:none; color:var(--text); transition:all .25s; display:block; position:relative; overflow:hidden; }
-.tool-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(to right, var(--gold), transparent); opacity:0; transition:opacity .25s; }
-.tool-card:hover { border-color:rgba(255,215,0,.25); transform:translateY(-3px); box-shadow:0 12px 40px rgba(0,0,0,.4); }
-.tool-card:hover::before { opacity:1; }
-.tool-badge { display:inline-block; font-family:var(--mono); font-size:.6rem; padding:.15rem .5rem; border-radius:100px; margin-bottom:.75rem; }
-.badge-live { background:rgba(68,255,136,.1); color:var(--green); border:1px solid rgba(68,255,136,.3); }
-.tool-tag   { font-family:var(--mono); font-size:.62rem; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; margin-bottom:.6rem; }
-.tool-name  { font-size:1.05rem; font-weight:700; margin-bottom:.5rem; }
-.tool-desc  { font-size:.82rem; color:var(--dim); line-height:1.65; margin-bottom:1.25rem; }
-.tool-arrow { font-family:var(--mono); font-size:.78rem; color:var(--gold); }
+.stat-item {
+  text-align: center;
+  position: relative;
+  min-width: 130px;
+}
 
-/* POSTULATES */
-.post-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(240px,1fr)); gap:1rem; margin-bottom:2rem; }
-.post-card { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:1.5rem; }
-.post-num  { font-family:var(--mono); font-size:2rem; font-weight:700; color:rgba(255,215,0,.15); margin-bottom:.5rem; line-height:1; }
-.post-name { font-size:.9rem; font-weight:700; color:var(--gold); margin-bottom:.5rem; }
-.post-desc { font-size:.8rem; color:var(--dim); line-height:1.65; }
-.eq-box { background:var(--bg2); border:1px solid var(--border); border-left:3px solid var(--gold); border-radius:0 8px 8px 0; padding:1.5rem 2rem; }
-.eq-label { font-family:var(--mono); font-size:.68rem; color:var(--gold); letter-spacing:.2em; margin-bottom:.75rem; }
-.eq-main  { font-family:var(--mono); font-size:1.1rem; color:var(--text); margin-bottom:.5rem; }
-.eq-meta  { font-family:var(--mono); font-size:.82rem; color:var(--dim); }
+.stat-item::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 25%;
+  width: 50%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: scan 3s infinite;
+}
 
-/* PREDICTIONS */
-.pred-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:.85rem; }
-.pred-item { background:var(--bg2); border:1px solid var(--border); border-radius:6px; padding:1rem 1.2rem; display:flex; align-items:center; gap:.9rem; }
-.pred-icon { font-size:1.1rem; flex-shrink:0; }
-.pred-name { font-size:.85rem; font-weight:600; margin-bottom:.2rem; }
-.pred-val  { font-family:var(--mono); font-size:.68rem; color:var(--dim); }
+.stat-number {
+  font-family: var(--mono);
+  font-size: 2.8rem;
+  font-weight: 800;
+  display: block;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 0 30px rgba(255,215,0,0.5);
+  animation: flicker 3s infinite;
+}
 
-/* PAPERS */
-.paper-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(250px,1fr)); gap:1.25rem; }
-.paper-card { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:1.75rem; }
-.paper-tag  { font-family:var(--mono); font-size:.62rem; letter-spacing:.2em; color:var(--blue); text-transform:uppercase; margin-bottom:.6rem; }
-.paper-name { font-size:1rem; font-weight:700; margin-bottom:.5rem; }
-.paper-desc { font-size:.82rem; color:var(--dim); line-height:1.6; margin-bottom:1.25rem; }
-.paper-link { display:inline-flex; align-items:center; gap:.4rem; font-family:var(--mono); font-size:.75rem; color:var(--gold); text-decoration:none; transition:color .2s; }
-.paper-link:hover { color:#fff; }
-.paper-link.dim { color:var(--dim); }
+.stat-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--dim);
+  letter-spacing: 1.5px;
+  margin-top: 0.6rem;
+  display: block;
+  text-transform: uppercase;
+}
 
-/* FOOTER */
-footer { position:relative; z-index:1; border-top:1px solid var(--border); padding:2.5rem 2rem; text-align:center; }
-.footer-logo { font-family:var(--mono); font-size:1rem; color:var(--gold); letter-spacing:.2em; margin-bottom:.75rem; }
-.footer-links { display:flex; gap:1.5rem; justify-content:center; list-style:none; margin-bottom:.75rem; flex-wrap:wrap; }
-.footer-links a { color:var(--dim); text-decoration:none; font-family:var(--mono); font-size:.72rem; transition:color .2s; }
-.footer-links a:hover { color:var(--gold); }
-.footer-copy { font-family:var(--mono); font-size:.68rem; color:var(--dim); }
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  3% { opacity: 0.4; }
+  6% { opacity: 1; }
+  9% { opacity: 0.6; }
+  12% { opacity: 1; }
+}
+
+@keyframes scan {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* ===== BOTONES PRINCIPALES COMO CUADROS ===== */
+.hero-actions {
+  display: flex;
+  gap: 1.5rem; /* Ajustado */
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeInUp 1s 0.8s forwards;
+  width: 100%;
+  max-width: 1100px; /* Ajustado */
+}
+
+.action-card {
+  flex: 1 1 280px;
+  padding: 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+  background: rgba(5, 5, 15, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid transparent;
+  text-align: left;
+}
+
+.action-card.lab {
+  border-color: rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.action-card.lab:hover {
+  border-color: var(--gold);
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+}
+
+.action-card.github {
+  border-color: rgba(91, 200, 245, 0.3);
+  box-shadow: 0 0 20px rgba(91, 200, 245, 0.2);
+}
+
+.action-card.github:hover {
+  border-color: var(--blue);
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(91, 200, 245, 0.3);
+}
+
+.action-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
+  animation: shine 10s infinite;
+  pointer-events: none;
+}
+
+.action-tag {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  letter-spacing: 2px;
+  margin-bottom: 0.8rem;
+  display: block;
+}
+
+.action-card.lab .action-tag {
+  color: var(--gold);
+}
+
+.action-card.github .action-tag {
+  color: var(--blue);
+}
+
+.action-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.action-card.lab .action-title {
+  color: var(--gold);
+}
+
+.action-card.github .action-title {
+  color: var(--blue);
+}
+
+.action-desc {
+  font-size: 0.85rem;
+  color: var(--dim);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.action-link {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: inherit;
+  letter-spacing: 2px;
+  transition: 0.3s;
+  display: inline-block;
+}
+
+.action-card.lab .action-link {
+  color: var(--gold);
+}
+
+.action-card.github .action-link {
+  color: var(--blue);
+}
+
+.action-card.lab:hover .action-link,
+.action-card.github:hover .action-link {
+  transform: translateX(10px);
+  color: #fff;
+}
+
+/* ===== CUADROS DE PAPERS Y PREDICCIONES ===== */
+.hero-cards {
+  display: flex;
+  gap: 1.5rem; /* Ajustado */
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeInUp 1s 1s forwards;
+  width: 100%;
+  max-width: 1100px; /* Ajustado */
+}
+
+.info-card {
+  flex: 1 1 280px;
+  padding: 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+  background: rgba(5, 5, 15, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid transparent;
+  text-align: left;
+}
+
+.info-card.papers {
+  border-color: rgba(68, 255, 136, 0.3);
+  box-shadow: 0 0 20px rgba(68, 255, 136, 0.2);
+}
+
+.info-card.papers:hover {
+  border-color: var(--green);
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(68, 255, 136, 0.3);
+}
+
+.info-card.predictions {
+  border-color: rgba(255, 68, 85, 0.3);
+  box-shadow: 0 0 20px rgba(255, 68, 85, 0.2);
+}
+
+.info-card.predictions:hover {
+  border-color: var(--red);
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(255, 68, 85, 0.3);
+}
+
+.info-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
+  animation: shine 10s infinite;
+  pointer-events: none;
+}
+
+.info-tag {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  letter-spacing: 2px;
+  margin-bottom: 0.8rem;
+  display: block;
+}
+
+.info-card.papers .info-tag {
+  color: var(--green);
+}
+
+.info-card.predictions .info-tag {
+  color: var(--red);
+}
+
+.info-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.info-card.papers .info-title {
+  color: var(--green);
+}
+
+.info-card.predictions .info-title {
+  color: var(--red);
+}
+
+.info-desc {
+  font-size: 0.85rem;
+  color: var(--dim);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.info-link {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: inherit;
+  letter-spacing: 2px;
+  transition: 0.3s;
+  display: inline-block;
+}
+
+.info-card.papers .info-link {
+  color: var(--green);
+}
+
+.info-card.predictions .info-link {
+  color: var(--red);
+}
+
+.info-card.papers:hover .info-link,
+.info-card.predictions:hover .info-link {
+  transform: translateX(10px);
+  color: #fff;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  padding: 3rem;
+  text-align: center;
+  border-top: 1px solid rgba(255,215,0,0.1);
+  margin-top: 2rem;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 30;
+}
+
+.footer-equation {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(255,215,0,0.3);
+}
+
+.footer-copy {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  letter-spacing: 2px;
+}
+
+/* ===== ANIMACIONES ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
+<canvas id="galaxy-canvas"></canvas>
+
 <nav>
-  <a href="index.html" class="nav-logo">TIE / R@LC</a>
-  <ul class="nav-links">
-    <li class="nav-dropdown">
-      <a class="dropdown-trigger" onclick="toggleMenu(event)">Laboratorio ▾</a>
-      <div class="dropdown-menu" id="lab-menu">
-        <a href="curvas.html"         class="dropdown-item"><span class="d-tag">H-01</span><span class="d-name">Curvas de Rotación</span></a>
-        <a href="sparc.html"          class="dropdown-item"><span class="d-tag">H-02</span><span class="d-name">Explorador SPARC</span></a>
-        <a href="2pi.html"            class="dropdown-item"><span class="d-tag">H-03</span><span class="d-name">Calculadora 2π</span></a>
-        <div class="dropdown-divider"></div>
-        <a href="materia-oscura.html" class="dropdown-item"><span class="d-tag">H-05</span><span class="d-name">Materia Oscura</span></a>
-        <a href="constante.html"      class="dropdown-item"><span class="d-tag">H-08</span><span class="d-name">a₀ y Lambda</span></a>
-        <div class="dropdown-divider"></div>
-        <a href="agujeros.html"       class="dropdown-item"><span class="d-tag">H-11</span><span class="d-name">Agujeros Negros</span></a>
-        <a href="gps.html"            class="dropdown-item"><span class="d-tag">H-12</span><span class="d-name">Corrección GPS</span></a>
-        <a href="predicciones.html"   class="dropdown-item"><span class="d-tag">★</span><span class="d-name">Predicciones</span></a>
-      </div>
-    </li>
-    <li><a href="#teoria">Teoría</a></li>
-    <li><a href="#predicciones">Predicciones</a></li>
-    <li><a href="#papers">Papers</a></li>
-  </ul>
-  <a href="curvas.html" class="nav-cta">→ Laboratorio</a>
+  <a href="#" class="nav-logo">TIE / R@LC</a>
+  <span class="nav-status">V.3.0 · INFRAESTRUCTURA</span>
 </nav>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="ring ring-1"></div>
-  <div class="ring ring-2"></div>
-  <div class="ring ring-3"></div>
-  <div class="glow"></div>
-  <div class="hero-eyebrow">Teoría de la Infraestructura Espacial · R@LC 2026</div>
-  <h1 class="hero-title">
-    La materia oscura<br>
-    <span class="dim">no es una sustancia.</span><br>
-    <em>Es un error de cálculo.</em>
-  </h1>
-  <p class="hero-sub">Una ecuación. Cero parámetros libres.<br>Verificable desde tu navegador en 30 segundos.</p>
-  <div class="hero-stats">
-    <div class="stat"><span class="stat-num">7.3×</span><span class="stat-label">mejor que Newton<br>en curvas galácticas</span></div>
-    <div class="stat"><span class="stat-num">84.1%</span><span class="stat-label">materia oscura<br>= 1 − 1/2π</span></div>
-    <div class="stat"><span class="stat-num">3.5%</span><span class="stat-label">error en Λ cosmológica<br>(QFT: 10¹²⁰×)</span></div>
+<section class="hero">
+  <!-- TÍTULO PRINCIPAL - AHORA CON ESPACIO Y ANIMACIÓN CORRECTA -->
+  <div class="hero-title">TIE · TEORÍA DE LA INFRAESTRUCTURA ESPACIAL</div>
+  
+  <!-- CARRUSEL DE FRASES -->
+  <div class="hero-rotator">
+    <div id="rotating-phrase" class="rotating-phrase">EL TIEMPO ES ABSOLUTO.</div>
   </div>
-  <div class="hero-btns">
-    <a href="curvas.html" class="btn btn-gold">→ Entrar al Laboratorio</a>
-    <a href="https://github.com/RALC-TIE-CREATOR/TIE-rotation-curves" target="_blank" class="btn btn-ghost">GitHub ↗</a>
-    <a href="https://zenodo.org/records/18851408" target="_blank" class="btn btn-ghost">Paper DOI ↗</a>
+
+  <!-- ESTADÍSTICAS -->
+  <div class="stats-container">
+    <div class="stat-item">
+      <span class="stat-number">7.3×</span>
+      <span class="stat-label">MEJOR QUE NEWTON</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">84.1%</span>
+      <span class="stat-label">LA "MATERIA OSCURA"</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">3.5%</span>
+      <span class="stat-label">ERROR EN Λ</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">0</span>
+      <span class="stat-label">PARÁMETROS LIBRES</span>
+    </div>
+  </div>
+
+  <!-- BOTONES PRINCIPALES COMO CUADROS -->
+  <div class="hero-actions">
+    <a href="labs.html" class="action-card lab">
+      <span class="action-tag">LABORATORIO</span>
+      <div class="action-title">Entrar al Laboratorio</div>
+      <div class="action-desc">10 herramientas interactivas para verificar TIE por ti mismo. Curvas de rotación, SPARC, agujeros negros, GPS y más.</div>
+      <span class="action-link">→ ACCEDER</span>
+    </a>
+    
+    <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" class="action-card github">
+      <span class="action-tag">CÓDIGO ABIERTO</span>
+      <div class="action-title">GitHub</div>
+      <div class="action-desc">Todo el código fuente, papers y documentación. Reproducible, verificable, libre.</div>
+      <span class="action-link">↗ REPOSITORIO</span>
+    </a>
+  </div>
+
+  <!-- CUADROS DE PAPERS Y PREDICCIONES -->
+  <div class="hero-cards">
+    <a href="papers.html" class="info-card papers">
+      <span class="info-tag">PUBLICACIONES</span>
+      <div class="info-title">Papers y Código</div>
+      <div class="info-desc">Zenodo DOI · GitHub · Tratado completo en arXiv y Kindle · Todo abierto y verificable.</div>
+      <span class="info-link">→ ACCEDER</span>
+    </a>
+    
+    <a href="predicciones.html" class="info-card predictions">
+      <span class="info-tag">VERIFICACIÓN</span>
+      <div class="info-title">Predicciones</div>
+      <div class="info-desc">11 predicciones · 8 confirmadas · 3 pendientes · Sin parámetros libres. Semáforo en tiempo real.</div>
+      <span class="info-link">→ VER ESTADO</span>
+    </a>
   </div>
 </section>
 
-<hr class="div">
-
-<!-- LABORATORIO -->
-<div class="section" id="laboratorio">
-  <div class="s-label">Laboratorio Interactivo</div>
-  <h2 class="s-title">Herramientas — Verifica por ti mismo</h2>
-  <p class="s-sub">Sin fe. Sin autoridad. Solo masa observable, constantes conocidas y números reales.</p>
-  <div class="tools-grid">
-    <a href="curvas.html" class="tool-card">
-      <div class="tool-badge badge-live">● EN VIVO</div>
-      <div class="tool-tag">H-01</div>
-      <div class="tool-name">Curvas de Rotación Galáctica</div>
-      <div class="tool-desc">Ingresa masa y radio. TIE predice la curva plana sin materia oscura. Newton falla. Cero parámetros ajustados.</div>
-      <div class="tool-arrow">Abrir calculadora →</div>
-    </a>
-    <a href="sparc.html" class="tool-card">
-      <div class="tool-badge badge-live">● EN VIVO</div>
-      <div class="tool-tag">H-02</div>
-      <div class="tool-name">Explorador SPARC</div>
-      <div class="tool-desc">55 galaxias reales del catálogo SPARC (Lelli et al. 2016). Elige cualquiera — TIE la predice sin ajuste.</div>
-      <div class="tool-arrow">Explorar galaxias →</div>
-    </a>
-    <a href="2pi.html" class="tool-card">
-      <div class="tool-badge badge-live">● EN VIVO</div>
-      <div class="tool-tag">H-03</div>
-      <div class="tool-name">Calculadora Universal 2π</div>
-      <div class="tool-desc">Masa total → velocidad terminal. v = (GM·a₀)^(1/4). Una línea. Cualquier galaxia del universo.</div>
-      <div class="tool-arrow">Calcular →</div>
-    </a>
-    <a href="materia-oscura.html" class="tool-card">
-      <div class="tool-badge badge-live">● EN VIVO</div>
-      <div class="tool-tag">H-05</div>
-      <div class="tool-name">Conversor de Materia Oscura</div>
-      <div class="tool-desc">La materia oscura es la fracción 1−1/2π = 84.1% que las ecuaciones con T² artificial no pueden ver.</div>
-      <div class="tool-arrow">Ver la demostración →</div>
-    </a>
-    <a href="constante.html" class="tool-card">
-      <div class="tool-badge badge-live">● EN VIVO</div>
-      <div class="tool-tag">H-08</div>
-      <div class="tool-name">Calculadora a₀ y Lambda</div>
-      <div class="tool-desc">Mueve H₀ de 67 a 74. a₀ = c·H₀/2π conecta la dinámica galáctica con la expansión del universo.</div>
-      <div class="tool-arrow">Ajustar H₀ →</div>
-    </a>
-    <a href="agujeros.html" class="tool-card">
-      <div class="tool-badge badge-live">● EN VIVO</div>
-      <div class="tool-tag">H-11</div>
-      <div class="tool-name">Agujeros Negros TIE vs GR</div>
-      <div class="tool-desc">rh = 0.869·√(GM/a₀) vs rs = 2GM/c². Sin singularidades. Predicción falsificable con ngEHT.</div>
-      <div class="tool-arrow">Calcular horizonte →</div>
-    </a>
-    <a href="gps.html" class="tool-card">
-      <div class="tool-badge badge-live">● EN VIVO</div>
-      <div class="tool-tag">H-12</div>
-      <div class="tool-name">Corrección GPS TIE</div>
-      <div class="tool-desc">TIE predice 45.7 µs/día (observado: 45.9). Viscosidad gravitacional — sin curvatura del tiempo.</div>
-      <div class="tool-arrow">Ver cálculo →</div>
-    </a>
-    <a href="predicciones.html" class="tool-card">
-      <div class="tool-badge badge-live">● EN VIVO</div>
-      <div class="tool-tag">Dashboard</div>
-      <div class="tool-name">Semáforo de Predicciones</div>
-      <div class="tool-desc">11 predicciones. 8 confirmadas. 3 pendientes de datos experimentales futuros.</div>
-      <div class="tool-arrow">Ver estado →</div>
-    </a>
-  </div>
-</div>
-
-<hr class="div">
-
-<!-- TEORIA -->
-<div class="section" id="teoria">
-  <div class="s-label">Los Fundamentos</div>
-  <h2 class="s-title">Cuatro Postulados. Todo el Universo.</h2>
-  <p class="s-sub">TIE no agrega partículas, dimensiones ni constantes. Elimina el T² artificial que se coló en las ecuaciones desde Newton.</p>
-  <div class="post-grid">
-    <div class="post-card">
-      <div class="post-num">I</div>
-      <div class="post-name">El Motor Absoluto</div>
-      <div class="post-desc">El tiempo fluye siempre hacia adelante, absoluto y uniforme. No se estira. No se dobla. T² en cualquier ecuación es un artefacto.</div>
-    </div>
-    <div class="post-card">
-      <div class="post-num">II</div>
-      <div class="post-name">La Infraestructura</div>
-      <div class="post-desc">El espacio no está vacío. Es una red que transmite y sincroniza. La gravedad y el electromagnetismo son propiedades de esa red.</div>
-    </div>
-    <div class="post-card">
-      <div class="post-num">III</div>
-      <div class="post-name">El Pixel Mínimo</div>
-      <div class="post-desc">La infraestructura no procesa cantidades arbitrariamente pequeñas. Existe un paquete mínimo: ħ = 1.055×10⁻³⁴ kg·m²/s.</div>
-    </div>
-    <div class="post-card">
-      <div class="post-num">IV</div>
-      <div class="post-name">Los Ciclos Completos</div>
-      <div class="post-desc">La infraestructura opera en ciclos completos. Un proceso no puede completarse en fracción de ciclo. El factor 2π es físico, no geométrico.</div>
-    </div>
-  </div>
-  <div class="eq-box">
-    <div class="eq-label">ECUACIÓN CENTRAL TIE</div>
-    <div class="eq-main">a<sub>TIE</sub> = √[ a<sub>N</sub> · (a<sub>N</sub> + a<sub>0</sub>) ]</div>
-    <div class="eq-meta">
-      a<sub>N</sub> = GM/r² &nbsp;·&nbsp;
-      a<sub>0</sub> = c·H<sub>0</sub>/2π = 1.082×10⁻¹⁰ m/s² &nbsp;·&nbsp;
-      Parámetros libres: <span style="color:var(--green)">CERO</span>
-    </div>
-  </div>
-</div>
-
-<hr class="div">
-
-<!-- PREDICCIONES -->
-<div class="section" id="predicciones">
-  <div class="s-label">Estado de Verificación</div>
-  <h2 class="s-title">11 Predicciones Verificables</h2>
-  <p class="s-sub">Cero parámetros ajustados. Actualizados conforme llegan nuevos datos observacionales.</p>
-  <div class="pred-grid">
-    <div class="pred-item"><span class="pred-icon">✅</span><div><div class="pred-name">Materia oscura</div><div class="pred-val">TIE: 84.1% · Obs: ~84% · error &lt;1%</div></div></div>
-    <div class="pred-item"><span class="pred-icon">✅</span><div><div class="pred-name">Constante cosmológica Λ</div><div class="pred-val">TIE: 1.145×10⁻⁵² · Planck 2018: 1.106×10⁻⁵² · error 3.5%</div></div></div>
-    <div class="pred-item"><span class="pred-icon">✅</span><div><div class="pred-name">Corrección GPS</div><div class="pred-val">TIE: 45.7 µs/día · Obs: 45.9 µs/día · error 0.4%</div></div></div>
-    <div class="pred-item"><span class="pred-icon">✅</span><div><div class="pred-name">Precesión de Mercurio</div><div class="pred-val">TIE: 43.0''/siglo · Obs: 43.1±0.5 · error 0.2%</div></div></div>
-    <div class="pred-item"><span class="pred-icon">✅</span><div><div class="pred-name">Radio de Bohr</div><div class="pred-val">TIE: error 0.10% · obs: 5.29×10⁻¹¹ m</div></div></div>
-    <div class="pred-item"><span class="pred-icon">✅</span><div><div class="pred-name">Constante α = 1/137</div><div class="pred-val">TIE: 137.12 · obs: 137.04 · error &lt;0.1%</div></div></div>
-    <div class="pred-item"><span class="pred-icon">✅</span><div><div class="pred-name">Factor cúmulos galácticos</div><div class="pred-val">TIE: 2π = 6.28× · obs: 6.25× · error 0.5%</div></div></div>
-    <div class="pred-item"><span class="pred-icon">✅</span><div><div class="pred-name">Regla de Oro de Fermi</div><div class="pred-val">2π/ħ emerge nativamente de TIE</div></div></div>
-    <div class="pred-item"><span class="pred-icon">⏳</span><div><div class="pred-name">Sombra EHT agujeros negros</div><div class="pred-val">rh ≫ rs · verificable con ngEHT</div></div></div>
-    <div class="pred-item"><span class="pred-icon">⏳</span><div><div class="pred-name">Señal LISA ~2.4 mHz</div><div class="pred-val">masa campo escalar φ · pendiente</div></div></div>
-    <div class="pred-item"><span class="pred-icon">⏳</span><div><div class="pred-name">Campo cruzado intergaláctico</div><div class="pred-val">aceleración residual · Telescopio Euclid</div></div></div>
-  </div>
-</div>
-
-<hr class="div">
-
-<!-- PAPERS -->
-<div class="section" id="papers">
-  <div class="s-label">Verificación Independiente</div>
-  <h2 class="s-title">Papers y Código Abierto</h2>
-  <p class="s-sub">Todo público. Todo reproducible. Sin intermediarios.</p>
-  <div class="paper-grid">
-    <div class="paper-card">
-      <div class="paper-tag">Preprint · Zenodo · CERN</div>
-      <div class="paper-name">Curvas de Rotación — Cero Parámetros</div>
-      <div class="paper-desc">6 páginas. 1 ecuación. 6 galaxias SPARC. 7.3× mejor que Newton. DOI permanente.</div>
-      <a href="https://zenodo.org/records/18851408" target="_blank" class="paper-link">10.5281/zenodo.18851408 ↗</a>
-    </div>
-    <div class="paper-card">
-      <div class="paper-tag">Código Abierto · GitHub</div>
-      <div class="paper-name">TIE Rotation Curves</div>
-      <div class="paper-desc">Python puro. numpy + matplotlib. Reproduce todas las gráficas del paper en 30 segundos.</div>
-      <a href="https://github.com/RALC-TIE-CREATOR/TIE-rotation-curves" target="_blank" class="paper-link">github.com/RALC-TIE-CREATOR ↗</a>
-    </div>
-    <div class="paper-card">
-      <div class="paper-tag">Preprint · viXra</div>
-      <div class="paper-name">Tratado TIE — En Revisión</div>
-      <div class="paper-desc">Paper completo en revisión. Ref. 17854448. Las 12 fuerzas, cosmología y agujeros negros.</div>
-      <a href="#" class="paper-link dim">viXra ref. 17854448 — pendiente ↗</a>
-    </div>
-    <div class="paper-card">
-      <div class="paper-tag">Libro · Kindle · Amazon</div>
-      <div class="paper-name">Tratado TIE Completo</div>
-      <div class="paper-desc">12 capítulos. Gravedad, EM, fuerzas nucleares, MQ, agujeros negros, cosmología. R@LC 2026.</div>
-      <a href="#" class="paper-link dim">Amazon Kindle — próximamente ↗</a>
-    </div>
-  </div>
-</div>
-
-<hr class="div">
-
-<!-- FOOTER -->
 <footer>
-  <div class="footer-logo">TIE / R@LC</div>
-  <ul class="footer-links">
-    <li><a href="https://zenodo.org/records/18851408" target="_blank">Zenodo DOI</a></li>
-    <li><a href="https://github.com/RALC-TIE-CREATOR/TIE-rotation-curves" target="_blank">GitHub</a></li>
-    <li><a href="curvas.html">Laboratorio</a></li>
-    <li><a href="mailto:ralc007@hotmail.com">Contacto</a></li>
-  </ul>
-  <div class="footer-copy">Rubén A. Lecona C. (R@LC) · México 2026 · Investigador Independiente</div>
+  <div class="footer-equation">a₀ = c·H₀/2π</div>
+  <div class="footer-copy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 
+<!-- Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-function toggleMenu(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  document.getElementById('lab-menu').classList.toggle('open');
+// ===== GALAXIA 3D =====
+const canvas = document.getElementById('galaxy-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+
+const parameters = {
+  count: 50000,
+  size: 0.03,
+  radius: 20,
+  branches: 4,
+  spin: 1.2,
+  randomness: 0.4,
+  randomnessPower: 2,
+  insideColor: 0xffaa00,
+  outsideColor: 0x1b3984
+};
+
+const galaxyGeometry = new THREE.BufferGeometry();
+const positions = new Float32Array(parameters.count * 3);
+const colors = new Float32Array(parameters.count * 3);
+
+const colorInside = new THREE.Color(parameters.insideColor);
+const colorOutside = new THREE.Color(parameters.outsideColor);
+
+for (let i = 0; i < parameters.count; i++) {
+  const i3 = i * 3;
+  const r = Math.random() * parameters.radius;
+  const spinAngle = r * parameters.spin;
+  const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
+  
+  const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  
+  const x = Math.cos(branchAngle + spinAngle) * r + randomX;
+  const y = randomY * 0.5;
+  const z = Math.sin(branchAngle + spinAngle) * r + randomZ;
+  
+  positions[i3] = x;
+  positions[i3 + 1] = y;
+  positions[i3 + 2] = z;
+  
+  const mixedColor = colorInside.clone().lerp(colorOutside, r / parameters.radius);
+  colors[i3] = mixedColor.r;
+  colors[i3 + 1] = mixedColor.g;
+  colors[i3 + 2] = mixedColor.b;
 }
-document.addEventListener('click', function() {
-  document.getElementById('lab-menu').classList.remove('open');
+
+galaxyGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+galaxyGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+const galaxyMaterial = new THREE.PointsMaterial({
+  size: parameters.size,
+  sizeAttenuation: true,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.8
 });
+
+const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
+scene.add(galaxy);
+
+camera.position.set(10, 5, 25);
+camera.lookAt(0, 0, 0);
+
+let mouseX = 0;
+let mouseY = 0;
+
+document.addEventListener('mousemove', (event) => {
+  mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  galaxy.rotation.y += 0.00015;
+  galaxy.rotation.x += 0.00005;
+  galaxy.rotation.y += mouseX * 0.0003;
+  galaxy.rotation.x += mouseY * 0.0002;
+  renderer.render(scene, camera);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ===== CARRUSEL DE FRASES =====
+const frases = [
+  "EL TIEMPO ES ABSOLUTO.",
+  "EL ESPACIO ES INFRAESTRUCTURA.",
+  "LA MATERIA OSCURA NO EXISTE.",
+  "UNA ECUACIÓN. CERO PARÁMETROS.",
+  "2π ES EL CICLO DEL UNIVERSO.",
+  "EL VACÍO TIENE DENSIDAD DE PROCESAMIENTO.",
+  "LA GRAVEDAD ES VISCOSIDAD.",
+  "EL UNIVERSO ES UN PROCESADOR DE PAQUETES-ħ.",
+  "NO HAY SINGULARIDADES. HAY SATURACIÓN.",
+  "LA FÍSICA ESTÁ COMPLETA."
+];
+
+let index = 0;
+const phraseElement = document.getElementById('rotating-phrase');
+
+function rotatePhrase() {
+  index = (index + 1) % frases.length;
+  phraseElement.style.opacity = '0';
+  
+  setTimeout(() => {
+    phraseElement.textContent = frases[index];
+    phraseElement.style.opacity = '1';
+  }, 400);
+}
+
+setInterval(rotatePhrase, 4000);
 </script>
 </body>
 </html>

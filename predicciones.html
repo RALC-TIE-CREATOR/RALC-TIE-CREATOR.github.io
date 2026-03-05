@@ -2,80 +2,138 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>H-12 Sincronizador T² — TIE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H-12.2 Predicciones TIE — El Reloj Maestro</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
-    :root { --gold: #FFD700; --blue: #5BC8F5; --bg: #06060f; --text: #e8e8f0; }
-    body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; text-align: center; }
-    .container { display: flex; justify-content: space-around; padding: 50px; }
-    .clock-box { border: 2px solid #1e1e3a; padding: 20px; border-radius: 15px; width: 300px; }
-    canvas { background: #0d0d1a; border-radius: 50%; margin-bottom: 20px; }
-    .counter { font-family: 'Space Mono', monospace; font-size: 2rem; color: var(--gold); }
-    .label { color: var(--blue); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; }
+:root {
+  --gold: #FFD700; --blue: #5BC8F5; --green: #44FF88; --red: #FF4455;
+  --bg: #06060f; --bg2: #0d0d1a; --text: #e8e8f0; --dim: #7777aa;
+  --border: #1e1e3a; --mono: 'Space Mono', monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:'Syne', sans-serif; padding:2rem; }
+.dashboard { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+header { border-left: 5px solid var(--gold); padding-left: 1.5rem; margin-bottom: 1rem; }
+h1 { font-size: 2rem; text-transform: uppercase; }
+
+.comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.location-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+h2 { color: var(--blue); font-size: 1rem; text-transform: uppercase; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+
+/* ESTILO DE LOS RELOJES */
+.clock-row { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; }
+.clock-circle { width: 60px; height: 60px; border: 2px solid var(--dim); border-radius: 50%; position: relative; flex-shrink: 0; }
+.hand { width: 2px; height: 25px; background: var(--text); position: absolute; left: 50%; top: 50%; transform-origin: top center; }
+
+.data-display { flex-grow: 1; }
+.time-val { font-family: var(--mono); font-size: 1.8rem; font-weight: 700; display: block; }
+.tag { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; color: var(--dim); }
+
+/* CONTADOR T2 */
+.t2-counter { background: rgba(68, 255, 136, 0.05); border: 1px solid var(--green); padding: 15px; border-radius: 8px; }
+.t2-val { color: var(--green); font-family: var(--mono); font-size: 2.2rem; font-weight: 700; }
+
+.sync-bar { grid-column: span 2; background: var(--bg2); border: 2px solid var(--gold); padding: 1.5rem; border-radius: 12px; text-align: center; }
+.status-msg { font-size: 1.2rem; font-weight: 800; color: var(--green); margin-bottom: 10px; }
 </style>
 </head>
 <body>
 
-    <h1 style="margin-top:40px;">CRONÓMETRO DE FASE UNIVERSAL</h1>
-    <p style="color:#7777aa;">Sincronía absoluta mediante conteo de ciclos 2π</p>
+<div class="dashboard">
+    <header>
+        <p class="tag" style="color:var(--gold)">Módulo de Predicción Temporal</p>
+        <h1>Sincronía vs. Dilatación</h1>
+    </header>
 
-    <div class="container">
-        <div class="clock-box">
-            <div class="label">Viscosidad Baja (Tierra)</div>
-            <canvas id="canvas1" width="200" height="200"></canvas>
-            <div id="count1" class="counter">0</div>
-            <div class="label">Ciclos Completados</div>
+    <div class="comparison-grid">
+        <div class="location-card">
+            <h2>Punto A: Tierra (Referencia)</h2>
+            
+            <div class="clock-row">
+                <div class="clock-circle"><div id="hand-norm-1" class="hand"></div></div>
+                <div class="data-display">
+                    <span class="tag">Reloj Normal (GR)</span>
+                    <span class="time-val" id="time-norm-1">00:00:00</span>
+                </div>
+            </div>
+
+            <div class="t2-counter">
+                <span class="tag" style="color:var(--green)">Contador T² (2π)</span>
+                <span class="t2-val" id="t2-1">0</span>
+            </div>
         </div>
 
-        <div class="clock-box" style="border-color: var(--gold);">
-            <div class="label">Viscosidad Alta (Agujero Negro)</div>
-            <canvas id="canvas2" width="200" height="200"></canvas>
-            <div id="count2" class="counter">0</div>
-            <div class="label">Ciclos Completados</div>
+        <div class="location-card" style="border-color: var(--red);">
+            <h2>Punto B: Júpiter (Alta Viscosidad)</h2>
+            
+            <div class="clock-row">
+                <div class="clock-circle" style="border-color: var(--red);"><div id="hand-norm-2" class="hand"></div></div>
+                <div class="data-display">
+                    <span class="tag">Reloj Normal (Dilatado por GR)</span>
+                    <span class="time-val" id="time-norm-2" style="color:var(--red)">00:00:00</span>
+                </div>
+            </div>
+
+            <div class="t2-counter" style="border-color: var(--gold);">
+                <span class="tag" style="color:var(--gold)">Contador T² (Sincronizado)</span>
+                <span class="t2-val" id="t2-2" style="color:var(--green)">0</span>
+            </div>
+        </div>
+
+        <div class="sync-bar">
+            <div class="status-msg" id="msg">AUDITORÍA: SINCRONÍA T² DETECTADA</div>
+            <p id="desc" style="font-size: 0.9rem; color: var(--dim);">
+                Mientras que el reloj de Júpiter se retrasa debido a la <b>viscosidad de la infraestructura</b>, el contador T² demuestra que ambos puntos del universo han procesado exactamente el mismo número de ciclos de fase.
+            </p>
         </div>
     </div>
-
-    <div style="margin-top: 50px; padding: 20px; border-top: 1px solid #1e1e3a;">
-        <h2 id="sync-msg" style="color: var(--green);">SINCRONÍA: 100.0%</h2>
-        <p>La TIE demuestra que el tiempo es un contador, no una dimensión.</p>
-    </div>
+</div>
 
 <script>
+    let startTime = Date.now();
     let cycles = 0;
-    let angle1 = 0; let angle2 = 0;
     
-    function draw() {
-        // En TIE, el "Latido Maestro" es el mismo
-        cycles += 0.01; 
-        
-        // Simulación visual: a mayor viscosidad, el dibujo es más lento pero el conteo es real
-        angle1 = (cycles * 2 * Math.PI);
-        angle2 = (cycles * 2 * Math.PI); // ¡Es el mismo conteo!
+    // Viscosidad de Júpiter (simulación de retraso relativo)
+    const viscosityJupiter = 0.85; // El reloj normal corre al 85%
 
-        updateCanvas('canvas1', angle1, '#5BC8F5');
-        updateCanvas('canvas2', angle2, '#FFD700');
-
-        document.getElementById('count1').textContent = Math.floor(cycles);
-        document.getElementById('count2').textContent = Math.floor(cycles);
-
-        requestAnimationFrame(draw);
+    function formatTime(ms) {
+        let s = Math.floor(ms / 1000);
+        let m = Math.floor(s / 60);
+        let h = Math.floor(m / 60);
+        return `${String(h).padStart(2,'0')}:${String(m%60).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
     }
 
-    function updateCanvas(id, angle, color) {
-        const c = document.getElementById(id);
-        const ctx = c.getContext('2d');
-        ctx.clearRect(0,0,200,200);
-        ctx.beginPath();
-        ctx.arc(100, 100, 80, 0, 2*Math.PI);
-        ctx.strokeStyle = '#1e1e3a'; ctx.stroke();
+    function update() {
+        let now = Date.now();
+        let elapsed = now - startTime;
+
+        // 1. RELOJES NORMALES (Sufren Dilatación/Viscosidad)
+        let earthTime = elapsed;
+        let jupiterTime = elapsed * viscosityJupiter;
+
+        document.getElementById('time-norm-1').textContent = formatTime(earthTime);
+        document.getElementById('time-norm-2').textContent = formatTime(jupiterTime);
         
-        ctx.beginPath();
-        let x = 100 + 80 * Math.cos(angle);
-        let y = 100 + 80 * Math.sin(angle);
-        ctx.arc(x, y, 10, 0, 2*Math.PI);
-        ctx.fillStyle = color; ctx.fill();
+        // Animación de manecillas
+        document.getElementById('hand-norm-1').style.transform = `rotate(${(earthTime/1000)*6}deg)`;
+        document.getElementById('hand-norm-2').style.transform = `rotate(${(jupiterTime/1000)*6}deg)`;
+
+        // 2. CONTADORES T² (Universales - Cuentan Vueltas 2π)
+        cycles += 0.05; // El latido maestro de la infraestructura
+        
+        // En TIE, el contador NO DEPENDE del tiempo local, es el "System Clock"
+        document.getElementById('t2-1').textContent = Math.floor(cycles).toLocaleString();
+        document.getElementById('t2-2').textContent = Math.floor(cycles).toLocaleString();
+
+        let lag = ((earthTime - jupiterTime)/1000).toFixed(1);
+        document.getElementById('msg').innerHTML = `DESINCRONÍA GR: ${lag}s | <span style="color:var(--green)">SINCRONÍA T²: 100%</span>`;
+
+        requestAnimationFrame(update);
     }
 
-    draw();
+    update();
 </script>
 </body>
 </html>

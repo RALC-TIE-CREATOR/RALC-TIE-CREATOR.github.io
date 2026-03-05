@@ -25,8 +25,6 @@ body {
   background:var(--bg); color:var(--text);
   font-family:var(--sans); min-height:100vh;
   display:flex; flex-direction:column;
-  background-image: radial-gradient(circle at 10% 20%, rgba(255,215,0,0.03) 0%, transparent 30%),
-                    radial-gradient(circle at 90% 70%, rgba(91,200,245,0.03) 0%, transparent 30%);
 }
 nav {
   padding:1rem 2rem;
@@ -57,7 +55,6 @@ h1 {
 .card {
   background:var(--bg2); border:1px solid var(--border);
   border-radius:12px; padding:1.5rem;
-  backdrop-filter:blur(10px);
 }
 .card-title {
   font-family:var(--mono); font-size:.7rem; color:var(--gold);
@@ -69,7 +66,7 @@ h1 {
   background:var(--bg3); border-radius:8px; margin:1rem 0;
 }
 .clock-value {
-  font-family:var(--mono); font-size:3rem; font-weight:700;
+  font-family:var(--mono); font-size:2.5rem; font-weight:700;
   color:var(--gold); line-height:1;
 }
 .clock-label {
@@ -132,7 +129,7 @@ h1 {
   font-size:4rem; color:rgba(255,215,0,.1); font-family:serif;
 }
 .universal-value {
-  font-family:var(--mono); font-size:4rem; font-weight:700;
+  font-family:var(--mono); font-size:3rem; font-weight:700;
   color:var(--gold); line-height:1;
 }
 .universal-label {
@@ -175,7 +172,7 @@ h1 {
 <div class="container">
   <h1>Sincronizador de Infraestructura</h1>
   <div class="subtitle">
-    El Motor Absoluto es universal. Los relojes procesan según la gravedad local.
+    El Motor Absoluto produce ciclos constantes. Los relojes locales procesan según la gravedad.
   </div>
 
   <div class="grid-2">
@@ -195,13 +192,13 @@ h1 {
       <div class="clock-panel" style="border-left:4px solid var(--gold);">
         <div class="clock-label">TIERRA (referencia)</div>
         <div class="clock-value" id="clock-tierra">12:00:00</div>
-        <div class="clock-tag">procesando a 1.000× (gravedad terrestre)</div>
+        <div class="clock-tag">procesa TODOS los ciclos del Motor</div>
       </div>
 
       <div class="clock-panel" style="border-left:4px solid var(--blue);">
         <div class="clock-label">UBICACIÓN SELECCIONADA</div>
         <div class="clock-value" id="clock-local">12:00:00</div>
-        <div class="clock-tag" id="clock-speed">procesando a 1.000×</div>
+        <div class="clock-tag" id="clock-speed">procesa al ritmo de la gravedad local</div>
       </div>
 
       <div class="slider-group">
@@ -211,28 +208,28 @@ h1 {
         </div>
         <input type="range" class="slider" id="gravity" min="0.5" max="2.0" value="1.0" step="0.001">
         <div style="display:flex; justify-content:space-between; font-family:var(--mono); font-size:.5rem; color:var(--dim); margin-top:.2rem;">
-          <span>0.5× (muy baja)</span>
+          <span>0.5× (más rápido)</span>
           <span>1.0× (Tierra)</span>
-          <span>2.0× (muy alta)</span>
+          <span>2.0× (más lento)</span>
         </div>
       </div>
 
       <div class="phase-indicator">
         <div class="phase-row">
-          <span>Ciclos completados (Tierra)</span>
+          <span>Ciclos producidos por el Motor Absoluto</span>
+          <span class="phase-number" id="motor-cycles">1,000,000</span>
+        </div>
+        <div class="phase-row">
+          <span>Ciclos procesados por Tierra</span>
           <span class="phase-number" id="cycles-tierra">1,000,000</span>
         </div>
         <div class="phase-row">
-          <span>Ciclos completados (local)</span>
+          <span>Ciclos procesados por local</span>
           <span class="phase-number" id="cycles-local">1,000,000</span>
         </div>
         <div class="phase-row">
-          <span>Diferencia acumulada</span>
+          <span>Diferencia acumulada (local vs Tierra)</span>
           <span class="phase-sync" id="phase-diff">0 ciclos</span>
-        </div>
-        <div class="phase-row">
-          <span>Tiempo transcurrido (Motor Absoluto)</span>
-          <span class="phase-number" id="motor-time">16m 40s</span>
         </div>
       </div>
     </div>
@@ -247,28 +244,28 @@ h1 {
         <div class="universal-value" id="universal-time">2π · 1,000,000</div>
         <div class="universal-label">CICLOS DE INFRAESTRUCTURA</div>
         <div class="universal-note">
-          El Motor Absoluto es el mismo en todo el cosmos.<br>
-          Los relojes locales cuentan a diferente velocidad.
+          El Motor Absoluto produce ciclos a ritmo constante.<br>
+          Los relojes procesan según la gravedad local.
         </div>
       </div>
 
       <div class="phase-indicator">
         <div class="phase-row">
-          <span>Estado de sincronía</span>
-          <span class="phase-sync" id="sync-status">EN FASE</span>
+          <span>Tiempo transcurrido (Motor Absoluto)</span>
+          <span class="phase-number" id="motor-time">16m 40s</span>
         </div>
         <div class="phase-row">
           <span>Protocolo de anclaje</span>
           <span class="phase-value">Púlsar PSR B1937+21</span>
         </div>
         <div class="phase-row">
-          <span>Frecuencia de referencia</span>
-          <span class="phase-number">642 Hz</span>
+          <span>Estado del reloj local</span>
+          <span class="phase-sync" id="sync-status">EN FASE CON TIERRA</span>
         </div>
       </div>
 
       <div style="margin:1rem 0; font-family:var(--mono); font-size:.6rem; color:var(--dim); text-align:center;">
-        🔗 2π es invariante · La fase se conserva
+        🔗 2π es invariante · El Motor Absoluto es universal
       </div>
     </div>
   </div>
@@ -278,13 +275,13 @@ h1 {
     <tr><th>Aspecto</th><th>Relatividad General (GR)</th><th>Infraestructura (TIE)</th></tr>
     <tr><td>Naturaleza del tiempo</td><td>Dimensión deformable</td><td class="gold">Conteo de ciclos 2π</td></tr>
     <tr><td>Causa del retraso</td><td>Curvatura espacio-temporal</td><td class="gold">Gravedad = viscosidad de infraestructura</td></tr>
-    <tr><td>Sincronización</td><td>Relativa y local</td><td class="gold">Universal por anclaje de fase</td></tr>
+    <tr><td>Referencia universal</td><td>No existe</td><td class="gold">Motor Absoluto (ciclos constantes)</td></tr>
     <tr><td>Instrumento</td><td>Reloj atómico (pasivo)</td><td class="gold">Contador de fase (activo)</td></tr>
-    <tr><td>Simultaneidad</td><td>Ilusión del observador</td><td class="gold">Base de la red cósmica</td></tr>
+    <tr><td>Sincronización</td><td>Imposible (relatividad)</td><td class="gold">Posible por anclaje de fase</td></tr>
   </table>
 
   <div class="footer">
-    ⏳ 2π es invariante · El Motor Absoluto es universal · La gravedad afecta el procesamiento, no el tiempo
+    ⏳ El Motor Absoluto produce ciclos constantes · Los relojes cuentan según su gravedad local
   </div>
 </div>
 
@@ -309,53 +306,55 @@ function formatMotorTime(cycles) {
 
 function updateClocks() {
   let now = Date.now();
-  let dt = (now - lastUpdate) / 1000; // segundos desde última actualización
+  let dt = (now - lastUpdate) / 1000;
   
   // Gravedad local (relativa a Tierra)
   let gravity = parseFloat(document.getElementById('gravity').value);
   document.getElementById('gravity-value').textContent = gravity.toFixed(3);
   
-  // El Motor Absoluto avanza igual para todos
-  cycles += Math.floor(dt * 1000); // 1000 ciclos por segundo base
+  // El Motor Absoluto produce ciclos a ritmo constante
+  cycles += Math.floor(dt * 1000);
   
-  // Tierra: siempre procesa a velocidad normal (gravedad = 1.0)
+  // Tierra: procesa TODOS los ciclos (siempre 1.0)
   let cyclesTierra = cycles;
   
-  // Local: procesa según su gravedad local
-  // Mayor gravedad = procesamiento más lento (menos ciclos)
-  // Menor gravedad = procesamiento más rápido (más ciclos)
+  // Local: procesa según su gravedad
+  // Mayor gravedad = procesamiento más lento (MENOS ciclos)
+  // Menor gravedad = procesamiento más rápido (MÁS ciclos)
   let cyclesLocal = Math.floor(cycles / gravity);
   
+  // Mostrar ciclos
+  document.getElementById('motor-cycles').textContent = cycles.toLocaleString();
   document.getElementById('cycles-tierra').textContent = cyclesTierra.toLocaleString();
   document.getElementById('cycles-local').textContent = cyclesLocal.toLocaleString();
   
-  // Diferencia de fase acumulada
+  // Diferencia acumulada (ventaja/desventaja del reloj local)
   let diff = cyclesLocal - cyclesTierra;
-  document.getElementById('phase-diff').textContent = 
-    (diff > 0 ? '+' : '') + diff.toLocaleString() + ' ciclos';
+  let diffSign = diff > 0 ? '+' : '';
+  document.getElementById('phase-diff').textContent = diffSign + diff.toLocaleString() + ' ciclos';
   
   // Tiempos locales
   document.getElementById('clock-tierra').textContent = formatTime(cyclesTierra);
   document.getElementById('clock-local').textContent = formatTime(cyclesLocal);
   
   // Velocidad de procesamiento local
-  let speed = gravity.toFixed(3);
-  let speedText = gravity < 1 ? 'más rápido' : (gravity > 1 ? 'más lento' : 'igual');
-  document.getElementById('clock-speed').innerHTML = `procesando a ${speed}× (${speedText})`;
+  let speedText = gravity < 1 ? 'MÁS RÁPIDO' : (gravity > 1 ? 'MÁS LENTO' : 'IGUAL');
+  let speedColor = gravity < 1 ? 'var(--green)' : (gravity > 1 ? 'var(--red)' : 'var(--dim)');
+  document.getElementById('clock-speed').innerHTML = `procesa <span style="color:${speedColor}">${speedText}</span> (×${gravity.toFixed(3)})`;
   
-  // Reloj universal (Motor Absoluto) - SIEMPRE IGUAL
+  // Reloj universal (Motor Absoluto)
   document.getElementById('universal-time').innerHTML = '2π · ' + cycles.toLocaleString();
   document.getElementById('motor-time').textContent = formatMotorTime(cycles);
   
-  // Estado de sincronía
+  // Estado de sincronía (solo importa para el reloj local vs Tierra)
   if (Math.abs(diff) < 100) {
-    document.getElementById('sync-status').textContent = 'EN FASE ✓';
+    document.getElementById('sync-status').textContent = 'EN FASE CON TIERRA ✓';
     document.getElementById('sync-status').style.color = 'var(--green)';
   } else if (diff > 0) {
-    document.getElementById('sync-status').textContent = 'ADELANTADO ⚡';
+    document.getElementById('sync-status').textContent = 'ADELANTADO RESPECTO A TIERRA ⚡';
     document.getElementById('sync-status').style.color = 'var(--gold)';
   } else {
-    document.getElementById('sync-status').textContent = 'ATRASADO ⏳';
+    document.getElementById('sync-status').textContent = 'ATRASADO RESPECTO A TIERRA ⏳';
     document.getElementById('sync-status').style.color = 'var(--red)';
   }
   
@@ -370,9 +369,9 @@ document.querySelectorAll('.location-btn').forEach(btn => {
     
     let loc = this.dataset.loc;
     if (loc === 'tierra') document.getElementById('gravity').value = 1.000;
-    if (loc === 'marte') document.getElementById('gravity').value = 0.998; // Menor gravedad = más rápido
-    if (loc === 'jupiter') document.getElementById('gravity').value = 0.950; // Mucho menor gravedad superficial? Revisar
-    if (loc === 'espacio') document.getElementById('gravity').value = 1.100; // Espacio profundo: gravedad casi nula = mucho más rápido
+    if (loc === 'marte') document.getElementById('gravity').value = 0.998; // Menos gravedad = más rápido
+    if (loc === 'jupiter') document.getElementById('gravity').value = 0.950; // Mucho menos gravedad superficial
+    if (loc === 'espacio') document.getElementById('gravity').value = 1.500; // Espacio profundo: gravedad casi nula = mucho más lento? Revisar
     
     updateClocks();
   });

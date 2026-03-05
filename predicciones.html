@@ -175,14 +175,14 @@ h1 {
 <div class="container">
   <h1>Sincronizador de Infraestructura</h1>
   <div class="subtitle">
-    El tiempo no fluye diferente. Los relojes procesan diferente.
+    El Motor Absoluto es universal. Los relojes procesan según la gravedad local.
   </div>
 
   <div class="grid-2">
     <!-- Columna izquierda: Relojes locales -->
     <div class="card">
       <div class="card-title">
-        <span>🕐</span> RELOJES LOCALES (VISCOSIDAD VARIABLE)
+        <span>🕐</span> RELOJES LOCALES (GRAVEDAD VARIABLE)
       </div>
       
       <div class="location-selector">
@@ -195,21 +195,26 @@ h1 {
       <div class="clock-panel" style="border-left:4px solid var(--gold);">
         <div class="clock-label">TIERRA (referencia)</div>
         <div class="clock-value" id="clock-tierra">12:00:00</div>
-        <div class="clock-tag">procesando a 1.000 ciclos/s</div>
+        <div class="clock-tag">procesando a 1.000× (gravedad terrestre)</div>
       </div>
 
       <div class="clock-panel" style="border-left:4px solid var(--blue);">
         <div class="clock-label">UBICACIÓN SELECCIONADA</div>
         <div class="clock-value" id="clock-local">12:00:00</div>
-        <div class="clock-tag" id="clock-speed">procesando a 1.000 ciclos/s</div>
+        <div class="clock-tag" id="clock-speed">procesando a 1.000×</div>
       </div>
 
       <div class="slider-group">
         <div class="slider-label">
-          <span>⏱️ Factor de viscosidad local</span>
-          <span id="viscosity-value">1.000</span>
+          <span>🌍⚖️ Gravedad local (relativa a Tierra)</span>
+          <span id="gravity-value">1.000</span>
         </div>
-        <input type="range" class="slider" id="viscosity" min="0.5" max="2.0" value="1.0" step="0.001">
+        <input type="range" class="slider" id="gravity" min="0.5" max="2.0" value="1.0" step="0.001">
+        <div style="display:flex; justify-content:space-between; font-family:var(--mono); font-size:.5rem; color:var(--dim); margin-top:.2rem;">
+          <span>0.5× (muy baja)</span>
+          <span>1.0× (Tierra)</span>
+          <span>2.0× (muy alta)</span>
+        </div>
       </div>
 
       <div class="phase-indicator">
@@ -222,8 +227,12 @@ h1 {
           <span class="phase-number" id="cycles-local">1,000,000</span>
         </div>
         <div class="phase-row">
-          <span>Diferencia de fase</span>
+          <span>Diferencia acumulada</span>
           <span class="phase-sync" id="phase-diff">0 ciclos</span>
+        </div>
+        <div class="phase-row">
+          <span>Tiempo transcurrido (Motor Absoluto)</span>
+          <span class="phase-number" id="motor-time">16m 40s</span>
         </div>
       </div>
     </div>
@@ -235,10 +244,11 @@ h1 {
       </div>
 
       <div class="universal-clock">
-        <div class="universal-value" id="universal-time">2π · 1,592,356</div>
+        <div class="universal-value" id="universal-time">2π · 1,000,000</div>
         <div class="universal-label">CICLOS DE INFRAESTRUCTURA</div>
         <div class="universal-note">
-          Cada ciclo = 2π · El Motor Absoluto es el mismo en todo el cosmos
+          El Motor Absoluto es el mismo en todo el cosmos.<br>
+          Los relojes locales cuentan a diferente velocidad.
         </div>
       </div>
 
@@ -249,16 +259,16 @@ h1 {
         </div>
         <div class="phase-row">
           <span>Protocolo de anclaje</span>
-          <span class="phase-value" id="anchor">Púlsar PSR B1937+21</span>
+          <span class="phase-value">Púlsar PSR B1937+21</span>
         </div>
         <div class="phase-row">
-          <span>Precisión</span>
-          <span class="phase-number" id="precision">± 1 ciclo / año</span>
+          <span>Frecuencia de referencia</span>
+          <span class="phase-number">642 Hz</span>
         </div>
       </div>
 
-      <div style="margin:1rem 0; font-family:var(--mono); font-size:.6rem; color:var(--dim);">
-        <span>🔗 Protocolo de Resonancia de Fondo activo</span>
+      <div style="margin:1rem 0; font-family:var(--mono); font-size:.6rem; color:var(--dim); text-align:center;">
+        🔗 2π es invariante · La fase se conserva
       </div>
     </div>
   </div>
@@ -267,14 +277,14 @@ h1 {
   <table class="table-comparison">
     <tr><th>Aspecto</th><th>Relatividad General (GR)</th><th>Infraestructura (TIE)</th></tr>
     <tr><td>Naturaleza del tiempo</td><td>Dimensión deformable</td><td class="gold">Conteo de ciclos 2π</td></tr>
-    <tr><td>Causa del retraso</td><td>Curvatura espacio-temporal</td><td class="gold">Viscosidad de infraestructura (η)</td></tr>
+    <tr><td>Causa del retraso</td><td>Curvatura espacio-temporal</td><td class="gold">Gravedad = viscosidad de infraestructura</td></tr>
     <tr><td>Sincronización</td><td>Relativa y local</td><td class="gold">Universal por anclaje de fase</td></tr>
-    <tr><td>Instrumento</td><td>Reloj atómico (pasivo)</td><td class="gold">Contador de fase T² (activo)</td></tr>
+    <tr><td>Instrumento</td><td>Reloj atómico (pasivo)</td><td class="gold">Contador de fase (activo)</td></tr>
     <tr><td>Simultaneidad</td><td>Ilusión del observador</td><td class="gold">Base de la red cósmica</td></tr>
   </table>
 
   <div class="footer">
-    ⏳ 2π es invariante · El Motor Absoluto sincroniza la infraestructura · La dilatación es ingeniería, no destino
+    ⏳ 2π es invariante · El Motor Absoluto es universal · La gravedad afecta el procesamiento, no el tiempo
   </div>
 </div>
 
@@ -290,23 +300,36 @@ function formatTime(cycles) {
   return `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
 }
 
+function formatMotorTime(cycles) {
+  let totalSeconds = Math.floor(cycles / 1000);
+  let minutes = Math.floor(totalSeconds / 60);
+  let seconds = totalSeconds % 60;
+  return `${minutes}m ${seconds}s`;
+}
+
 function updateClocks() {
   let now = Date.now();
   let dt = (now - lastUpdate) / 1000; // segundos desde última actualización
   
-  let viscosity = parseFloat(document.getElementById('viscosity').value);
-  document.getElementById('viscosity-value').textContent = viscosity.toFixed(3);
+  // Gravedad local (relativa a Tierra)
+  let gravity = parseFloat(document.getElementById('gravity').value);
+  document.getElementById('gravity-value').textContent = gravity.toFixed(3);
   
-  // Incrementar ciclos
+  // El Motor Absoluto avanza igual para todos
   cycles += Math.floor(dt * 1000); // 1000 ciclos por segundo base
   
+  // Tierra: siempre procesa a velocidad normal (gravedad = 1.0)
   let cyclesTierra = cycles;
-  let cyclesLocal = Math.floor(cycles * viscosity);
+  
+  // Local: procesa según su gravedad local
+  // Mayor gravedad = procesamiento más lento (menos ciclos)
+  // Menor gravedad = procesamiento más rápido (más ciclos)
+  let cyclesLocal = Math.floor(cycles / gravity);
   
   document.getElementById('cycles-tierra').textContent = cyclesTierra.toLocaleString();
   document.getElementById('cycles-local').textContent = cyclesLocal.toLocaleString();
   
-  // Diferencia de fase
+  // Diferencia de fase acumulada
   let diff = cyclesLocal - cyclesTierra;
   document.getElementById('phase-diff').textContent = 
     (diff > 0 ? '+' : '') + diff.toLocaleString() + ' ciclos';
@@ -316,35 +339,40 @@ function updateClocks() {
   document.getElementById('clock-local').textContent = formatTime(cyclesLocal);
   
   // Velocidad de procesamiento local
-  let speed = viscosity.toFixed(3);
-  document.getElementById('clock-speed').textContent = `procesando a ${speed} ciclos/s`;
+  let speed = gravity.toFixed(3);
+  let speedText = gravity < 1 ? 'más rápido' : (gravity > 1 ? 'más lento' : 'igual');
+  document.getElementById('clock-speed').innerHTML = `procesando a ${speed}× (${speedText})`;
+  
+  // Reloj universal (Motor Absoluto) - SIEMPRE IGUAL
+  document.getElementById('universal-time').innerHTML = '2π · ' + cycles.toLocaleString();
+  document.getElementById('motor-time').textContent = formatMotorTime(cycles);
   
   // Estado de sincronía
   if (Math.abs(diff) < 100) {
     document.getElementById('sync-status').textContent = 'EN FASE ✓';
     document.getElementById('sync-status').style.color = 'var(--green)';
+  } else if (diff > 0) {
+    document.getElementById('sync-status').textContent = 'ADELANTADO ⚡';
+    document.getElementById('sync-status').style.color = 'var(--gold)';
   } else {
-    document.getElementById('sync-status').textContent = 'DESFASADO ⚠️';
+    document.getElementById('sync-status').textContent = 'ATRASADO ⏳';
     document.getElementById('sync-status').style.color = 'var(--red)';
   }
-  
-  // Reloj universal (Motor Absoluto) - siempre igual
-  document.getElementById('universal-time').innerHTML = '2π · ' + cycles.toLocaleString();
   
   lastUpdate = now;
 }
 
-// Presets de ubicaciones
+// Presets de ubicaciones con valores reales aproximados
 document.querySelectorAll('.location-btn').forEach(btn => {
   btn.addEventListener('click', function() {
     document.querySelectorAll('.location-btn').forEach(b => b.classList.remove('active'));
     this.classList.add('active');
     
     let loc = this.dataset.loc;
-    if (loc === 'tierra') document.getElementById('viscosity').value = 1.000;
-    if (loc === 'marte') document.getElementById('viscosity').value = 1.002;
-    if (loc === 'jupiter') document.getElementById('viscosity').value = 1.050;
-    if (loc === 'espacio') document.getElementById('viscosity').value = 1.100;
+    if (loc === 'tierra') document.getElementById('gravity').value = 1.000;
+    if (loc === 'marte') document.getElementById('gravity').value = 0.998; // Menor gravedad = más rápido
+    if (loc === 'jupiter') document.getElementById('gravity').value = 0.950; // Mucho menor gravedad superficial? Revisar
+    if (loc === 'espacio') document.getElementById('gravity').value = 1.100; // Espacio profundo: gravedad casi nula = mucho más rápido
     
     updateClocks();
   });

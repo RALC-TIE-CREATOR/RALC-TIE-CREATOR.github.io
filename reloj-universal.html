@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIE · RELOJ UNIVERSAL</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #FFD700;
+  --blue: #5BC8F5;
+  --green: #44FF88;
+  --red: #FF4455;
+  --purple: #9b59b6;
+  --bg: #000001;
+  --bg2: rgba(5, 5, 15, 0.6);
+  --bg3: rgba(10, 10, 25, 0.4);
+  --text: #ffffff;
+  --dim: #a0a0b0;
+  --border: rgba(91, 200, 245, 0.15);
+  --mono: 'Space Mono', monospace;
+  --sans: 'Syne', sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#galaxy-canvas {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120vw;
+  height: 120vh;
+  min-width: 1200px;
+  min-height: 1200px;
+  z-index: -2;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(91,200,245,0.08) 0%, transparent 60%),
+              radial-gradient(circle at 70% 60%, rgba(255,215,0,0.08) 0%, transparent 60%);
+  z-index: -1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 4rem;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(15px);
+  border-bottom: 2px solid rgba(255,215,0,0.2);
+}
+
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.nav-back {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--dim);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 0.4rem 1.2rem;
+  border-radius: 30px;
+  transition: 0.3s;
+}
+
+.nav-back:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.page {
+  padding: 120px 2rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.page-tag {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  letter-spacing: 8px;
+  color: var(--purple);
+  margin-bottom: 1rem;
+  border-bottom: 2px solid rgba(155,89,182,0.4);
+  padding-bottom: 0.8rem;
+  display: inline-block;
+}
+
+.page-title {
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--purple) 0%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-sub {
+  font-size: 1.1rem;
+  color: var(--dim);
+  max-width: 600px;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.clock-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.clock-card {
+  background: rgba(5, 5, 15, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.clock-card-title {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--gold);
+  letter-spacing: 2px;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.clock-visual {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.clock-face {
+  width: 120px;
+  height: 120px;
+  border: 3px solid;
+  border-radius: 50%;
+  position: relative;
+  background: rgba(0,0,0,0.5);
+  flex-shrink: 0;
+}
+
+.clock-face.gr {
+  border-color: var(--red);
+}
+
+.clock-face.tie {
+  border-color: var(--gold);
+}
+
+.hand {
+  width: 3px;
+  height: 50px;
+  background: #fff;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: top center;
+  transform: translate(-50%, 0) rotate(0deg);
+  border-radius: 2px;
+}
+
+.hand.gr-hand {
+  background: var(--red);
+}
+
+.hand.tie-hand {
+  background: var(--gold);
+}
+
+.center-dot {
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.clock-info {
+  flex: 1;
+}
+
+.clock-time {
+  font-family: var(--mono);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.clock-time.gr {
+  color: var(--red);
+}
+
+.clock-time.tie {
+  color: var(--gold);
+}
+
+.clock-label-sm {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+}
+
+.clock-desc {
+  font-size: 0.8rem;
+  color: var(--dim);
+  margin-top: 0.5rem;
+  line-height: 1.5;
+}
+
+.control-panel {
+  background: rgba(5, 5, 15, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.control-title {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--gold);
+  letter-spacing: 2px;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+
+.location-selector {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.loc-btn {
+  background: rgba(10,10,20,0.8);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 0.6rem 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.loc-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.loc-btn.active {
+  background: var(--gold);
+  color: #000;
+  border-color: var(--gold);
+}
+
+.slider-container {
+  margin-bottom: 2rem;
+}
+
+.slider-label {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  margin-bottom: 0.5rem;
+}
+
+.slider {
+  width: 100%;
+  height: 4px;
+  background: var(--border);
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.metric-card {
+  background: rgba(10,10,20,0.8);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.metric-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--dim);
+  margin-bottom: 0.3rem;
+}
+
+.metric-value {
+  font-family: var(--mono);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.metric-unit {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  color: var(--dim);
+  margin-top: 0.2rem;
+}
+
+.universal-box {
+  background: linear-gradient(145deg, rgba(20,20,40,0.8) 0%, rgba(5,5,15,0.8) 100%);
+  border: 2px solid var(--gold);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.universal-title {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  letter-spacing: 3px;
+  margin-bottom: 1rem;
+}
+
+.universal-number {
+  font-family: var(--mono);
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.universal-label {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--dim);
+}
+
+footer {
+  padding: 3rem;
+  text-align: center;
+  border-top: 1px solid rgba(255,215,0,0.1);
+  margin-top: 4rem;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+}
+
+.footer-equation {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(255,215,0,0.3);
+}
+
+.footer-copy {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  letter-spacing: 2px;
+}
+</style>
+</head>
+<body>
+
+<canvas id="galaxy-canvas"></canvas>
+
+<nav>
+  <a href="index.html" class="nav-logo">TIE / R@LC</a>
+  <a href="labs.html" class="nav-back">← VOLVER AL LABORATORIO</a>
+</nav>
+
+<div class="page">
+  <div class="page-tag">H-12.2 · RELOJ UNIVERSAL</div>
+  <h1 class="page-title">EL MOTOR ABSOLUTO</h1>
+  <p class="page-sub">El tiempo es el mismo en todo el cosmos. Los relojes locales procesan según la gravedad.</p>
+
+  <!-- RELOJES DUALES -->
+  <div class="clock-grid">
+    <!-- Reloj GR -->
+    <div class="clock-card">
+      <div class="clock-card-title">
+        <span>🌀</span> RELATIVIDAD GENERAL (GR)
+      </div>
+      <div class="clock-visual">
+        <div class="clock-face gr" id="clock-gr-face">
+          <div class="hand gr-hand" id="hand-gr"></div>
+          <div class="center-dot"></div>
+        </div>
+        <div class="clock-info">
+          <div class="clock-time gr" id="time-gr">12:00:00</div>
+          <div class="clock-label-sm">Tiempo local</div>
+          <div class="clock-desc">La gravedad curva el espacio-tiempo. El tiempo fluye a diferente ritmo según el lugar.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reloj TIE -->
+    <div class="clock-card">
+      <div class="clock-card-title">
+        <span>⚛️</span> INFRAESTRUCTURA (TIE)
+      </div>
+      <div class="clock-visual">
+        <div class="clock-face tie" id="clock-tie-face">
+          <div class="hand tie-hand" id="hand-tie"></div>
+          <div class="center-dot"></div>
+        </div>
+        <div class="clock-info">
+          <div class="clock-time tie" id="time-tie">12:00:00</div>
+          <div class="clock-label-sm">Tiempo procesado</div>
+          <div class="clock-desc">El Motor Absoluto es universal. Los relojes procesan ciclos según la viscosidad local.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL DE CONTROL -->
+  <div class="control-panel">
+    <div class="control-title">🌍 AJUSTE DE GRAVEDAD LOCAL</div>
+
+    <div class="location-selector">
+      <span class="loc-btn active" data-loc="tierra">🌍 Tierra (1.0g)</span>
+      <span class="loc-btn" data-loc="marte">🔴 Marte (0.38g)</span>
+      <span class="loc-btn" data-loc="jupiter">🪐 Júpiter (2.5g)</span>
+      <span class="loc-btn" data-loc="espacio">🌌 Espacio (~0g)</span>
+    </div>
+
+    <div class="slider-container">
+      <div class="slider-label">
+        <span>Factor de gravedad (relativo a Tierra)</span>
+        <span id="gravity-display">1.00</span>
+      </div>
+      <input type="range" class="slider" id="gravity-slider" min="0.001" max="3.0" value="1.0" step="0.001">
+    </div>
+
+    <!-- RELOJ UNIVERSAL -->
+    <div class="universal-box">
+      <div class="universal-title">MOTOR ABSOLUTO</div>
+      <div class="universal-number" id="universal-cycles">2π · 1,000,000</div>
+      <div class="universal-label">ciclos de infraestructura</div>
+    </div>
+
+    <!-- MÉTRICAS -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Ciclos (Tierra)</div>
+        <div class="metric-value" id="cycles-earth">1,000,000</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Ciclos (local)</div>
+        <div class="metric-value" id="cycles-local">1,000,000</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Diferencia</div>
+        <div class="metric-value" id="diff-display">0</div>
+        <div class="metric-unit">ciclos</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Estado</div>
+        <div class="metric-value" id="sync-state" style="font-size:0.9rem;">EN FASE</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-equation">El Motor Absoluto es universal · 2π es invariante</div>
+  <div class="footer-copy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ===== GALAXIA 3D =====
+const canvas = document.getElementById('galaxy-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+
+const parameters = {
+  count: 50000,
+  size: 0.03,
+  radius: 20,
+  branches: 4,
+  spin: 1.2,
+  randomness: 0.4,
+  randomnessPower: 2,
+  insideColor: 0xffaa00,
+  outsideColor: 0x1b3984
+};
+
+const galaxyGeometry = new THREE.BufferGeometry();
+const positions = new Float32Array(parameters.count * 3);
+const colors = new Float32Array(parameters.count * 3);
+
+const colorInside = new THREE.Color(parameters.insideColor);
+const colorOutside = new THREE.Color(parameters.outsideColor);
+
+for (let i = 0; i < parameters.count; i++) {
+  const i3 = i * 3;
+  const r = Math.random() * parameters.radius;
+  const spinAngle = r * parameters.spin;
+  const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
+  
+  const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  
+  const x = Math.cos(branchAngle + spinAngle) * r + randomX;
+  const y = randomY * 0.5;
+  const z = Math.sin(branchAngle + spinAngle) * r + randomZ;
+  
+  positions[i3] = x;
+  positions[i3 + 1] = y;
+  positions[i3 + 2] = z;
+  
+  const mixedColor = colorInside.clone().lerp(colorOutside, r / parameters.radius);
+  colors[i3] = mixedColor.r;
+  colors[i3 + 1] = mixedColor.g;
+  colors[i3 + 2] = mixedColor.b;
+}
+
+galaxyGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+galaxyGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+const galaxyMaterial = new THREE.PointsMaterial({
+  size: parameters.size,
+  sizeAttenuation: true,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.8
+});
+
+const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
+scene.add(galaxy);
+
+camera.position.set(10, 5, 25);
+camera.lookAt(0, 0, 0);
+
+let mouseX = 0;
+let mouseY = 0;
+
+document.addEventListener('mousemove', (event) => {
+  mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  galaxy.rotation.y += 0.00015;
+  galaxy.rotation.x += 0.00005;
+  galaxy.rotation.y += mouseX * 0.0003;
+  galaxy.rotation.x += mouseY * 0.0002;
+  renderer.render(scene, camera);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ===== LÓGICA DEL RELOJ =====
+let cycles = 1000000;
+let lastUpdate = Date.now();
+
+function formatTime(cycles) {
+  let totalSeconds = Math.floor(cycles / 1000);
+  let hours = Math.floor(totalSeconds / 3600) % 24;
+  let minutes = Math.floor((totalSeconds % 3600) / 60);
+  let seconds = totalSeconds % 60;
+  return `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+}
+
+function updateClocks() {
+  let now = Date.now();
+  let dt = (now - lastUpdate) / 1000;
+  
+  let gravity = parseFloat(document.getElementById('gravity-slider').value);
+  document.getElementById('gravity-display').textContent = gravity.toFixed(2);
+  
+  cycles += Math.floor(dt * 1000);
+  
+  let cyclesEarth = cycles;
+  let cyclesLocal = Math.floor(cycles / gravity);
+  
+  // Actualizar displays
+  document.getElementById('universal-cycles').innerHTML = '2π · ' + cycles.toLocaleString();
+  document.getElementById('cycles-earth').textContent = cyclesEarth.toLocaleString();
+  document.getElementById('cycles-local').textContent = cyclesLocal.toLocaleString();
+  
+  // Tiempos
+  document.getElementById('time-gr').textContent = formatTime(cyclesEarth);
+  document.getElementById('time-tie').textContent = formatTime(cyclesLocal);
+  
+  // Manecillas
+  let secondsEarth = Math.floor(cyclesEarth / 1000) % 60;
+  let secondsLocal = Math.floor(cyclesLocal / 1000) % 60;
+  
+  document.getElementById('hand-gr').style.transform = `translate(-50%, 0) rotate(${secondsEarth * 6}deg)`;
+  document.getElementById('hand-tie').style.transform = `translate(-50%, 0) rotate(${secondsLocal * 6}deg)`;
+  
+  // Diferencia
+  let diff = cyclesLocal - cyclesEarth;
+  document.getElementById('diff-display').textContent = (diff > 0 ? '+' : '') + diff.toLocaleString();
+  
+  // Estado
+  let syncEl = document.getElementById('sync-state');
+  if (Math.abs(diff) < 100) {
+    syncEl.textContent = 'EN FASE';
+    syncEl.style.color = 'var(--green)';
+  } else if (diff > 0) {
+    syncEl.textContent = 'ADELANTADO';
+    syncEl.style.color = 'var(--gold)';
+  } else {
+    syncEl.textContent = 'ATRASADO';
+    syncEl.style.color = 'var(--red)';
+  }
+  
+  lastUpdate = now;
+}
+
+// Presets
+document.querySelectorAll('.loc-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.loc-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    
+    let loc = this.dataset.loc;
+    if (loc === 'tierra') document.getElementById('gravity-slider').value = 1.0;
+    if (loc === 'marte') document.getElementById('gravity-slider').value = 0.38;
+    if (loc === 'jupiter') document.getElementById('gravity-slider').value = 2.5;
+    if (loc === 'espacio') document.getElementById('gravity-slider').value = 0.001;
+  });
+});
+
+document.getElementById('gravity-slider').addEventListener('input', () => {
+  document.querySelectorAll('.loc-btn').forEach(b => b.classList.remove('active'));
+});
+
+setInterval(updateClocks, 100);
+updateClocks();
+</script>
+</body>
+</html>

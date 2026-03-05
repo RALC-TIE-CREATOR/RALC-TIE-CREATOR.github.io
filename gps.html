@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>H-12 · Corrección GPS TIE</title>
+<title>H-12 · Corrección GPS TIE · Calculadora Universal</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -39,7 +39,7 @@ nav {
 .nav-tag   { font-family:var(--mono); font-size:.75rem; color:var(--dim); letter-spacing:.1em; }
 
 .page {
-  max-width:1100px; margin:0 auto; padding:1.5rem 2rem; width:100%;
+  max-width:1200px; margin:0 auto; padding:1.5rem 2rem; width:100%;
 }
 
 .page-header { margin-bottom:1.2rem; }
@@ -63,6 +63,64 @@ nav {
   background:var(--bg2); border:1px solid var(--border);
   border-radius:12px; padding:1.5rem;
   display:flex; flex-direction:column; gap:1.2rem;
+}
+
+/* NUEVA SECCIÓN: CALCULADORA UNIVERSAL */
+.calculator-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:1.5rem; margin:1rem 0;
+}
+.calculator-card {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:8px; padding:1.2rem;
+}
+.calculator-card h3 {
+  font-family:var(--mono); font-size:.8rem; color:var(--gold);
+  margin-bottom:0.8rem; border-bottom:1px solid var(--border); padding-bottom:0.3rem;
+}
+.input-field {
+  margin-bottom:1rem;
+}
+.input-field label {
+  display:block; font-family:var(--mono); font-size:.6rem; color:var(--dim);
+  margin-bottom:0.3rem;
+}
+.input-field input {
+  width:100%; background:var(--bg2); border:1px solid var(--border);
+  border-radius:4px; padding:.5rem .8rem;
+  color:var(--text); font-family:var(--mono); font-size:.9rem;
+}
+.input-field select {
+  width:100%; background:var(--bg2); border:1px solid var(--border);
+  border-radius:4px; padding:.5rem .8rem;
+  color:var(--text); font-family:var(--mono); font-size:.9rem;
+}
+.preset-buttons {
+  display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem;
+}
+.preset-btn {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:4px; padding:.3rem .6rem;
+  font-family:var(--mono); font-size:.65rem; color:var(--dim);
+  cursor:pointer; transition:all .2s;
+}
+.preset-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+.result-display {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:6px; padding:1rem; margin-top:.5rem;
+  text-align:center;
+}
+.result-value {
+  font-family:var(--mono); font-size:2rem; font-weight:700;
+  color:var(--gold); line-height:1;
+}
+.result-unit {
+  font-family:var(--mono); font-size:.7rem; color:var(--dim);
+  margin-top:.3rem;
+}
+.result-note {
+  font-size:.7rem; color:var(--dim); margin-top:.5rem;
 }
 
 .results-grid {
@@ -200,7 +258,6 @@ nav {
 }
 .interp-text .emph { color:var(--gold); font-weight:700; }
 
-/* NUEVA SECCIÓN: REFLEXIÓN CIENTÍFICA */
 .reflexion-box {
   background:linear-gradient(145deg, var(--bg3) 0%, #0a0a18 100%);
   border:2px solid var(--gold);
@@ -273,27 +330,70 @@ nav {
 
 <nav>
   <a href="index.html" class="nav-back">← Inicio</a>
-  <span class="nav-tag">H-12 · Corrección GPS TIE</span>
+  <span class="nav-tag">H-12 · Corrección GPS Universal</span>
   <a href="agujeros.html" class="nav-back">Agujeros Negros →</a>
 </nav>
 
 <div class="page">
   <div class="page-header">
-    <div class="page-tag">Viscosidad gravitacional · Sin curvatura del tiempo</div>
-    <h1 class="page-title">Corrección GPS: TIE vs Relatividad</h1>
+    <div class="page-tag">Calcula la dilatación temporal en cualquier lugar del universo</div>
+    <h1 class="page-title">Corrección GPS: Calculadora Universal</h1>
     <p class="page-sub">
-      Los relojes en órbita adelantan 45.9 µs/día. GR dice que el tiempo se curva. 
-      TIE dice que la <strong style="color:var(--gold)">viscosidad de la infraestructura</strong> es menor allá arriba. 
-      Mismo número, naturaleza opuesta.
+      Introduce la masa de cualquier objeto (planeta, estrella, galaxia) y dos distancias.
+      TIE te dirá cuánto se adelanta o atrasa un reloj.
     </p>
   </div>
 
   <div class="eq-highlight">
-    <span class="gold">TIE:</span> Δt = (Φ<sub>GPS</sub> − Φ<sub>Tierra</sub>) / c² · 86400 s
+    <span class="gold">Δt</span> = (Φ<sub>2</sub> − Φ<sub>1</sub>) / c² × tiempo
     <div class="small">Φ(r) = −GM/r · 1/√(1 + a₀r²/(GM))</div>
   </div>
 
   <div class="calculator-panel">
+
+    <!-- NUEVA CALCULADORA UNIVERSAL -->
+    <div class="calculator-grid">
+      <!-- Columna 1: Parámetros del objeto -->
+      <div class="calculator-card">
+        <h3>1. Objeto central</h3>
+        <div class="input-field">
+          <label>Masa (M☉)</label>
+          <input type="number" id="masa" value="1.0" step="any" oninput="calcularUniversal()">
+        </div>
+        <div class="preset-buttons">
+          <span class="preset-btn" onclick="setMasa('tierra')">🌍 Tierra</span>
+          <span class="preset-btn" onclick="setMasa('sol')">☀️ Sol</span>
+          <span class="preset-btn" onclick="setMasa('sgra')">🕳️ Sgr A*</span>
+          <span class="preset-btn" onclick="setMasa('m87')">🕳️ M87*</span>
+        </div>
+      </div>
+
+      <!-- Columna 2: Distancias -->
+      <div class="calculator-card">
+        <h3>2. Posiciones</h3>
+        <div class="input-field">
+          <label>Distancia 1 (km)</label>
+          <input type="number" id="r1" value="6371" step="any" oninput="calcularUniversal()">
+        </div>
+        <div class="input-field">
+          <label>Distancia 2 (km)</label>
+          <input type="number" id="r2" value="26560" step="any" oninput="calcularUniversal()">
+        </div>
+        <div class="preset-buttons">
+          <span class="preset-btn" onclick="setDistancias('gps')">🛰️ GPS</span>
+          <span class="preset-btn" onclick="setDistancias('iss')">🚀 ISS</span>
+          <span class="preset-btn" onclick="setDistancias('luna')">🌕 Luna</span>
+          <span class="preset-btn" onclick="setDistancias('marte')">🔴 Marte</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resultado universal -->
+    <div class="result-display">
+      <div class="result-value" id="deltaT">45.7</div>
+      <div class="result-unit">microsegundos por día</div>
+      <div class="result-note" id="deltaNote">Reloj en r₂ adelanta respecto a r₁</div>
+    </div>
 
     <div class="results-grid">
       <div class="result-card obs">
@@ -302,8 +402,8 @@ nav {
         <div class="result-unit">μs/día</div>
       </div>
       <div class="result-card tie">
-        <div class="result-label">TIE (viscosidad)</div>
-        <div class="result-value">45.7</div>
+        <div class="result-label">TIE (calculado)</div>
+        <div class="result-value" id="tieValue">45.7</div>
         <div class="result-unit">μs/día</div>
       </div>
       <div class="result-card gr">
@@ -316,8 +416,8 @@ nav {
     <div class="comparison-box">
       <div class="comp-item">
         <div class="comp-label">TIE</div>
-        <div class="comp-value tie">45.7 μs</div>
-        <div class="comp-error green">error 0.4%</div>
+        <div class="comp-value tie" id="tieComp">45.7 μs</div>
+        <div class="comp-error green" id="tieError">error 0.4%</div>
       </div>
       <div class="comp-item">
         <div class="comp-label">GR</div>
@@ -333,24 +433,24 @@ nav {
 
     <div class="parameters-grid">
       <div class="param-card">
-        <div class="param-label">Masa Tierra</div>
-        <div class="param-value">5.972×10²⁴ kg</div>
+        <div class="param-label">Masa objeto</div>
+        <div class="param-value" id="masaDisplay">1 M☉</div>
       </div>
       <div class="param-card">
-        <div class="param-label">Radio Tierra</div>
-        <div class="param-value">6.371×10⁶ m</div>
+        <div class="param-label">Radio 1</div>
+        <div class="param-value" id="r1Display">6,371 km</div>
       </div>
       <div class="param-card">
-        <div class="param-label">Radio órbita GPS</div>
-        <div class="param-value">2.656×10⁷ m</div>
+        <div class="param-label">Radio 2</div>
+        <div class="param-value" id="r2Display">26,560 km</div>
       </div>
       <div class="param-card">
-        <div class="param-label">Velocidad orbital</div>
-        <div class="param-value">3.87 km/s</div>
+        <div class="param-label">Corrección diaria</div>
+        <div class="param-value" id="corrDisplay">+45.7 μs</div>
       </div>
     </div>
 
-    <!-- TABLA DE MISIONES CON COLUMNA TIE -->
+    <!-- TABLA DE MISIONES (sin cambios) -->
     <div class="missions-section">
       <div class="missions-header">
         <span>🛰️</span>
@@ -427,11 +527,6 @@ nav {
           </tr>
         </tbody>
       </table>
-      
-      <div style="display:flex; justify-content:space-between; margin-top:0.5rem; font-family:var(--mono); font-size:.6rem; color:var(--dim);">
-        <span>⚠️ TIE predice los mismos valores que GR en todos los experimentos</span>
-        <span>🔬 Error promedio &lt; 1%</span>
-      </div>
     </div>
 
     <!-- RÉCORD HUMANO -->
@@ -449,34 +544,7 @@ nav {
       </div>
     </div>
 
-    <div class="explanation-box">
-      <span class="highlight">¿Cómo funciona en TIE?</span> 
-      La infraestructura espacial tiene <strong>viscosidad</strong>: cerca de la Tierra es más densa,
-      los relojes procesan paquetes-ħ más lentamente. En órbita, la infraestructura está más
-      dilatada, los relojes procesan más ciclos por segundo. La diferencia es exactamente
-      la misma que GR predice, pero la interpretación es opuesta: <strong>el tiempo no se curva,
-      la red se espesa</strong>.
-    </div>
-
-    <div class="interpretation-grid">
-      <div class="interp-card">
-        <div class="interp-title">Relatividad General</div>
-        <div class="interp-text">
-          "El tiempo va más rápido allá arriba porque la <span class="emph">curvatura del espacio-tiempo</span> 
-          es menor. La gravedad dilata el tiempo."
-        </div>
-      </div>
-      <div class="interp-card">
-        <div class="interp-title">TIE</div>
-        <div class="interp-text">
-          "El tiempo es el Motor Absoluto — siempre fluye igual. Lo que cambia es la 
-          <span class="emph">viscosidad de la infraestructura</span>: los relojes procesan más ciclos de sincronía 
-          por segundo cuando la red está menos densa."
-        </div>
-      </div>
-    </div>
-
-    <!-- NUEVA SECCIÓN: REFLEXIÓN CIENTÍFICA -->
+    <!-- REFLEXIÓN CIENTÍFICA -->
     <div class="reflexion-box">
       <div class="reflexion-title">¿TIE ES MEJOR QUE GR?</div>
       <div class="reflexion-content">
@@ -524,28 +592,97 @@ nav {
     </div>
 
     <div class="footer-note">
-      Misma predicción numérica. Naturaleza opuesta de la realidad. Error TIE promedio &lt; 1%
+      Calcula la dilatación temporal para cualquier masa y distancia · Error TIE promedio &lt; 1%
     </div>
 
   </div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const G = 6.674e-11;
-  const M = 5.972e24;
-  const c = 2.998e8;
-  const R1 = 6.371e6;
-  const R2 = 2.656e7;
-  const segundosPorDia = 86400;
+const G = 6.674e-11;
+const c = 2.998e8;
+const MS = 1.989e30;
+const H0_si = 70 * 1000 / 3.0857e22;
+const a0 = c * H0_si / (2 * Math.PI);
+const segundosPorDia = 86400;
+
+function setMasa(tipo) {
+  const input = document.getElementById('masa');
+  if (tipo === 'tierra') input.value = 3.0e-6; // 3e-6 M☉
+  if (tipo === 'sol') input.value = 1.0;
+  if (tipo === 'sgra') input.value = 4.0e6;
+  if (tipo === 'm87') input.value = 6.5e9;
+  calcularUniversal();
+}
+
+function setDistancias(tipo) {
+  const r1 = document.getElementById('r1');
+  const r2 = document.getElementById('r2');
+  if (tipo === 'gps') {
+    r1.value = 6371;
+    r2.value = 26560;
+  }
+  if (tipo === 'iss') {
+    r1.value = 6371;
+    r2.value = 6771;
+  }
+  if (tipo === 'luna') {
+    r1.value = 6371;
+    r2.value = 384400;
+  }
+  if (tipo === 'marte') {
+    r1.value = 6371;
+    r2.value = 225000000; // distancia promedio a Marte
+  }
+  calcularUniversal();
+}
+
+function calcularUniversal() {
+  const masaMsun = parseFloat(document.getElementById('masa').value) || 1;
+  const masaKg = masaMsun * MS;
+  const r1_km = parseFloat(document.getElementById('r1').value) || 6371;
+  const r2_km = parseFloat(document.getElementById('r2').value) || 26560;
   
-  const phi1 = -G * M / R1;
-  const phi2 = -G * M / R2;
+  const r1 = r1_km * 1000;
+  const r2 = r2_km * 1000;
+  
+  // Potenciales (simplificado sin a₀ para este cálculo)
+  const phi1 = -G * masaKg / r1;
+  const phi2 = -G * masaKg / r2;
+  
   const deltaPhi = (phi2 - phi1) / (c * c);
   const correccionMicrosegundos = deltaPhi * segundosPorDia * 1e6;
   
-  console.log('Corrección GPS TIE:', correccionMicrosegundos.toFixed(1), 'µs/día');
-});
+  document.getElementById('deltaT').textContent = correccionMicrosegundos.toFixed(1);
+  document.getElementById('tieValue').textContent = correccionMicrosegundos.toFixed(1);
+  document.getElementById('tieComp').innerHTML = correccionMicrosegundos.toFixed(1) + ' μs';
+  
+  // Actualizar displays
+  document.getElementById('masaDisplay').textContent = masaMsun.toExponential(2) + ' M☉';
+  document.getElementById('r1Display').textContent = r1_km.toLocaleString() + ' km';
+  document.getElementById('r2Display').textContent = r2_km.toLocaleString() + ' km';
+  document.getElementById('corrDisplay').textContent = (correccionMicrosegundos > 0 ? '+' : '') + 
+    correccionMicrosegundos.toFixed(1) + ' μs';
+  
+  // Nota sobre dirección
+  if (correccionMicrosegundos > 0) {
+    document.getElementById('deltaNote').textContent = 'Reloj en r₂ adelanta respecto a r₁';
+  } else {
+    document.getElementById('deltaNote').textContent = 'Reloj en r₂ atrasa respecto a r₁';
+  }
+  
+  // Error respecto a GPS (solo aplica para Tierra)
+  if (masaMsun === 1 && Math.abs(r1_km - 6371) < 100 && Math.abs(r2_km - 26560) < 1000) {
+    const error = Math.abs((correccionMicrosegundos - 45.9) / 45.9 * 100).toFixed(1);
+    document.getElementById('tieError').textContent = 'error ' + error + '%';
+  } else {
+    document.getElementById('tieError').textContent = '—';
+  }
+}
+
+window.onload = function() {
+  calcularUniversal();
+};
 </script>
 </body>
 </html>

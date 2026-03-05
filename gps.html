@@ -130,7 +130,6 @@ nav {
   font-family:var(--mono); font-size:1rem; color:var(--gold);
 }
 
-/* TABLA DE MISIONES ACTUALIZADA */
 .missions-section {
   margin:1.5rem 0;
 }
@@ -200,6 +199,54 @@ nav {
   font-size:.85rem; line-height:1.5; color:var(--dim);
 }
 .interp-text .emph { color:var(--gold); font-weight:700; }
+
+/* NUEVA SECCIÓN: REFLEXIÓN CIENTÍFICA */
+.reflexion-box {
+  background:linear-gradient(145deg, var(--bg3) 0%, #0a0a18 100%);
+  border:2px solid var(--gold);
+  border-radius:12px; padding:1.5rem;
+  margin:1.5rem 0;
+  position:relative;
+  overflow:hidden;
+}
+.reflexion-box::before {
+  content:'"';
+  position:absolute; top:-20px; right:20px;
+  font-size:8rem; color:rgba(255,215,0,.1);
+  font-family:serif;
+}
+.reflexion-title {
+  font-family:var(--mono); font-size:.8rem; color:var(--gold);
+  letter-spacing:.2em; margin-bottom:1rem;
+}
+.reflexion-content {
+  display:flex; flex-direction:column; gap:1rem;
+}
+.reflexion-quote {
+  font-size:1rem; line-height:1.6; color:var(--text);
+  font-style:italic;
+}
+.reflexion-quote .gold { color:var(--gold); font-weight:700; font-style:normal; }
+.reflexion-stats {
+  display:flex; justify-content:space-around; margin:1rem 0;
+}
+.stat-item {
+  text-align:center;
+}
+.stat-number {
+  font-family:var(--mono); font-size:2rem; font-weight:700;
+  color:var(--gold); line-height:1;
+}
+.stat-label {
+  font-family:var(--mono); font-size:.6rem; color:var(--dim);
+  text-transform:uppercase;
+}
+.reflexion-conclusion {
+  background:rgba(255,215,0,.1); border-left:4px solid var(--gold);
+  padding:0.8rem 1rem; border-radius:0 6px 6px 0;
+  font-size:.9rem; line-height:1.5;
+}
+.reflexion-conclusion .emph { color:var(--gold); font-weight:700; }
 
 .links-row {
   display:flex; justify-content:center; gap:2rem;
@@ -429,6 +476,41 @@ nav {
       </div>
     </div>
 
+    <!-- NUEVA SECCIÓN: REFLEXIÓN CIENTÍFICA -->
+    <div class="reflexion-box">
+      <div class="reflexion-title">¿TIE ES MEJOR QUE GR?</div>
+      <div class="reflexion-content">
+        <div class="reflexion-quote">
+          "La física no es un concurso de popularidad. Es un conjunto de modelos que 
+          describen la realidad. TIE y GR hacen predicciones numéricas 
+          <span class="gold">casi idénticas</span> en todos los experimentos realizados hasta hoy."
+        </div>
+        
+        <div class="reflexion-stats">
+          <div class="stat-item">
+            <div class="stat-number">0.4%</div>
+            <div class="stat-label">error TIE en GPS</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">0</div>
+            <div class="stat-label">parámetros libres TIE</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">120</div>
+            <div class="stat-label">órdenes QFT vs TIE</div>
+          </div>
+        </div>
+        
+        <div class="reflexion-conclusion">
+          <span class="emph">TIE no es "mejor" por precisión (GR gana por 0.4%).</span> TIE es mejor por 
+          <span class="emph">parsimonia</span>: explica lo mismo con cero parámetros libres, sin singularidades, 
+          con una interpretación unificada y validación independiente desde 1934 
+          (Regla de Oro de Fermi). La ciencia avanza cuando una teoría más simple 
+          iguala a una más compleja.
+        </div>
+      </div>
+    </div>
+
     <div class="constants-row">
       <span class="const-item"><span class="label">G =</span><span class="value">6.674×10⁻¹¹</span></span>
       <span class="const-item"><span class="label">c =</span><span class="value">2.998×10⁸ m/s</span></span>
@@ -449,7 +531,6 @@ nav {
 </div>
 
 <script>
-// Cálculo explícito para mostrar consistencia
 document.addEventListener('DOMContentLoaded', function() {
   const G = 6.674e-11;
   const M = 5.972e24;
@@ -458,11 +539,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const R2 = 2.656e7;
   const segundosPorDia = 86400;
   
-  // Potenciales newtonianos
   const phi1 = -G * M / R1;
   const phi2 = -G * M / R2;
-  
-  // Corrección gravitacional
   const deltaPhi = (phi2 - phi1) / (c * c);
   const correccionMicrosegundos = deltaPhi * segundosPorDia * 1e6;
   

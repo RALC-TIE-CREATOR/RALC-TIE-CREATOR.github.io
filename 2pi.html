@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H-03 · Calculadora Universal 2π — TIE</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #FFD700;
+  --blue: #5BC8F5;
+  --green: #44FF88;
+  --red: #FF4455;
+  --bg: #06060f;
+  --bg2: #0d0d1a;
+  --bg3: #111122;
+  --text: #e8e8f0;
+  --dim: #7777aa;
+  --border: #1e1e3a;
+  --mono: 'Space Mono', monospace;
+  --sans: 'Syne', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--bg); color:var(--text);
+  font-family:var(--sans); min-height:100vh;
+}
+
+nav {
+  position:sticky; top:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:.9rem 2rem;
+  background:rgba(6,6,15,.95); backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo { font-family:var(--mono); font-size:.9rem; color:var(--gold); letter-spacing:.2em; text-decoration:none; }
+.nav-back  { font-family:var(--mono); font-size:.78rem; color:var(--dim); text-decoration:none; transition:color .2s; }
+.nav-back:hover { color:var(--gold); }
+.nav-tag   { font-family:var(--mono); font-size:.68rem; color:var(--dim); letter-spacing:.1em; }
+
+.page {
+  max-width:1000px; margin:0 auto; padding:2.5rem 2rem 4rem;
+}
+
+.page-header { margin-bottom:2.5rem; }
+.page-tag {
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.3em; color:var(--gold);
+  text-transform:uppercase; margin-bottom:.5rem;
+}
+.page-title { font-size:clamp(1.6rem,3vw,2.5rem); font-weight:800; margin-bottom:.5rem; }
+.page-sub   { color:var(--dim); font-size:.92rem; line-height:1.7; }
+
+.eq-highlight {
+  background:var(--bg2); border-left:4px solid var(--gold);
+  border-radius:0 8px 8px 0; padding:1.5rem 2rem;
+  margin:2rem 0;
+  font-family:var(--mono); font-size:1.2rem; text-align:center;
+}
+.eq-highlight .gold { color:var(--gold); font-weight:700; }
+.eq-highlight .dim { color:var(--dim); }
+
+.calculator-panel {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:12px; padding:2rem;
+  margin:2rem 0;
+}
+
+.input-group {
+  margin-bottom:1.5rem;
+}
+.input-group label {
+  display:block; font-family:var(--mono); font-size:.7rem;
+  color:var(--dim); letter-spacing:.08em; margin-bottom:.5rem;
+}
+.input-group input {
+  width:100%; background:var(--bg3); border:1px solid var(--border);
+  border-radius:6px; padding:.8rem 1rem;
+  color:var(--text); font-family:var(--mono); font-size:1rem;
+  outline:none; transition:border-color .2s;
+}
+.input-group input:focus { border-color:var(--gold); }
+
+.range-group {
+  display:flex; gap:1rem; align-items:center;
+}
+.range-group input[type=range] {
+  flex:1; padding:0; accent-color:var(--gold); cursor:pointer;
+  height:4px; background:var(--border);
+}
+.range-group .range-value {
+  font-family:var(--mono); font-size:.9rem; color:var(--gold);
+  min-width:60px; text-align:right;
+}
+
+.results-grid {
+  display:grid; grid-template-columns:repeat(3, 1fr);
+  gap:1rem; margin:2rem 0;
+}
+.result-card {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:8px; padding:1.25rem;
+}
+.result-label {
+  font-family:var(--mono); font-size:.6rem; color:var(--dim);
+  text-transform:uppercase; letter-spacing:.1em; margin-bottom:.5rem;
+}
+.result-value {
+  font-family:var(--mono); font-size:1.8rem; font-weight:700;
+  color:var(--gold); line-height:1.2;
+}
+.result-unit {
+  font-family:var(--mono); font-size:.65rem; color:var(--dim);
+  margin-top:.25rem;
+}
+.result-desc {
+  font-size:.75rem; color:var(--dim); margin-top:.5rem;
+  border-top:1px solid var(--border); padding-top:.5rem;
+}
+
+.galaxy-presets {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr));
+  gap:.75rem; margin:1.5rem 0;
+}
+.preset-btn {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:6px; padding:.75rem 1rem;
+  font-family:var(--mono); font-size:.75rem; color:var(--dim);
+  cursor:pointer; transition:all .2s; text-align:left;
+}
+.preset-btn:hover { border-color:var(--gold); color:var(--gold); background:var(--bg2); }
+.preset-btn .name { display:block; color:var(--text); font-size:.85rem; font-weight:600; margin-bottom:.2rem; }
+.preset-btn .meta { font-size:.65rem; }
+
+.constants-box {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:8px; padding:1rem 1.5rem;
+  display:flex; justify-content:space-between; flex-wrap:wrap;
+  gap:1rem; margin:1rem 0;
+}
+.const-item {
+  font-family:var(--mono); font-size:.8rem;
+}
+.const-item .label { color:var(--dim); margin-right:.3rem; }
+.const-item .value { color:var(--gold); }
+
+.comparison-table {
+  width:100%; border-collapse:collapse;
+  margin:1.5rem 0; font-family:var(--mono); font-size:.75rem;
+}
+.comparison-table th {
+  text-align:left; color:var(--dim); font-weight:400;
+  border-bottom:1px solid var(--border); padding:.5rem;
+}
+.comparison-table td {
+  padding:.5rem; border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+.comparison-table .tie { color:var(--gold); font-weight:700; }
+.comparison-table .gr { color:var(--dim); }
+
+.footer-note {
+  text-align:center; font-family:var(--mono); font-size:.7rem;
+  color:var(--dim); margin-top:2rem;
+  border-top:1px solid var(--border); padding-top:1.5rem;
+}
+.footer-note a { color:var(--gold); text-decoration:none; }
+
+@media (max-width:600px) {
+  .results-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-back">← TIE / R@LC</a>
+  <span class="nav-tag">H-03 · Calculadora Universal 2π</span>
+  <a href="curvas.html" class="nav-back">Curvas →</a>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <div class="page-tag">H-03 · Una ecuación · Cero parámetros</div>
+    <h1 class="page-title">Calculadora Universal 2π</h1>
+    <p class="page-sub">
+      La masa total de cualquier galaxia (estrellas + gas) determina su velocidad asintótica.
+      Una sola ecuación: <strong style="color:var(--gold)">v<sub>flat</sub> = (G · M<sub>total</sub> · a₀)<sup>1/4</sup></strong>
+    </p>
+  </div>
+
+  <div class="eq-highlight">
+    <span class="gold">v<sub>flat</sub></span> = ( G · <span class="gold">M<sub>total</sub></span> · <span class="gold">a₀</span> )<sup>1/4</sup>
+    <div style="margin-top:.5rem; font-size:.9rem;">
+      <span class="dim">a₀ = c·H₀/2π = 1.082×10⁻¹⁰ m/s²</span>
+    </div>
+  </div>
+
+  <div class="calculator-panel">
+    <div class="input-group">
+      <label>Masa estelar del disco (× 10¹⁰ M☉)</label>
+      <input type="number" id="mdisk" value="2.20" step="0.01" min="0" oninput="calculate()">
+    </div>
+
+    <div class="input-group">
+      <label>Masa de gas (× 10⁹ M☉)</label>
+      <input type="number" id="mgas" value="8.50" step="0.1" min="0" oninput="calculate()">
+    </div>
+
+    <div class="input-group">
+      <label>H₀ (km/s/Mpc) — <span id="h0-val">70.0</span></label>
+      <div class="range-group">
+        <input type="range" id="h0" min="67" max="74" value="70" step="0.1" oninput="updateH0()">
+        <span class="range-value" id="h0-display">70.0</span>
+      </div>
+    </div>
+
+    <div class="results-grid">
+      <div class="result-card">
+        <div class="result-label">Masa total</div>
+        <div class="result-value" id="mtot">2.20</div>
+        <div class="result-unit">× 10¹⁰ M☉</div>
+        <div class="result-desc">M<sub>disk</sub> + M<sub>gas</sub>/10</div>
+      </div>
+      <div class="result-card">
+        <div class="result-label">Velocidad asintótica</div>
+        <div class="result-value" id="vflat">150.0</div>
+        <div class="result-unit">km/s</div>
+        <div class="result-desc">v<sub>flat</sub> TIE</div>
+      </div>
+      <div class="result-card">
+        <div class="result-label">Radio de transición</div>
+        <div class="result-value" id="rt">10.8</div>
+        <div class="result-unit">kpc</div>
+        <div class="result-desc">r<sub>t</sub> = √(GM<sub>tot</sub>/a₀)</div>
+      </div>
+    </div>
+
+    <div class="galaxy-presets">
+      <div class="preset-btn" onclick="loadPreset('ngc3198')">
+        <span class="name">NGC 3198</span>
+        <span class="meta">M<sub>disk</sub>=2.20 · M<sub>gas</sub>=8.5</span>
+      </div>
+      <div class="preset-btn" onclick="loadPreset('ngc2403')">
+        <span class="name">NGC 2403</span>
+        <span class="meta">M<sub>disk</sub>=0.82 · M<sub>gas</sub>=12.0</span>
+      </div>
+      <div class="preset-btn" onclick="loadPreset('ddo154')">
+        <span class="name">DDO 154</span>
+        <span class="meta">M<sub>disk</sub>=0.0028 · M<sub>gas</sub>=0.71</span>
+      </div>
+      <div class="preset-btn" onclick="loadPreset('ugc2885')">
+        <span class="name">UGC 2885</span>
+        <span class="meta">M<sub>disk</sub>=17.5 · M<sub>gas</sub>=82.0</span>
+      </div>
+    </div>
+
+    <div class="constants-box">
+      <div class="const-item"><span class="label">G =</span> <span class="value">6.674×10⁻¹¹</span></div>
+      <div class="const-item"><span class="label">c =</span> <span class="value">2.998×10⁸</span></div>
+      <div class="const-item"><span class="label">a₀ =</span> <span class="value" id="a0-display">1.082×10⁻¹⁰</span></div>
+    </div>
+
+    <table class="comparison-table">
+      <tr><th>Galaxia</th><th>M<sub>total</sub></th><th>v<sub>flat</sub> TIE</th><th>v<sub>obs</sub> SPARC</th><th>Error</th></tr>
+      <tr><td>NGC 3198</td><td>2.28</td><td class="tie">150</td><td>150</td><td>0.0%</td></tr>
+      <tr><td>NGC 2403</td><td>0.94</td><td class="tie">124</td><td>134</td><td>7.5%</td></tr>
+      <tr><td>DDO 154</td><td>0.0073</td><td class="tie">47</td><td>47</td><td>0.0%</td></tr>
+      <tr><td>UGC 2885</td><td>18.3</td><td class="tie">298</td><td>300</td><td>0.7%</td></tr>
+    </table>
+
+    <div class="footer-note">
+      <a href="sparc.html">Explorar 55 galaxias reales →</a> · 
+      <a href="curvas.html">Curvas de rotación detalladas →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const G = 6.674e-11;
+const MS = 1.989e30;
+const km = 1e3;
+const kpc = 3.0857e19;
+
+function getA0() {
+  const H0_kms = parseFloat(document.getElementById('h0').value);
+  const H0_si = H0_kms * 1000 / 3.0857e22;
+  return 2.998e8 * H0_si / (2 * Math.PI);
+}
+
+function updateH0() {
+  const val = parseFloat(document.getElementById('h0').value).toFixed(1);
+  document.getElementById('h0-display').textContent = val;
+  document.getElementById('h0-val').textContent = val;
+  calculate();
+}
+
+function calculate() {
+  const Mdisk = parseFloat(document.getElementById('mdisk').value) || 0;
+  const Mgas = parseFloat(document.getElementById('mgas').value) || 0;
+  const a0 = getA0();
+  
+  const Mtotal_kg = (Mdisk * 1e10 + Mgas * 1e9) * MS;
+  const vFlat = Math.pow(G * Mtotal_kg * a0, 0.25) / km;
+  const rt = Math.sqrt(G * Mtotal_kg / a0) / kpc;
+  
+  document.getElementById('mtot').textContent = (Mdisk + Mgas/10).toFixed(2);
+  document.getElementById('vflat').textContent = vFlat.toFixed(0);
+  document.getElementById('rt').textContent = rt.toFixed(1);
+  document.getElementById('a0-display').textContent = a0.toExponential(3).replace('e-','×10⁻');
+}
+
+function loadPreset(preset) {
+  if (preset === 'ngc3198') {
+    document.getElementById('mdisk').value = 2.20;
+    document.getElementById('mgas').value = 8.50;
+  } else if (preset === 'ngc2403') {
+    document.getElementById('mdisk').value = 0.82;
+    document.getElementById('mgas').value = 12.0;
+  } else if (preset === 'ddo154') {
+    document.getElementById('mdisk').value = 0.0028;
+    document.getElementById('mgas').value = 0.71;
+  } else if (preset === 'ugc2885') {
+    document.getElementById('mdisk').value = 17.5;
+    document.getElementById('mgas').value = 82.0;
+  }
+  calculate();
+}
+
+window.onload = () => {
+  updateH0();
+};
+</script>
+</body>
+</html>

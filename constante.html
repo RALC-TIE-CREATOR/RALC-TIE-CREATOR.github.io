@@ -30,112 +30,119 @@ body {
 nav {
   flex-shrink:0;
   display:flex; align-items:center; justify-content:space-between;
-  padding:.5rem 1.5rem;
+  padding:.7rem 2rem;
   background:rgba(6,6,15,.95); backdrop-filter:blur(16px);
   border-bottom:1px solid var(--border);
 }
-.nav-back  { font-family:var(--mono); font-size:.7rem; color:var(--dim); text-decoration:none; }
+.nav-back  { font-family:var(--mono); font-size:.8rem; color:var(--dim); text-decoration:none; }
 .nav-back:hover { color:var(--gold); }
-.nav-tag   { font-family:var(--mono); font-size:.6rem; color:var(--dim); letter-spacing:.1em; }
+.nav-tag   { font-family:var(--mono); font-size:.7rem; color:var(--dim); letter-spacing:.1em; }
 
 .page {
   flex:1; display:flex; flex-direction:column;
-  max-width:1200px; margin:0 auto; padding:0.75rem 1.5rem; width:100%;
+  max-width:1000px; margin:0 auto; padding:1rem 2rem; width:100%;
   overflow-y:auto;
 }
 
-.page-header { margin-bottom:0.5rem; }
+.page-header { margin-bottom:1rem; }
 .page-tag {
-  font-family:var(--mono); font-size:.6rem; letter-spacing:.2em; color:var(--gold);
+  font-family:var(--mono); font-size:.7rem; letter-spacing:.2em; color:var(--gold);
   text-transform:uppercase;
 }
-.page-title { font-size:1.2rem; font-weight:800; margin-bottom:0.1rem; }
+.page-title { font-size:1.6rem; font-weight:800; margin-bottom:0.2rem; }
 
 .eq-highlight {
-  background:var(--bg2); border-left:3px solid var(--gold);
-  border-radius:0 6px 6px 0; padding:0.5rem 1rem;
-  margin:0.5rem 0;
-  font-family:var(--mono); font-size:0.9rem; text-align:center;
+  background:var(--bg2); border-left:4px solid var(--gold);
+  border-radius:0 8px 8px 0; padding:0.8rem 1.5rem;
+  margin:0.8rem 0;
+  font-family:var(--mono); font-size:1.1rem; text-align:center;
 }
 .eq-highlight .gold { color:var(--gold); font-weight:700; }
-.eq-highlight .small { font-size:0.7rem; margin-top:0.2rem; }
+.eq-highlight .small { font-size:0.85rem; margin-top:0.3rem; color:var(--dim); }
 
 .calculator-panel {
   background:var(--bg2); border:1px solid var(--border);
-  border-radius:8px; padding:0.75rem;
-  display:flex; flex-direction:column; gap:0.5rem;
+  border-radius:10px; padding:1.25rem;
+  display:flex; flex-direction:column; gap:1rem;
 }
 
 .input-group {
-  display:flex; align-items:center; gap:1rem;
+  display:flex; align-items:center; gap:1.5rem;
 }
 .input-group label {
-  font-family:var(--mono); font-size:.6rem; color:var(--dim); min-width:40px;
+  font-family:var(--mono); font-size:.8rem; color:var(--dim); min-width:50px;
 }
 .range-group {
-  flex:1; display:flex; align-items:center; gap:0.5rem;
+  flex:1; display:flex; align-items:center; gap:1rem;
 }
 .range-group input[type=range] {
-  flex:1; accent-color:var(--gold); height:4px;
+  flex:1; accent-color:var(--gold); height:5px;
 }
 .range-group .range-value {
-  font-family:var(--mono); font-size:.8rem; color:var(--gold); min-width:45px;
+  font-family:var(--mono); font-size:1rem; color:var(--gold); min-width:50px;
 }
 
 .results-grid {
   display:grid; grid-template-columns:repeat(3, 1fr);
-  gap:0.4rem;
+  gap:0.8rem;
 }
 .result-card {
   background:var(--bg3); border:1px solid var(--border);
-  border-radius:4px; padding:0.4rem 0.5rem;
+  border-radius:6px; padding:0.8rem 1rem;
 }
 .result-label {
-  font-family:var(--mono); font-size:.5rem; color:var(--dim);
-  text-transform:uppercase;
+  font-family:var(--mono); font-size:.6rem; color:var(--dim);
+  text-transform:uppercase; letter-spacing:.05em; margin-bottom:0.2rem;
 }
 .result-value {
-  font-family:var(--mono); font-size:.9rem; font-weight:700;
-  color:var(--gold); line-height:1.1;
+  font-family:var(--mono); font-size:1.3rem; font-weight:700;
+  color:var(--gold); line-height:1.2;
 }
 .result-unit {
-  font-family:var(--mono); font-size:.5rem; color:var(--dim);
+  font-family:var(--mono); font-size:.6rem; color:var(--dim); margin-top:0.2rem;
 }
 
 .comparison-grid {
   display:grid; grid-template-columns:repeat(3, 1fr);
-  gap:0.3rem; text-align:center; background:var(--bg3); padding:0.3rem;
-  border-radius:4px; border:1px solid var(--border);
+  gap:0.8rem; text-align:center; background:var(--bg3); padding:0.8rem;
+  border-radius:6px; border:1px solid var(--border);
 }
-.comp-item .source { font-family:var(--mono); font-size:.5rem; color:var(--dim); }
-.comp-item .value { font-family:var(--mono); font-size:.8rem; font-weight:700; }
+.comp-item .source { font-family:var(--mono); font-size:.65rem; color:var(--dim); margin-bottom:0.2rem; }
+.comp-item .value { font-family:var(--mono); font-size:1rem; font-weight:700; }
 .comp-item .tie { color:var(--gold); }
-.comp-item .error { font-family:var(--mono); font-size:.5rem; }
+.comp-item .error { font-family:var(--mono); font-size:.6rem; margin-top:0.2rem; }
 
 .constants-row {
-  display:flex; justify-content:space-around; gap:0.5rem;
-  background:var(--bg3); padding:0.3rem; border-radius:4px;
-  border:1px solid var(--border); font-family:var(--mono); font-size:.6rem;
+  display:flex; justify-content:space-around; gap:1rem;
+  background:var(--bg3); padding:0.6rem; border-radius:6px;
+  border:1px solid var(--border); font-family:var(--mono); font-size:.75rem;
 }
 .const-item .label { color:var(--dim); }
-.const-item .value { color:var(--gold); margin-left:0.2rem; }
+.const-item .value { color:var(--gold); margin-left:0.3rem; }
 
 .explanation-box {
   background:rgba(255,215,0,.05); border:1px solid rgba(255,215,0,.2);
-  border-radius:4px; padding:0.4rem 0.6rem;
-  font-size:0.65rem; line-height:1.3;
+  border-radius:6px; padding:0.8rem 1rem;
+  font-size:0.8rem; line-height:1.4;
 }
 .explanation-box .highlight { color:var(--gold); font-weight:700; }
 
 .links-row {
-  display:flex; justify-content:center; gap:0.8rem;
-  font-family:var(--mono); font-size:.6rem; margin-top:0.2rem;
+  display:flex; justify-content:center; gap:1.5rem;
+  font-family:var(--mono); font-size:.75rem; margin:0.2rem 0;
 }
 .links-row a { color:var(--gold); text-decoration:none; }
 
 .footer-note {
-  text-align:center; font-family:var(--mono); font-size:.55rem;
-  color:var(--dim); margin-top:0.3rem;
+  text-align:center; font-family:var(--mono); font-size:.65rem;
+  color:var(--dim); margin-top:0.5rem;
+}
+
+@media (max-height:700px) {
+  .page { padding:0.5rem 1.5rem; }
+  .results-grid { gap:0.4rem; }
+  .result-card { padding:0.5rem; }
+  .result-value { font-size:1.1rem; }
 }
 </style>
 </head>
@@ -154,15 +161,15 @@ nav {
   </div>
 
   <div class="eq-highlight">
-    <span class="gold">a₀</span> = c·H₀/2π ≈ <span id="a0-small">1.082×10⁻¹⁰</span> m/s²
-    <span style="margin:0 0.5rem; color:var(--dim);">|</span>
-    <span class="gold">Λ</span> = 2H₀²/c² ≈ <span id="lambda-small">1.148×10⁻⁵²</span> m⁻²
+    <span class="gold">a₀</span> = c·H₀/2π = <span id="a0-display">1.082×10⁻¹⁰</span> m/s²
+    <span style="margin:0 1rem; color:var(--dim);">|</span>
+    <span class="gold">Λ</span> = 2H₀²/c² = <span id="lambda-display">1.148×10⁻⁵²</span> m⁻²
   </div>
 
   <div class="calculator-panel">
 
     <div class="input-group">
-      <label>H₀</label>
+      <label>H₀ (km/s/Mpc)</label>
       <div class="range-group">
         <input type="range" id="h0" min="67" max="74" value="70" step="0.1" oninput="update()">
         <span class="range-value" id="h0-display">70.0</span>
@@ -181,47 +188,50 @@ nav {
         <div class="result-unit">m⁻²</div>
       </div>
       <div class="result-card">
-        <div class="result-label">error Planck</div>
-        <div class="result-value" id="error" style="font-size:0.8rem;">3.5%</div>
-        <div class="result-unit">vs 1.106e-52</div>
+        <div class="result-label">error vs Planck</div>
+        <div class="result-value" id="error" style="font-size:1rem;">3.5%</div>
+        <div class="result-unit">(Planck: 1.106e-52)</div>
       </div>
     </div>
 
     <div class="comparison-grid">
       <div class="comp-item">
         <div class="source">Planck 2018</div>
-        <div class="value">1.106e-52</div>
+        <div class="value">1.106×10⁻⁵²</div>
+        <div class="error">observado</div>
       </div>
       <div class="comp-item">
-        <div class="source">TIE actual</div>
-        <div class="value tie" id="lambda-compare">1.148e-52</div>
+        <div class="source">TIE</div>
+        <div class="value tie" id="lambda-compare">1.148×10⁻⁵²</div>
+        <div class="error">error <span id="error-small">3.5</span>%</div>
       </div>
       <div class="comp-item">
-        <div class="source">QFT</div>
-        <div class="value" style="color:var(--red);">10⁶⁸ ✗</div>
+        <div class="source">QFT (vacío)</div>
+        <div class="value" style="color:var(--red);">~10⁶⁸</div>
+        <div class="error" style="color:var(--red);">120 órdenes ✗</div>
       </div>
     </div>
 
     <div class="constants-row">
-      <span class="const-item"><span class="label">c=</span><span class="value">3e8</span></span>
-      <span class="const-item"><span class="label">2π=</span><span class="value">6.283</span></span>
-      <span class="const-item"><span class="label">8π²=</span><span class="value">78.96</span></span>
+      <span class="const-item"><span class="label">c =</span><span class="value">2.998×10⁸ m/s</span></span>
+      <span class="const-item"><span class="label">2π =</span><span class="value">6.28318</span></span>
+      <span class="const-item"><span class="label">8π² =</span><span class="value">78.9568</span></span>
     </div>
 
     <div class="explanation-box">
       <span class="highlight">Una constante, dos escalas:</span> 
       La misma H₀ da a₀ (galaxias) y Λ (cosmos). 
-      Λ no es energía oscura, es curvatura de fondo. QFT falla por 120 órdenes ✗
+      Λ no es energía oscura, es curvatura de fondo de la infraestructura.
     </div>
 
     <div class="links-row">
-      <a href="2pi.html">← 2π</a>
-      <a href="sparc.html">SPARC</a>
-      <a href="materia-oscura.html">MO →</a>
+      <a href="2pi.html">← Calculadora 2π</a>
+      <a href="sparc.html">Explorador SPARC</a>
+      <a href="materia-oscura.html">Conversor MO →</a>
     </div>
 
     <div class="footer-note">
-      <a href="index.html">Inicio</a> · a₀ = cH₀/2π · Λ = 2H₀²/c²
+      a₀ = cH₀/2π · Λ = 2H₀²/c² · Cero parámetros libres
     </div>
 
   </div>
@@ -255,12 +265,14 @@ function update() {
   document.getElementById('a0').innerHTML = a0.toExponential(3).replace('e', '×10');
   document.getElementById('lambda').innerHTML = lambda.toExponential(3).replace('e', '×10');
   document.getElementById('lambda-compare').innerHTML = lambda.toExponential(3).replace('e', '×10');
-  document.getElementById('lambda-small').innerHTML = lambda.toExponential(3).replace('e', '×10');
-  document.getElementById('a0-small').innerHTML = a0.toExponential(3).replace('e', '×10');
+  document.getElementById('a0-display').innerHTML = a0.toExponential(3).replace('e', '×10');
+  document.getElementById('lambda-display').innerHTML = lambda.toExponential(3).replace('e', '×10');
   
   const errEl = document.getElementById('error');
   errEl.innerHTML = error + '%';
   errEl.style.color = Math.abs(error) < 5 ? 'var(--green)' : 'var(--red)';
+  
+  document.getElementById('error-small').textContent = error;
 }
 
 window.onload = update;

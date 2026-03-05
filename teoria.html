@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIE · FUNDAMENTOS</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+
+<!-- KaTeX para fórmulas con aspecto científico -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+
+<style>
+:root {
+  --gold: #FFD700;
+  --blue: #5BC8F5;
+  --green: #44FF88;
+  --red: #FF4455;
+  --purple: #9b59b6;
+  --bg: #000001;
+  --bg2: rgba(5, 5, 15, 0.6);
+  --bg3: rgba(10, 10, 25, 0.4);
+  --text: #ffffff;
+  --dim: #a0a0b0;
+  --border: rgba(91, 200, 245, 0.15);
+  --mono: 'Space Mono', monospace;
+  --sans: 'Syne', sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#galaxy-canvas {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120vw;
+  height: 120vh;
+  min-width: 1200px;
+  min-height: 1200px;
+  z-index: -2;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(91,200,245,0.08) 0%, transparent 60%),
+              radial-gradient(circle at 70% 60%, rgba(255,215,0,0.08) 0%, transparent 60%);
+  z-index: -1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 4rem;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(15px);
+  border-bottom: 2px solid rgba(255,215,0,0.2);
+}
+
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.nav-back {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--dim);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 0.4rem 1.2rem;
+  border-radius: 30px;
+  transition: 0.3s;
+}
+
+.nav-back:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.page {
+  padding: 120px 2rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.page-tag {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  letter-spacing: 8px;
+  color: var(--purple);
+  margin-bottom: 1rem;
+  border-bottom: 2px solid rgba(155,89,182,0.4);
+  padding-bottom: 0.8rem;
+  display: inline-block;
+}
+
+.page-title {
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--purple) 0%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-sub {
+  font-size: 1.1rem;
+  color: var(--dim);
+  max-width: 600px;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+/* SECCIÓN POSTULADOS */
+.section-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 3rem 0 2rem;
+  border-left: 4px solid var(--purple);
+  padding-left: 1rem;
+}
+
+.postulates-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.postulate-card {
+  background: rgba(5,5,15,0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.postulate-card:hover {
+  border-color: var(--purple);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(155,89,182,0.2);
+}
+
+.postulate-number {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--purple);
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.postulate-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--purple);
+}
+
+.postulate-desc {
+  font-size: 0.9rem;
+  color: var(--dim);
+  line-height: 1.6;
+}
+
+.postulate-quote {
+  font-style: italic;
+  font-size: 0.8rem;
+  color: var(--dim);
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+/* SECCIÓN BISTURÍ */
+.bisturi-container {
+  background: rgba(5,5,15,0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.bisturi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.bisturi-step {
+  background: rgba(10,10,20,0.8);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.bisturi-step:hover {
+  border-color: var(--purple);
+}
+
+.step-number {
+  font-family: var(--mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--purple);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.step-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.step-desc {
+  font-size: 0.75rem;
+  color: var(--dim);
+  line-height: 1.5;
+}
+
+/* SECCIÓN CONSTANTES */
+.constants-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.constant-card {
+  background: rgba(5,5,15,0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.constant-card:hover {
+  border-color: var(--purple);
+  transform: translateY(-5px);
+}
+
+.constant-symbol {
+  font-family: var(--mono);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--purple);
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.constant-value {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  word-break: break-word;
+}
+
+.constant-desc {
+  font-size: 0.8rem;
+  color: var(--dim);
+  line-height: 1.5;
+}
+
+/* SECCIÓN FÓRMULAS (con LaTeX) */
+.formulas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.8rem;
+  margin: 2rem 0;
+}
+
+.formula-card {
+  background: rgba(5,5,15,0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: 0.3s;
+}
+
+.formula-card:hover {
+  border-color: var(--purple);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(155,89,182,0.2);
+}
+
+.formula-classic {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--dim);
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
+}
+
+.formula-classic .katex { 
+  color: var(--dim);
+  filter: opacity(0.7);
+  text-decoration: line-through 1px solid var(--dim);
+}
+
+.formula-tie {
+  font-size: 1.1rem;
+  margin: 1rem 0;
+}
+
+.formula-tie .katex {
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.formula-terms {
+  background: rgba(155,89,182,0.1);
+  border-left: 3px solid var(--purple);
+  padding: 0.8rem;
+  margin: 1rem 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.formula-terms .katex {
+  color: var(--purple);
+  font-weight: 700;
+}
+
+.term {
+  font-family: var(--mono);
+  color: var(--purple);
+  font-weight: 700;
+}
+
+.formula-interp {
+  font-size: 0.8rem;
+  color: var(--dim);
+  line-height: 1.5;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.formula-interp .katex {
+  color: var(--gold);
+}
+
+/* LAGRANGIANO */
+.lagrangian-container {
+  background: linear-gradient(145deg, rgba(155,89,182,0.2) 0%, rgba(5,5,15,0.8) 100%);
+  border: 2px solid var(--purple);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin: 3rem 0;
+  text-align: center;
+}
+
+.lagrangian-title {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--purple);
+  letter-spacing: 3px;
+  margin-bottom: 1.5rem;
+}
+
+.lagrangian-equation {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  margin: 1.5rem 0;
+  word-break: break-word;
+  overflow-x: auto;
+  padding: 1rem 0;
+}
+
+.lagrangian-equation .katex {
+  color: var(--gold);
+  font-size: 1rem;
+}
+
+.lagrangian-desc {
+  font-size: 0.9rem;
+  color: var(--dim);
+  max-width: 800px;
+  margin: 1rem auto;
+  line-height: 1.6;
+}
+
+.lagrangian-terms {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.lagrangian-term-item {
+  background: rgba(10,10,20,0.8);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 0.5rem 1.2rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+}
+
+.lagrangian-term-item .katex {
+  color: var(--gold);
+}
+
+footer {
+  padding: 3rem;
+  text-align: center;
+  border-top: 1px solid rgba(255,215,0,0.1);
+  margin-top: 4rem;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+}
+
+.footer-equation {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(255,215,0,0.3);
+}
+
+.footer-copy {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  letter-spacing: 2px;
+}
+</style>
+</head>
+<body>
+
+<canvas id="galaxy-canvas"></canvas>
+
+<nav>
+  <a href="index.html" class="nav-logo">TIE / R@LC</a>
+  <a href="index.html" class="nav-back">← VOLVER AL INICIO</a>
+</nav>
+
+<div class="page">
+  <div class="page-tag">FUNDAMENTOS</div>
+  <h1 class="page-title">LOS PILARES DE TIE</h1>
+  <p class="page-sub">Cuatro postulados. Un bisturí. Cero parámetros libres. Todo el universo en una infraestructura.</p>
+
+  <!-- POSTULADOS -->
+  <div class="section-title">LOS 4 POSTULADOS</div>
+  <div class="postulates-grid">
+    <!-- I. Motor Absoluto -->
+    <div class="postulate-card">
+      <span class="postulate-number">I</span>
+      <div class="postulate-title">Motor Absoluto</div>
+      <div class="postulate-desc">El tiempo fluye siempre hacia adelante, de forma absoluta y uniforme. No se estira. No se dobla.</div>
+      <div class="postulate-quote">"El tiempo no es una dimensión. Es el motor."</div>
+    </div>
+
+    <!-- II. Infraestructura Espacial -->
+    <div class="postulate-card">
+      <span class="postulate-number">II</span>
+      <div class="postulate-title">Infraestructura</div>
+      <div class="postulate-desc">El espacio no está vacío. Es una red que transmite, sincroniza y procesa información.</div>
+      <div class="postulate-quote">"No es escenario. Es hardware."</div>
+    </div>
+
+    <!-- III. Cuanto mínimo ħ -->
+    <div class="postulate-card">
+      <span class="postulate-number">III</span>
+      <div class="postulate-title">Cuanto mínimo $\hbar$</div>
+      <div class="postulate-desc">La infraestructura no puede procesar cantidades arbitrariamente pequeñas. $\hbar$ es el píxel mínimo.</div>
+      <div class="postulate-quote">"La realidad tiene grano."</div>
+    </div>
+
+    <!-- IV. Ciclos completos 2π -->
+    <div class="postulate-card">
+      <span class="postulate-number">IV</span>
+      <div class="postulate-title">Ciclos completos $2\pi$</div>
+      <div class="postulate-desc">Todo proceso requiere un ciclo completo de sincronía. No hay fracciones de ciclo.</div>
+      <div class="postulate-quote">"$2\pi$ es inviolable."</div>
+    </div>
+  </div>
+
+  <!-- BISTURÍ T² -->
+  <div class="section-title">EL BISTURÍ T²</div>
+  <div class="bisturi-container">
+    <p style="color:var(--dim); margin-bottom:2rem;">El método que detecta y elimina el $T^2$ artificial en las ecuaciones de la física.</p>
+    <div class="bisturi-grid">
+      <div class="bisturi-step">
+        <span class="step-number">1</span>
+        <div class="step-title">Encontrar</div>
+        <div class="step-desc">Localizar el $T^2$ escondido en la ecuación (aceleraciones, velocidades al cuadrado, definiciones de carga).</div>
+      </div>
+      <div class="bisturi-step">
+        <span class="step-number">2</span>
+        <div class="step-title">Preguntar</div>
+        <div class="step-desc">¿Viene de una doble derivación real o es un artefacto de medición?</div>
+      </div>
+      <div class="bisturi-step">
+        <span class="step-number">3</span>
+        <div class="step-title">Eliminar</div>
+        <div class="step-desc">Si es artificial, redefinir la cantidad física sin él, manteniendo consistencia dimensional.</div>
+      </div>
+      <div class="bisturi-step">
+        <span class="step-number">4</span>
+        <div class="step-title">Verificar</div>
+        <div class="step-desc">Dejar que los números hablen. Si la predicción coincide con la observación, la cirugía fue exitosa.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONSTANTES CLAVE -->
+  <div class="section-title">CONSTANTES CLAVE</div>
+  <div class="constants-grid">
+    <div class="constant-card">
+      <span class="constant-symbol">$a_0$</span>
+      <div class="constant-value">$a_0 = \dfrac{cH_0}{2\pi} = 1.082\times10^{-10}\,\text{m/s}^2$</div>
+      <div class="constant-desc">Aceleración de transición. Conecta galaxias, agujeros negros y cosmología.</div>
+    </div>
+    <div class="constant-card">
+      <span class="constant-symbol">$\Lambda$</span>
+      <div class="constant-value">$\Lambda_{\text{TIE}} = \dfrac{2H_0^2}{c^2} = 1.148\times10^{-52}\,\text{m}^{-2}$</div>
+      <div class="constant-desc">Constante cosmológica. Curvatura de fondo de la infraestructura.</div>
+    </div>
+    <div class="constant-card">
+      <span class="constant-symbol">$\mathcal{R}$</span>
+      <div class="constant-value">$\mathcal{R} = 2\pi = 6.283185\ldots$</div>
+      <div class="constant-desc">Constante de RALC. El ciclo completo que sincroniza el universo.</div>
+    </div>
+  </div>
+
+  <!-- FÓRMULAS REINTERPRETADAS (con LaTeX) -->
+  <div class="section-title">FÓRMULAS REINTERPRETADAS</div>
+  <div class="formulas-grid">
+    
+    <!-- Gravedad -->
+    <div class="formula-card">
+      <div style="font-family:var(--mono); font-size:0.7rem; color:var(--blue); margin-bottom:0.5rem;">⚡ GRAVEDAD</div>
+      <div class="formula-classic">$$F = G\frac{Mm}{r^2}$$</div>
+      <div class="formula-tie">$$m_{\text{TIE}} = 2\pi \, m_{\text{obs}}$$</div>
+      <div class="formula-terms">
+        <span class="term">$m_{\text{TIE}}$</span> masa real · 
+        <span class="term">$2\pi$</span> ciclo completo · 
+        <span class="term">$a_0$</span> aceleración de transición
+      </div>
+      <div class="formula-interp">La masa real es $2\pi$ veces la observada. La "materia oscura" es el factor que faltaba ($84.1\%$).</div>
+    </div>
+
+    <!-- Energía -->
+    <div class="formula-card">
+      <div style="font-family:var(--mono); font-size:0.7rem; color:var(--gold); margin-bottom:0.5rem;">⚡ ENERGÍA</div>
+      <div class="formula-classic">$$E = mc^2$$</div>
+      <div class="formula-tie">$$E_{\text{TIE}} = \frac{mc^2}{2\pi}$$</div>
+      <div class="formula-terms">
+        <span class="term">$E_{\text{TIE}}$</span> energía por ciclo · 
+        <span class="term">$2\pi$</span> ciclo de sincronía · 
+        <span class="term">$a_0 = \dfrac{cH_0}{2\pi}$</span>
+      </div>
+      <div class="formula-interp">Energía por ciclo de sincronía. La masa real emerge al completar $2\pi$ ciclos.</div>
+    </div>
+
+    <!-- Electromagnetismo -->
+    <div class="formula-card">
+      <div style="font-family:var(--mono); font-size:0.7rem; color:var(--green); margin-bottom:0.5rem;">⚡ ELECTROMAGNETISMO</div>
+      <div class="formula-classic">$$F = k\frac{q^2}{r^2}$$</div>
+      <div class="formula-tie">$$[q_{\text{TIE}}]^2 = \text{kg}\cdot\text{m}^3/\text{s}^2$$</div>
+      <div class="formula-terms">
+        <span class="term">$q_{\text{TIE}}$</span> carga geométrica · 
+        <span class="term">$k_e$</span> absorbido · 
+        <span class="term">$T^2$</span> artificial eliminado
+      </div>
+      <div class="formula-interp">La carga es curvatura electromagnética. El $T^2$ artificial de $q = I\cdot t$ desaparece.</div>
+    </div>
+
+    <!-- Nuclear fuerte -->
+    <div class="formula-card">
+      <div style="font-family:var(--mono); font-size:0.7rem; color:var(--red); margin-bottom:0.5rem;">⚡ NUCLEAR FUERTE</div>
+      <div class="formula-classic">$$V(r) = -g^2\frac{e^{-m_\pi c r/\hbar}}{r}$$</div>
+      <div class="formula-tie">$$V(r) = -\Gamma_N \frac{e^{-f_i r}}{r},\quad f_i = \frac{m_\pi c}{\hbar}$$</div>
+      <div class="formula-terms">
+        <span class="term">$f_i$</span> frecuencia de coherencia · 
+        <span class="term">$\Gamma_N$</span> acoplamiento · 
+        <span class="term">saturación</span> de canal
+      </div>
+      <div class="formula-interp">El corte no es por partículas, sino por saturación del canal de coherencia.</div>
+    </div>
+
+    <!-- Nuclear débil -->
+    <div class="formula-card">
+      <div style="font-family:var(--mono); font-size:0.7rem; color:var(--purple); margin-bottom:0.5rem;">⚡ NUCLEAR DÉBIL</div>
+      <div class="formula-classic">$$\Gamma = \frac{2\pi}{\hbar} |M|^2 \rho(E)$$</div>
+      <div class="formula-tie">$$\Gamma = \frac{2\pi}{\hbar} |M|^2 \rho(E)$$</div>
+      <div class="formula-terms">
+        <span class="term">$\dfrac{2\pi}{\hbar}$</span> nativo · 
+        <span class="term">$|M|^2$</span> compatibilidad de fase · 
+        <span class="term">$\rho$</span> canales de sincronía
+      </div>
+      <div class="formula-interp">Regla de Oro de Fermi. TIE la hereda sin modificación: validación independiente (1934).</div>
+    </div>
+
+    <!-- Cosmología -->
+    <div class="formula-card">
+      <div style="font-family:var(--mono); font-size:0.7rem; color:var(--gold); margin-bottom:0.5rem;">⚡ COSMOLOGÍA</div>
+      <div class="formula-classic">$$\Lambda_{\text{obs}} \approx 1.1\times10^{-52}\,\text{m}^{-2}$$</div>
+      <div class="formula-tie">$$\Lambda_{\text{TIE}} = \frac{2H_0^2}{c^2} = \frac{8\pi^2 a_0^2}{c^4}$$</div>
+      <div class="formula-terms">
+        <span class="term">$a_0 = \dfrac{cH_0}{2\pi}$</span> · 
+        <span class="term">$8\pi^2$</span> dos capas × ciclos · 
+        <span class="term">curvatura de fondo</span>
+      </div>
+      <div class="formula-interp">La constante cosmológica no es energía oscura, es curvatura de fondo de la infraestructura.</div>
+    </div>
+
+    <!-- GPS / Viscosidad -->
+    <div class="formula-card">
+      <div style="font-family:var(--mono); font-size:0.7rem; color:var(--blue); margin-bottom:0.5rem;">⚡ GPS / VISCOSIDAD</div>
+      <div class="formula-classic">$$\Delta t = \frac{\Phi_2 - \Phi_1}{c^2}\,T$$</div>
+      <div class="formula-tie">$$\Delta t = \frac{\Phi_2 - \Phi_1}{c^2}\,T$$</div>
+      <div class="formula-terms">
+        <span class="term">$\Phi$</span> potencial gravitacional · 
+        <span class="term">viscosidad</span> densidad de infraestructura · 
+        <span class="term">$c^2$</span> invariante
+      </div>
+      <div class="formula-interp">Misma ecuación, distinta interpretación: viscosidad gravitacional, no curvatura del tiempo.</div>
+    </div>
+
+    <!-- Agujeros negros -->
+    <div class="formula-card">
+      <div style="font-family:var(--mono); font-size:0.7rem; color:var(--red); margin-bottom:0.5rem;">⚡ AGUJEROS NEGROS</div>
+      <div class="formula-classic">$$r_s = \frac{2GM}{c^2}$$</div>
+      <div class="formula-tie">$$r_h = 0.869\sqrt{\frac{GM}{a_0}}$$</div>
+      <div class="formula-terms">
+        <span class="term">$r_h$</span> horizonte TIE · 
+        <span class="term">$a_0$</span> límite de saturación · 
+        <span class="term">$0.869$</span> de $t^3+t^2-1=0$
+      </div>
+      <div class="formula-interp">El horizonte TIE crece como $\sqrt{M}$ (vs lineal en GR). Sin singularidades. Sombra EHT falsificable.</div>
+    </div>
+
+    <!-- Mecánica cuántica -->
+    <div class="formula-card">
+      <div style="font-family:var(--mono); font-size:0.7rem; color:var(--green); margin-bottom:0.5rem;">⚡ MECÁNICA CUÁNTICA</div>
+      <div class="formula-classic">$$\Delta x \cdot \Delta p \geq \frac{\hbar}{2}$$</div>
+      <div class="formula-tie">$$[\hbar] = \text{kg}\cdot\text{m}^2/\text{s} = \Delta p \cdot \Delta x$$</div>
+      <div class="formula-terms">
+        <span class="term">$\hbar$</span> pixel mínimo · 
+        <span class="term">granularidad</span> de la red · 
+        <span class="term">$2\pi$</span> ciclo de fase
+      </div>
+      <div class="formula-interp">El principio de incertidumbre es la granularidad de $\hbar$. No es un axioma, es el píxel mínimo.</div>
+    </div>
+
+    <!-- Estructura fina -->
+    <div class="formula-card">
+      <div style="font-family:var(--mono); font-size:0.7rem; color:var(--purple); margin-bottom:0.5rem;">⚡ ESTRUCTURA FINA</div>
+      <div class="formula-classic">$$\alpha = \frac{e^2}{4\pi\epsilon_0\hbar c} = \frac{1}{137}$$</div>
+      <div class="formula-tie">$$\alpha_{\text{TIE}} = \frac{e^2 k_e}{\hbar c} = \frac{1}{137.12}$$</div>
+      <div class="formula-terms">
+        <span class="term">$\alpha$</span> relación carga/cuanto · 
+        <span class="term">$e^2$</span> curvatura EM · 
+        <span class="term">$\hbar c$</span> pixel de interacción
+      </div>
+      <div class="formula-interp">Relación entre carga (curvatura EM) y cuanto de sincronía. Error TIE $<0.1\%$.</div>
+    </div>
+  </div>
+
+  <!-- LAGRANGIANO DE LA INFRAESTRUCTURA -->
+  <div class="lagrangian-container">
+    <div class="lagrangian-title">⚛️ EL LAGRANGIANO DE LA INFRAESTRUCTURA</div>
+    <div class="lagrangian-equation">
+      $$
+      \mathcal{L}_{\text{TIE}} = \frac{1}{2}\left(\frac{\partial\phi}{\partial T}\right)^2 - \frac{1}{2}c^2(\nabla\phi)^2 - \frac{1}{2}\Lambda_{\text{TIE}}c^2\phi^2 - \frac{4\pi G_{\text{TIE}}}{c^2}\phi\rho_{\text{bar}}\left(1 - \frac{1}{2\pi}\right)
+      $$
+    </div>
+    <div class="lagrangian-desc">
+      El Lagrangiano que unifica toda la dinámica de la infraestructura. De él se derivan las ecuaciones de movimiento del campo de sincronía $\phi$, que a escala cuántica es la función de onda $\psi$ y a escala clásica genera las perturbaciones gravitacionales.
+    </div>
+    <div class="lagrangian-terms">
+      <span class="lagrangian-term-item"><span class="term">$\partial\phi/\partial T$</span> energía cinética</span>
+      <span class="lagrangian-term-item"><span class="term">$\nabla\phi$</span> gradientes espaciales</span>
+      <span class="lagrangian-term-item"><span class="term">$\Lambda_{\text{TIE}}$</span> curvatura de fondo</span>
+      <span class="lagrangian-term-item"><span class="term">$G_{\text{TIE}} = G/4\pi^2$</span></span>
+      <span class="lagrangian-term-item"><span class="term">$1-1/2\pi$</span> fracción "oscura"</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-equation">4 postulados · 1 bisturí · 1 Lagrangiano · 0 parámetros libres</div>
+  <div class="footer-copy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ===== GALAXIA 3D (código completo) =====
+const canvas = document.getElementById('galaxy-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+
+const parameters = {
+  count: 50000,
+  size: 0.03,
+  radius: 20,
+  branches: 4,
+  spin: 1.2,
+  randomness: 0.4,
+  randomnessPower: 2,
+  insideColor: 0xffaa00,
+  outsideColor: 0x1b3984
+};
+
+const galaxyGeometry = new THREE.BufferGeometry();
+const positions = new Float32Array(parameters.count * 3);
+const colors = new Float32Array(parameters.count * 3);
+
+const colorInside = new THREE.Color(parameters.insideColor);
+const colorOutside = new THREE.Color(parameters.outsideColor);
+
+for (let i = 0; i < parameters.count; i++) {
+  const i3 = i * 3;
+  const r = Math.random() * parameters.radius;
+  const spinAngle = r * parameters.spin;
+  const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
+  
+  const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  
+  const x = Math.cos(branchAngle + spinAngle) * r + randomX;
+  const y = randomY * 0.5;
+  const z = Math.sin(branchAngle + spinAngle) * r + randomZ;
+  
+  positions[i3] = x;
+  positions[i3 + 1] = y;
+  positions[i3 + 2] = z;
+  
+  const mixedColor = colorInside.clone().lerp(colorOutside, r / parameters.radius);
+  colors[i3] = mixedColor.r;
+  colors[i3 + 1] = mixedColor.g;
+  colors[i3 + 2] = mixedColor.b;
+}
+
+galaxyGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+galaxyGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+const galaxyMaterial = new THREE.PointsMaterial({
+  size: parameters.size,
+  sizeAttenuation: true,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.8
+});
+
+const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
+scene.add(galaxy);
+
+camera.position.set(10, 5, 25);
+camera.lookAt(0, 0, 0);
+
+let mouseX = 0;
+let mouseY = 0;
+
+document.addEventListener('mousemove', (event) => {
+  mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  galaxy.rotation.y += 0.00015;
+  galaxy.rotation.x += 0.00005;
+  galaxy.rotation.y += mouseX * 0.0003;
+  galaxy.rotation.x += mouseY * 0.0002;
+  renderer.render(scene, camera);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Renderizar KaTeX al final
+document.addEventListener("DOMContentLoaded", function() {
+  if (typeof renderMathInElement === 'function') {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });
+  }
+});
+</script>
+</body>
+</html>

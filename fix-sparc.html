@@ -318,14 +318,14 @@ function mEncKg(r_kpc, Md, rd, Mg, rg) {
 let curveChart, massChart;
 
 function initCharts() {
-    // Gráfica 1: Curva de rotación (Radio vs Velocidad)
+    // Gráfica 1: Curva de rotación
     const ctx1 = document.getElementById('curveChart').getContext('2d');
     curveChart = new Chart(ctx1, {
         type: 'scatter',
         data: {
             datasets: [
                 { label: 'TIE (0 parámetros)', data: [], showLine: true, borderColor: '#FFD700', borderWidth: 3, pointRadius: 0 },
-                { label: 'Newton', data: [], showLine: true, borderColor: 'rgba(255,255,255,0.2)', borderWidth: 1, borderDash: [5,5], pointRadius: 0 },
+                { label: 'Newton', data: [], showLine: true, borderColor: '#FF4455', borderWidth: 2, borderDash: [5,3], pointRadius: 0 },
                 { label: 'v_flat', data: [], showLine: true, borderColor: '#44FF88', borderWidth: 1.5, borderDash: [3,3], pointRadius: 0 },
                 { label: 'Observado (SPARC)', data: [], backgroundColor: '#5BC8F5', pointRadius: 6, borderColor: '#0d0d1a', borderWidth: 1 },
                 { label: 'TIE + Bisturí (corregida)', data: [], showLine: true, borderColor: 'rgba(68, 255, 136, 0.8)', borderWidth: 2, borderDash: [5,2], pointRadius: 0 }
@@ -361,7 +361,7 @@ function initCharts() {
         type: 'scatter',
         data: {
             datasets: [
-                { label: 'Tendencia Newton', data: [], showLine: true, borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, borderDash:[5,5], pointRadius: 0 },
+                { label: 'Tendencia Newton', data: [], showLine: true, borderColor: '#FF4455', borderWidth: 2, borderDash:[5,3], pointRadius: 0 },
                 { label: 'TIE (0 parámetros)', data: [], showLine: true, borderColor: '#FFD700', borderWidth: 3, pointRadius: 0 },
                 { label: 'v_flat', data: [], showLine: true, borderColor: '#44FF88', borderWidth: 1.5, borderDash: [3,3], pointRadius: 0 },
                 { label: 'Tendencia SPARC (Original)', data: [], showLine: true, borderColor: 'rgba(255, 68, 85, 0.6)', borderWidth: 2, borderDash: [2,2], pointRadius: 0 },

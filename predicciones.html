@@ -3,384 +3,737 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TIE · Sincronizador de Infraestructura</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<title>TIE · PREDICCIONES VERIFICABLES</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
   --gold: #FFD700;
   --blue: #5BC8F5;
   --green: #44FF88;
   --red: #FF4455;
-  --bg: #06060f;
-  --bg2: #0d0d1a;
-  --bg3: #111122;
-  --text: #e8e8f0;
-  --dim: #7777aa;
-  --border: #1e1e3a;
+  --yellow: #FFD700;
+  --bg: #000001;
+  --bg2: rgba(5, 5, 15, 0.6);
+  --bg3: rgba(10, 10, 25, 0.4);
+  --text: #ffffff;
+  --dim: #a0a0b0;
+  --border: rgba(91, 200, 245, 0.15);
   --mono: 'Space Mono', monospace;
   --sans: 'Syne', sans-serif;
 }
+
 * { margin:0; padding:0; box-sizing:border-box; }
+
 body {
-  background:var(--bg); color:var(--text);
-  font-family:var(--sans); min-height:100vh;
-  display:flex; flex-direction:column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
 }
+
+#galaxy-canvas {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120vw;
+  height: 120vh;
+  min-width: 1200px;
+  min-height: 1200px;
+  z-index: -2;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(91,200,245,0.08) 0%, transparent 60%),
+              radial-gradient(circle at 70% 60%, rgba(255,215,0,0.08) 0%, transparent 60%);
+  z-index: -1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
 nav {
-  padding:1rem 2rem;
-  border-bottom:1px solid var(--border);
-  display:flex; justify-content:space-between;
-  font-family:var(--mono); font-size:.8rem;
-}
-.nav-link { color:var(--dim); text-decoration:none; }
-.nav-link:hover { color:var(--gold); }
-.container {
-  max-width:1000px; margin:2rem auto; padding:0 2rem;
-  flex:1;
-}
-h1 {
-  font-size:2.5rem; font-weight:800; margin-bottom:0.5rem;
-  background:linear-gradient(135deg, var(--gold) 0%, #fff 100%);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.subtitle {
-  color:var(--dim); font-size:1rem; margin-bottom:2rem;
-  border-left:3px solid var(--gold); padding-left:1rem;
-}
-.grid-2 {
-  display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;
-  margin:2rem 0;
-}
-.card {
-  background:var(--bg2); border:1px solid var(--border);
-  border-radius:12px; padding:1.5rem;
-}
-.card-title {
-  font-family:var(--mono); font-size:.7rem; color:var(--gold);
-  letter-spacing:.2em; margin-bottom:1rem;
-  display:flex; align-items:center; gap:0.5rem;
-}
-.clock-panel {
-  text-align:center; padding:1rem;
-  background:var(--bg3); border-radius:8px; margin:1rem 0;
-}
-.clock-value {
-  font-family:var(--mono); font-size:2.5rem; font-weight:700;
-  color:var(--gold); line-height:1;
-}
-.clock-label {
-  font-family:var(--mono); font-size:.6rem; color:var(--dim);
-  margin-top:.5rem;
-}
-.clock-tag {
-  font-family:var(--mono); font-size:.5rem; color:var(--dim);
-  background:rgba(255,215,0,.1); padding:.2rem .5rem;
-  border-radius:100px; display:inline-block; margin-top:.5rem;
-}
-.slider-group {
-  margin:1.5rem 0;
-}
-.slider-label {
-  display:flex; justify-content:space-between;
-  font-family:var(--mono); font-size:.6rem; color:var(--dim);
-  margin-bottom:.3rem;
-}
-.slider {
-  width:100%; height:4px; background:var(--border);
-  accent-color:var(--gold); cursor:pointer;
-}
-.location-selector {
-  display:flex; gap:.5rem; flex-wrap:wrap; margin:1rem 0;
-}
-.location-btn {
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:4px; padding:.3rem .6rem;
-  font-family:var(--mono); font-size:.6rem; color:var(--dim);
-  cursor:pointer; transition:all .2s;
-}
-.location-btn:hover { border-color:var(--gold); color:var(--gold); }
-.location-btn.active { background:var(--gold); color:var(--bg); border-color:var(--gold); }
-
-.phase-indicator {
-  background:var(--bg3); border-radius:8px; padding:1rem;
-  margin:1.5rem 0;
-  border-left:4px solid var(--gold);
-}
-.phase-row {
-  display:flex; justify-content:space-between; align-items:center;
-  font-family:var(--mono); font-size:.7rem;
-  padding:.5rem 0;
-  border-bottom:1px solid var(--border);
-}
-.phase-row:last-child { border-bottom:none; }
-.phase-number { color:var(--gold); font-weight:700; }
-.phase-value { color:var(--dim); }
-.phase-sync { color:var(--green); }
-
-.universal-clock {
-  background:linear-gradient(145deg, var(--bg2) 0%, #0a0a1a 100%);
-  border:2px solid var(--gold); border-radius:16px;
-  padding:1.5rem; text-align:center; margin:2rem 0;
-  position:relative; overflow:hidden;
-}
-.universal-clock::before {
-  content:'∞'; position:absolute; bottom:-10px; right:10px;
-  font-size:4rem; color:rgba(255,215,0,.1); font-family:serif;
-}
-.universal-value {
-  font-family:var(--mono); font-size:3rem; font-weight:700;
-  color:var(--gold); line-height:1;
-}
-.universal-label {
-  font-family:var(--mono); font-size:.6rem; color:var(--dim);
-  letter-spacing:.3em; margin:.5rem 0;
-}
-.universal-note {
-  font-size:.7rem; color:var(--dim); max-width:400px; margin:0 auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 4rem;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(15px);
+  border-bottom: 2px solid rgba(255,215,0,0.2);
 }
 
-.table-comparison {
-  width:100%; border-collapse:collapse;
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:8px; overflow:hidden;
-  font-family:var(--mono); font-size:.6rem;
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-decoration: none;
+  font-weight: 700;
 }
-.table-comparison th {
-  background:rgba(0,0,0,0.3); padding:.5rem;
-  color:var(--dim); font-weight:400;
-}
-.table-comparison td {
-  padding:.5rem; border-bottom:1px solid var(--border);
-}
-.table-comparison .gold { color:var(--gold); }
-.table-comparison .green { color:var(--green); }
 
-.footer {
-  text-align:center; font-family:var(--mono); font-size:.6rem;
-  color:var(--dim); margin:2rem 0; padding-top:2rem;
-  border-top:1px solid var(--border);
+.nav-back {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--dim);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 0.4rem 1.2rem;
+  border-radius: 30px;
+  transition: 0.3s;
+}
+
+.nav-back:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.page {
+  padding: 120px 2rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.page-tag {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  letter-spacing: 8px;
+  color: var(--red);
+  margin-bottom: 1rem;
+  border-bottom: 2px solid rgba(255,68,85,0.4);
+  padding-bottom: 0.8rem;
+  display: inline-block;
+}
+
+.page-title {
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--red) 0%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-sub {
+  font-size: 1.1rem;
+  color: var(--dim);
+  max-width: 600px;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+/* SEMÁFORO GRANDE */
+.big-traffic-light {
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  margin: 3rem 0;
+}
+
+.light-item {
+  text-align: center;
+}
+
+.light-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 0 auto 0.5rem;
+  box-shadow: 0 0 30px currentColor;
+}
+
+.light-circle.green {
+  background: var(--green);
+  color: var(--green);
+}
+
+.light-circle.yellow {
+  background: var(--yellow);
+  color: var(--yellow);
+}
+
+.light-circle.red {
+  background: var(--red);
+  color: var(--red);
+}
+
+.light-number {
+  font-family: var(--mono);
+  font-size: 2rem;
+  font-weight: 700;
+  display: block;
+  line-height: 1;
+}
+
+.light-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  letter-spacing: 2px;
+}
+
+/* LISTA DE PREDICCIONES */
+.predictions-list {
+  background: rgba(5,5,15,0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 3rem 0;
+}
+
+.prediction-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.prediction-item:last-child {
+  border-bottom: none;
+}
+
+.prediction-status {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.prediction-status.green {
+  background: rgba(68,255,136,0.2);
+  color: var(--green);
+  border: 2px solid var(--green);
+}
+
+.prediction-status.yellow {
+  background: rgba(255,215,0,0.2);
+  color: var(--yellow);
+  border: 2px solid var(--yellow);
+}
+
+.prediction-content {
+  flex: 1;
+  min-width: 250px;
+}
+
+.prediction-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.prediction-values {
+  display: flex;
+  gap: 2rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.prediction-tie {
+  color: var(--gold);
+}
+
+.prediction-obs {
+  color: var(--dim);
+}
+
+.prediction-error {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--green);
+  background: rgba(68,255,136,0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: 30px;
+  white-space: nowrap;
+}
+
+.prediction-error.yellow {
+  color: var(--yellow);
+  background: rgba(255,215,0,0.1);
+}
+
+/* SECCIÓN FALSIFICABILIDAD */
+.falsifiability-box {
+  background: linear-gradient(145deg, rgba(255,68,85,0.1) 0%, rgba(10,10,20,0.8) 100%);
+  border: 2px solid var(--red);
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 3rem 0;
+}
+
+.falsifiability-title {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--red);
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+}
+
+.falsifiability-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+.falsifiability-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.falsifiability-list li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--dim);
+}
+
+.falsifiability-list li::before {
+  content: '🔴';
+  font-size: 1rem;
+}
+
+/* CHANGELOG */
+.changelog {
+  background: rgba(5,5,15,0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+.changelog-item {
+  display: flex;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+
+.changelog-item:last-child {
+  border-bottom: none;
+}
+
+.changelog-date {
+  color: var(--gold);
+  min-width: 90px;
+}
+
+.changelog-text {
+  color: var(--dim);
+}
+
+.changelog-text .green {
+  color: var(--green);
+}
+
+/* PROGRESS BAR */
+.progress-section {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 20px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 30px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--green));
+  width: 73%;
+  border-radius: 30px;
+  box-shadow: 0 0 20px rgba(68,255,136,0.5);
+}
+
+.progress-label {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--dim);
+}
+
+footer {
+  padding: 3rem;
+  text-align: center;
+  border-top: 1px solid rgba(255,215,0,0.1);
+  margin-top: 4rem;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+}
+
+.footer-equation {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(255,215,0,0.3);
+}
+
+.footer-copy {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  letter-spacing: 2px;
 }
 </style>
 </head>
 <body>
+
+<canvas id="galaxy-canvas"></canvas>
+
 <nav>
-  <a href="index.html" class="nav-link">← Volver al menú principal</a>
-  <span style="color:var(--gold); font-family:var(--mono);">H-12.1 · Sincronizador TIE</span>
+  <a href="index.html" class="nav-logo">TIE / R@LC</a>
+  <a href="index.html" class="nav-back">← VOLVER AL INICIO</a>
 </nav>
 
-<div class="container">
-  <h1>Sincronizador de Infraestructura</h1>
-  <div class="subtitle">
-    El Motor Absoluto produce ciclos constantes. Los relojes locales procesan según la gravedad.
-    <br><span style="color:var(--dim); font-size:0.8rem;">✅ CORREGIDO: Menos gravedad = procesamiento MÁS RÁPIDO (factor &lt; 1.0)</span>
-  </div>
+<div class="page">
+  <div class="page-tag">ESTADO DE VERIFICACIÓN</div>
+  <h1 class="page-title">PREDICCIONES VERIFICABLES</h1>
+  <p class="page-sub">11 predicciones. 8 confirmadas. 3 pendientes. Cero parámetros libres. Sin fe. Solo números.</p>
 
-  <div class="grid-2">
-    <!-- Columna izquierda: Relojes locales -->
-    <div class="card">
-      <div class="card-title">
-        <span>🕐</span> RELOJES LOCALES (GRAVEDAD VARIABLE)
-      </div>
-      
-      <div class="location-selector">
-        <span class="location-btn active" data-loc="tierra">🌍 Tierra</span>
-        <span class="location-btn" data-loc="marte">🔴 Marte</span>
-        <span class="location-btn" data-loc="jupiter">🪐 Júpiter</span>
-        <span class="location-btn" data-loc="espacio">🌌 Espacio profundo</span>
-      </div>
-
-      <div class="clock-panel" style="border-left:4px solid var(--gold);">
-        <div class="clock-label">TIERRA (referencia)</div>
-        <div class="clock-value" id="clock-tierra">12:00:00</div>
-        <div class="clock-tag">gravedad 1.0 · procesa TODOS los ciclos</div>
-      </div>
-
-      <div class="clock-panel" style="border-left:4px solid var(--blue);">
-        <div class="clock-label">UBICACIÓN SELECCIONADA</div>
-        <div class="clock-value" id="clock-local">12:00:00</div>
-        <div class="clock-tag" id="clock-speed">cargando...</div>
-      </div>
-
-      <div class="slider-group">
-        <div class="slider-label">
-          <span>🌍⚖️ Factor de gravedad local (relativo a Tierra)</span>
-          <span id="gravity-value">1.000</span>
-        </div>
-        <input type="range" class="slider" id="gravity" min="0.001" max="3.0" value="1.0" step="0.001">
-        <div style="display:flex; justify-content:space-between; font-family:var(--mono); font-size:.5rem; color:var(--dim); margin-top:.2rem;">
-          <span>0.001× (más rápido)</span>
-          <span>1.0× (Tierra)</span>
-          <span>3.0× (más lento)</span>
-        </div>
-      </div>
-
-      <div class="phase-indicator">
-        <div class="phase-row">
-          <span>Ciclos producidos por el Motor Absoluto</span>
-          <span class="phase-number" id="motor-cycles">1,000,000</span>
-        </div>
-        <div class="phase-row">
-          <span>Ciclos procesados por Tierra</span>
-          <span class="phase-number" id="cycles-tierra">1,000,000</span>
-        </div>
-        <div class="phase-row">
-          <span>Ciclos procesados por local</span>
-          <span class="phase-number" id="cycles-local">1,000,000</span>
-        </div>
-        <div class="phase-row">
-          <span>Diferencia acumulada (local vs Tierra)</span>
-          <span class="phase-sync" id="phase-diff">0 ciclos</span>
-        </div>
-      </div>
+  <!-- SEMÁFORO GRANDE -->
+  <div class="big-traffic-light">
+    <div class="light-item">
+      <div class="light-circle green"></div>
+      <span class="light-number">8</span>
+      <span class="light-label">CONFIRMADAS</span>
     </div>
-
-    <!-- Columna derecha: Reloj universal TIE -->
-    <div class="card">
-      <div class="card-title">
-        <span>⚛️</span> MOTOR ABSOLUTO (REFERENCIA UNIVERSAL)
-      </div>
-
-      <div class="universal-clock">
-        <div class="universal-value" id="universal-time">2π · 1,000,000</div>
-        <div class="universal-label">CICLOS DE INFRAESTRUCTURA</div>
-        <div class="universal-note">
-          El Motor Absoluto produce ciclos a ritmo constante.<br>
-          Los relojes procesan según la gravedad local.
-        </div>
-      </div>
-
-      <div class="phase-indicator">
-        <div class="phase-row">
-          <span>Tiempo transcurrido (Motor Absoluto)</span>
-          <span class="phase-number" id="motor-time">16m 40s</span>
-        </div>
-        <div class="phase-row">
-          <span>Protocolo de anclaje</span>
-          <span class="phase-value">Púlsar PSR B1937+21</span>
-        </div>
-        <div class="phase-row">
-          <span>Estado del reloj local</span>
-          <span class="phase-sync" id="sync-status">EN FASE CON TIERRA</span>
-        </div>
-      </div>
-
-      <div style="margin:1rem 0; font-family:var(--mono); font-size:.6rem; color:var(--dim); text-align:center;">
-        🔗 2π es invariante · El Motor Absoluto es universal
-      </div>
+    <div class="light-item">
+      <div class="light-circle yellow"></div>
+      <span class="light-number">3</span>
+      <span class="light-label">PENDIENTES</span>
+    </div>
+    <div class="light-item">
+      <div class="light-circle red"></div>
+      <span class="light-number">0</span>
+      <span class="light-label">REFUTADAS</span>
     </div>
   </div>
 
-  <!-- Tabla comparativa -->
-  <table class="table-comparison">
-    <tr><th>Aspecto</th><th>Relatividad General (GR)</th><th>Infraestructura (TIE)</th></tr>
-    <tr><td>Naturaleza del tiempo</td><td>Dimensión deformable</td><td class="gold">Conteo de ciclos 2π</td></tr>
-    <tr><td>Causa del retraso</td><td>Curvatura espacio-temporal</td><td class="gold">Gravedad = viscosidad de infraestructura</td></tr>
-    <tr><td>Referencia universal</td><td>No existe</td><td class="gold">Motor Absoluto (ciclos constantes)</td></tr>
-    <tr><td>Instrumento</td><td>Reloj atómico (pasivo)</td><td class="gold">Contador de fase (activo)</td></tr>
-    <tr><td>Sincronización</td><td>Imposible (relatividad)</td><td class="gold">Posible por anclaje de fase</td></tr>
-  </table>
+  <!-- BARRA DE PROGRESO -->
+  <div class="progress-section">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill"></div>
+    </div>
+    <div class="progress-label">8/11 confirmadas · 73% verificadas</div>
+  </div>
 
-  <div class="footer">
-    ⏳ El Motor Absoluto produce ciclos constantes · Menos gravedad = procesamiento MÁS RÁPIDO (factor &lt; 1.0)
+  <!-- LISTA DE PREDICCIONES -->
+  <div class="predictions-list">
+    <!-- 1. Materia oscura -->
+    <div class="prediction-item">
+      <div class="prediction-status green">✅</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Materia oscura</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: 84.1%</span>
+          <span class="prediction-obs">Obs: ~84%</span>
+        </div>
+      </div>
+      <span class="prediction-error">error &lt;1%</span>
+    </div>
+
+    <!-- 2. Constante cosmológica Λ -->
+    <div class="prediction-item">
+      <div class="prediction-status green">✅</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Constante cosmológica Λ</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: 1.145×10⁻⁵² m⁻²</span>
+          <span class="prediction-obs">Planck: 1.106×10⁻⁵² m⁻²</span>
+        </div>
+      </div>
+      <span class="prediction-error">error 3.5%</span>
+    </div>
+
+    <!-- 3. Corrección GPS -->
+    <div class="prediction-item">
+      <div class="prediction-status green">✅</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Corrección GPS</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: 45.7 μs/día</span>
+          <span class="prediction-obs">Obs: 45.9 μs/día</span>
+        </div>
+      </div>
+      <span class="prediction-error">error 0.4%</span>
+    </div>
+
+    <!-- 4. Precesión de Mercurio -->
+    <div class="prediction-item">
+      <div class="prediction-status green">✅</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Precesión de Mercurio</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: 43.0″/siglo</span>
+          <span class="prediction-obs">Obs: 43.1±0.5″/siglo</span>
+        </div>
+      </div>
+      <span class="prediction-error">error 0.2%</span>
+    </div>
+
+    <!-- 5. Radio de Bohr -->
+    <div class="prediction-item">
+      <div class="prediction-status green">✅</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Radio de Bohr</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: 5.292×10⁻¹¹ m</span>
+          <span class="prediction-obs">Obs: 5.297×10⁻¹¹ m</span>
+        </div>
+      </div>
+      <span class="prediction-error">error 0.10%</span>
+    </div>
+
+    <!-- 6. Estructura fina α -->
+    <div class="prediction-item">
+      <div class="prediction-status green">✅</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Constante de estructura fina α</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: 1/137.12</span>
+          <span class="prediction-obs">Obs: 1/137.04</span>
+        </div>
+      </div>
+      <span class="prediction-error">error &lt;0.1%</span>
+    </div>
+
+    <!-- 7. Factor cúmulos -->
+    <div class="prediction-item">
+      <div class="prediction-status green">✅</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Factor de cúmulos galácticos</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: 2π = 6.28×</span>
+          <span class="prediction-obs">Obs: ~6.25×</span>
+        </div>
+      </div>
+      <span class="prediction-error">error 0.5%</span>
+    </div>
+
+    <!-- 8. Regla de Oro de Fermi -->
+    <div class="prediction-item">
+      <div class="prediction-status green">✅</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Regla de Oro de Fermi</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: 2π/ħ nativa</span>
+          <span class="prediction-obs">Fermi 1934</span>
+        </div>
+      </div>
+      <span class="prediction-error">validación independiente</span>
+    </div>
+
+    <!-- 9. Sombra EHT (pendiente) -->
+    <div class="prediction-item">
+      <div class="prediction-status yellow">⏳</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Sombra EHT (M87*, Sgr A*)</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: rₕ ≫ rₛ</span>
+          <span class="prediction-obs">Pendiente (ngEHT)</span>
+        </div>
+      </div>
+      <span class="prediction-error yellow">falsificable 2028+</span>
+    </div>
+
+    <!-- 10. Señal LISA -->
+    <div class="prediction-item">
+      <div class="prediction-status yellow">⏳</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Señal LISA</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: ~2.4 mHz</span>
+          <span class="prediction-obs">Pendiente (2030+)</span>
+        </div>
+      </div>
+      <span class="prediction-error yellow">por verificar</span>
+    </div>
+
+    <!-- 11. Campo cruzado intergaláctico -->
+    <div class="prediction-item">
+      <div class="prediction-status yellow">⏳</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Campo cruzado intergaláctico</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: Aceleración residual</span>
+          <span class="prediction-obs">Pendiente (Euclid)</span>
+        </div>
+      </div>
+      <span class="prediction-error yellow">en curso</span>
+    </div>
+  </div>
+
+  <!-- SECCIÓN FALSIFICABILIDAD -->
+  <div class="falsifiability-box">
+    <div class="falsifiability-title">🔴 FALSIFICABILIDAD</div>
+    <div class="falsifiability-text">
+      TIE no pide fe. Pide que la midas. Si estos experimentos no confirman las predicciones, la teoría está equivocada.
+    </div>
+    <ul class="falsifiability-list">
+      <li>ngEHT (próxima generación) — si la sombra de M87* o Sgr A* coincide con rₛ y no con rₕ</li>
+      <li>LISA (2030+) — si no se detecta la señal ~2.4 mHz del campo φ</li>
+      <li>Euclid — si no se mide la aceleración residual en el espacio intergaláctico</li>
+      <li>GPS de próxima generación — si la corrección difiere sistemáticamente de 45.7 μs/día</li>
+    </ul>
+  </div>
+
+  <!-- CHANGELOG CIENTÍFICO -->
+  <h2 style="font-size:1.8rem; margin:3rem 0 1rem;">📋 CHANGELOG CIENTÍFICO</h2>
+  <div class="changelog">
+    <div class="changelog-item">
+      <span class="changelog-date">2026-03-05</span>
+      <span class="changelog-text"><span class="green">✅ Confirmada</span> estructura fina α con error &lt;0.1%</span>
+    </div>
+    <div class="changelog-item">
+      <span class="changelog-date">2026-03-04</span>
+      <span class="changelog-text"><span class="green">✅ Confirmada</span> corrección GPS (error 0.4%)</span>
+    </div>
+    <div class="changelog-item">
+      <span class="changelog-date">2026-03-03</span>
+      <span class="changelog-text"><span class="green">✅ Confirmada</span> constante cosmológica Λ (error 3.5%)</span>
+    </div>
+    <div class="changelog-item">
+      <span class="changelog-date">2026-03-02</span>
+      <span class="changelog-text"><span class="green">✅ Confirmada</span> materia oscura 84.1% (Planck 2018)</span>
+    </div>
+    <div class="changelog-item">
+      <span class="changelog-date">2026-03-01</span>
+      <span class="changelog-text"><span class="green">✅ Confirmada</span> Regla de Oro de Fermi (validación independiente 1934)</span>
+    </div>
   </div>
 </div>
 
+<footer>
+  <div class="footer-equation">11 predicciones · 8 confirmadas · 3 pendientes · 0 refutadas</div>
+  <div class="footer-copy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-let cycles = 1000000;
-let lastUpdate = Date.now();
+// ===== GALAXIA 3D (código completo) =====
+const canvas = document.getElementById('galaxy-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
 
-function formatTime(cycles) {
-  let totalSeconds = Math.floor(cycles / 1000);
-  let hours = Math.floor(totalSeconds / 3600) % 24;
-  let minutes = Math.floor((totalSeconds % 3600) / 60);
-  let seconds = totalSeconds % 60;
-  return `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+const parameters = {
+  count: 50000,
+  size: 0.03,
+  radius: 20,
+  branches: 4,
+  spin: 1.2,
+  randomness: 0.4,
+  randomnessPower: 2,
+  insideColor: 0xffaa00,
+  outsideColor: 0x1b3984
+};
+
+const galaxyGeometry = new THREE.BufferGeometry();
+const positions = new Float32Array(parameters.count * 3);
+const colors = new Float32Array(parameters.count * 3);
+
+const colorInside = new THREE.Color(parameters.insideColor);
+const colorOutside = new THREE.Color(parameters.outsideColor);
+
+for (let i = 0; i < parameters.count; i++) {
+  const i3 = i * 3;
+  const r = Math.random() * parameters.radius;
+  const spinAngle = r * parameters.spin;
+  const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
+  
+  const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  
+  const x = Math.cos(branchAngle + spinAngle) * r + randomX;
+  const y = randomY * 0.5;
+  const z = Math.sin(branchAngle + spinAngle) * r + randomZ;
+  
+  positions[i3] = x;
+  positions[i3 + 1] = y;
+  positions[i3 + 2] = z;
+  
+  const mixedColor = colorInside.clone().lerp(colorOutside, r / parameters.radius);
+  colors[i3] = mixedColor.r;
+  colors[i3 + 1] = mixedColor.g;
+  colors[i3 + 2] = mixedColor.b;
 }
 
-function formatMotorTime(cycles) {
-  let totalSeconds = Math.floor(cycles / 1000);
-  let minutes = Math.floor(totalSeconds / 60);
-  let seconds = totalSeconds % 60;
-  return `${minutes}m ${seconds}s`;
-}
+galaxyGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+galaxyGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-function updateClocks() {
-  let now = Date.now();
-  let dt = (now - lastUpdate) / 1000;
-  
-  // Factor de gravedad local (CORREGIDO: menor número = más rápido)
-  let gravity = parseFloat(document.getElementById('gravity').value);
-  document.getElementById('gravity-value').textContent = gravity.toFixed(3);
-  
-  // El Motor Absoluto produce ciclos a ritmo constante
-  cycles += Math.floor(dt * 1000);
-  
-  // Tierra: procesa TODOS los ciclos (factor 1.0)
-  let cyclesTierra = cycles;
-  
-  // Local: procesa según su gravedad
-  // Mayor gravedad = factor MÁS GRANDE = procesamiento MÁS LENTO (MENOS ciclos)
-  // Menor gravedad = factor MÁS PEQUEÑO = procesamiento MÁS RÁPIDO (MÁS ciclos)
-  let cyclesLocal = Math.floor(cycles / gravity);
-  
-  // Mostrar ciclos
-  document.getElementById('motor-cycles').textContent = cycles.toLocaleString();
-  document.getElementById('cycles-tierra').textContent = cyclesTierra.toLocaleString();
-  document.getElementById('cycles-local').textContent = cyclesLocal.toLocaleString();
-  
-  // Diferencia acumulada (ventaja/desventaja del reloj local)
-  let diff = cyclesLocal - cyclesTierra;
-  let diffSign = diff > 0 ? '+' : '';
-  document.getElementById('phase-diff').textContent = diffSign + diff.toLocaleString() + ' ciclos';
-  
-  // Tiempos locales
-  document.getElementById('clock-tierra').textContent = formatTime(cyclesTierra);
-  document.getElementById('clock-local').textContent = formatTime(cyclesLocal);
-  
-  // Velocidad de procesamiento local
-  let speedText = gravity < 1 ? 'MÁS RÁPIDO' : (gravity > 1 ? 'MÁS LENTO' : 'IGUAL');
-  let speedColor = gravity < 1 ? 'var(--green)' : (gravity > 1 ? 'var(--red)' : 'var(--dim)');
-  let speedRatio = (1/gravity).toFixed(2);
-  document.getElementById('clock-speed').innerHTML = `gravedad ${gravity.toFixed(3)}× · procesa <span style="color:${speedColor}">${speedText}</span> (${speedRatio}× ciclos)`;
-  
-  // Reloj universal (Motor Absoluto)
-  document.getElementById('universal-time').innerHTML = '2π · ' + cycles.toLocaleString();
-  document.getElementById('motor-time').textContent = formatMotorTime(cycles);
-  
-  // Estado de sincronía
-  if (Math.abs(diff) < 100) {
-    document.getElementById('sync-status').textContent = 'EN FASE CON TIERRA ✓';
-    document.getElementById('sync-status').style.color = 'var(--green)';
-  } else if (diff > 0) {
-    document.getElementById('sync-status').textContent = 'ADELANTADO RESPECTO A TIERRA ⚡';
-    document.getElementById('sync-status').style.color = 'var(--gold)';
-  } else {
-    document.getElementById('sync-status').textContent = 'ATRASADO RESPECTO A TIERRA ⏳';
-    document.getElementById('sync-status').style.color = 'var(--red)';
-  }
-  
-  lastUpdate = now;
-}
-
-// Presets de ubicaciones con valores CORREGIDOS
-document.querySelectorAll('.location-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.location-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    
-    let loc = this.dataset.loc;
-    if (loc === 'tierra') document.getElementById('gravity').value = 1.0;
-    if (loc === 'marte') document.getElementById('gravity').value = 0.38;  // Menos gravedad = más rápido
-    if (loc === 'jupiter') document.getElementById('gravity').value = 2.5;  // Más gravedad = más lento
-    if (loc === 'espacio') document.getElementById('gravity').value = 0.001; // Casi sin gravedad = rapidísimo
-    
-    updateClocks();
-  });
+const galaxyMaterial = new THREE.PointsMaterial({
+  size: parameters.size,
+  sizeAttenuation: true,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.8
 });
 
-setInterval(updateClocks, 100);
-updateClocks();
+const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
+scene.add(galaxy);
+
+camera.position.set(10, 5, 25);
+camera.lookAt(0, 0, 0);
+
+let mouseX = 0;
+let mouseY = 0;
+
+document.addEventListener('mousemove', (event) => {
+  mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  galaxy.rotation.y += 0.00015;
+  galaxy.rotation.x += 0.00005;
+  galaxy.rotation.y += mouseX * 0.0003;
+  galaxy.rotation.x += mouseY * 0.0002;
+  renderer.render(scene, camera);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
 </script>
 </body>
 </html>

@@ -157,163 +157,110 @@ const km = 1e3;
 // ═══════════════════════════════════════════════════
 const SPARC = [
   { name:"NGC 3198", type:"Espiral", dist:13.8, Mdisk:2.20, rd:3.52, Mgas:8.5,  vobs:150,
-    desc:"Espiral clásica — testbed histórico de materia oscura",
     obs:[[0.9,72],[2,108],[3.5,130],[5.5,143],[7.5,148],[10,150],[13,150],[17,151],[22,150],[28,149],[33,150]] },
   { name:"NGC 2403", type:"Espiral", dist:3.2,  Mdisk:0.82, rd:1.75, Mgas:12.0, vobs:134,
-    desc:"Espiral de baja masa — observada por Rubin en 1980",
     obs:[[0.5,55],[1.2,90],[2,108],[3,118],[4.5,124],[6,128],[8,131],[10,132],[13,133],[17,134],[22,134]] },
   { name:"NGC 6503", type:"Espiral", dist:5.3,  Mdisk:0.79, rd:1.57, Mgas:3.8,  vobs:116,
-    desc:"Espiral aislada en el vacío del Campo Local",
     obs:[[0.5,50],[1,78],[2,100],[3,109],[4.5,113],[6,115],[8,116],[10,116],[14,116],[18,115]] },
   { name:"NGC 7331", type:"Espiral", dist:14.7, Mdisk:6.33, rd:3.10, Mgas:9.4,  vobs:240,
-    desc:"Gran espiral — análoga a la Vía Láctea",
     obs:[[1.5,175],[3,215],[5,230],[7,237],[10,238],[13,238],[17,237],[22,236],[28,236],[33,235],[38,234]] },
   { name:"NGC 2841", type:"Espiral", dist:14.1, Mdisk:8.40, rd:2.90, Mgas:6.1,  vobs:280,
-    desc:"Espiral de alta superficie — dominio estelar",
     obs:[[1,160],[2,210],[3.5,245],[5,262],[7,272],[10,276],[14,278],[18,279],[22,280],[28,280]] },
   { name:"NGC 3521", type:"Espiral", dist:10.7, Mdisk:5.50, rd:2.80, Mgas:9.2,  vobs:230,
-    desc:"Espiral floculenta de brazos difusos y extendidos",
     obs:[[1,120],[2,165],[3.5,195],[5,210],[7,220],[10,225],[14,228],[18,229],[22,230],[28,230]] },
   { name:"NGC 5055", type:"Espiral", dist:10.1, Mdisk:4.10, rd:2.75, Mgas:11.0, vobs:183,
-    desc:"M63 — la Galaxia del Girasol",
     obs:[[1,95],[2,138],[3.5,160],[5,170],[7,177],[10,181],[14,183],[18,183],[22,183],[28,183]] },
   { name:"NGC 4736", type:"Espiral", dist:4.7,  Mdisk:1.10, rd:1.30, Mgas:1.8,  vobs:180,
-    desc:"M94 — espiral compacta con anillo exterior brillante",
     obs:[[0.5,80],[1,130],[2,158],[3,170],[4.5,175],[6,177],[8,178],[10,179],[12,180]] },
   { name:"NGC 3031", type:"Espiral", dist:3.6,  Mdisk:4.60, rd:2.45, Mgas:7.0,  vobs:220,
-    desc:"M81 — gran espiral del Grupo M81",
     obs:[[1,115],[2,165],[3.5,190],[5,205],[7,212],[10,216],[14,219],[18,220],[22,220]] },
   { name:"NGC 300",  type:"Espiral", dist:2.1,  Mdisk:0.15, rd:1.30, Mgas:2.8,  vobs:90,
-    desc:"Espiral de cara en el Grupo Sculptor",
     obs:[[0.5,32],[1,52],[2,68],[3,77],[4.5,83],[6,87],[8,89],[10,90],[12,90]] },
   { name:"NGC 7793", type:"Espiral", dist:3.9,  Mdisk:0.28, rd:1.18, Mgas:2.1,  vobs:100,
-    desc:"Espiral floculenta del Grupo Sculptor",
     obs:[[0.5,40],[1,62],[2,80],[3,90],[4.5,95],[6,98],[8,100],[10,100]] },
   { name:"NGC 2976", type:"Espiral", dist:3.6,  Mdisk:0.28, rd:0.90, Mgas:0.9,  vobs:87,
-    desc:"Espiral compacta sin brazo definido del Grupo M81",
     obs:[[0.3,28],[0.7,52],[1.2,68],[2,78],[3,83],[4,86],[5,87]] },
   { name:"NGC 4559", type:"Espiral", dist:7.0,  Mdisk:0.85, rd:2.90, Mgas:12.0, vobs:120,
-    desc:"Espiral de baja masa y alta extensión de gas",
     obs:[[1,45],[2,68],[3.5,84],[5,96],[7,105],[10,112],[14,117],[18,120],[22,120]] },
   { name:"NGC 5585", type:"Espiral", dist:5.7,  Mdisk:0.18, rd:1.55, Mgas:5.2,  vobs:85,
-    desc:"Espiral de baja luminosidad con gas dominante",
     obs:[[0.5,28],[1,44],[2,60],[3,70],[4.5,77],[6,81],[8,84],[10,85]] },
   { name:"NGC 3741", type:"Espiral", dist:3.2,  Mdisk:0.007,rd:0.60, Mgas:1.5,  vobs:52,
-    desc:"Espiral enana — casi toda su masa es gas",
     obs:[[0.3,14],[0.6,22],[1,31],[1.5,37],[2,41],[2.8,45],[3.5,48],[4.5,51],[5.5,52]] },
   { name:"NGC 6015", type:"Espiral", dist:17.0, Mdisk:1.60, rd:3.10, Mgas:7.5,  vobs:140,
-    desc:"Espiral de tipo tardío con alto contenido de gas",
     obs:[[1,58],[2,88],[3.5,108],[5,120],[7,129],[10,135],[14,139],[18,140]] },
   { name:"NGC 4085", type:"Espiral", dist:19.0, Mdisk:1.20, rd:1.40, Mgas:2.2,  vobs:145,
-    desc:"Espiral vista de canto — cinemática limpia",
     obs:[[0.5,65],[1,98],[2,122],[3,134],[4.5,140],[6,143],[8,145]] },
   { name:"UGC 2885", type:"Gigante", dist:80.4, Mdisk:17.5, rd:12.0, Mgas:82.0, vobs:300,
-    desc:"La espiral más grande conocida — 800 kly de diámetro",
     obs:[[5,180],[10,225],[18,258],[26,275],[34,284],[42,290],[50,294],[58,297],[66,299],[74,300]] },
   { name:"NGC 5907", type:"Gigante", dist:16.3, Mdisk:8.20, rd:5.40, Mgas:13.0, vobs:218,
-    desc:"Espiral gigante vista de canto con halo de corrientes",
     obs:[[2,110],[4,160],[6,185],[8,200],[11,210],[15,215],[20,217],[25,218],[30,218]] },
   { name:"NGC 7814", type:"Gigante", dist:14.4, Mdisk:7.80, rd:2.60, Mgas:3.5,  vobs:230,
-    desc:"Espiral gigante vista de canto — bojo prominente",
     obs:[[1,140],[2,185],[3.5,210],[5,220],[7,226],[10,229],[14,230]] },
   { name:"UGC 6614", type:"LSB", dist:86.2, Mdisk:1.80, rd:8.50, Mgas:28.0, vobs:179,
-    desc:"LSB gigante — una de las más extensas conocidas",
     obs:[[5,90],[10,120],[15,138],[20,150],[28,161],[36,168],[44,173],[52,177],[60,179]] },
   { name:"UGC 128",  type:"LSB", dist:64.6, Mdisk:0.55, rd:8.80, Mgas:18.0, vobs:130,
-    desc:"LSB clásica — dominada por gas a todos los radios",
     obs:[[3,42],[6,63],[10,80],[15,96],[20,106],[26,113],[32,118],[38,122],[44,125],[50,127],[56,129]] },
   { name:"UGC 1230", type:"LSB", dist:51.0, Mdisk:0.42, rd:6.30, Mgas:14.5, vobs:107,
-    desc:"LSB extrema — prueba crítica de teorías alternativas",
     obs:[[3,38],[6,58],[10,73],[14,83],[18,90],[22,95],[28,100],[34,104],[40,107]] },
   { name:"F568-3",   type:"LSB", dist:77.0, Mdisk:0.31, rd:4.60, Mgas:9.8,  vobs:96,
-    desc:"LSB del catálogo de Schombert — bajo brilloextremo",
     obs:[[2,36],[4,56],[6.5,70],[9,80],[12,87],[15,91],[18,94],[22,96]] },
   { name:"F583-1",   type:"LSB", dist:32.4, Mdisk:0.12, rd:4.10, Mgas:6.2,  vobs:80,
-    desc:"LSB pura — casi sin estrellas, solo gas",
     obs:[[2,30],[4,46],[6.5,58],[9,66],[12,72],[15,76],[18,79],[22,80]] },
   { name:"UGC 4325", type:"LSB", dist:10.1, Mdisk:0.089,rd:1.70, Mgas:3.8,  vobs:90,
-    desc:"LSB de tamaño intermedio bien estudiada",
     obs:[[0.8,34],[1.5,52],[2.5,64],[3.5,72],[5,79],[6.5,83],[8,87],[10,90]] },
   { name:"UGC 5005", type:"LSB", dist:48.5, Mdisk:0.22, rd:5.50, Mgas:10.5, vobs:98,
-    desc:"LSB con perfil de brillo muy extendido",
     obs:[[3,36],[6,55],[9,68],[13,78],[18,85],[22,90],[28,95],[34,98]] },
   { name:"UGC 11748",type:"LSB", dist:35.2, Mdisk:0.75, rd:3.40, Mgas:8.2,  vobs:115,
-    desc:"LSB con alta relación gas-estrella",
     obs:[[2,44],[4,66],[6,80],[9,91],[12,98],[16,107],[20,112],[24,115]] },
   { name:"F563-1",   type:"LSB", dist:46.0, Mdisk:0.08, rd:3.90, Mgas:5.5,  vobs:70,
-    desc:"LSB extrema del catálogo Schombert",
     obs:[[2,26],[4,40],[6.5,51],[9,58],[12,63],[15,67],[18,70]] },
   { name:"DDO 154",  type:"Enana", dist:4.0,  Mdisk:0.0028,rd:0.45,Mgas:0.71, vobs:47,
-    desc:"Enana irregular — casi 100% gas, sin estrellas apreciables",
     obs:[[0.3,10],[0.6,18],[1,25],[1.5,31],[2,36],[2.8,40],[3.5,43],[4.5,45],[5.5,46],[6.5,47]] },
   { name:"DDO 168",  type:"Enana", dist:4.3,  Mdisk:0.0033,rd:0.55,Mgas:0.65, vobs:52,
-    desc:"Enana del Grupo M81 — baja metalicidad",
     obs:[[0.3,12],[0.6,20],[1,28],[1.5,34],[2,38],[2.8,43],[3.5,47],[4.5,50],[5.5,52]] },
   { name:"DDO 52",   type:"Enana", dist:10.3, Mdisk:0.021, rd:0.88,Mgas:1.9,  vobs:66,
-    desc:"Enana irregular aislada bien estudiada",
     obs:[[0.5,18],[1,30],[1.5,39],[2,46],[2.8,53],[3.5,57],[4.5,61],[5.5,64],[6.5,66]] },
   { name:"DDO 87",   type:"Enana", dist:7.7,  Mdisk:0.014, rd:0.75,Mgas:1.1,  vobs:58,
-    desc:"Enana irregular de muy baja metalicidad",
     obs:[[0.3,10],[0.6,18],[1,26],[1.5,33],[2,38],[2.8,43],[3.5,48],[4.5,53],[5.5,57],[6,58]] },
   { name:"DDO 64",   type:"Enana", dist:6.8,  Mdisk:0.008, rd:0.60,Mgas:0.85, vobs:45,
-    desc:"Enana compacta — régimen puramente TIE",
     obs:[[0.3,9],[0.6,15],[1,21],[1.5,27],[2,31],[2.8,36],[3.5,40],[4.5,44],[5,45]] },
   { name:"DDO 161",  type:"Enana", dist:7.5,  Mdisk:0.018, rd:1.10,Mgas:1.4,  vobs:60,
-    desc:"Enana irregular extendida del campo",
     obs:[[0.5,16],[1,26],[1.5,34],[2,40],[2.8,46],[3.5,51],[4.5,56],[5.5,59],[6.5,60]] },
   { name:"WLM",      type:"Enana", dist:1.02, Mdisk:0.0038,rd:0.52,Mgas:0.38, vobs:38,
-    desc:"Wolf-Lundmark-Melotte — enana del Grupo Local",
     obs:[[0.2,8],[0.4,14],[0.7,19],[1,23],[1.4,27],[1.8,31],[2.2,34],[2.6,36],[3,38]] },
   { name:"NGC 1569", type:"Enana", dist:3.4,  Mdisk:0.035, rd:0.40,Mgas:0.45, vobs:40,
-    desc:"Enana con viento galáctico activo — starburst",
     obs:[[0.2,12],[0.4,20],[0.7,28],[1,33],[1.4,37],[1.8,39],[2.2,40]] },
   { name:"IC 2574",  type:"Irregular", dist:4.0,  Mdisk:0.048,rd:1.70,Mgas:5.1,  vobs:65,
-    desc:"Enana irregular — estructura muy extendida y asimétrica",
     obs:[[0.5,14],[1,23],[2,34],[3,43],[4.5,52],[6,58],[8,62],[10,64],[12,65]] },
   { name:"NGC 4214", type:"Irregular", dist:3.0,  Mdisk:0.062,rd:0.65,Mgas:1.4,  vobs:60,
-    desc:"Irregular con brote de formación estelar activo",
     obs:[[0.3,15],[0.6,25],[1,35],[1.5,43],[2,49],[2.8,54],[3.5,57],[4.5,60]] },
   { name:"NGC 2366", type:"Irregular", dist:3.4,  Mdisk:0.028,rd:0.82,Mgas:2.0,  vobs:55,
-    desc:"Irregular — tipo magallánico con HII prominentes",
     obs:[[0.3,10],[0.6,18],[1,26],[1.5,33],[2,38],[2.8,44],[3.5,48],[4.5,52],[5.5,55]] },
   { name:"NGC 3109", type:"Irregular", dist:1.3,  Mdisk:0.022,rd:1.50,Mgas:3.2,  vobs:67,
-    desc:"Irregular cercana del Grupo Local",
     obs:[[0.5,18],[1,28],[2,40],[3,49],[4.5,56],[6,61],[8,65],[10,67]] },
   { name:"NGC 4395", type:"Irregular", dist:3.5,  Mdisk:0.030,rd:1.80,Mgas:4.8,  vobs:68,
-    desc:"Irregular extendida con núcleo Seyfert débil",
     obs:[[0.5,14],[1,23],[2,35],[3,44],[4.5,53],[6,59],[8,63],[10,66],[12,68]] },
   { name:"NGC 1560", type:"Irregular", dist:3.0,  Mdisk:0.031,rd:1.30,Mgas:3.5,  vobs:72,
-    desc:"Irregular vista de canto — perfil limpio",
     obs:[[0.5,16],[1,27],[2,40],[3,51],[4.5,60],[6,66],[8,70],[10,72]] },
   { name:"NGC 1003", type:"Espiral", dist:11.4, Mdisk:0.45, rd:2.80, Mgas:9.0,  vobs:110,
-    desc:"Espiral de tipo tardío con alta fracción de gas",
     obs:[[1,38],[2,58],[3.5,74],[5,85],[7,94],[10,101],[14,107],[18,110]] },
   { name:"NGC 3893", type:"Espiral", dist:17.9, Mdisk:2.50, rd:2.40, Mgas:5.5,  vobs:175,
-    desc:"Espiral con barra débil y brazo asimétrico",
     obs:[[1,80],[2,120],[3.5,145],[5,158],[7,166],[10,171],[14,174],[18,175]] },
   { name:"NGC 4051", type:"Espiral", dist:13.3, Mdisk:1.10, rd:1.80, Mgas:3.2,  vobs:140,
-    desc:"Espiral Seyfert 1 — núcleo activo débil",
     obs:[[0.8,60],[1.5,92],[2.5,113],[3.5,124],[5,132],[7,137],[10,140]] },
   { name:"NGC 5033", type:"Espiral", dist:18.7, Mdisk:3.20, rd:3.50, Mgas:11.0, vobs:190,
-    desc:"Espiral Seyfert 1.5 — gran galaxia de tipo tardío",
     obs:[[1,80],[2,120],[3.5,148],[5,163],[7,174],[10,182],[14,187],[18,190]] },
   { name:"NGC 5371", type:"Gigante", dist:37.8, Mdisk:9.50, rd:5.20, Mgas:14.0, vobs:255,
-    desc:"Espiral gigante barrada — sistema masivo",
     obs:[[2,125],[4,180],[6,210],[8,228],[11,240],[15,248],[20,252],[25,255]] },
   { name:"UGC 3060", type:"LSB", dist:64.0, Mdisk:0.35, rd:7.10, Mgas:15.5, vobs:118,
-    desc:"LSB extendida — curva plana desde radios pequeños",
     obs:[[3,40],[6,62],[10,78],[14,90],[18,99],[22,106],[28,112],[34,116],[40,118]] },
   { name:"F574-1",   type:"LSB", dist:95.2, Mdisk:0.28, rd:5.80, Mgas:12.0, vobs:90,
-    desc:"LSB del catálogo Schombert en vacío de gran escala",
     obs:[[3,30],[6,47],[10,60],[14,70],[18,77],[22,82],[28,87],[34,90]] },
   { name:"DDO 43",   type:"Enana", dist:7.8,  Mdisk:0.012,rd:0.70,Mgas:1.0,  vobs:50,
-    desc:"Enana irregular compacta — gas domina la masa",
     obs:[[0.3,9],[0.6,16],[1,23],[1.5,29],[2,34],[2.8,40],[3.5,44],[4.5,48],[5.5,50]] },
   { name:"NGC 2915", type:"Irregular", dist:3.8,  Mdisk:0.048,rd:0.35,Mgas:2.8,  vobs:75,
-    desc:"Irregular con disco de gas 6× más grande que el óptico",
     obs:[[0.5,30],[1,48],[2,60],[3,67],[4.5,71],[6,73],[8,74],[10,75]] },
   { name:"NGC 6946", type:"Espiral", dist:5.5,  Mdisk:3.20, rd:2.90, Mgas:12.0, vobs:195,
-    desc:"La Galaxia de los Fuegos Fireworks — alta tasa de SN",
     obs:[[1,85],[2,130],[3.5,158],[5,172],[7,181],[10,188],[14,192],[18,195]] },
 ];
 
@@ -356,7 +303,7 @@ function getTrend(points) {
     }
     return line;
 }
-  
+
 function mEncKg(r_kpc, Md, rd, Mg, rg) {
     const xd = r_kpc / rd;
     const xg = r_kpc / rg;
@@ -364,14 +311,14 @@ function mEncKg(r_kpc, Md, rd, Mg, rg) {
     const Mg_kg = Mg * 1e9 * MS * (1 - Math.exp(-xg)*(1+xg+0.5*xg*xg));
     return Math.max(Md_kg + Mg_kg, 1e20);
 }
-  
+
 // ═══════════════════════════════════════════════════
 // GRÁFICAS
 // ═══════════════════════════════════════════════════
 let curveChart, massChart;
 
 function initCharts() {
-    // Gráfica 1: Curva de rotación (Radio vs Velocidad) - como SPARC
+    // Gráfica 1: Curva de rotación (Radio vs Velocidad)
     const ctx1 = document.getElementById('curveChart').getContext('2d');
     curveChart = new Chart(ctx1, {
         type: 'scatter',
@@ -380,7 +327,8 @@ function initCharts() {
                 { label: 'TIE (0 parámetros)', data: [], showLine: true, borderColor: '#FFD700', borderWidth: 3, pointRadius: 0 },
                 { label: 'Newton', data: [], showLine: true, borderColor: 'rgba(255,255,255,0.2)', borderWidth: 1, borderDash: [5,5], pointRadius: 0 },
                 { label: 'v_flat', data: [], showLine: true, borderColor: '#44FF88', borderWidth: 1.5, borderDash: [3,3], pointRadius: 0 },
-                { label: 'Observado (SPARC)', data: [], backgroundColor: '#5BC8F5', pointRadius: 6, borderColor: '#0d0d1a', borderWidth: 1 }
+                { label: 'Observado (SPARC)', data: [], backgroundColor: '#5BC8F5', pointRadius: 6, borderColor: '#0d0d1a', borderWidth: 1 },
+                { label: 'TIE + Bisturí (corregida)', data: [], showLine: true, borderColor: 'rgba(68, 255, 136, 0.8)', borderWidth: 2, borderDash: [5,2], pointRadius: 0 }
             ]
         },
         options: {
@@ -397,17 +345,17 @@ function initCharts() {
                     title: { display: true, text: 'Velocidad (km/s)', color: '#7777aa' }, 
                     grid: { color: 'rgba(255,255,255,0.05)' }, 
                     ticks: { color: '#7777aa' },
-                    suggestedMin: 1  // Empieza en 0 pero se ajusta si los datos son mayores
+                    suggestedMin: 1
                 }
             },
             plugins: { 
-                legend: { position: 'top', labels: { color: '#e8e8f0', font: { family: 'Space Mono', size: 9 }, usePointStyle: true } },
+                legend: { position: 'top', labels: { color: '#e8e8f0', font: { family: 'Space Mono', size: 8 }, usePointStyle: true, padding: 10 } },
                 tooltip: { enabled: true }
             }
         }
     });
 
-    // Gráfica 2: Diagrama masa-velocidad (Tully-Fisher) - corrección global
+    // Gráfica 2: Diagrama masa-velocidad
     const ctx2 = document.getElementById('massChart').getContext('2d');
     massChart = new Chart(ctx2, {
         type: 'scatter',
@@ -430,7 +378,7 @@ function initCharts() {
                 y: { type: 'logarithmic', min: 20, max: 600, title: { display: true, text: 'Velocidad (km/s)', color: '#7777aa' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7777aa' } }
             },
             plugins: { 
-                legend: { position: 'top', labels: { color: '#e8e8f0', font: { family: 'Space Mono', size: 8 }, usePointStyle: true, padding: 10 } },
+                legend: { position: 'top', labels: { color: '#e8e8f0', font: { family: 'Space Mono', size: 7 }, usePointStyle: true, padding: 8 } },
                 tooltip: { enabled: true }
             }
         }
@@ -480,49 +428,61 @@ function run() {
     document.getElementById('e-new').textContent = errN.toFixed(1) + "%";
     document.getElementById('sync').textContent = (100 - errN).toFixed(1) + "%";
 
-// --- GRÁFICA 1: Curva de rotación (Radio vs Velocidad) ---
-if (gRaw.obs) {
-    document.getElementById('curve-gal-name').textContent = gRaw.name;
-    
-    // Datos observados
-    const obsData = gRaw.obs.map(p => ({ x: p[0], y: p[1] }));
-    
-    // Generar curva TIE para esta galaxia
-    const rMax = Math.max(...gRaw.obs.map(p => p[0])) * 1.2;
-    const rCurve = [];
-    for (let r = 0.1; r <= rMax; r += rMax/100) {
-        rCurve.push(r);
-    }
-    
-    // Función para calcular vTIE (CORREGIDA)
-    function vTIE_curve(r_kpc) {
-        const rg = gRaw.rd * 2.5;
-        const r = r_kpc * kpc;
-        const M = mEncKg(r_kpc, gRaw.Mdisk, gRaw.rd, gRaw.Mgas, rg);
-        const aN = G * M / (r * r);
-        const a = Math.sqrt(aN * (aN + a0));
-        return Math.sqrt(r * a) / km;
-    }
-    
-    const tieCurve = rCurve.map(r => ({ x: r, y: vTIE_curve(r) }));
-    
-    // Curva de Newton (CORREGIDA - usa masa encerrada)
-    const newtonCurve = rCurve.map(r => ({ 
-        x: r, 
-        y: Math.sqrt(G * mEncKg(r, gRaw.Mdisk, gRaw.rd, gRaw.Mgas, gRaw.rd * 2.5) / (r * kpc)) / km 
-    }));
-    
-    const vFlat = Math.pow(G * (gRaw.Mdisk*1e10 + gRaw.Mgas*1e9) * MS * a0, 0.25) / km;
-    const vFlatCurve = rCurve.map(r => ({ x: r, y: vFlat }));
+    // --- GRÁFICA 1: Curva de rotación (con TIE + Bisturí) ---
+    if (gRaw.obs) {
+        document.getElementById('curve-gal-name').textContent = gRaw.name;
+        
+        // Datos observados
+        const obsData = gRaw.obs.map(p => ({ x: p[0], y: p[1] }));
+        
+        // Generar curvas
+        const rMax = Math.max(...gRaw.obs.map(p => p[0])) * 1.2;
+        const rCurve = [];
+        for (let r = 0.1; r <= rMax; r += rMax/100) {
+            rCurve.push(r);
+        }
+        
+        // TIE original
+        function vTIE_curve(r_kpc) {
+            const rg = gRaw.rd * 2.5;
+            const r = r_kpc * kpc;
+            const M = mEncKg(r_kpc, gRaw.Mdisk, gRaw.rd, gRaw.Mgas, rg);
+            const aN = G * M / (r * r);
+            const a = Math.sqrt(aN * (aN + a0));
+            return Math.sqrt(r * a) / km;
+        }
+        
+        // TIE corregida con Bisturí
+        const mTie_disk = gRaw.Mdisk * (ups / 0.5);
+        const mTie_gas = gRaw.Mgas * 1.33;
+        
+        function vTIE_corregida(r_kpc) {
+            const rg = gRaw.rd * 2.5;
+            const r = r_kpc * kpc;
+            const M = mEncKg(r_kpc, mTie_disk, gRaw.rd, mTie_gas, rg);
+            const aN = G * M / (r * r);
+            const a = Math.sqrt(aN * (aN + a0));
+            return Math.sqrt(r * a) / km;
+        }
+        
+        const tieCurve = rCurve.map(r => ({ x: r, y: vTIE_curve(r) }));
+        const tieCorregidaCurve = rCurve.map(r => ({ x: r, y: vTIE_corregida(r) }));
+        const newtonCurve = rCurve.map(r => ({ 
+            x: r, 
+            y: Math.sqrt(G * mEncKg(r, gRaw.Mdisk, gRaw.rd, gRaw.Mgas, gRaw.rd * 2.5) / (r * kpc)) / km 
+        }));
+        const vFlat = Math.pow(G * (gRaw.Mdisk*1e10 + gRaw.Mgas*1e9) * MS * a0, 0.25) / km;
+        const vFlatCurve = rCurve.map(r => ({ x: r, y: vFlat }));
 
-    curveChart.data.datasets[0].data = tieCurve;
-    curveChart.data.datasets[1].data = newtonCurve;
-    curveChart.data.datasets[2].data = vFlatCurve;
-    curveChart.data.datasets[3].data = obsData;
-    curveChart.update();
-}
+        curveChart.data.datasets[0].data = tieCurve;
+        curveChart.data.datasets[1].data = newtonCurve;
+        curveChart.data.datasets[2].data = vFlatCurve;
+        curveChart.data.datasets[3].data = obsData;
+        curveChart.data.datasets[4].data = tieCorregidaCurve;
+        curveChart.update();
+    }
 
-    // --- GRÁFICA 2: Diagrama masa-velocidad (corrección global) ---
+    // --- GRÁFICA 2: Diagrama masa-velocidad ---
     const cloudOrig = []; const cloudDep = [];
     
     SPARC.forEach(d => {

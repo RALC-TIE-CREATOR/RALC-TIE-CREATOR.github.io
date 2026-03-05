@@ -25,6 +25,7 @@ html { scroll-behavior:smooth; }
 body {
   background:var(--bg); color:var(--text);
   font-family:var(--sans); height:100vh; display:flex; flex-direction:column;
+  overflow-y:auto; /* Solo scroll del navegador */
 }
 
 nav {
@@ -41,7 +42,7 @@ nav {
 .page {
   flex:1; display:flex; flex-direction:column;
   max-width:1000px; margin:0 auto; padding:1.2rem 2rem; width:100%;
-  overflow-y:auto;
+  /* ELIMINADO overflow-y:auto - ahora usa el scroll del body */
 }
 
 .page-header { margin-bottom:1.2rem; }
@@ -112,6 +113,12 @@ nav {
 .comp-item .tie { color:var(--gold); }
 .comp-item .error { font-family:var(--mono); font-size:.7rem; margin-top:0.3rem; }
 
+/* Nota adicional para QFT */
+.qft-note {
+  font-family:var(--mono); font-size:.6rem; color:var(--dim);
+  margin-top:0.2rem; font-style:italic;
+}
+
 .constants-row {
   display:flex; justify-content:space-around; gap:1.2rem;
   background:var(--bg3); padding:0.8rem; border-radius:8px;
@@ -136,13 +143,6 @@ nav {
 .footer-note {
   text-align:center; font-family:var(--mono); font-size:.75rem;
   color:var(--dim); margin-top:0.8rem;
-}
-
-@media (max-height:750px) {
-  .page { padding:0.8rem 1.5rem; }
-  .results-grid { gap:0.7rem; }
-  .result-card { padding:0.7rem; }
-  .result-value { font-size:1.3rem; }
 }
 </style>
 </head>
@@ -209,6 +209,7 @@ nav {
         <div class="source">QFT (vacío)</div>
         <div class="value" style="color:var(--red);">~10⁶⁸</div>
         <div class="error" style="color:var(--red);">120 órdenes ✗</div>
+        <div class="qft-note">(no depende de H₀ — error fijo)</div>
       </div>
     </div>
 
@@ -242,13 +243,6 @@ const c = 2.998e8;
 
 function getH0_si() {
   return parseFloat(document.getElementById('h0').value) * 1000 / 3.0857e22;
-}
-
-function formatExp(value) {
-  if (value === 0) return "0";
-  const exp = Math.floor(Math.log10(Math.abs(value)));
-  const mantissa = (value / Math.pow(10, exp)).toFixed(3);
-  return mantissa + (exp < 0 ? "×10⁻" + Math.abs(exp) : "×10⁺" + exp);
 }
 
 function update() {

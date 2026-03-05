@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H-11 · Agujeros Negros TIE vs GR</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #FFD700;
+  --blue: #5BC8F5;
+  --green: #44FF88;
+  --red: #FF4455;
+  --bg: #06060f;
+  --bg2: #0d0d1a;
+  --bg3: #111122;
+  --text: #e8e8f0;
+  --dim: #7777aa;
+  --border: #1e1e3a;
+  --mono: 'Space Mono', monospace;
+  --sans: 'Syne', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--bg); color:var(--text);
+  font-family:var(--sans); min-height:100vh; display:flex; flex-direction:column;
+}
+
+nav {
+  flex-shrink:0;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:.8rem 2rem;
+  background:rgba(6,6,15,.95); backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.nav-back  { font-family:var(--mono); font-size:.85rem; color:var(--dim); text-decoration:none; }
+.nav-back:hover { color:var(--gold); }
+.nav-tag   { font-family:var(--mono); font-size:.75rem; color:var(--dim); letter-spacing:.1em; }
+
+.page {
+  max-width:1100px; margin:0 auto; padding:1.5rem 2rem; width:100%;
+}
+
+.page-header { margin-bottom:1.2rem; }
+.page-tag {
+  font-family:var(--mono); font-size:.8rem; letter-spacing:.2em; color:var(--gold);
+  text-transform:uppercase;
+}
+.page-title { font-size:2rem; font-weight:800; margin-bottom:0.3rem; }
+.page-sub { color:var(--dim); font-size:.95rem; line-height:1.5; }
+
+.eq-highlight {
+  background:var(--bg2); border-left:4px solid var(--gold);
+  border-radius:0 8px 8px 0; padding:1rem 1.8rem;
+  margin:1rem 0;
+  font-family:var(--mono); font-size:1.1rem; text-align:center;
+}
+.eq-highlight .gold { color:var(--gold); font-weight:700; }
+.eq-highlight .small { font-size:0.85rem; margin-top:0.3rem; color:var(--dim); }
+
+.calculator-panel {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:12px; padding:1.5rem;
+  display:flex; flex-direction:column; gap:1.2rem;
+}
+
+.input-group {
+  display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap;
+}
+.input-group label {
+  font-family:var(--mono); font-size:.9rem; color:var(--dim); min-width:100px;
+}
+.input-group input {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:6px; padding:.7rem 1rem;
+  color:var(--text); font-family:var(--mono); font-size:1rem;
+  outline:none; transition:border-color .2s; width:200px;
+}
+.input-group input:focus { border-color:var(--gold); }
+
+.unit-group {
+  display:flex; gap:.5rem;
+}
+.unit-btn {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:4px; padding:.3rem .8rem;
+  font-family:var(--mono); font-size:.7rem; color:var(--dim);
+  cursor:pointer; transition:all .2s;
+}
+.unit-btn.active { background:var(--gold); color:var(--bg); border-color:var(--gold); }
+
+.results-grid {
+  display:grid; grid-template-columns:repeat(4, 1fr);
+  gap:1rem; margin:0.5rem 0;
+}
+.result-card {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:8px; padding:1rem;
+}
+.result-label {
+  font-family:var(--mono); font-size:.65rem; color:var(--dim);
+  text-transform:uppercase; margin-bottom:0.3rem;
+}
+.result-value {
+  font-family:var(--mono); font-size:1.3rem; font-weight:700;
+  color:var(--gold); line-height:1.2;
+}
+.result-unit {
+  font-family:var(--mono); font-size:.65rem; color:var(--dim); margin-top:0.3rem;
+}
+.result-note {
+  font-size:.7rem; color:var(--dim); margin-top:0.5rem;
+  border-top:1px solid var(--border); padding-top:0.5rem;
+}
+
+.comparison-table {
+  width:100%; border-collapse:collapse;
+  margin:1rem 0; font-family:var(--mono); font-size:.75rem;
+}
+.comparison-table th {
+  text-align:left; color:var(--dim); font-weight:400;
+  border-bottom:1px solid var(--border); padding:.5rem;
+}
+.comparison-table td {
+  padding:.5rem; border-bottom:1px solid var(--border);
+}
+.comparison-table .tie { color:var(--gold); font-weight:700; }
+.comparison-table .gr { color:var(--dim); }
+.comparison-table .factor { color:var(--green); font-weight:700; }
+
+.presets {
+  display:flex; gap:.8rem; flex-wrap:wrap; margin:.5rem 0;
+}
+.preset-btn {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:6px; padding:.6rem 1rem;
+  font-family:var(--mono); font-size:.75rem; color:var(--dim);
+  cursor:pointer; transition:all .2s;
+}
+.preset-btn:hover { border-color:var(--gold); color:var(--gold); }
+.preset-btn .name { display:block; color:var(--text); font-size:.8rem; }
+
+.explanation-box {
+  background:rgba(255,215,0,.05); border:1px solid rgba(255,215,0,.2);
+  border-radius:8px; padding:1rem 1.2rem;
+  font-size:0.9rem; line-height:1.5; margin-top:.5rem;
+}
+.explanation-box .highlight { color:var(--gold); font-weight:700; }
+
+.constants-row {
+  display:flex; justify-content:space-around; gap:1.2rem;
+  background:var(--bg3); padding:0.8rem; border-radius:8px;
+  border:1px solid var(--border); font-family:var(--mono); font-size:.85rem;
+}
+.const-item .label { color:var(--dim); }
+.const-item .value { color:var(--gold); margin-left:0.4rem; }
+
+.links-row {
+  display:flex; justify-content:center; gap:2rem;
+  font-family:var(--mono); font-size:.85rem; margin:1rem 0;
+}
+.links-row a { color:var(--gold); text-decoration:none; }
+
+.footer-note {
+  text-align:center; font-family:var(--mono); font-size:.75rem;
+  color:var(--dim); margin-top:1rem;
+  border-top:1px solid var(--border); padding-top:1rem;
+}
+
+@media (max-width:700px) {
+  .results-grid { grid-template-columns:repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-back">← Inicio</a>
+  <span class="nav-tag">H-11 · Agujeros Negros TIE vs GR</span>
+  <a href="constante.html" class="nav-back">a₀ y Λ →</a>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <div class="page-tag">Sin singularidades · Horizonte finito</div>
+    <h1 class="page-title">Agujeros Negros: TIE vs GR</h1>
+    <p class="page-sub">
+      GR predice un horizonte lineal (r<sub>s</sub> = 2GM/c²) y una singularidad en r=0. 
+      TIE predice un horizonte que crece como √M (r<sub>h</sub> = 0.869·√(GM/a₀)) y 
+      un interior sin singularidad — solo saturación de la infraestructura.
+    </p>
+  </div>
+
+  <div class="eq-highlight">
+    <span class="gold">r<sub>s</sub> (GR)</span> = 2GM/c²  |  
+    <span class="gold">r<sub>h</sub> (TIE)</span> = 0.869·√(GM/a₀)
+    <div class="small">a₀ = c·H₀/2π = <span id="a0-display">1.082×10⁻¹⁰</span> m/s²</div>
+  </div>
+
+  <div class="calculator-panel">
+
+    <div class="input-group">
+      <label>Masa del agujero negro (M☉)</label>
+      <input type="number" id="mass" value="6.5e9" step="any" oninput="calculate()">
+      <div class="unit-group">
+        <div class="unit-btn active" onclick="setPreset('m87')">M87*</div>
+        <div class="unit-btn" onclick="setPreset('sgra')">Sgr A*</div>
+        <div class="unit-btn" onclick="setPreset('sol')">Sol</div>
+        <div class="unit-btn" onclick="setPreset('critica')">M crítica</div>
+      </div>
+    </div>
+
+    <div class="results-grid">
+      <div class="result-card">
+        <div class="result-label">rₛ (GR)</div>
+        <div class="result-value" id="rs">1.92×10¹⁰</div>
+        <div class="result-unit">km</div>
+        <div class="result-note">Horizonte lineal ∝ M</div>
+      </div>
+      <div class="result-card">
+        <div class="result-label">rₕ (TIE)</div>
+        <div class="result-value" id="rh">7.45×10¹²</div>
+        <div class="result-unit">km</div>
+        <div class="result-note">Horizonte ∝ √M</div>
+      </div>
+      <div class="result-card">
+        <div class="result-label">Factor</div>
+        <div class="result-value" id="factor">388</div>
+        <div class="result-unit">rₕ / rₛ</div>
+        <div class="result-note">TIE predice sombra mayor</div>
+      </div>
+      <div class="result-card">
+        <div class="result-label">Masa crítica</div>
+        <div class="result-value">1.06×10²³</div>
+        <div class="result-unit">M☉</div>
+        <div class="result-note">donde rₕ = rₛ</div>
+      </div>
+    </div>
+
+    <div class="presets">
+      <div class="preset-btn" onclick="setPreset('m87')"><span class="name">M87*</span>6.5×10⁹ M☉</div>
+      <div class="preset-btn" onclick="setPreset('sgra')"><span class="name">Sgr A*</span>4×10⁶ M☉</div>
+      <div class="preset-btn" onclick="setPreset('ngc1277')"><span class="name">NGC 1277</span>2×10¹⁰ M☉</div>
+      <div class="preset-btn" onclick="setPreset('sol')"><span class="name">Sol</span>1 M☉</div>
+    </div>
+
+    <table class="comparison-table">
+      <tr><th>Objeto</th><th>M (M☉)</th><th>rₛ GR (km)</th><th>rₕ TIE (km)</th><th>Factor</th><th>Predicción EHT</th></tr>
+      <tr><td>M87*</td><td>6.5×10⁹</td><td>1.92×10¹⁰</td><td class="tie">7.45×10¹²</td><td class="factor">388×</td><td>Sombra ~388× mayor</td></tr>
+      <tr><td>Sgr A*</td><td>4.0×10⁶</td><td>1.18×10⁷</td><td class="tie">5.85×10⁹</td><td class="factor">496×</td><td>Sombra ~496× mayor</td></tr>
+      <tr><td>NGC 1277</td><td>2.0×10¹⁰</td><td>5.92×10¹⁰</td><td class="tie">1.31×10¹³</td><td class="factor">221×</td><td>Sombra ~221× mayor</td></tr>
+      <tr><td>Masa crítica</td><td>1.06×10²³</td><td>3.13×10²⁰</td><td class="tie">3.13×10²⁰</td><td>1×</td><td>Cruce de horizontes</td></tr>
+    </table>
+
+    <div class="explanation-box">
+      <span class="highlight">¿Por qué importa esto?</span> 
+      Si TIE es correcto, el Event Horizon Telescope (EHT) debería ver sombras 
+      <strong>cientos de veces más grandes</strong> de lo que predice GR. 
+      La resolución actual no distingue entre ambas, pero la próxima generación (ngEHT) 
+      podrá falsificar TIE. Además, no hay singularidad — la infraestructura se satura 
+      en r<sub>h</sub> y los paquetes-ħ quedan atrapados en ciclos de fase cerrados.
+    </div>
+
+    <div class="constants-row">
+      <span class="const-item"><span class="label">G =</span><span class="value">6.674×10⁻¹¹</span></span>
+      <span class="const-item"><span class="label">c =</span><span class="value">2.998×10⁸ m/s</span></span>
+      <span class="const-item"><span class="label">a₀ =</span><span class="value" id="a0-const">1.082×10⁻¹⁰</span></span>
+    </div>
+
+    <div class="links-row">
+      <a href="constante.html">← Calculadora a₀ y Λ</a>
+      <a href="sparc.html">Explorador SPARC</a>
+      <a href="curvas.html">Curvas de rotación →</a>
+    </div>
+
+    <div class="footer-note">
+      rₕ = 0.869·√(GM/a₀) · Sin singularidad · Verificable con ngEHT
+    </div>
+
+  </div>
+</div>
+
+<script>
+const G = 6.674e-11;
+const c = 2.998e8;
+const MS = 1.989e30;
+const km = 1e3;
+const H0_kms = 70;
+const H0_si = H0_kms * 1000 / 3.0857e22;
+const a0 = c * H0_si / (2 * Math.PI);
+const kpc = 3.0857e19;
+
+function formatExp(value) {
+  if (value === 0) return "0";
+  const exp = Math.floor(Math.log10(Math.abs(value)));
+  const mantissa = (value / Math.pow(10, exp)).toFixed(2);
+  return mantissa + "×10" + (exp < 0 ? "⁻" + Math.abs(exp) : "⁺" + exp);
+}
+
+function calculate() {
+  const massMsun = parseFloat(document.getElementById('mass').value) || 0;
+  const massKg = massMsun * MS;
+  
+  // GR
+  const rs = 2 * G * massKg / (c * c) / km;
+  
+  // TIE
+  const rh = 0.869 * Math.sqrt(G * massKg / a0) / km;
+  
+  // Factor
+  const factor = rh / rs;
+  
+  document.getElementById('rs').innerHTML = rs.toExponential(2).replace('e', '×10');
+  document.getElementById('rh').innerHTML = rh.toExponential(2).replace('e', '×10');
+  document.getElementById('factor').innerHTML = factor.toFixed(0);
+  document.getElementById('a0-display').innerHTML = a0.toExponential(3).replace('e-', '×10⁻');
+  document.getElementById('a0-const').innerHTML = a0.toExponential(3).replace('e-', '×10⁻');
+}
+
+function setPreset(p) {
+  const input = document.getElementById('mass');
+  if (p === 'm87') input.value = 6.5e9;
+  else if (p === 'sgra') input.value = 4e6;
+  else if (p === 'ngc1277') input.value = 2e10;
+  else if (p === 'sol') input.value = 1;
+  else if (p === 'critica') input.value = 1.06e23;
+  calculate();
+  
+  // Marcar botón activo
+  document.querySelectorAll('.unit-btn').forEach(btn => btn.classList.remove('active'));
+  const btnMap = {'m87':0, 'sgra':1, 'sol':2, 'critica':3};
+  if (btnMap[p] !== undefined) {
+    document.querySelectorAll('.unit-btn')[btnMap[p]].classList.add('active');
+  }
+}
+
+window.onload = calculate;
+</script>
+</body>
+</html>

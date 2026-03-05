@@ -472,45 +472,47 @@ function run() {
     document.getElementById('e-new').textContent = errN.toFixed(1) + "%";
     document.getElementById('sync').textContent = (100 - errN).toFixed(1) + "%";
 
-    // --- GRÁFICA 1: Curva de rotación (Radio vs Velocidad) ---
-    if (gRaw.obs) {
-        document.getElementById('curve-gal-name').textContent = gRaw.name;
-        
-        // Datos observados
-        const obsData = gRaw.obs.map(p => ({ x: p[0], y: p[1] }));
-        
-        // Generar curva TIE para esta galaxia
-        const rMax = Math.max(...gRaw.obs.map(p => p[0])) * 1.2;
-        const rCurve = [];
-        for (let r = 0.1; r <= rMax; r += rMax/100) {
-            rCurve.push(r);
-        }
-        
-        // Función para calcular vTIE
-        function vTIE_curve(r_kpc) {
-            const rg = gRaw.rd * 2.5;
-            const r = r_kpc * kpc;
-            const xd = r_kpc / gRaw.rd;
-            const xg = r_kpc / rg;
-            const Md_kg = gRaw.Mdisk * 1e10 * MS * (1 - Math.exp(-xd)*(1+xd));
-            const Mg_kg = gRaw.Mgas * 1e9 * MS * (1 - Math.exp(-xg)*(1+xg+0.5*xg*xg));
-            const M = Math.max(Md_kg + Mg_kg, 1e20);
-            const aN = G * M / (r * r);
-            const a = Math.sqrt(aN * (aN + a0));
-            return Math.sqrt(r * a) / km;
-        }
-        
-        const tieCurve = rCurve.map(r => ({ x: r, y: vTIE_curve(r) }));
-        const newtonCurve = rCurve.map(r => ({ x: r, y: Math.sqrt(G * (gRaw.Mdisk*1e10 + gRaw.Mgas*1e9) * MS / (r * kpc)) / km }));
-        const vFlat = Math.pow(G * (gRaw.Mdisk*1e10 + gRaw.Mgas*1e9) * MS * a0, 0.25) / km;
-        const vFlatCurve = rCurve.map(r => ({ x: r, y: vFlat }));
-
-        curveChart.data.datasets[0].data = tieCurve;
-        curveChart.data.datasets[1].data = newtonCurve;
-        curveChart.data.datasets[2].data = vFlatCurve;
-        curveChart.data.datasets[3].data = obsData;
-        curveChart.update();
+// --- GRÁFICA 1: Curva de rotación (Radio vs Velocidad) ---
+if (gRaw.obs) {
+    document.getElementById('curve-gal-name').textContent = gRaw.name;
+    
+    // Datos observados
+    const obsData = gRaw.obs.map(p => ({ x: p[0], y: p[1] }));
+    
+    // Generar curva TIE para esta galaxia
+    const rMax = Math.max(...gRaw.obs.map(p => p[0])) * 1.2;
+    const rCurve = [];
+    for (let r = 0.1; r <= rMax; r += rMax/100) {
+        rCurve.push(r);
     }
+    
+    // Función para calcular vTIE (CORREGIDA)
+    function vTIE_curve(r_kpc) {
+        const rg = gRaw.rd * 2.5;
+        const r = r_kpc * kpc;
+        const M = mEncKg(r_kpc, gRaw.Mdisk, gRaw.rd, gRaw.Mgas, rg);
+        const aN = G * M / (r * r);
+        const a = Math.sqrt(aN * (aN + a0));
+        return Math.sqrt(r * a) / km;
+    }
+    
+    const tieCurve = rCurve.map(r => ({ x: r, y: vTIE_curve(r) }));
+    
+    // Curva de Newton (CORREGIDA - usa masa encerrada)
+    const newtonCurve = rCurve.map(r => ({ 
+        x: r, 
+        y: Math.sqrt(G * mEncKg(r, gRaw.Mdisk, gRaw.rd, gRaw.Mgas, gRaw.rd * 2.5) / (r * kpc)) / km 
+    }));
+    
+    const vFlat = Math.pow(G * (gRaw.Mdisk*1e10 + gRaw.Mgas*1e9) * MS * a0, 0.25) / km;
+    const vFlatCurve = rCurve.map(r => ({ x: r, y: vFlat }));
+
+    curveChart.data.datasets[0].data = tieCurve;
+    curveChart.data.datasets[1].data = newtonCurve;
+    curveChart.data.datasets[2].data = vFlatCurve;
+    curveChart.data.datasets[3].data = obsData;
+    curveChart.update();
+}
 
     // --- GRÁFICA 2: Diagrama masa-velocidad (corrección global) ---
     const cloudOrig = []; const cloudDep = [];

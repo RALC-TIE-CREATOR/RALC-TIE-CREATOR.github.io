@@ -300,10 +300,10 @@ nav {
   line-height: 1.5;
 }
 
-/* SECCIÓN FÓRMULAS (con LaTeX) */
+/* SECCIÓN FÓRMULAS (con "Donde:") */
 .formulas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
   gap: 1.8rem;
   margin: 2rem 0;
 }
@@ -347,24 +347,33 @@ nav {
   font-weight: 700;
 }
 
-.formula-terms {
-  background: rgba(155,89,182,0.1);
-  border-left: 3px solid var(--purple);
+/* NUEVO ESTILO PARA "Donde:" */
+.formula-variables {
+  background: rgba(10,10,20,0.8);
+  border-left: 3px solid var(--gold);
   padding: 0.8rem;
   margin: 1rem 0;
-  font-size: 0.8rem;
-  line-height: 1.5;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  border-radius: 0 4px 4px 0;
 }
 
-.formula-terms .katex {
-  color: var(--purple);
-  font-weight: 700;
-}
-
-.term {
+.formula-variables strong {
+  color: var(--gold);
   font-family: var(--mono);
-  color: var(--purple);
+  font-size: 0.7rem;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.formula-variables .var {
+  font-family: var(--mono);
+  color: var(--gold);
   font-weight: 700;
+}
+
+.formula-variables .katex {
+  color: var(--gold);
 }
 
 .formula-interp {
@@ -532,7 +541,7 @@ footer {
       </div>
       <div class="bisturi-step">
         <span class="step-number">3</span>
-        <div class="step-title">Sustituir</div>
+        <div class="step-title">Eliminar</div>
         <div class="step-desc">Si es artificial, redefinir la cantidad física sin él, manteniendo consistencia dimensional.</div>
       </div>
       <div class="bisturi-step">
@@ -563,138 +572,173 @@ footer {
     </div>
   </div>
 
-  <!-- FÓRMULAS REINTERPRETADAS (con LaTeX) -->
+  <!-- FÓRMULAS REINTERPRETADAS (con "Donde:") -->
   <div class="section-title">FÓRMULAS REINTERPRETADAS</div>
   <div class="formulas-grid">
     
-    <!-- Gravedad -->
+    <!-- 1. Gravedad -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--blue); margin-bottom:0.5rem;">⚡ GRAVEDAD</div>
-      <div class="formula-classic">$$F = G\frac{Mm}{r^2}$$</div>
+      <div class="formula-classic">$$F = G\frac{M m}{r^2}$$</div>
       <div class="formula-tie">$$m_{\text{TIE}} = 2\pi \, m_{\text{obs}}$$</div>
-      <div class="formula-terms">
-        <span class="term">$m_{\text{TIE}}$</span> masa real · 
-        <span class="term">$2\pi$</span> ciclo completo · 
-        <span class="term">$a_0$</span> aceleración de transición
+      <div class="formula-variables">
+        <strong>Donde:</strong>
+        <span class="var">$m_{\text{obs}}$</span> = masa visible (estrellas + gas)<br>
+        <span class="var">$m_{\text{TIE}}$</span> = masa real de la infraestructura<br>
+        <span class="var">$2\pi$</span> = ciclo completo de sincronía
       </div>
-      <div class="formula-interp">La masa real es $2\pi$ veces la observada. La "materia oscura" es el factor que faltaba ($84.1\%$).</div>
+      <div class="formula-interp">
+        La masa real es $2\pi$ veces la observada. La "materia oscura" ($84.1\%$) es la diferencia.
+      </div>
     </div>
 
-    <!-- Energía -->
+    <!-- 2. Energía -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--gold); margin-bottom:0.5rem;">⚡ ENERGÍA</div>
       <div class="formula-classic">$$E = mc^2$$</div>
       <div class="formula-tie">$$E_{\text{TIE}} = \frac{mc^2}{2\pi}$$</div>
-      <div class="formula-terms">
-        <span class="term">$E_{\text{TIE}}$</span> energía por ciclo · 
-        <span class="term">$2\pi$</span> ciclo de sincronía · 
-        <span class="term">$a_0 = \dfrac{cH_0}{2\pi}$</span>
+      <div class="formula-variables">
+        <strong>Donde:</strong>
+        <span class="var">$E$</span> = energía total (clásica)<br>
+        <span class="var">$E_{\text{TIE}}$</span> = energía por ciclo de sincronía<br>
+        <span class="var">$m$</span> = masa observada<br>
+        <span class="var">$c$</span> = velocidad de la luz<br>
+        <span class="var">$2\pi$</span> = ciclo completo de sincronía
       </div>
-      <div class="formula-interp">Energía por ciclo de sincronía. La masa real emerge al completar $2\pi$ ciclos.</div>
+      <div class="formula-interp">
+        La energía se manifiesta en ciclos completos. La masa real es $2\pi$ veces la observada.
+      </div>
     </div>
 
-    <!-- Electromagnetismo -->
+    <!-- 3. Electromagnetismo -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--green); margin-bottom:0.5rem;">⚡ ELECTROMAGNETISMO</div>
       <div class="formula-classic">$$F = k\frac{q^2}{r^2}$$</div>
       <div class="formula-tie">$$[q_{\text{TIE}}]^2 = \text{kg}\cdot\text{m}^3/\text{s}^2$$</div>
-      <div class="formula-terms">
-        <span class="term">$q_{\text{TIE}}$</span> carga geométrica · 
-        <span class="term">$k_e$</span> absorbido · 
-        <span class="term">$T^2$</span> artificial eliminado
+      <div class="formula-variables">
+        <strong>Donde:</strong>
+        <span class="var">$q_{\text{TIE}}$</span> = carga como curvatura electromagnética<br>
+        <span class="var">$k_e$</span> = constante de Coulomb (absorbida)<br>
+        <span class="var">$T^2$</span> = tiempo cuadrado (artificial eliminado)
       </div>
-      <div class="formula-interp">La carga es curvatura electromagnética. El $T^2$ artificial de $q = I\cdot t$ desaparece.</div>
+      <div class="formula-interp">
+        La carga es curvatura de la infraestructura. El $T^2$ artificial de $q = I\cdot t$ desaparece.
+      </div>
     </div>
 
-    <!-- Nuclear fuerte -->
+    <!-- 4. Nuclear fuerte -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--red); margin-bottom:0.5rem;">⚡ NUCLEAR FUERTE</div>
       <div class="formula-classic">$$V(r) = -g^2\frac{e^{-m_\pi c r/\hbar}}{r}$$</div>
       <div class="formula-tie">$$V(r) = -\Gamma_N \frac{e^{-f_i r}}{r},\quad f_i = \frac{m_\pi c}{\hbar}$$</div>
-      <div class="formula-terms">
-        <span class="term">$f_i$</span> frecuencia de coherencia · 
-        <span class="term">$\Gamma_N$</span> acoplamiento · 
-        <span class="term">saturación</span> de canal
+      <div class="formula-variables">
+        <strong>Donde:</strong>
+        <span class="var">$f_i$</span> = frecuencia de coherencia nuclear<br>
+        <span class="var">$\Gamma_N$</span> = acoplamiento nuclear<br>
+        <span class="var">$m_\pi$</span> = masa del pión<br>
+        <span class="var">$\hbar$</span> = cuanto mínimo de sincronía
       </div>
-      <div class="formula-interp">El corte no es por partículas, sino por saturación del canal de coherencia.</div>
+      <div class="formula-interp">
+        El corte nuclear no es por partículas, sino por saturación del canal de coherencia.
+      </div>
     </div>
 
-    <!-- Nuclear débil -->
+    <!-- 5. Nuclear débil -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--purple); margin-bottom:0.5rem;">⚡ NUCLEAR DÉBIL</div>
       <div class="formula-classic">$$\Gamma = \frac{2\pi}{\hbar} |M|^2 \rho(E)$$</div>
       <div class="formula-tie">$$\Gamma = \frac{2\pi}{\hbar} |M|^2 \rho(E)$$</div>
-      <div class="formula-terms">
-        <span class="term">$\dfrac{2\pi}{\hbar}$</span> nativo · 
-        <span class="term">$|M|^2$</span> compatibilidad de fase · 
-        <span class="term">$\rho$</span> canales de sincronía
+      <div class="formula-variables">
+        <strong>Donde:</strong>
+        <span class="var">$\Gamma$</span> = tasa de desintegración<br>
+        <span class="var">$2\pi/\hbar$</span> = frecuencia de sincronía por cuanto<br>
+        <span class="var">$|M|^2$</span> = compatibilidad de fase<br>
+        <span class="var">$\rho(E)$</span> = canales de sincronía disponibles
       </div>
-      <div class="formula-interp">Regla de Oro de Fermi. TIE la hereda sin modificación: validación independiente (1934).</div>
+      <div class="formula-interp">
+        Regla de Oro de Fermi. TIE la hereda sin modificación: validación independiente (1934).
+      </div>
     </div>
 
-    <!-- Cosmología -->
+    <!-- 6. Cosmología -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--gold); margin-bottom:0.5rem;">⚡ COSMOLOGÍA</div>
       <div class="formula-classic">$$\Lambda_{\text{obs}} \approx 1.1\times10^{-52}\,\text{m}^{-2}$$</div>
       <div class="formula-tie">$$\Lambda_{\text{TIE}} = \frac{2H_0^2}{c^2} = \frac{8\pi^2 a_0^2}{c^4}$$</div>
-      <div class="formula-terms">
-        <span class="term">$a_0 = \dfrac{cH_0}{2\pi}$</span> · 
-        <span class="term">$8\pi^2$</span> dos capas × ciclos · 
-        <span class="term">curvatura de fondo</span>
+      <div class="formula-variables">
+        <strong>Donde:</strong>
+        <span class="var">$H_0$</span> = constante de Hubble<br>
+        <span class="var">$a_0 = \dfrac{cH_0}{2\pi}$</span> = aceleración de transición<br>
+        <span class="var">$8\pi^2$</span> = dos capas $\times$ ciclos completos
       </div>
-      <div class="formula-interp">La constante cosmológica no es energía oscura, es curvatura de fondo de la infraestructura.</div>
+      <div class="formula-interp">
+        La constante cosmológica no es energía oscura, es curvatura de fondo de la infraestructura.
+      </div>
     </div>
 
-    <!-- GPS / Viscosidad -->
+    <!-- 7. GPS / Viscosidad -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--blue); margin-bottom:0.5rem;">⚡ GPS / VISCOSIDAD</div>
       <div class="formula-classic">$$\Delta t = \frac{\Phi_2 - \Phi_1}{c^2}\,T$$</div>
       <div class="formula-tie">$$\Delta t = \frac{\Phi_2 - \Phi_1}{c^2}\,T$$</div>
-      <div class="formula-terms">
-        <span class="term">$\Phi$</span> potencial gravitacional · 
-        <span class="term">viscosidad</span> densidad de infraestructura · 
-        <span class="term">$c^2$</span> invariante
+      <div class="formula-variables">
+        <strong>Donde:</strong>
+        <span class="var">$\Phi$</span> = potencial gravitacional<br>
+        <span class="var">$c^2$</span> = velocidad de la luz al cuadrado (invariante)<br>
+        <span class="var">$T$</span> = tiempo coordenado
       </div>
-      <div class="formula-interp">Misma ecuación, distinta interpretación: viscosidad gravitacional, no curvatura del tiempo.</div>
+      <div class="formula-interp">
+        Misma ecuación, distinta interpretación: viscosidad gravitacional, no curvatura del tiempo.
+      </div>
     </div>
 
-    <!-- Agujeros negros -->
+    <!-- 8. Agujeros negros -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--red); margin-bottom:0.5rem;">⚡ AGUJEROS NEGROS</div>
       <div class="formula-classic">$$r_s = \frac{2GM}{c^2}$$</div>
       <div class="formula-tie">$$r_h = 0.869\sqrt{\frac{GM}{a_0}}$$</div>
-      <div class="formula-terms">
-        <span class="term">$r_h$</span> horizonte TIE · 
-        <span class="term">$a_0$</span> límite de saturación · 
-        <span class="term">$0.869$</span> de $t^3+t^2-1=0$
+      <div class="formula-variables">
+        <strong>Donde:</strong>
+        <span class="var">$r_s$</span> = radio de Schwarzschild (GR)<br>
+        <span class="var">$r_h$</span> = horizonte TIE<br>
+        <span class="var">$a_0$</span> = aceleración de transición<br>
+        <span class="var">$0.869$</span> = raíz de $t^3+t^2-1=0$
       </div>
-      <div class="formula-interp">El horizonte TIE crece como $\sqrt{M}$ (vs lineal en GR). Sin singularidades. Sombra EHT falsificable.</div>
+      <div class="formula-interp">
+        El horizonte TIE crece como $\sqrt{M}$ (vs lineal en GR). Sin singularidades. Sombra EHT falsificable.
+      </div>
     </div>
 
-    <!-- Mecánica cuántica -->
+    <!-- 9. Mecánica cuántica -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--green); margin-bottom:0.5rem;">⚡ MECÁNICA CUÁNTICA</div>
       <div class="formula-classic">$$\Delta x \cdot \Delta p \geq \frac{\hbar}{2}$$</div>
       <div class="formula-tie">$$[\hbar] = \text{kg}\cdot\text{m}^2/\text{s} = \Delta p \cdot \Delta x$$</div>
-      <div class="formula-terms">
-        <span class="term">$\hbar$</span> pixel mínimo · 
-        <span class="term">granularidad</span> de la red · 
-        <span class="term">$2\pi$</span> ciclo de fase
+      <div class="formula-variables">
+        <strong>Donde:</strong>
+        <span class="var">$\hbar$</span> = cuanto mínimo de sincronía<br>
+        <span class="var">$\Delta x$</span> = incertidumbre en posición<br>
+        <span class="var">$\Delta p$</span> = incertidumbre en momento
       </div>
-      <div class="formula-interp">El principio de incertidumbre es la granularidad de $\hbar$. No es un axioma, es el píxel mínimo.</div>
+      <div class="formula-interp">
+        El principio de incertidumbre es la granularidad de $\hbar$. No es un axioma, es el píxel mínimo.
+      </div>
     </div>
 
-    <!-- Estructura fina -->
+    <!-- 10. Estructura fina -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--purple); margin-bottom:0.5rem;">⚡ ESTRUCTURA FINA</div>
       <div class="formula-classic">$$\alpha = \frac{e^2}{4\pi\epsilon_0\hbar c} = \frac{1}{137}$$</div>
       <div class="formula-tie">$$\alpha_{\text{TIE}} = \frac{e^2 k_e}{\hbar c} = \frac{1}{137.12}$$</div>
-      <div class="formula-terms">
-        <span class="term">$\alpha$</span> relación carga/cuanto · 
-        <span class="term">$e^2$</span> curvatura EM · 
-        <span class="term">$\hbar c$</span> pixel de interacción
+      <div class="formula-variables">
+        <strong>Donde:</strong>
+        <span class="var">$\alpha$</span> = constante de estructura fina<br>
+        <span class="var">$e$</span> = carga elemental<br>
+        <span class="var">$\hbar c$</span> = pixel de interacción electromagnética
       </div>
-      <div class="formula-interp">Relación entre carga (curvatura EM) y cuanto de sincronía. Error TIE $<0.1\%$.</div>
+      <div class="formula-interp">
+        Relación entre carga (curvatura EM) y cuanto de sincronía. Error TIE $<0.1\%$.
+      </div>
     </div>
   </div>
 
@@ -726,7 +770,7 @@ footer {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// ===== GALAXIA 3D (código completo) =====
+// ===== GALAXIA 3D =====
 const canvas = document.getElementById('galaxy-canvas');
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);

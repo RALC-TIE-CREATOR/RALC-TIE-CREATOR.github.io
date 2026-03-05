@@ -215,7 +215,7 @@ nav {
   <div class="calculator-panel">
     <div class="input-group">
       <label>Masa observada (m<sub>obs</sub>)</label>
-      <input type="number" id="mass-input" value="1.0" step="0.1" min="0" oninput="convert()">
+      <input type="number" id="mass-input" value="1.0" step="0.1" min="0" oninput="convert()" onchange="convert()">
       <div class="unit-selector">
         <div class="unit-btn active" id="unit-sun" onclick="setUnit('sun')">M☉ (masas solares)</div>
         <div class="unit-btn" id="unit-kg" onclick="setUnit('kg')">kg</div>
@@ -327,7 +327,13 @@ function convert() {
   document.getElementById('visible-pct').textContent = (1/(2*Math.PI)*100).toFixed(1);
   document.getElementById('oscura-pct').textContent = (100 - (1/(2*Math.PI)*100)).toFixed(1);
 }
-
+// Prevenir que Enter intente enviar un formulario
+document.getElementById('mass-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        convert();
+    }
+});
 window.onload = convert;
 </script>
 </body>

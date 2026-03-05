@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H-05 · Conversor de Materia Oscura — TIE</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #FFD700;
+  --blue: #5BC8F5;
+  --green: #44FF88;
+  --red: #FF4455;
+  --bg: #06060f;
+  --bg2: #0d0d1a;
+  --bg3: #111122;
+  --text: #e8e8f0;
+  --dim: #7777aa;
+  --border: #1e1e3a;
+  --mono: 'Space Mono', monospace;
+  --sans: 'Syne', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--bg); color:var(--text);
+  font-family:var(--sans); min-height:100vh;
+}
+
+nav {
+  position:sticky; top:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:.9rem 2rem;
+  background:rgba(6,6,15,.95); backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo { font-family:var(--mono); font-size:.9rem; color:var(--gold); letter-spacing:.2em; text-decoration:none; }
+.nav-back  { font-family:var(--mono); font-size:.78rem; color:var(--dim); text-decoration:none; transition:color .2s; }
+.nav-back:hover { color:var(--gold); }
+.nav-tag   { font-family:var(--mono); font-size:.68rem; color:var(--dim); letter-spacing:.1em; }
+
+.page {
+  max-width:1000px; margin:0 auto; padding:2.5rem 2rem 4rem;
+}
+
+.page-header { margin-bottom:2.5rem; }
+.page-tag {
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.3em; color:var(--gold);
+  text-transform:uppercase; margin-bottom:.5rem;
+}
+.page-title { font-size:clamp(1.6rem,3vw,2.5rem); font-weight:800; margin-bottom:.5rem; }
+.page-sub   { color:var(--dim); font-size:.92rem; line-height:1.7; }
+
+.eq-highlight {
+  background:var(--bg2); border-left:4px solid var(--gold);
+  border-radius:0 8px 8px 0; padding:1.5rem 2rem;
+  margin:2rem 0;
+  font-family:var(--mono); font-size:1.2rem; text-align:center;
+}
+.eq-highlight .gold { color:var(--gold); font-weight:700; }
+.eq-highlight .dim { color:var(--dim); }
+
+.calculator-panel {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:12px; padding:2rem;
+  margin:2rem 0;
+}
+
+.input-group {
+  margin-bottom:2rem;
+}
+.input-group label {
+  display:block; font-family:var(--mono); font-size:.7rem;
+  color:var(--dim); letter-spacing:.08em; margin-bottom:.5rem;
+}
+.input-group input {
+  width:100%; background:var(--bg3); border:1px solid var(--border);
+  border-radius:6px; padding:.8rem 1rem;
+  color:var(--text); font-family:var(--mono); font-size:1rem;
+  outline:none; transition:border-color .2s;
+}
+.input-group input:focus { border-color:var(--gold); }
+
+.unit-selector {
+  display:flex; gap:.5rem; margin-top:.5rem;
+}
+.unit-btn {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:4px; padding:.3rem .8rem;
+  font-family:var(--mono); font-size:.65rem; color:var(--dim);
+  cursor:pointer; transition:all .2s;
+}
+.unit-btn:hover { border-color:var(--gold); color:var(--gold); }
+.unit-btn.active { background:var(--gold); color:var(--bg); border-color:var(--gold); }
+
+.results-grid {
+  display:grid; grid-template-columns:repeat(2, 1fr);
+  gap:1.5rem; margin:2rem 0;
+}
+.result-card {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:8px; padding:1.5rem;
+}
+.result-card.full-width { grid-column:span 2; }
+.result-label {
+  font-family:var(--mono); font-size:.6rem; color:var(--dim);
+  text-transform:uppercase; letter-spacing:.1em; margin-bottom:.5rem;
+}
+.result-value {
+  font-family:var(--mono); font-size:2rem; font-weight:700;
+  color:var(--gold); line-height:1.2;
+}
+.result-unit {
+  font-family:var(--mono); font-size:.7rem; color:var(--dim);
+  margin-top:.25rem;
+}
+
+.fraction-display {
+  display:flex; justify-content:space-around;
+  margin:2rem 0;
+  text-align:center;
+}
+.fraction-item {
+  flex:1;
+}
+.fraction-value {
+  font-family:var(--mono); font-size:2.5rem; font-weight:700;
+  line-height:1;
+}
+.fraction-value.visible { color:var(--gold); }
+.fraction-value.oscura { color:var(--red); }
+.fraction-label {
+  font-family:var(--mono); font-size:.7rem; color:var(--dim);
+  margin-top:.5rem;
+}
+.fraction-desc {
+  font-size:.75rem; color:var(--dim);
+  margin-top:.25rem;
+}
+
+.constants-box {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:8px; padding:1rem 1.5rem;
+  display:flex; justify-content:space-between; flex-wrap:wrap;
+  gap:1rem; margin:1rem 0;
+}
+.const-item {
+  font-family:var(--mono); font-size:.8rem;
+}
+.const-item .label { color:var(--dim); margin-right:.3rem; }
+.const-item .value { color:var(--gold); }
+
+.explanation-box {
+  background:rgba(255,215,0,.05); border:1px solid rgba(255,215,0,.2);
+  border-radius:8px; padding:1.5rem;
+  margin:2rem 0;
+  line-height:1.8;
+}
+.explanation-box p { margin-bottom:1rem; }
+.explanation-box .highlight { color:var(--gold); font-weight:700; }
+
+.comparison-table {
+  width:100%; border-collapse:collapse;
+  margin:1.5rem 0; font-family:var(--mono); font-size:.75rem;
+}
+.comparison-table th {
+  text-align:left; color:var(--dim); font-weight:400;
+  border-bottom:1px solid var(--border); padding:.5rem;
+}
+.comparison-table td {
+  padding:.5rem; border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+.comparison-table .tie { color:var(--gold); font-weight:700; }
+.comparison-table .obs { color:var(--blue); }
+
+.footer-note {
+  text-align:center; font-family:var(--mono); font-size:.7rem;
+  color:var(--dim); margin-top:2rem;
+  border-top:1px solid var(--border); padding-top:1.5rem;
+}
+.footer-note a { color:var(--gold); text-decoration:none; }
+
+@media (max-width:600px) {
+  .results-grid { grid-template-columns:1fr; }
+  .result-card.full-width { grid-column:span 1; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-back">← TIE / R@LC</a>
+  <span class="nav-tag">H-05 · Conversor de Materia Oscura</span>
+  <a href="2pi.html" class="nav-back">Calculadora 2π →</a>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <div class="page-tag">H-05 · La materia oscura no es una sustancia</div>
+    <h1 class="page-title">Conversor de Materia Oscura</h1>
+    <p class="page-sub">
+      La materia oscura es la fracción de masa real que las ecuaciones con T² artificial no pueden ver.
+      <strong style="color:var(--gold)">84.1%</strong> del universo es "oscuro" solo por un error de cálculo.
+    </p>
+  </div>
+
+  <div class="eq-highlight">
+    <span class="gold">m<sub>TIE</sub></span> = 2π · <span class="gold">m<sub>obs</sub></span>
+    <div style="margin-top:.5rem; font-size:.9rem;">
+      <span class="dim">La masa real es 2π veces la masa observada</span>
+    </div>
+  </div>
+
+  <div class="calculator-panel">
+    <div class="input-group">
+      <label>Masa observada (m<sub>obs</sub>)</label>
+      <input type="number" id="mass-input" value="1.0" step="0.1" min="0" oninput="convert()">
+      <div class="unit-selector">
+        <div class="unit-btn active" id="unit-sun" onclick="setUnit('sun')">M☉ (masas solares)</div>
+        <div class="unit-btn" id="unit-kg" onclick="setUnit('kg')">kg</div>
+        <div class="unit-btn" id="unit-earth" onclick="setUnit('earth')">M🜨 (masas terrestres)</div>
+      </div>
+    </div>
+
+    <div class="fraction-display">
+      <div class="fraction-item">
+        <div class="fraction-value visible" id="visible-pct">15.9</div>
+        <div class="fraction-label">% visible</div>
+        <div class="fraction-desc">1/2π = 15.9%</div>
+      </div>
+      <div class="fraction-item">
+        <div class="fraction-value oscura" id="oscura-pct">84.1</div>
+        <div class="fraction-label">% "oscura"</div>
+        <div class="fraction-desc">1 - 1/2π = 84.1%</div>
+      </div>
+    </div>
+
+    <div class="results-grid">
+      <div class="result-card">
+        <div class="result-label">Masa real TIE</div>
+        <div class="result-value" id="mtie">6.283</div>
+        <div class="result-unit" id="mtie-unit">M☉</div>
+      </div>
+      <div class="result-card">
+        <div class="result-label">Masa observada</div>
+        <div class="result-value" id="mobs">1.000</div>
+        <div class="result-unit" id="mobs-unit">M☉</div>
+      </div>
+      <div class="result-card full-width">
+        <div class="result-label">Masa "oscura" (no detectada)</div>
+        <div class="result-value" id="mdark">5.283</div>
+        <div class="result-unit" id="mdark-unit">M☉</div>
+      </div>
+    </div>
+
+    <div class="constants-box">
+      <div class="const-item"><span class="label">2π =</span> <span class="value">6.283185...</span></div>
+      <div class="const-item"><span class="label">1/2π =</span> <span class="value">0.159154...</span></div>
+      <div class="const-item"><span class="label">1 - 1/2π =</span> <span class="value">0.840845...</span></div>
+    </div>
+
+    <div class="explanation-box">
+      <p>🔭 <span class="highlight">¿Por qué 84.1%?</span></p>
+      <p>Cuando la física estándar mide la masa de una galaxia a través de su luz (estrellas visibles), obtiene <strong>m<sub>obs</sub></strong>. Pero la masa real que genera la gravedad es:</p>
+      <p style="text-align:center; font-size:1.2rem; margin:1rem 0;">m<sub>TIE</sub> = 2π · m<sub>obs</sub></p>
+      <p>Por lo tanto, la fracción visible es solo <strong>1/2π = 15.9%</strong>. El <strong>84.1%</strong> restante es lo que llaman "materia oscura" — no es una partícula exótica, es el factor 2π que faltaba en la ecuación.</p>
+    </div>
+
+    <table class="comparison-table">
+      <tr><th>Objeto</th><th>Masa observada</th><th>Masa real TIE</th><th>Masa "oscura"</th></tr>
+      <tr><td>Vía Láctea (estrellas)</td><td>6×10¹⁰ M☉</td><td>3.77×10¹¹ M☉</td><td>3.17×10¹¹ M☉</td></tr>
+      <tr><td>Cúmulo de Coma</td><td>1.5×10¹⁴ M☉</td><td>9.42×10¹⁴ M☉</td><td>7.92×10¹⁴ M☉</td></tr>
+      <tr><td>Sol (1 M☉)</td><td>1.00 M☉</td><td>6.28 M☉</td><td>5.28 M☉</td></tr>
+    </table>
+
+    <div class="footer-note">
+      <a href="sparc.html">Ver galaxias reales →</a> · 
+      <a href="curvas.html">Calcular curvas de rotación →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentUnit = 'sun';
+
+const CONVERSION = {
+  'sun': { toKg: 1.989e30, name: 'M☉' },
+  'kg': { toKg: 1, name: 'kg' },
+  'earth': { toKg: 5.972e24, name: 'M🜨' }
+};
+
+function setUnit(unit) {
+  currentUnit = unit;
+  document.querySelectorAll('.unit-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById(`unit-${unit}`).classList.add('active');
+  convert();
+}
+
+function convert() {
+  const input = parseFloat(document.getElementById('mass-input').value) || 0;
+  
+  // Convertir input a kg para cálculos internos
+  const input_kg = input * CONVERSION[currentUnit].toKg;
+  
+  // Masa real TIE (en kg)
+  const mtie_kg = 2 * Math.PI * input_kg;
+  
+  // Masa "oscura" (diferencia)
+  const mdark_kg = mtie_kg - input_kg;
+  
+  // Convertir de vuelta a la unidad seleccionada
+  const mtie = mtie_kg / CONVERSION[currentUnit].toKg;
+  const mobs = input;
+  const mdark = mdark_kg / CONVERSION[currentUnit].toKg;
+  
+  // Actualizar UI
+  document.getElementById('mtie').textContent = mtie.toExponential(3);
+  document.getElementById('mobs').textContent = mobs.toExponential(3);
+  document.getElementById('mdark').textContent = mdark.toExponential(3);
+  
+  document.getElementById('mtie-unit').textContent = CONVERSION[currentUnit].name;
+  document.getElementById('mobs-unit').textContent = CONVERSION[currentUnit].name;
+  document.getElementById('mdark-unit').textContent = CONVERSION[currentUnit].name;
+  
+  // Los porcentajes son fijos (no cambian con la masa)
+  document.getElementById('visible-pct').textContent = (1/(2*Math.PI)*100).toFixed(1);
+  document.getElementById('oscura-pct').textContent = (100 - (1/(2*Math.PI)*100)).toFixed(1);
+}
+
+window.onload = convert;
+</script>
+</body>
+</html>

@@ -356,7 +356,15 @@ function getTrend(points) {
     }
     return line;
 }
-
+  
+function mEncKg(r_kpc, Md, rd, Mg, rg) {
+    const xd = r_kpc / rd;
+    const xg = r_kpc / rg;
+    const Md_kg = Md * 1e10 * MS * (1 - Math.exp(-xd)*(1+xd));
+    const Mg_kg = Mg * 1e9 * MS * (1 - Math.exp(-xg)*(1+xg+0.5*xg*xg));
+    return Math.max(Md_kg + Mg_kg, 1e20);
+}
+  
 // ═══════════════════════════════════════════════════
 // GRÁFICAS
 // ═══════════════════════════════════════════════════

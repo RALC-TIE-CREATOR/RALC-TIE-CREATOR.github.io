@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TIE · LABORATORIO</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+
+<!-- KaTeX para fórmulas científicas -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+
 <style>
 :root {
   --gold: #FFD700;
@@ -100,7 +106,7 @@ nav {
 
 .page {
   padding: 120px 2rem 4rem;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   position: relative;
   z-index: 10;
@@ -134,30 +140,33 @@ nav {
   line-height: 1.6;
 }
 
+/* GRID DE HERRAMIENTAS */
 .tools-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
 }
 
 .tool-card {
-  background: rgba(5, 5, 15, 0.7);
+  background: rgba(5,5,15,0.7);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,215,0,0.2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
   padding: 2rem;
-  border-radius: 8px;
   text-decoration: none;
   color: inherit;
   transition: 0.3s;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .tool-card:hover {
   border-color: var(--gold);
   transform: translateY(-5px);
-  box-shadow: 0 0 40px rgba(255,215,0,0.2);
+  box-shadow: 0 10px 30px rgba(255,215,0,0.2);
 }
 
 .tool-id {
@@ -169,7 +178,7 @@ nav {
 }
 
 .tool-name {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 0.8rem;
 }
@@ -177,8 +186,37 @@ nav {
 .tool-desc {
   font-size: 0.85rem;
   color: var(--dim);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+.tool-desc .katex {
+  color: var(--gold);
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  display: inline-block;
+}
+
+/* Cajita de términos (como en teoria.html) */
+.tool-terms {
+  background: rgba(255,215,0,0.08);
+  border-left: 3px solid var(--gold);
+  padding: 0.8rem;
+  margin: 0.8rem 0;
+  font-size: 0.75rem;
   line-height: 1.5;
-  margin-bottom: 1.5rem;
+  border-radius: 0 4px 4px 0;
+}
+
+.tool-terms .term {
+  font-family: var(--mono);
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.tool-terms .katex {
+  color: var(--gold);
 }
 
 .tool-link {
@@ -187,12 +225,39 @@ nav {
   color: var(--gold);
   letter-spacing: 2px;
   transition: 0.3s;
+  margin-top: 0.5rem;
+  align-self: flex-start;
 }
 
 .tool-card:hover .tool-link {
   transform: translateX(10px);
   color: var(--blue);
 }
+
+/* Colores específicos por herramienta (opcional) */
+.tool-card[data-color="blue"] .tool-id { color: var(--blue); }
+.tool-card[data-color="blue"] .tool-link { color: var(--blue); }
+.tool-card[data-color="blue"] .tool-terms { border-left-color: var(--blue); background: rgba(91,200,245,0.08); }
+.tool-card[data-color="blue"] .tool-terms .term { color: var(--blue); }
+.tool-card[data-color="blue"] .tool-desc .katex { color: var(--blue); }
+
+.tool-card[data-color="green"] .tool-id { color: var(--green); }
+.tool-card[data-color="green"] .tool-link { color: var(--green); }
+.tool-card[data-color="green"] .tool-terms { border-left-color: var(--green); background: rgba(68,255,136,0.08); }
+.tool-card[data-color="green"] .tool-terms .term { color: var(--green); }
+.tool-card[data-color="green"] .tool-desc .katex { color: var(--green); }
+
+.tool-card[data-color="red"] .tool-id { color: var(--red); }
+.tool-card[data-color="red"] .tool-link { color: var(--red); }
+.tool-card[data-color="red"] .tool-terms { border-left-color: var(--red); background: rgba(255,68,85,0.08); }
+.tool-card[data-color="red"] .tool-terms .term { color: var(--red); }
+.tool-card[data-color="red"] .tool-desc .katex { color: var(--red); }
+
+.tool-card[data-color="purple"] .tool-id { color: var(--purple); }
+.tool-card[data-color="purple"] .tool-link { color: var(--purple); }
+.tool-card[data-color="purple"] .tool-terms { border-left-color: var(--purple); background: rgba(155,89,182,0.08); }
+.tool-card[data-color="purple"] .tool-terms .term { color: var(--purple); }
+.tool-card[data-color="purple"] .tool-desc .katex { color: var(--purple); }
 
 footer {
   padding: 3rem;
@@ -234,96 +299,174 @@ footer {
   <p class="page-sub">10 módulos interactivos para poner a prueba TIE con datos reales. Sin fe. Solo números.</p>
 
   <div class="tools-grid">
-    <!-- H-01 Curvas de Rotación (actualizada) -->
-    <a href="curvas.html" class="tool-card">
+    <!-- H-01 Curvas de Rotación -->
+    <a href="curvas.html" class="tool-card" data-color="gold">
       <span class="tool-id">H-01 · EN VIVO</span>
       <div class="tool-name">Curvas de Rotación</div>
-      <div class="tool-desc">Presets por tipo de galaxia + modo libre. TIE predice la curva plana sin materia oscura.</div>
+      <div class="tool-desc">
+        <span>$$v_{\text{flat}} = (G M a_0)^{1/4}$$</span>
+        <span style="display:block; margin-top:0.5rem;">175 galaxias SPARC. TIE predice la curva plana sin materia oscura.</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$a_0 = \dfrac{cH_0}{2\pi}$</span> · 
+        <span class="term">$M$</span> masa total · 
+        <span class="term">$v_{\text{flat}}$</span> velocidad asintótica
+      </div>
       <span class="tool-link">→ EJECUTAR</span>
     </a>
 
-    <!-- H-02 Explorador SPARC (nuevo: solo catálogo) -->
-    <a href="sparc.html" class="tool-card">
+    <!-- H-02 Explorador SPARC -->
+    <a href="sparc.html" class="tool-card" data-color="blue">
       <span class="tool-id">H-02 · EN VIVO</span>
       <div class="tool-name">Explorador SPARC</div>
-      <div class="tool-desc">175 galaxias reales del catálogo SPARC. Filtra por tipo y busca por nombre.</div>
+      <div class="tool-desc">
+        <span>Catálogo de 175 galaxias reales con datos observacionales.</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$M_{\text{disc}}$</span> masa estelar · 
+        <span class="term">$M_{\text{gas}}$</span> masa de gas · 
+        <span class="term">$v_{\text{obs}}$</span> velocidad observada
+      </div>
       <span class="tool-link">→ EXPLORAR</span>
     </a>
 
-    <!-- H-02.1 El Bisturí T² (se mantiene) -->
-    <a href="fix-sparc.html" class="tool-card">
+    <!-- H-02.1 El Bisturí T² -->
+    <a href="fix-sparc.html" class="tool-card" data-color="red">
       <span class="tool-id">H-02.1 · EN VIVO</span>
       <div class="tool-name">El Bisturí T²</div>
-      <div class="tool-desc">Corrección de datos observacionales: geometría, masa y presión.</div>
+      <div class="tool-desc">
+        <span>Corrección de datos observacionales: geometría, masa y presión.</span>
+        <span style="display:block; margin-top:0.5rem;">$$T^2 \text{ artificial} \rightarrow \text{eliminado}$$</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$T^2$</span> tiempo cuadrado · 
+        <span class="term">$\Upsilon$</span> ajuste de masa · 
+        <span class="term">$\sigma$</span> presión
+      </div>
       <span class="tool-link">→ EJECUTAR</span>
     </a>
 
     <!-- H-03 Calculadora 2π -->
-    <a href="2pi.html" class="tool-card">
+    <a href="2pi.html" class="tool-card" data-color="gold">
       <span class="tool-id">H-03 · EN VIVO</span>
       <div class="tool-name">Calculadora 2π</div>
-      <div class="tool-desc">Masa total → velocidad terminal. v = (GM·a₀)^(1/4).</div>
+      <div class="tool-desc">
+        <span>$$E_{\text{TIE}} = \frac{mc^2}{2\pi}$$</span>
+        <span style="display:block; margin-top:0.5rem;">Masa total → velocidad terminal.</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$E$</span> energía por ciclo · 
+        <span class="term">$2\pi$</span> ciclo de sincronía · 
+        <span class="term">$m_{\text{TIE}} = 2\pi m_{\text{obs}}$</span>
+      </div>
       <span class="tool-link">→ EJECUTAR</span>
     </a>
 
     <!-- H-05 Conversor de Materia Oscura -->
-    <a href="materia-oscura.html" class="tool-card">
+    <a href="materia-oscura.html" class="tool-card" data-color="green">
       <span class="tool-id">H-05 · EN VIVO</span>
       <div class="tool-name">Conversor de Materia Oscura</div>
-      <div class="tool-desc">84.1% = 1 − 1/2π. La materia oscura no es una partícula.</div>
+      <div class="tool-desc">
+        <span>$$1 - \frac{1}{2\pi} = 84.1\%$$</span>
+        <span style="display:block; margin-top:0.5rem;">La materia oscura no es una partícula.</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$2\pi$</span> ciclo completo · 
+        <span class="term">$84.1\%$</span> fracción "oscura" · 
+        <span class="term">$m_{\text{TIE}}$</span> masa real
+      </div>
       <span class="tool-link">→ EJECUTAR</span>
     </a>
 
-    <!-- H-08 Calculadora a₀ y Lambda -->
-    <a href="constante.html" class="tool-card">
+    <!-- H-08 a₀ y Lambda -->
+    <a href="constante.html" class="tool-card" data-color="blue">
       <span class="tool-id">H-08 · EN VIVO</span>
       <div class="tool-name">a₀ y Lambda</div>
-      <div class="tool-desc">a₀ = cH₀/2π conecta galaxias y cosmología. Λ = 2H₀²/c².</div>
+      <div class="tool-desc">
+        <span>$$a_0 = \frac{cH_0}{2\pi}$$</span>
+        <span>$$\Lambda_{\text{TIE}} = \frac{2H_0^2}{c^2}$$</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$a_0$</span> aceleración de transición · 
+        <span class="term">$\Lambda$</span> constante cosmológica · 
+        <span class="term">$H_0$</span> tensión de Hubble
+      </div>
       <span class="tool-link">→ EJECUTAR</span>
     </a>
 
     <!-- H-11 Agujeros Negros -->
-    <a href="agujeros.html" class="tool-card">
+    <a href="agujeros.html" class="tool-card" data-color="red">
       <span class="tool-id">H-11 · EN VIVO</span>
       <div class="tool-name">Agujeros Negros</div>
-      <div class="tool-desc">rₕ = 0.869·√(GM/a₀) vs rₛ = 2GM/c². Sin singularidades.</div>
+      <div class="tool-desc">
+        <span>$$r_h = 0.869\sqrt{\frac{GM}{a_0}}$$</span>
+        <span style="display:block; margin-top:0.5rem;">vs $$r_s = \frac{2GM}{c^2}$$</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$r_h$</span> horizonte TIE · 
+        <span class="term">$r_s$</span> Schwarzschild · 
+        <span class="term">$0.869$</span> de $t^3+t^2-1=0$
+      </div>
       <span class="tool-link">→ EJECUTAR</span>
     </a>
 
     <!-- H-12 Corrección GPS -->
-    <a href="gps.html" class="tool-card">
+    <a href="gps.html" class="tool-card" data-color="blue">
       <span class="tool-id">H-12 · EN VIVO</span>
       <div class="tool-name">Corrección GPS</div>
-      <div class="tool-desc">45.9 μs/día. TIE: 45.7 μs/día. Viscosidad vs curvatura.</div>
+      <div class="tool-desc">
+        <span>$$\Delta t = \frac{\Phi_2 - \Phi_1}{c^2} T$$</span>
+        <span style="display:block; margin-top:0.5rem;">45.9 μs/día observado vs 45.7 TIE.</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$\Phi$</span> potencial gravitacional · 
+        <span class="term">$c^2$</span> invariante · 
+        <span class="term">viscosidad</span> gravitacional
+      </div>
       <span class="tool-link">→ EJECUTAR</span>
     </a>
 
-    <!-- H-12.1 Sincronizador TIE (mi versión) -->
-    <a href="sincronizador.html" class="tool-card">
+    <!-- H-12.1 Sincronizador TIE -->
+    <a href="sincronizador.html" class="tool-card" data-color="purple">
       <span class="tool-id">H-12.1 · EN VIVO</span>
       <div class="tool-name">Sincronizador TIE</div>
-      <div class="tool-desc">Reloj universal interactivo. El Motor Absoluto es el mismo en todo el cosmos.</div>
+      <div class="tool-desc">
+        <span>$$\text{ciclos}_{\text{local}} = \frac{\text{ciclos}_{\text{absolutos}}}{g}$$</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$g$</span> gravedad local · 
+        <span class="term">$2\pi$</span> ciclo universal · 
+        <span class="term">Motor Absoluto</span>
+      </div>
       <span class="tool-link">→ EJECUTAR</span>
     </a>
 
-    <!-- H-12.2 Reloj Universal (antes Gemini) - NOMBRE CORREGIDO -->
-    <a href="reloj-universal.html" class="tool-card">
+    <!-- H-12.2 Reloj Universal -->
+    <a href="reloj-universal.html" class="tool-card" data-color="purple">
       <span class="tool-id">H-12.2 · EN VIVO</span>
       <div class="tool-name">Reloj Universal</div>
-      <div class="tool-desc">Versión visual de Gemini. Relojes duales GR vs TIE en tiempo real.</div>
+      <div class="tool-desc">
+        <span>Relojes duales: GR vs TIE en tiempo real.</span>
+        <span style="display:block; margin-top:0.5rem;">$$\frac{dt_{\text{GR}}}{dt_{\text{TIE}}} = \frac{1}{g}$$</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">GR</span> tiempo curvo · 
+        <span class="term">TIE</span> tiempo procesado · 
+        <span class="term">$g$</span> gravedad local
+      </div>
       <span class="tool-link">→ EJECUTAR</span>
     </a>
   </div>
 </div>
 
 <footer>
-  <div class="footer-equation">a₀ = c·H₀/2π</div>
+  <div class="footer-equation">$a_0 = \dfrac{cH_0}{2\pi}$ · $\Lambda = \dfrac{2H_0^2}{c^2}$ · $\mathcal{R} = 2\pi$</div>
   <div class="footer-copy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// ===== GALAXIA 3D (código completo) =====
+// ===== GALAXIA 3D =====
 const canvas = document.getElementById('galaxy-canvas');
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -416,6 +559,21 @@ window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Renderizar KaTeX
+document.addEventListener("DOMContentLoaded", function() {
+  if (typeof renderMathInElement === 'function') {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });
+  }
 });
 </script>
 </body>

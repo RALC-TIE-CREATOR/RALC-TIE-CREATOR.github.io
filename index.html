@@ -11,6 +11,7 @@
   --blue: #5BC8F5;
   --green: #44FF88;
   --red: #FF4455;
+  --purple: #9b59b6; /* NUEVO COLOR MORADO */
   --bg: #000001;
   --bg2: rgba(5, 5, 15, 0.6);
   --bg3: rgba(10, 10, 25, 0.4);
@@ -104,7 +105,7 @@ nav {
   50% { border-color: rgba(255,215,0,0.5); }
 }
 
-/* ===== HERO SECTION - CORREGIDO CON PADDING TOP ===== */
+/* ===== HERO SECTION ===== */
 .hero {
   min-height: 100vh;
   display: flex;
@@ -112,27 +113,25 @@ nav {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 120px 2rem 5rem; /* 120px arriba para que el título no quede detrás del navbar */
+  padding: 120px 2rem 5rem;
   position: relative;
   z-index: 10;
 }
 
-/* ===== TÍTULO PRINCIPAL - CORREGIDO Y POTENCIADO ===== */
+/* TÍTULO PRINCIPAL */
 .hero-title {
   font-family: var(--mono);
-  font-size: 1.5rem; /* Aumentado para autoridad visual */
-  letter-spacing: 8px; /* Más espacio tecnológico */
+  font-size: 1.5rem;
+  letter-spacing: 8px;
   color: var(--gold);
   margin-bottom: 2rem;
   text-transform: uppercase;
-  border-bottom: 2px solid rgba(255,215,0,0.4); /* Línea más marcada */
+  border-bottom: 2px solid rgba(255,215,0,0.4);
   padding-bottom: 0.8rem;
   display: inline-block;
-  
-  /* Lógica de visibilidad limpia */
   opacity: 0;
   visibility: visible;
-  animation: fadeInUp 1s 0.4s forwards; /* Espera 0.4s a que la galaxia cargue */
+  animation: fadeInUp 1s 0.4s forwards;
   font-weight: 700;
 }
 
@@ -227,7 +226,7 @@ nav {
 /* ===== BOTONES PRINCIPALES COMO CUADROS ===== */
 .hero-actions {
   display: flex;
-  gap: 1.5rem; /* Ajustado */
+  gap: 1.5rem;
   margin-top: 1rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
@@ -235,7 +234,7 @@ nav {
   opacity: 0;
   animation: fadeInUp 1s 0.8s forwards;
   width: 100%;
-  max-width: 1100px; /* Ajustado */
+  max-width: 1100px;
 }
 
 .action-card {
@@ -348,22 +347,23 @@ nav {
   color: #fff;
 }
 
-/* ===== CUADROS DE PAPERS Y PREDICCIONES ===== */
+/* ===== CUADROS DE INFORMACIÓN (5 ahora) ===== */
 .hero-cards {
   display: flex;
-  gap: 1.5rem; /* Ajustado */
+  gap: 1.5rem;
   margin-top: 2rem;
   flex-wrap: wrap;
   justify-content: center;
   opacity: 0;
   animation: fadeInUp 1s 1s forwards;
   width: 100%;
-  max-width: 1100px; /* Ajustado */
+  max-width: 1400px; /* Más ancho para 5 cuadros */
 }
 
 .info-card {
-  flex: 1 1 280px;
-  padding: 2rem;
+  flex: 1 1 220px; /* Más pequeños para que quepan 5 */
+  min-width: 200px;
+  padding: 1.5rem;
   border-radius: 8px;
   text-decoration: none;
   color: inherit;
@@ -398,6 +398,18 @@ nav {
   box-shadow: 0 0 40px rgba(255, 68, 85, 0.3);
 }
 
+/* NUEVO CUADRO MORADO - TEORÍA */
+.info-card.theory {
+  border-color: rgba(155, 89, 182, 0.3);
+  box-shadow: 0 0 20px rgba(155, 89, 182, 0.2);
+}
+
+.info-card.theory:hover {
+  border-color: var(--purple);
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(155, 89, 182, 0.3);
+}
+
 .info-card::before {
   content: '';
   position: absolute;
@@ -412,10 +424,10 @@ nav {
 
 .info-tag {
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   color: var(--dim);
   letter-spacing: 2px;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.6rem;
   display: block;
 }
 
@@ -427,10 +439,14 @@ nav {
   color: var(--red);
 }
 
+.info-card.theory .info-tag {
+  color: var(--purple);
+}
+
 .info-title {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
 
 .info-card.papers .info-title {
@@ -441,16 +457,20 @@ nav {
   color: var(--red);
 }
 
+.info-card.theory .info-title {
+  color: var(--purple);
+}
+
 .info-desc {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--dim);
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  margin-bottom: 1.2rem;
 }
 
 .info-link {
   font-family: var(--mono);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: inherit;
   letter-spacing: 2px;
   transition: 0.3s;
@@ -465,8 +485,13 @@ nav {
   color: var(--red);
 }
 
+.info-card.theory .info-link {
+  color: var(--purple);
+}
+
 .info-card.papers:hover .info-link,
-.info-card.predictions:hover .info-link {
+.info-card.predictions:hover .info-link,
+.info-card.theory:hover .info-link {
   transform: translateX(10px);
   color: #fff;
 }
@@ -521,7 +546,7 @@ footer {
 </nav>
 
 <section class="hero">
-  <!-- TÍTULO PRINCIPAL - AHORA CON ESPACIO Y ANIMACIÓN CORRECTA -->
+  <!-- TÍTULO PRINCIPAL -->
   <div class="hero-title">TIE · TEORÍA DE LA INFRAESTRUCTURA ESPACIAL</div>
   
   <!-- CARRUSEL DE FRASES -->
@@ -554,32 +579,41 @@ footer {
     <a href="labs.html" class="action-card lab">
       <span class="action-tag">LABORATORIO</span>
       <div class="action-title">Entrar al Laboratorio</div>
-      <div class="action-desc">10 herramientas interactivas para verificar TIE por ti mismo. Curvas de rotación, SPARC, agujeros negros, GPS y más.</div>
+      <div class="action-desc">10 herramientas interactivas para verificar TIE por ti mismo.</div>
       <span class="action-link">→ ACCEDER</span>
     </a>
     
     <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" class="action-card github">
       <span class="action-tag">CÓDIGO ABIERTO</span>
       <div class="action-title">GitHub</div>
-      <div class="action-desc">Todo el código fuente, papers y documentación. Reproducible, verificable, libre.</div>
+      <div class="action-desc">Todo el código fuente, papers y documentación. Reproducible y libre.</div>
       <span class="action-link">↗ REPOSITORIO</span>
     </a>
   </div>
 
-  <!-- CUADROS DE PAPERS Y PREDICCIONES -->
+  <!-- AHORA 5 CUADROS INFERIORES (verde, rojo, morado NUEVO, y los de acción ya están arriba) -->
+  <!-- Espera, mejor reorganicemos: los cuadros de acción ya están arriba, estos son los de info -->
   <div class="hero-cards">
     <a href="papers.html" class="info-card papers">
       <span class="info-tag">PUBLICACIONES</span>
       <div class="info-title">Papers y Código</div>
-      <div class="info-desc">Zenodo DOI · GitHub · Tratado completo en arXiv y Kindle · Todo abierto y verificable.</div>
+      <div class="info-desc">Zenodo DOI · Tratado completo · Todo abierto y verificable.</div>
       <span class="info-link">→ ACCEDER</span>
     </a>
     
     <a href="predicciones.html" class="info-card predictions">
       <span class="info-tag">VERIFICACIÓN</span>
       <div class="info-title">Predicciones</div>
-      <div class="info-desc">11 predicciones · 8 confirmadas · 3 pendientes · Sin parámetros libres. Semáforo en tiempo real.</div>
+      <div class="info-desc">11 predicciones · 8 confirmadas · 3 pendientes · Semáforo.</div>
       <span class="info-link">→ VER ESTADO</span>
+    </a>
+
+    <!-- NUEVO CUADRO MORADO - TEORÍA -->
+    <a href="teoria.html" class="info-card theory">
+      <span class="info-tag">FUNDAMENTOS</span>
+      <div class="info-title">La Teoría TIE</div>
+      <div class="info-desc">4 postulados · El Bisturí T² · Constantes · Fórmulas reinterpretadas.</div>
+      <span class="info-link">→ EXPLORAR</span>
     </a>
   </div>
 </section>

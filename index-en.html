@@ -559,16 +559,24 @@ footer {
 <canvas id="galaxy-canvas"></canvas>
 
 <nav>
-  <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
+  <a href="index.html" class="nav-logo">TIE / R@LC</a>
   
-  <div class="lang-selector">
-    <a href="../index.html" class="lang-link inactive">ES</a>
-    <span class="lang-divider">/</span>
-    <a href="index-en.html" class="lang-link active">EN</a>
+  <!-- SELECTOR DE IDIOMA - SOLO BANDERAS -->
+  <div style="display:flex; gap:1rem; align-items:center; margin:0 1rem;">
+    <a href="index.html" style="font-size:1.8rem; line-height:1; text-decoration:none; opacity:1; border-bottom:2px solid var(--gold);">🇪🇸</a>
+    <span style="color:var(--dim); font-size:1.5rem;">|</span>
+    <a href="index-en.html" style="font-size:1.8rem; line-height:1; text-decoration:none; opacity:0.5; transition:0.3s;">🇬🇧</a>
   </div>
   
-  <a href="index-en.html" class="nav-back">← BACK TO HOME</a>
+  <a href="index.html" class="nav-back">← VOLVER AL INICIO</a>
 </nav>
+
+<style>
+/* Para el hover de la bandera inactiva */
+.nav a[href="index-en.html"]:hover {
+  opacity: 1 !important;
+}
+</style>
 
 <section class="hero">
   <div class="hero-title">TIE · THEORY OF SPATIAL INFRASTRUCTURE</div>

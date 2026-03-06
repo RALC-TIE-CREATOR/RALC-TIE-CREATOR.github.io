@@ -234,7 +234,7 @@ nav {
   color: var(--blue);
 }
 
-/* Colores específicos por herramienta (opcional) */
+/* Colores específicos por herramienta */
 .tool-card[data-color="blue"] .tool-id { color: var(--blue); }
 .tool-card[data-color="blue"] .tool-link { color: var(--blue); }
 .tool-card[data-color="blue"] .tool-terms { border-left-color: var(--blue); background: rgba(91,200,245,0.08); }
@@ -346,29 +346,31 @@ footer {
       <span class="tool-link">→ EJECUTAR</span>
     </a>
 
-    <!-- H-03 Calculadora 2π -->
+    <!-- H-03 Calculadora 2π (CORREGIDA) -->
     <a href="2pi.html" class="tool-card" data-color="gold">
       <span class="tool-id">H-03 · EN VIVO</span>
       <div class="tool-name">Calculadora 2π</div>
       <div class="tool-desc">
-        <span>$$E_{\text{TIE}} = \frac{mc^2}{2\pi}$$</span>
-        <span style="display:block; margin-top:0.5rem;">Masa total → velocidad terminal.</span>
+        <span>$$E_{\text{ciclo}} = \frac{m_{\text{obs}} c^2}{2\pi}$$</span>
+        <span>$$m_{\text{TIE}} = 2\pi \cdot m_{\text{obs}}$$</span>
+        <span style="display:block; margin-top:0.5rem;">Energía total: $E_{\text{total}} = m_{\text{obs}} c^2$ (idéntica a Einstein)</span>
       </div>
       <div class="tool-terms">
-        <span class="term">$E$</span> energía por ciclo · 
+        <span class="term">$E_{\text{ciclo}}$</span> energía por ciclo · 
         <span class="term">$2\pi$</span> ciclo de sincronía · 
-        <span class="term">$m_{\text{TIE}} = 2\pi m_{\text{obs}}$</span>
+        <span class="term">$m_{\text{TIE}} = 2\pi m_{\text{obs}}$</span> masa real
       </div>
       <span class="tool-link">→ EJECUTAR</span>
     </a>
 
-    <!-- H-05 Conversor de Materia Oscura -->
+    <!-- H-05 Conversor de Materia Oscura (CORREGIDO) -->
     <a href="materia-oscura.html" class="tool-card" data-color="green">
       <span class="tool-id">H-05 · EN VIVO</span>
       <div class="tool-name">Conversor de Materia Oscura</div>
       <div class="tool-desc">
         <span>$$1 - \frac{1}{2\pi} = 84.1\%$$</span>
-        <span style="display:block; margin-top:0.5rem;">La materia oscura no es una partícula.</span>
+        <span>$$m_{\text{TIE}} = 2\pi \cdot m_{\text{obs}}$$</span>
+        <span style="display:block; margin-top:0.5rem;">La materia oscura no es una partícula — es la masa real no contabilizada.</span>
       </div>
       <div class="tool-terms">
         <span class="term">$2\pi$</span> ciclo completo · 
@@ -378,34 +380,36 @@ footer {
       <span class="tool-link">→ EJECUTAR</span>
     </a>
 
-    <!-- H-08 a₀ y Lambda -->
+    <!-- H-08 a₀ y Lambda (CORREGIDO con G_TIE) -->
     <a href="constante.html" class="tool-card" data-color="blue">
       <span class="tool-id">H-08 · EN VIVO</span>
       <div class="tool-name">a₀ y Lambda</div>
       <div class="tool-desc">
         <span>$$a_0 = \frac{cH_0}{2\pi}$$</span>
         <span>$$\Lambda_{\text{TIE}} = \frac{2H_0^2}{c^2}$$</span>
+        <span>$$G_{\text{TIE}} = \frac{G}{4\pi^2}$$</span>
       </div>
       <div class="tool-terms">
         <span class="term">$a_0$</span> aceleración de transición · 
         <span class="term">$\Lambda$</span> constante cosmológica · 
-        <span class="term">$H_0$</span> tensión de Hubble
+        <span class="term">$G_{\text{TIE}}$</span> constante gravitacional TIE
       </div>
       <span class="tool-link">→ EJECUTAR</span>
     </a>
 
-    <!-- H-11 Agujeros Negros -->
+    <!-- H-11 Agujeros Negros (CORREGIDO con G_TIE) -->
     <a href="agujeros.html" class="tool-card" data-color="red">
       <span class="tool-id">H-11 · EN VIVO</span>
       <div class="tool-name">Agujeros Negros</div>
       <div class="tool-desc">
         <span>$$r_h = 0.869\sqrt{\frac{GM}{a_0}}$$</span>
-        <span style="display:block; margin-top:0.5rem;">vs $$r_s = \frac{2GM}{c^2}$$</span>
+        <span>vs $$r_s = \frac{2GM}{c^2}$$</span>
+        <span>$$G_{\text{TIE}} = \frac{G}{4\pi^2}$$</span>
       </div>
       <div class="tool-terms">
         <span class="term">$r_h$</span> horizonte TIE · 
         <span class="term">$r_s$</span> Schwarzschild · 
-        <span class="term">$0.869$</span> de $t^3+t^2-1=0$
+        <span class="term">$G_{\text{TIE}}$</span> constante TIE
       </div>
       <span class="tool-link">→ EJECUTAR</span>
     </a>
@@ -460,7 +464,7 @@ footer {
 </div>
 
 <footer>
-  <div class="footer-equation">$a_0 = \dfrac{cH_0}{2\pi}$ · $\Lambda = \dfrac{2H_0^2}{c^2}$ · $\mathcal{R} = 2\pi$</div>
+  <div class="footer-equation">$a_0 = \dfrac{cH_0}{2\pi}$ · $\Lambda = \dfrac{2H_0^2}{c^2}$ · $\mathcal{R} = 2\pi$ · $G_{\text{TIE}} = \dfrac{G}{4\pi^2}$</div>
   <div class="footer-copy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 

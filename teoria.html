@@ -254,83 +254,83 @@ nav {
   line-height: 1.5;
 }
 
-<!-- NUEVA SECCIÓN: ¿POR QUÉ TIE? -->
-<div class="section-title">¿PARA QUÉ SIRVE TIE SI LOS NÚMEROS SON LOS MISMOS?</div>
-
-<div style="background: rgba(5,5,15,0.7); backdrop-filter:blur(10px); border:1px solid var(--border); border-radius:16px; padding:2rem; margin:2rem 0;">
-  
-  <!-- Botones de pestañas -->
-  <div style="display:flex; gap:1rem; margin-bottom:2rem; justify-content:center; flex-wrap:wrap;">
-    <button onclick="showStandard()" style="background:transparent; border:2px solid var(--red); color:var(--red); padding:0.8rem 2rem; font-family:var(--mono); cursor:pointer; border-radius:30px; transition:0.3s; font-weight:700;">🔴 VISIÓN ESTÁNDAR</button>
-    <button onclick="showTIE()" style="background:transparent; border:2px solid var(--green); color:var(--green); padding:0.8rem 2rem; font-family:var(--mono); cursor:pointer; border-radius:30px; transition:0.3s; font-weight:700;">🟢 VISIÓN TIE</button>
-  </div>
-  
-  <!-- Contenido: Visión Estándar (visible por defecto) -->
-  <div id="view-standard" style="display:block;">
-    <h3 style="color:var(--red); margin-bottom:1.5rem; font-size:1.3rem;">🔴 Lo que la física estándar ve</h3>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
-      <div style="background:rgba(255,68,85,0.05); border-left:3px solid var(--red); padding:1rem;">
-        <div style="font-family:var(--mono); color:var(--red); margin-bottom:0.5rem;">Materia oscura</div>
-        <div style="color:var(--dim);">"Una partícula que no hemos encontrado"</div>
-      </div>
-      <div style="background:rgba(255,68,85,0.05); border-left:3px solid var(--red); padding:1rem;">
-        <div style="font-family:var(--mono); color:var(--red); margin-bottom:0.5rem;">Energía oscura (Λ)</div>
-        <div style="color:var(--dim);">"Un misterio con 120 órdenes de error"</div>
-      </div>
-      <div style="background:rgba(255,68,85,0.05); border-left:3px solid var(--red); padding:1rem;">
-        <div style="font-family:var(--mono); color:var(--red); margin-bottom:0.5rem;">Gravedad cuántica</div>
-        <div style="color:var(--dim);">"Incompatible — necesitamos cuerdas"</div>
-      </div>
-      <div style="background:rgba(255,68,85,0.05); border-left:3px solid var(--red); padding:1rem;">
-        <div style="font-family:var(--mono); color:var(--red); margin-bottom:0.5rem;">Axiomas cuánticos</div>
-        <div style="color:var(--dim);">"Así es la naturaleza (5 misterios)"</div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Contenido: Visión TIE (oculto por defecto) -->
-  <div id="view-tie" style="display:none;">
-    <h3 style="color:var(--green); margin-bottom:1.5rem; font-size:1.3rem;">🟢 Lo que TIE revela</h3>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
-      <div style="background:rgba(68,255,136,0.05); border-left:3px solid var(--green); padding:1rem;">
-        <div style="font-family:var(--mono); color:var(--green); margin-bottom:0.5rem;">Materia oscura</div>
-        <div style="color:var(--dim);">"84.1% = 1 − 1/2π — masa real no contabilizada"</div>
-      </div>
-      <div style="background:rgba(68,255,136,0.05); border-left:3px solid var(--green); padding:1rem;">
-        <div style="font-family:var(--mono); color:var(--green); margin-bottom:0.5rem;">Energía oscura (Λ)</div>
-        <div style="color:var(--dim);">"Λ = 2H₀²/c² — curvatura de fondo"</div>
-      </div>
-      <div style="background:rgba(68,255,136,0.05); border-left:3px solid var(--green); padding:1rem;">
-        <div style="font-family:var(--mono); color:var(--green); margin-bottom:0.5rem;">Gravedad cuántica</div>
-        <div style="color:var(--dim);">"Mismo campo φ a distintas escalas"</div>
-      </div>
-      <div style="background:rgba(68,255,136,0.05); border-left:3px solid var(--green); padding:1rem;">
-        <div style="font-family:var(--mono); color:var(--green); margin-bottom:0.5rem;">Axiomas cuánticos</div>
-        <div style="color:var(--dim);">"Todos derivados de la granularidad de ħ"</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Frase central unificadora -->
-  <div style="margin-top:2rem; border-top:1px solid var(--border); padding-top:1.5rem; text-align:center;">
-    <span style="font-family:var(--mono); color:var(--gold); font-size:1rem;">⚡ LOS NÚMEROS SON LOS MISMOS. LA COMPRENSIÓN NO.</span>
-  </div>
-</div>
-
-<!-- Script para cambiar entre vistas -->
-<script>
-function showStandard() {
-  document.getElementById('view-standard').style.display = 'block';
-  document.getElementById('view-tie').style.display = 'none';
+/* NUEVA SECCIÓN: ¿POR QUÉ TIE? */
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
 }
-function showTIE() {
-  document.getElementById('view-standard').style.display = 'none';
-  document.getElementById('view-tie').style.display = 'block';
-}
-</script>
 
-  
-/* SECCIÓN CONSTANTES (dos grupos) */
+.comparison-card {
+  background: rgba(5,5,15,0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.comparison-card.standard {
+  border-color: rgba(255,68,85,0.3);
+}
+
+.comparison-card.tie {
+  border-color: rgba(68,255,136,0.3);
+}
+
+.comparison-title {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.comparison-title.standard {
+  color: var(--red);
+}
+
+.comparison-title.tie {
+  color: var(--green);
+}
+
+.comparison-item {
+  border-left: 3px solid;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  background: rgba(0,0,0,0.3);
+}
+
+.comparison-item.standard {
+  border-left-color: var(--red);
+}
+
+.comparison-item.tie {
+  border-left-color: var(--green);
+}
+
+.comparison-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  margin-bottom: 0.3rem;
+}
+
+.comparison-label.standard {
+  color: var(--red);
+}
+
+.comparison-label.tie {
+  color: var(--green);
+}
+
+.comparison-text {
+  font-size: 0.85rem;
+  color: var(--dim);
+  line-height: 1.5;
+}
+
+/* SECCIÓN CONSTANTES */
 .constants-subtitle {
   font-size: 1.4rem;
   font-weight: 600;
@@ -643,6 +643,81 @@ footer {
     </div>
   </div>
 
+  <!-- ===== NUEVA SECCIÓN: ¿POR QUÉ TIE? ===== -->
+  <div class="section-title">¿PARA QUÉ SIRVE TIE SI LOS NÚMEROS SON LOS MISMOS?</div>
+  
+  <div style="background: rgba(5,5,15,0.7); backdrop-filter:blur(10px); border:1px solid var(--border); border-radius:16px; padding:2rem; margin:2rem 0;">
+    
+    <!-- Botones de pestañas -->
+    <div style="display:flex; gap:1rem; margin-bottom:2rem; justify-content:center; flex-wrap:wrap;">
+      <button onclick="showStandard()" style="background:transparent; border:2px solid var(--red); color:var(--red); padding:0.8rem 2rem; font-family:var(--mono); cursor:pointer; border-radius:30px; transition:0.3s; font-weight:700;">🔴 VISIÓN ESTÁNDAR</button>
+      <button onclick="showTIE()" style="background:transparent; border:2px solid var(--green); color:var(--green); padding:0.8rem 2rem; font-family:var(--mono); cursor:pointer; border-radius:30px; transition:0.3s; font-weight:700;">🟢 VISIÓN TIE</button>
+    </div>
+    
+    <!-- Contenido: Visión Estándar (visible por defecto) -->
+    <div id="view-standard" style="display:block;">
+      <h3 style="color:var(--red); margin-bottom:1.5rem; font-size:1.3rem; text-align:center;">🔴 Lo que la física estándar ve</h3>
+      <div class="comparison-grid">
+        <div class="comparison-item standard">
+          <div class="comparison-label standard">MATERIA OSCURA</div>
+          <div class="comparison-text">"Una partícula que no hemos encontrado"</div>
+        </div>
+        <div class="comparison-item standard">
+          <div class="comparison-label standard">ENERGÍA OSCURA (Λ)</div>
+          <div class="comparison-text">"Un misterio con 120 órdenes de error"</div>
+        </div>
+        <div class="comparison-item standard">
+          <div class="comparison-label standard">GRAVEDAD CUÁNTICA</div>
+          <div class="comparison-text">"Incompatible — necesitamos cuerdas"</div>
+        </div>
+        <div class="comparison-item standard">
+          <div class="comparison-label standard">AXIOMAS CUÁNTICOS</div>
+          <div class="comparison-text">"Así es la naturaleza (5 misterios)"</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Contenido: Visión TIE (oculto por defecto) -->
+    <div id="view-tie" style="display:none;">
+      <h3 style="color:var(--green); margin-bottom:1.5rem; font-size:1.3rem; text-align:center;">🟢 Lo que TIE revela</h3>
+      <div class="comparison-grid">
+        <div class="comparison-item tie">
+          <div class="comparison-label tie">MATERIA OSCURA</div>
+          <div class="comparison-text">"84.1% = 1 − 1/2π — masa real no contabilizada"</div>
+        </div>
+        <div class="comparison-item tie">
+          <div class="comparison-label tie">ENERGÍA OSCURA (Λ)</div>
+          <div class="comparison-text">"Λ = 2H₀²/c² — curvatura de fondo"</div>
+        </div>
+        <div class="comparison-item tie">
+          <div class="comparison-label tie">GRAVEDAD CUÁNTICA</div>
+          <div class="comparison-text">"Mismo campo φ a distintas escalas"</div>
+        </div>
+        <div class="comparison-item tie">
+          <div class="comparison-label tie">AXIOMAS CUÁNTICOS</div>
+          <div class="comparison-text">"Todos derivados de la granularidad de ħ"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Frase central unificadora -->
+    <div style="margin-top:2rem; border-top:1px solid var(--border); padding-top:1.5rem; text-align:center;">
+      <span style="font-family:var(--mono); color:var(--gold); font-size:1rem;">⚡ LOS NÚMEROS SON LOS MISMOS. LA COMPRENSIÓN NO.</span>
+    </div>
+  </div>
+  
+  <script>
+  function showStandard() {
+    document.getElementById('view-standard').style.display = 'block';
+    document.getElementById('view-tie').style.display = 'none';
+  }
+  function showTIE() {
+    document.getElementById('view-standard').style.display = 'none';
+    document.getElementById('view-tie').style.display = 'block';
+  }
+  </script>
+  <!-- ===== FIN NUEVA SECCIÓN ===== -->
+
   <!-- CONSTANTES FUNDAMENTALES (HEREDADAS) -->
   <div class="constants-subtitle">⚙️ CONSTANTES FUNDAMENTALES (HEREDADAS)</div>
   <div class="constants-grid">
@@ -660,7 +735,7 @@ footer {
       <div class="constant-desc">Velocidad de la luz en el vacío</div>
     </div>
 
-    <!-- ħ - Versión con punto explícito -->
+    <!-- ħ -->
     <div class="constant-card">
       <span class="constant-symbol">$\hbar$</span>
       <div class="constant-value">$\hbar = 1.055\times10^{-34}\ \text{J}\cdot\text{s}$</div>
@@ -716,7 +791,7 @@ footer {
   <div class="section-title">FÓRMULAS REINTERPRETADAS</div>
   <div class="formulas-grid">
     
-    <!-- 1. Gravedad (COMPLETA) -->
+    <!-- 1. Gravedad -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--blue); margin-bottom:0.5rem;">⚡ GRAVEDAD</div>
       
@@ -752,7 +827,7 @@ footer {
       </div>
     </div>
 
-    <!-- 2. Energía (CORREGIDA) -->
+    <!-- 2. Energía -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--gold); margin-bottom:0.5rem;">⚡ ENERGÍA</div>
       
@@ -787,7 +862,7 @@ footer {
       </div>
     </div>
 
-    <!-- 3. Electromagnetismo (COMPLETO) -->
+    <!-- 3. Electromagnetismo -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--green); margin-bottom:0.5rem;">⚡ ELECTROMAGNETISMO</div>
       
@@ -820,7 +895,7 @@ footer {
       </div>
     </div>
 
-    <!-- 4. Nuclear fuerte (COMPLETA) -->
+    <!-- 4. Nuclear fuerte -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--red); margin-bottom:0.5rem;">⚡ NUCLEAR FUERTE</div>
       
@@ -894,7 +969,7 @@ footer {
       </div>
     </div>
 
-    <!-- 8. Agujeros negros (MEJORADA) -->
+    <!-- 8. Agujeros negros -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--red); margin-bottom:0.5rem;">⚡ AGUJEROS NEGROS</div>
       

@@ -3,18 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TIE · H-12 · GPS y Dilatación Temporal</title>
+<title>TIE · H-12.2 · El Motor Absoluto</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
-:root{--gold:#FFD700;--blue:#5BC8F5;--green:#44FF88;--red:#FF4455;--bg:#000001;--bg2:rgba(5,5,15,0.78);--bg3:rgba(10,10,25,0.6);--text:#fff;--dim:#a0a0b0;--border:rgba(91,200,245,0.15);--mono:'Space Mono',monospace;--sans:'Syne',sans-serif;}
+:root{--gold:#FFD700;--blue:#5BC8F5;--green:#44FF88;--red:#FF4455;--bg:#000001;--bg2:rgba(5,5,15,0.82);--bg3:rgba(10,10,25,0.65);--text:#fff;--dim:#a0a0b0;--border:rgba(91,200,245,0.15);--mono:'Space Mono',monospace;--sans:'Syne',sans-serif;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
 #galaxy-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.45;}
-
 nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
 .nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
 .nav-center{display:flex;gap:.5rem;}
@@ -24,347 +23,280 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .lang-link.inactive:hover{color:var(--gold);border-color:var(--gold);}
 .nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;transition:color .2s;}
 .nav-back:hover{color:var(--gold);}
-
 .page{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:7rem 2rem 4rem;}
 .page-tag{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:.75rem;}
 .page-title{font-size:clamp(2rem,5vw,3.2rem);font-weight:900;letter-spacing:-2px;margin-bottom:.5rem;}
 .page-title span{color:var(--gold);}
 .page-sub{font-family:var(--mono);font-size:.8rem;color:var(--dim);max-width:660px;line-height:1.7;margin-bottom:2rem;}
-
-.hero-eq{background:var(--bg2);border:1px solid rgba(255,215,0,.3);border-radius:16px;padding:1.25rem 2rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;backdrop-filter:blur(8px);}
-.hero-eq-badge{font-family:var(--mono);font-size:.6rem;color:var(--green);background:rgba(68,255,136,.08);border:1px solid rgba(68,255,136,.25);border-radius:6px;padding:.35rem .8rem;letter-spacing:2px;white-space:nowrap;}
-
+.hero-eq{background:var(--bg2);border:1px solid rgba(255,215,0,.3);border-radius:16px;padding:1.25rem 2rem;margin-bottom:2rem;backdrop-filter:blur(8px);}
+.hero-eq-sub{font-family:var(--mono);font-size:.62rem;color:var(--dim);margin-top:.5rem;}
+.motor-box{background:linear-gradient(135deg,rgba(10,10,30,.97),rgba(5,5,15,.99));border:2px solid rgba(255,215,0,.5);border-radius:20px;padding:1.75rem 2rem;margin-bottom:2rem;text-align:center;position:relative;overflow:hidden;backdrop-filter:blur(12px);}
+.motor-box::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,215,0,.06),transparent 70%);pointer-events:none;}
+.motor-label{font-family:var(--mono);font-size:.62rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:.5rem;}
+.motor-number{font-family:var(--mono);font-size:clamp(1.5rem,3.5vw,2.4rem);font-weight:700;color:var(--gold);letter-spacing:-1px;line-height:1.1;margin-bottom:.35rem;text-shadow:0 0 30px rgba(255,215,0,.4);}
+.motor-sub{font-family:var(--mono);font-size:.6rem;color:var(--dim);}
+.motor-pulse{position:absolute;top:1rem;right:1.25rem;width:8px;height:8px;background:var(--gold);border-radius:50%;animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,215,0,.4)}50%{opacity:.6;box-shadow:0 0 0 6px rgba(255,215,0,0)}}
 .panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;backdrop-filter:blur(8px);margin-bottom:1.5rem;}
 .panel-title{font-family:var(--mono);font-size:.65rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;padding-bottom:.5rem;border-bottom:1px solid var(--border);margin-bottom:1.1rem;}
-
-/* CALC GRID */
-.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
-@media(max-width:600px){.calc-grid{grid-template-columns:1fr;}}
-
-.input-row{margin-bottom:.8rem;}
-.input-row label{display:block;font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:1px;margin-bottom:.3rem;}
-.inp{background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:.9rem;padding:.4rem .65rem;width:100%;outline:none;transition:border-color .2s;}
-.inp:focus{border-color:var(--gold);}
-
-.preset-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem;}
-.pb{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.3rem .6rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);cursor:pointer;transition:all .2s;}
-.pb:hover{border-color:var(--gold);color:var(--gold);}
-.pb.active{background:rgba(255,215,0,.1);border-color:var(--gold);color:var(--gold);}
-
-/* REGIME INDICATOR */
-.regime-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem;margin-bottom:1.25rem;}
-.regime-title{font-family:var(--mono);font-size:.6rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:.75rem;}
-.regime-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;}
-@media(max-width:500px){.regime-grid{grid-template-columns:1fr;}}
-.rg-item{text-align:center;}
-.rg-val{font-family:var(--mono);font-size:1.1rem;font-weight:700;line-height:1.2;}
-.rg-val.flash{animation:fl .4s ease;}
+.loc-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem;}
+.loc-btn{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.45rem .85rem;font-family:var(--mono);font-size:.62rem;color:var(--dim);cursor:pointer;transition:all .2s;text-align:left;}
+.loc-btn:hover{border-color:var(--gold);color:var(--gold);}
+.loc-btn.active{background:rgba(255,215,0,.1);border-color:var(--gold);color:var(--gold);}
+.loc-btn .lname{display:block;font-weight:700;}
+.loc-btn .lmeta{display:block;font-size:.55rem;color:var(--dim);margin-top:.1rem;}
+.loc-btn.active .lmeta{color:rgba(255,215,0,.6);}
+.clocks-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+@media(max-width:560px){.clocks-grid{grid-template-columns:1fr;}}
+.clock-card{border-radius:14px;padding:1.25rem;text-align:center;border:1px solid var(--border);}
+.clock-card.motor-clk{background:rgba(255,215,0,.04);border-color:rgba(255,215,0,.25);}
+.clock-card.local-clk{background:rgba(91,200,245,.03);border-color:rgba(91,200,245,.2);}
+.ck-title{font-family:var(--mono);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:.75rem;}
+.clock-svg-wrap{display:flex;justify-content:center;margin-bottom:.75rem;}
+.ck-time{font-family:var(--mono);font-size:1.6rem;font-weight:700;line-height:1;margin-bottom:.2rem;}
+.ck-desc{font-family:var(--mono);font-size:.58rem;color:var(--dim);line-height:1.6;}
+.visc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:1rem;}
+@media(max-width:500px){.visc-grid{grid-template-columns:1fr;}}
+.vc{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.8rem 1rem;text-align:center;}
+.vc-label{font-family:var(--mono);font-size:.57rem;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:.2rem;}
+.vc-val{font-family:var(--mono);font-size:1.15rem;font-weight:700;line-height:1.1;}
+.vc-val.flash{animation:fl .4s ease;}
 @keyframes fl{0%{opacity:.2}100%{opacity:1}}
-.rg-label{font-family:var(--mono);font-size:.58rem;color:var(--dim);margin-top:.2rem;line-height:1.4;}
-.regime-bar{margin-top:.75rem;}
-.regime-bar-label{font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-bottom:.3rem;}
-.rb-track{height:10px;background:var(--bg3);border:1px solid var(--border);border-radius:5px;overflow:hidden;position:relative;}
-.rb-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:5px;transition:width .6s ease;}
-.rb-marker{position:absolute;top:0;bottom:0;width:2px;background:var(--red);}
-.rb-ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.55rem;color:var(--dim);margin-top:.2rem;}
-
-/* RESULTS */
-.res3{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1rem;}
-@media(max-width:500px){.res3{grid-template-columns:1fr;}}
-.rc{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.85rem .9rem;text-align:center;}
-.rc.grav{border-color:rgba(255,215,0,.3);}
-.rc.vel{border-color:rgba(255,68,85,.25);}
-.rc.net{border-color:rgba(68,255,136,.3);}
-.rc-label{font-family:var(--mono);font-size:.57rem;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:.25rem;}
-.rc-val{font-family:var(--mono);font-size:1.4rem;font-weight:700;line-height:1.1;}
-.rc-val.flash{animation:fl .4s ease;}
-.rc-unit{font-family:var(--mono);font-size:.58rem;color:var(--dim);margin-top:.1rem;}
-.rc-note{font-family:var(--mono);font-size:.55rem;color:var(--dim);margin-top:.35rem;padding-top:.35rem;border-top:1px solid var(--border);line-height:1.4;}
-
-/* THREE-WAY COMPARISON */
-.cmp3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:1rem;}
-@media(max-width:500px){.cmp3{grid-template-columns:1fr;}}
-.cmp-card{border-radius:12px;padding:1rem;text-align:center;border:1px solid var(--border);}
-.cmp-card.tie{background:rgba(255,215,0,.05);border-color:rgba(255,215,0,.3);}
-.cmp-card.gr{background:rgba(91,200,245,.04);border-color:rgba(91,200,245,.2);}
-.cmp-card.obs{background:rgba(68,255,136,.04);border-color:rgba(68,255,136,.2);}
-.cmp-src{font-family:var(--mono);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:.5rem;}
-.cmp-val{font-family:var(--mono);font-size:1.5rem;font-weight:700;line-height:1.2;margin-bottom:.3rem;}
-.cmp-badge{font-family:var(--mono);font-size:.58rem;display:inline-block;padding:.15rem .45rem;border-radius:4px;}
-.cmp-badge.green{background:rgba(68,255,136,.1);color:var(--green);border:1px solid rgba(68,255,136,.2);}
-.cmp-badge.ref{background:rgba(91,200,245,.1);color:var(--blue);border:1px solid rgba(91,200,245,.2);}
-
-/* MISSIONS TABLE */
-.mtable{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.62rem;margin-bottom:.75rem;}
-.mtable th{color:var(--dim);font-weight:400;text-align:left;padding:.4rem .5rem;border-bottom:1px solid var(--border);}
-.mtable td{padding:.4rem .5rem;border-bottom:1px solid rgba(91,200,245,.07);vertical-align:middle;}
-.gold{color:var(--gold);font-weight:700;}
-.grn{color:var(--green);}
-.dmt{color:var(--dim);}
-
-/* INSIGHT */
-.insight{background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.18);border-radius:12px;padding:1.1rem 1.35rem;font-size:.82rem;line-height:1.8;margin-bottom:1.5rem;}
+.packets-section{margin-bottom:1rem;}
+.pkt-label{font-family:var(--mono);font-size:.6rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:.6rem;}
+.pkt-track{position:relative;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.65rem 1rem;display:flex;align-items:center;gap:.75rem;margin-bottom:.4rem;}
+.pkt-name{font-family:var(--mono);font-size:.6rem;color:var(--dim);width:90px;flex-shrink:0;}
+.pkt-bar{flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:4px;overflow:hidden;}
+.pkt-fill{height:100%;border-radius:4px;transition:width .5s ease;}
+.pkt-fill.motor{background:linear-gradient(90deg,var(--gold),rgba(255,215,0,.6));}
+.pkt-fill.local{background:linear-gradient(90deg,var(--blue),rgba(91,200,245,.5));}
+.pkt-count{font-family:var(--mono);font-size:.6rem;width:100px;text-align:right;flex-shrink:0;}
+.delta-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem;display:flex;align-items:center;justify-content:space-around;flex-wrap:wrap;gap:.75rem;}
+.db-item{text-align:center;}
+.db-label{font-family:var(--mono);font-size:.58rem;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:.2rem;}
+.db-val{font-family:var(--mono);font-size:1.3rem;font-weight:700;}
+.db-val.flash{animation:fl .4s ease;}
+.cmp-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.63rem;margin-bottom:.75rem;}
+.cmp-table th{color:var(--dim);font-weight:400;text-align:left;padding:.4rem .5rem;border-bottom:1px solid var(--border);}
+.cmp-table td{padding:.45rem .5rem;border-bottom:1px solid rgba(91,200,245,.07);vertical-align:top;line-height:1.5;}
+.tag-gr{display:inline-block;background:rgba(255,68,85,.08);color:var(--red);border:1px solid rgba(255,68,85,.2);border-radius:4px;font-size:.55rem;padding:.1rem .4rem;margin-right:.3rem;}
+.tag-tie{display:inline-block;background:rgba(255,215,0,.08);color:var(--gold);border:1px solid rgba(255,215,0,.2);border-radius:4px;font-size:.55rem;padding:.1rem .4rem;margin-right:.3rem;}
+.insight{background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.18);border-radius:12px;padding:1.1rem 1.35rem;font-size:.82rem;line-height:1.85;margin-bottom:1.5rem;}
 .insight .hi{color:var(--gold);font-weight:700;}
-
-/* PARSIMONY BOX */
-.parsimony{background:linear-gradient(135deg,rgba(5,5,15,.9),rgba(10,10,30,.95));border:2px solid rgba(255,215,0,.4);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden;}
-.parsimony::before{content:'"';position:absolute;top:-15px;right:15px;font-size:7rem;color:rgba(255,215,0,.07);font-family:serif;line-height:1;}
-.par-title{font-family:var(--mono);font-size:.65rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:1rem;}
-.par-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0;text-align:center;}
-.ps-num{font-family:var(--mono);font-size:2rem;font-weight:700;color:var(--gold);line-height:1;}
-.ps-lbl{font-family:var(--mono);font-size:.58rem;color:var(--dim);text-transform:uppercase;margin-top:.2rem;}
-.par-conclusion{background:rgba(255,215,0,.07);border-left:3px solid var(--gold);padding:.75rem 1rem;border-radius:0 8px 8px 0;font-size:.8rem;line-height:1.75;}
-.par-conclusion .hi{color:var(--gold);font-weight:700;}
-
+.insight .bl{color:var(--blue);}
 .const-row{display:flex;flex-wrap:wrap;gap:.75rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.75rem 1.25rem;backdrop-filter:blur(8px);margin-bottom:1.5rem;}
 .ci{font-family:var(--mono);font-size:.72rem;}
 .cl{color:var(--dim);}
 .cv{color:var(--gold);}
-
 .nav-links{display:flex;justify-content:space-between;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);}
 .nav-links a{font-family:var(--mono);font-size:.7rem;color:var(--dim);text-decoration:none;transition:color .2s;}
 .nav-links a:hover{color:var(--gold);}
-
 footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);margin-top:2rem;}
-footer .feq{font-family:var(--mono);font-size:.75rem;color:var(--gold);margin-bottom:.5rem;}
+footer .feq{font-family:var(--mono);font-size:.72rem;color:var(--gold);margin-bottom:.5rem;}
 footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;}
 </style>
 </head>
 <body>
 <canvas id="galaxy-canvas"></canvas>
-
 <nav>
   <a href="index.html" class="nav-logo">TIE / R@LC</a>
   <div class="nav-center">
-    <a href="gps.html" class="lang-link active">ES</a>
-    <a href="gps-en.html" class="lang-link inactive">EN</a>
+    <a href="reloj-universal.html" class="lang-link active">ES</a>
+    <a href="universal-clock-en.html" class="lang-link inactive">EN</a>
   </div>
   <a href="labs.html" class="nav-back">← LABORATORIO</a>
 </nav>
 
 <div class="page">
-  <div class="page-tag">H-12 · Viscosidad gravitacional · Dilatación temporal</div>
-  <h1 class="page-title">GPS y <span>RELOJ</span></h1>
-  <p class="page-sub">El GPS corrige 45.9 μs/día porque los relojes en órbita van más rápido que en tierra. TIE reproduce esta predicción desde primeros principios — pero aquí las dos teorías convergen. La razón es física, no coincidencia.</p>
+  <div class="page-tag">H-12.2 · Motor Absoluto · Cap. VI · Viscosidad gravitacional</div>
+  <h1 class="page-title">EL MOTOR <span>ABSOLUTO</span></h1>
+  <p class="page-sub">En TIE el tiempo no se curva — es lineal y absoluto en todo el universo. Lo que cambia es la velocidad a la que los relojes procesan paquetes ħ. Cerca de una masa, la infraestructura es más densa: mayor resistencia, menos paquetes por pulso, reloj más lento.</p>
 
   <div class="hero-eq">
-    <div>\( \frac{\Delta t}{t} = \frac{\Delta\Phi}{c^2} = \frac{GM}{c^2}\left(\frac{1}{r_1} - \frac{1}{r_2}\right) \qquad a_N \gg a_0 \Rightarrow \text{TIE} \approx \text{Newton} \)</div>
-    <div class="hero-eq-badge">✓ VERIFICADO · 7 EXPERIMENTOS</div>
+    <div>\( \rho_{\text{sync}}(r) = \rho_\infty \cdot \left(1 + \frac{|\Phi(r)|}{c^2}\right) \qquad \Phi(r) = -\frac{GM}{r} \)</div>
+    <div class="hero-eq-sub">Mayor densidad de sincronía → mayor viscosidad → reloj procesa menos paquetes ħ por pulso del Motor</div>
+  </div>
+
+  <!-- MOTOR ABSOLUTO COUNTER -->
+  <div class="motor-box">
+    <div class="motor-pulse"></div>
+    <div class="motor-label">⚡ Motor Absoluto — pulso universal, idéntico en todo el cosmos</div>
+    <div class="motor-number" id="motor-cycles">2π × 0</div>
+    <div class="motor-sub">ciclos totales · t₀ = carga de página · igual en la Tierra, en Andrómeda, junto a un agujero negro</div>
   </div>
 
   <!-- CALCULADORA -->
   <div class="panel">
-    <div class="panel-title">Calculadora de dilatación temporal</div>
+    <div class="panel-title">Calculadora de viscosidad gravitacional</div>
 
-    <div class="calc-grid">
-      <div>
-        <div class="input-row">
-          <label>OBJETO CENTRAL</label>
-          <input class="inp" type="number" id="masa" value="5.972e24" step="any" oninput="calc()">
-        </div>
-        <div style="font-family:var(--mono);font-size:.58rem;color:var(--dim);margin-bottom:.4rem;">UNIDADES: kg</div>
-        <div class="preset-row" id="mass-presets">
-          <div class="pb active" onclick="setMasa('tierra')">🌍 Tierra</div>
-          <div class="pb" onclick="setMasa('sol')">☀ Sol</div>
-          <div class="pb" onclick="setMasa('sgra')">⚫ Sgr A*</div>
-          <div class="pb" onclick="setMasa('m87')">⚫ M87*</div>
-        </div>
+    <div class="loc-row" id="loc-btns">
+      <div class="loc-btn active" onclick="setLoc(this,'tierra')">
+        <span class="lname">🌍 Tierra</span><span class="lmeta">superficie · 6,371 km</span>
       </div>
-      <div>
-        <div class="input-row">
-          <label>RADIO r₁ — posición inferior (km)</label>
-          <input class="inp" type="number" id="r1" value="6371" step="any" oninput="calc()">
-        </div>
-        <div class="input-row">
-          <label>RADIO r₂ — posición superior (km)</label>
-          <input class="inp" type="number" id="r2" value="26560" step="any" oninput="calc()">
-        </div>
-        <div class="preset-row" id="dist-presets">
-          <div class="pb active" onclick="setDist('gps')">🛰 GPS</div>
-          <div class="pb" onclick="setDist('iss')">🚀 ISS</div>
-          <div class="pb" onclick="setDist('luna')">🌕 Luna</div>
-          <div class="pb" onclick="setDist('marte')">🔴 Marte</div>
-        </div>
+      <div class="loc-btn" onclick="setLoc(this,'gps')">
+        <span class="lname">🛰 GPS</span><span class="lmeta">órbita · 26,560 km</span>
+      </div>
+      <div class="loc-btn" onclick="setLoc(this,'marte')">
+        <span class="lname">🔴 Marte</span><span class="lmeta">superficie · 3,389 km</span>
+      </div>
+      <div class="loc-btn" onclick="setLoc(this,'jupiter')">
+        <span class="lname">🪐 Júpiter</span><span class="lmeta">superficie · 69,911 km</span>
+      </div>
+      <div class="loc-btn" onclick="setLoc(this,'sol')">
+        <span class="lname">☀ Sol</span><span class="lmeta">fotosfera · 696,000 km</span>
+      </div>
+      <div class="loc-btn" onclick="setLoc(this,'espacio')">
+        <span class="lname">🌌 Espacio libre</span><span class="lmeta">sin masa · ρ = ρ∞</span>
       </div>
     </div>
 
-    <!-- RÉGIMEN: LA CLAVE FÍSICA -->
-    <div class="regime-box">
-      <div class="regime-title">Aceleración newtoniana vs a₀ — ¿en qué régimen estás?</div>
-      <div class="regime-grid">
-        <div class="rg-item">
-          <div class="rg-val flash" id="aN-val" style="color:var(--blue)">0.565</div>
-          <div class="rg-label">aₙ(r₂)<br>m/s²</div>
+    <!-- DOS RELOJES -->
+    <div class="clocks-grid">
+      <div class="clock-card motor-clk">
+        <div class="ck-title" style="color:var(--gold)">Motor Absoluto · Espacio libre</div>
+        <div class="clock-svg-wrap">
+          <svg width="110" height="110" viewBox="0 0 110 110">
+            <circle cx="55" cy="55" r="50" fill="none" stroke="rgba(255,215,0,.3)" stroke-width="2"/>
+            <circle cx="55" cy="55" r="3" fill="#FFD700"/>
+            <line id="hand-motor-min" x1="55" y1="55" x2="55" y2="18" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round" style="transform-origin:55px 55px;"/>
+            <line id="hand-motor-sec" x1="55" y1="55" x2="55" y2="10" stroke="rgba(255,215,0,.7)" stroke-width="1.5" stroke-linecap="round" style="transform-origin:55px 55px;"/>
+          </svg>
         </div>
-        <div class="rg-item">
-          <div class="rg-val" style="color:var(--dim)">1.082×10⁻¹⁰</div>
-          <div class="rg-label">a₀<br>m/s²</div>
-        </div>
-        <div class="rg-item">
-          <div class="rg-val flash" id="ratio-val" style="color:var(--green)">5.2×10⁹</div>
-          <div class="rg-label">aₙ / a₀<br>factor de régimen</div>
-        </div>
+        <div class="ck-time" style="color:var(--gold)" id="time-motor">00:00:00</div>
+        <div class="ck-desc">Pulso de referencia · sin viscosidad<br>ρ = ρ∞ · máximo procesamiento</div>
       </div>
-      <div class="regime-bar">
-        <div class="regime-bar-label" id="regime-label">Régimen: NEWTONIANO PROFUNDO — TIE ≡ Newton (corrección &lt;10⁻⁹)</div>
-        <div class="rb-track">
-          <div class="rb-fill" id="rb-fill" style="width:100%;"></div>
+      <div class="clock-card local-clk">
+        <div class="ck-title" style="color:var(--blue)" id="local-title">Reloj local · Tierra</div>
+        <div class="clock-svg-wrap">
+          <svg width="110" height="110" viewBox="0 0 110 110">
+            <circle cx="55" cy="55" r="50" fill="none" stroke="rgba(91,200,245,.3)" stroke-width="2"/>
+            <circle cx="55" cy="55" r="3" fill="#5BC8F5"/>
+            <line id="hand-local-min" x1="55" y1="55" x2="55" y2="18" stroke="#5BC8F5" stroke-width="2.5" stroke-linecap="round" style="transform-origin:55px 55px;"/>
+            <line id="hand-local-sec" x1="55" y1="55" x2="55" y2="10" stroke="rgba(91,200,245,.7)" stroke-width="1.5" stroke-linecap="round" style="transform-origin:55px 55px;"/>
+          </svg>
         </div>
-        <div class="rb-ends">
-          <span>← Régimen TIE puro (a≪a₀)</span>
-          <span>Régimen newtoniano puro (a≫a₀) →</span>
-        </div>
+        <div class="ck-time" style="color:var(--blue)" id="time-local">00:00:00</div>
+        <div class="ck-desc" id="local-desc">Alta viscosidad gravitacional<br>menos paquetes ħ por pulso del Motor</div>
       </div>
     </div>
 
-    <!-- DESGLOSE DE LA CORRECCIÓN -->
-    <div class="res3">
-      <div class="rc grav">
-        <div class="rc-label">Gravitacional (GR/TIE)</div>
-        <div class="rc-val flash" id="r-grav" style="color:var(--gold)">+45.9</div>
-        <div class="rc-unit">μs / día</div>
-        <div class="rc-note">r₂ tiene menos gravedad → reloj va más rápido</div>
+    <!-- METRICS -->
+    <div class="visc-grid">
+      <div class="vc">
+        <div class="vc-label">|Φ|/c² — viscosidad</div>
+        <div class="vc-val flash" id="visc-val" style="color:var(--blue)">6.95×10⁻¹⁰</div>
+        <div style="font-family:var(--mono);font-size:.55rem;color:var(--dim);margin-top:.2rem;">adimensional</div>
       </div>
-      <div class="rc vel">
-        <div class="rc-label">Velocidad orbital (SR)</div>
-        <div class="rc-val flash" id="r-vel" style="color:var(--red)">−7.2</div>
-        <div class="rc-unit">μs / día</div>
-        <div class="rc-note">Satélite se mueve más rápido → reloj va más lento</div>
+      <div class="vc">
+        <div class="vc-label">Tasa reloj / Motor</div>
+        <div class="vc-val flash" id="rate-val" style="color:var(--gold)">0.9999999993</div>
+        <div style="font-family:var(--mono);font-size:.55rem;color:var(--dim);margin-top:.2rem;">fracción de ciclos ħ</div>
       </div>
-      <div class="rc net">
-        <div class="rc-label">Corrección neta total</div>
-        <div class="rc-val flash" id="r-net" style="color:var(--green)">+38.4</div>
-        <div class="rc-unit">μs / día</div>
-        <div class="rc-note">Lo que el GPS aplica realmente cada día</div>
+      <div class="vc">
+        <div class="vc-label">Δt acumulado</div>
+        <div class="vc-val" id="delta-acc" style="color:var(--green)">0.00 μs</div>
+        <div style="font-family:var(--mono);font-size:.55rem;color:var(--dim);margin-top:.2rem;">desde carga · vs Motor</div>
       </div>
     </div>
 
-    <!-- COMPARACIÓN TIE / GR / OBS -->
-    <div class="cmp3">
-      <div class="cmp-card tie">
-        <div class="cmp-src" style="color:var(--gold)">TIE</div>
-        <div class="cmp-val flash" id="c-tie" style="color:var(--gold)">+45.7</div>
-        <div style="font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-bottom:.4rem;">μs/día (grav.)</div>
-        <div class="cmp-badge green" id="c-err">ERROR: 0.4%</div>
-        <div style="font-family:var(--mono);font-size:.58rem;color:var(--dim);margin-top:.4rem;">Cero parámetros libres</div>
+    <!-- ħ PACKETS BAR -->
+    <div class="packets-section">
+      <div class="pkt-label">Paquetes ħ procesados por pulso del Motor Absoluto</div>
+      <div class="pkt-track">
+        <span class="pkt-name">Motor (ref.)</span>
+        <div class="pkt-bar"><div class="pkt-fill motor" style="width:100%"></div></div>
+        <span class="pkt-count" style="color:var(--gold)">1,000,000</span>
       </div>
-      <div class="cmp-card obs">
-        <div class="cmp-src" style="color:var(--green)">OBSERVADO</div>
-        <div class="cmp-val" style="color:var(--green)">+45.9</div>
-        <div style="font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-bottom:.4rem;">μs/día (grav.)</div>
-        <div class="cmp-badge ref">REFERENCIA</div>
-        <div style="font-family:var(--mono);font-size:.58rem;color:var(--dim);margin-top:.4rem;">GPS constelación</div>
-      </div>
-      <div class="cmp-card gr">
-        <div class="cmp-src" style="color:var(--blue)">GR</div>
-        <div class="cmp-val" style="color:var(--blue)">+45.9</div>
-        <div style="font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-bottom:.4rem;">μs/día (grav.)</div>
-        <div class="cmp-badge ref">REFERENCIA</div>
-        <div style="font-family:var(--mono);font-size:.58rem;color:var(--dim);margin-top:.4rem;">Curvatura espacio-tiempo</div>
+      <div class="pkt-track">
+        <span class="pkt-name" id="pkt-name">Local (Tierra)</span>
+        <div class="pkt-bar"><div class="pkt-fill local" id="pkt-fill" style="width:100%"></div></div>
+        <span class="pkt-count" style="color:var(--blue)" id="pkt-count">999,999</span>
       </div>
     </div>
 
-    <div id="chart-note" style="font-family:var(--mono);font-size:.62rem;color:var(--dim);padding:.7rem 1rem;background:rgba(255,215,0,.03);border:1px solid rgba(255,215,0,.1);border-radius:8px;line-height:1.8;"></div>
+    <!-- DELTA BOX -->
+    <div class="delta-box">
+      <div class="db-item">
+        <div class="db-label">Por día</div>
+        <div class="db-val flash" id="db-day" style="color:var(--red)">−60.1 μs</div>
+      </div>
+      <div class="db-item">
+        <div class="db-label">Por año</div>
+        <div class="db-val flash" id="db-year" style="color:var(--red)">−21.9 ms</div>
+      </div>
+      <div class="db-item">
+        <div class="db-label">Por siglo</div>
+        <div class="db-val flash" id="db-century" style="color:var(--red)">−2.19 s</div>
+      </div>
+      <div class="db-item">
+        <div class="db-label">Viscosidad</div>
+        <div class="db-val" id="db-state" style="color:var(--blue);font-size:1rem;">ALTA</div>
+      </div>
+    </div>
   </div>
 
-  <!-- TABLA DE EXPERIMENTOS -->
+  <!-- GR vs TIE -->
   <div class="panel">
-    <div class="panel-title">Experimentos verificados — TIE vs observado</div>
-    <table class="mtable">
-      <tr><th>Experimento</th><th>Año</th><th>Observado</th><th>TIE</th><th>Error</th><th>aₙ/a₀</th></tr>
+    <div class="panel-title">GR vs TIE — misma predicción, dos interpretaciones</div>
+    <table class="cmp-table">
+      <tr><th>Pregunta</th><th>Relatividad General</th><th>Teoría TIE (Cap. VI)</th></tr>
       <tr>
-        <td class="gold">GPS (constelación)</td><td class="dmt">1978–hoy</td>
-        <td class="grn">45.9 μs/día</td><td class="gold">45.7 μs/día</td>
-        <td class="grn">0.4%</td><td class="dmt">5×10⁹</td>
+        <td>¿Qué es el tiempo?</td>
+        <td><span class="tag-gr">RELATIVO</span>dimensión geométrica, se curva con la masa</td>
+        <td><span class="tag-tie">ABSOLUTO</span>Motor lineal, idéntico en todo el cosmos</td>
       </tr>
       <tr>
-        <td class="gold">Galileo (Europa)</td><td class="dmt">2011–hoy</td>
-        <td class="grn">~48 μs/día</td><td class="gold">47.8 μs/día</td>
-        <td class="grn">0.4%</td><td class="dmt">4×10⁹</td>
+        <td>¿Por qué el reloj va más lento cerca de masa?</td>
+        <td><span class="tag-gr">CURVATURA</span>el espacio-tiempo se deforma, geodésicas más largas</td>
+        <td><span class="tag-tie">VISCOSIDAD</span>infraestructura más densa → menos paquetes ħ por pulso</td>
       </tr>
       <tr>
-        <td class="gold">Hafele-Keating</td><td class="dmt">1971</td>
-        <td class="grn">273 ± 7 ns</td><td class="gold">273 ns</td>
-        <td class="grn">2.5%</td><td class="dmt">10¹²</td>
+        <td>Predicción GPS (grav.)</td>
+        <td>45.9 μs/día · exacto</td>
+        <td>45.7 μs/día · error 0.4%</td>
       </tr>
       <tr>
-        <td class="gold">Pound-Rebka</td><td class="dmt">1959</td>
-        <td class="grn">2.45×10⁻¹⁵</td><td class="gold">2.45×10⁻¹⁵</td>
-        <td class="grn">&lt;1%</td><td class="dmt">10¹³</td>
+        <td>¿Hay singularidades?</td>
+        <td>Sí — r=0 en agujeros negros, densidad → ∞</td>
+        <td>No — saturación de infraestructura, densidad finita máxima</td>
       </tr>
       <tr>
-        <td class="gold">Gravity Probe A</td><td class="dmt">1976</td>
-        <td class="grn">1.4×10⁻¹⁰</td><td class="gold">1.4×10⁻¹⁰</td>
-        <td class="grn">&lt;1%</td><td class="dmt">10¹⁰</td>
-      </tr>
-      <tr>
-        <td class="gold">ISS (Krikalev 803d)</td><td class="dmt">1994–2005</td>
-        <td class="grn">22.68 ms total</td><td class="gold">~22.7 ms</td>
-        <td class="grn">&lt;1%</td><td class="dmt">10¹²</td>
-      </tr>
-      <tr>
-        <td class="gold">Relojes ópticos NIST</td><td class="dmt">2010</td>
-        <td class="grn">90 μs/año por 30 cm</td><td class="gold">idéntico</td>
-        <td class="grn">&lt;1%</td><td class="dmt">10¹⁶</td>
+        <td>Parámetros libres</td>
+        <td>Múltiples (Λ, materia oscura, constantes cosmológicas)</td>
+        <td>Cero — todo sale de H₀ y ħ</td>
       </tr>
     </table>
-    <div style="font-family:var(--mono);font-size:.6rem;color:var(--dim);line-height:1.7;margin-top:.4rem;">
-      En todos estos experimentos aₙ ≫ a₀ — régimen newtoniano profundo donde TIE ≡ Newton ≡ GR. La corrección TIE es &lt;10⁻⁹ relativa, por debajo de cualquier medición actual.
-    </div>
-  </div>
-
-  <!-- RÉCORD HUMANO -->
-  <div style="background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.2);border-radius:14px;padding:1.1rem 1.35rem;display:flex;align-items:center;gap:1.25rem;margin-bottom:1.5rem;">
-    <div style="font-size:2.5rem;flex-shrink:0;">👨‍🚀</div>
-    <div>
-      <div style="font-family:var(--mono);font-size:.6rem;color:var(--gold);letter-spacing:2px;margin-bottom:.3rem;">RÉCORD HUMANO DE VIAJE EN EL TIEMPO</div>
-      <div style="font-size:.95rem;margin-bottom:.2rem;"><strong style="color:var(--gold)">Sergei Krikalev</strong> — <span style="color:var(--dim)">22.68 milisegundos en el futuro</span></div>
-      <div style="font-family:var(--mono);font-size:.62rem;color:var(--dim);">803 días acumulados en órbita · efecto neto gravitacional + velocidad · TIE predice ~22.7 ms</div>
-    </div>
   </div>
 
   <!-- INSIGHT -->
   <div class="insight">
-    <span class="hi">¿Por qué TIE y GR dan lo mismo aquí?</span><br>
-    No es coincidencia — es física. En órbita GPS, la aceleración newtoniana es aₙ ≈ 0.565 m/s². La aceleración de transición de TIE es a₀ = 1.082×10⁻¹⁰ m/s². El cociente aₙ/a₀ ≈ 5×10⁹ — cinco mil millones de veces dentro del régimen newtoniano. En ese límite, TIE converge exactamente con Newton y con GR. La corrección TIE es de orden a₀/aₙ ≈ 2×10⁻¹⁰ — quince órdenes de magnitud por debajo de la precisión GPS.
+    <span class="hi">ħ como píxel mínimo · 2π como ciclo completo</span><br>
+    En TIE, ħ es el <strong>cuanto de sincronía</strong>: el paquete mínimo de infraestructura que puede procesarse en un ciclo. Un reloj, para marcar un segundo, debe completar exactamente N de estos paquetes. En espacio libre la infraestructura es homogénea y el procesamiento es máximo. Cerca de una masa la densidad de sincronía sube: cada paquete cuesta más resistencia, el reloj completa menos ciclos por pulso del Motor Absoluto, y el tiempo <em>medido</em> parece más lento — aunque el Motor siga al mismo ritmo.
     <br><br>
-    <span class="hi">¿Dónde divergen TIE y GR?</span><br>
-    En los bordes de las galaxias, donde aₙ &lt; a₀. Ahí es donde las curvas de rotación planas requieren materia oscura en GR — y donde TIE predice la velocidad correcta sin parámetros libres. El GPS vive en el extremo opuesto del espectro de aceleración.
-  </div>
-
-  <!-- PARSIMONIA -->
-  <div class="parsimony">
-    <div class="par-title">¿TIE es mejor que GR en GPS?</div>
-    <div class="par-stats">
-      <div><div class="ps-num">0.4%</div><div class="ps-lbl">error TIE en GPS</div></div>
-      <div><div class="ps-num">0</div><div class="ps-lbl">parámetros libres TIE</div></div>
-      <div><div class="ps-num">120</div><div class="ps-lbl">órdenes QFT vs TIE en Λ</div></div>
-    </div>
-    <div class="par-conclusion">
-      TIE no gana en GPS por precisión — GR empata en 0.0%. <span class="hi">TIE gana por parsimonia:</span> la misma H₀ que predice las curvas de rotación galácticas, la constante cosmológica y la materia oscura — también da el GPS con 0.4% de error, sin ningún parámetro adicional. La ciencia avanza cuando una teoría más simple iguala a una más compleja en todos los dominios experimentales.
-    </div>
+    <span class="hi">La ilusión del tiempo curvo</span><br>
+    GR interpreta esto como curvatura del espacio-tiempo — una herramienta matemática extremadamente efectiva. TIE propone algo más simple: <span class="bl">el tiempo no se curva, los relojes se ralentizan</span>. Esa diferencia tiene consecuencias en los extremos: TIE elimina las singularidades porque la densidad de sincronía tiene un máximo físico finito. GR predice densidades infinitas en r=0. Los números actuales no distinguen entre ambas — los agujeros negros del futuro lo harán.
+    <br><br>
+    <span class="hi">"Una infraestructura · Un tiempo lineal · ħ como píxel · 2π como ciclo · Eso es todo el universo."</span>
   </div>
 
   <div class="const-row">
     <div class="ci"><span class="cl">G = </span><span class="cv">6.674×10⁻¹¹ m³/kg·s²</span></div>
     <div class="ci"><span class="cl">c = </span><span class="cv">2.998×10⁸ m/s</span></div>
-    <div class="ci"><span class="cl">a₀ = </span><span class="cv">1.082×10⁻¹⁰ m/s²</span></div>
-    <div class="ci"><span class="cl">M☉ = </span><span class="cv">1.989×10³⁰ kg</span></div>
+    <div class="ci"><span class="cl">ħ = </span><span class="cv">1.055×10⁻³⁴ J·s</span></div>
+    <div class="ci"><span class="cl">2π = </span><span class="cv">ciclo completo de sincronía</span></div>
   </div>
 
   <div class="nav-links">
-    <a href="agujeros.html">← Agujeros Negros</a>
-    <a href="reloj-universal.html">Reloj Universal →</a>
+    <a href="gps.html">← Corrección GPS</a>
     <a href="falsabilidad.html">Falsabilidad →</a>
   </div>
 </div>
 
 <footer>
-  <div class="feq">\( \frac{\Delta t}{t} = \frac{GM}{c^2}\!\left(\frac{1}{r_1} - \frac{1}{r_2}\right) \quad\cdot\quad a_N \gg a_0 \;\Rightarrow\; \text{TIE} \equiv \text{Newton} \quad\cdot\quad \text{GPS: error } 0.4\% \)</div>
+  <div class="feq">\( \rho_{\text{sync}}(r) = \rho_\infty\!\left(1+|\Phi|/c^2\right) \;\cdot\; \text{ħ píxel} \;\cdot\; 2\pi \text{ ciclo} \;\cdot\; \text{Motor Absoluto} \)</div>
   <div class="fcopy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 
-<!-- THREE.JS -->
 <script>
 (function(){
   const canvas=document.getElementById('galaxy-canvas');
@@ -373,14 +305,14 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));
   function resize(){renderer.setSize(canvas.clientWidth,canvas.clientHeight);camera.aspect=canvas.clientWidth/canvas.clientHeight;camera.updateProjectionMatrix();}
   resize(); window.addEventListener('resize',resize);
-  camera.position.set(0,4,6); camera.lookAt(0,0,0);
+  camera.position.set(0,4,7); camera.lookAt(0,0,0);
   const N=60000, pos=new Float32Array(N*3), col=new Float32Array(N*3);
-  const cIn=new THREE.Color('#FFD700'), cOut=new THREE.Color('#1a1a4e');
+  const cIn=new THREE.Color('#FFD700'), cOut=new THREE.Color('#050520');
   for(let i=0;i<N;i++){
-    const r=Math.random()*5,b=(i%5)/5*Math.PI*2,s=r*1.2;
-    const rx=Math.pow(Math.random(),2.5)*(Math.random()<.5?1:-1)*.4*r;
-    const ry=Math.pow(Math.random(),2.5)*(Math.random()<.5?1:-1)*.12*r;
-    const rz=Math.pow(Math.random(),2.5)*(Math.random()<.5?1:-1)*.4*r;
+    const r=Math.random()*5, b=(i%4)/4*Math.PI*2, s=r*1.3;
+    const rx=Math.pow(Math.random(),3)*(Math.random()<.5?1:-1)*.3*r;
+    const ry=Math.pow(Math.random(),3)*(Math.random()<.5?1:-1)*.1*r;
+    const rz=Math.pow(Math.random(),3)*(Math.random()<.5?1:-1)*.3*r;
     pos[i*3]=Math.cos(b+s)*r+rx; pos[i*3+1]=ry; pos[i*3+2]=Math.sin(b+s)*r+rz;
     const m=new THREE.Color().lerpColors(cIn,cOut,r/5);
     col[i*3]=m.r; col[i*3+1]=m.g; col[i*3+2]=m.b;
@@ -388,133 +320,100 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   const geo=new THREE.BufferGeometry();
   geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
   geo.setAttribute('color',new THREE.BufferAttribute(col,3));
-  const mat=new THREE.PointsMaterial({size:.007,sizeAttenuation:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true});
+  const mat=new THREE.PointsMaterial({size:.006,sizeAttenuation:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true});
   scene.add(new THREE.Points(geo,mat));
-  (function animate(){requestAnimationFrame(animate);scene.rotation.y+=.0005;renderer.render(scene,camera);})();
+  (function animate(){requestAnimationFrame(animate);scene.rotation.y+=.0004;renderer.render(scene,camera);})();
 })();
 </script>
-
-<!-- CALCULATOR LOGIC -->
 <script>
-const G   = 6.674e-11;
-const c   = 2.998e8;
-const MS  = 1.989e30;
-const km  = 1e3;
-const SPD = 86400; // seconds per day
-const H0si= 70*1000/3.0857e22;
-const a0  = c * H0si / (2*Math.PI);
-
-const MASAS = {
-  tierra: 5.972e24,
-  sol:    1.989e30,
-  sgra:   4e6 * 1.989e30,
-  m87:    6.5e9 * 1.989e30,
+const G=6.674e-11, c=2.998e8, c2=c*c, SPD=86400;
+const LOCS={
+  tierra: {M:5.972e24, r:6.371e6,   name:'Tierra',      desc:'Alta viscosidad gravitacional<br>menos paquetes ħ por pulso del Motor'},
+  gps:    {M:5.972e24, r:26560e3,   name:'Órbita GPS',  desc:'Viscosidad reducida — reloj va más rápido<br>más paquetes ħ procesados por pulso'},
+  marte:  {M:6.39e23,  r:3.389e6,   name:'Marte',       desc:'Viscosidad baja · Marte tiene ~38% gravedad terrestre<br>reloj ligeramente más rápido que en Tierra'},
+  jupiter:{M:1.898e27, r:69.911e6,  name:'Júpiter',     desc:'Viscosidad alta · 2.5× gravedad terrestre<br>reloj más lento que en Tierra'},
+  sol:    {M:1.989e30, r:696e6,     name:'Sol',         desc:'Viscosidad muy alta · campo gravitacional solar<br>reloj significativamente más lento'},
+  espacio:{M:0,        r:1e30,      name:'Espacio libre',desc:'Sin viscosidad · ρ = ρ∞ · procesamiento máximo<br>este es el pulso del Motor Absoluto'},
 };
-const DISTS = {
-  gps:   [6371,   26560],
-  iss:   [6371,   6771],
-  luna:  [6371,   384400],
-  marte: [6371,   225000000],
-};
+let currentLoc='tierra', motorT=0, localT=0, lastTS=null;
 
-function setMasa(key) {
-  document.getElementById('masa').value = MASAS[key];
-  document.querySelectorAll('#mass-presets .pb').forEach(b=>b.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  calc();
+function visc(key){
+  const l=LOCS[key];
+  if(l.M===0) return 0;
+  return G*l.M/(l.r*c2);
 }
-function setDist(key) {
-  const [r1,r2] = DISTS[key];
-  document.getElementById('r1').value = r1;
-  document.getElementById('r2').value = r2;
-  document.querySelectorAll('#dist-presets .pb').forEach(b=>b.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  calc();
-}
+function rate(key){ return 1/(1+visc(key)); }
 
-function fmtSci(n, dp=2) {
-  if(Math.abs(n) < 1e4 && Math.abs(n) >= 0.01) return n.toFixed(dp);
-  const e = Math.floor(Math.log10(Math.abs(n)));
-  return (n/Math.pow(10,e)).toFixed(2) + '×10' +
-    (e<0?'⁻':'') + Math.abs(e).toString().split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+function fmtSci(n){
+  if(n===0)return'0';
+  const e=Math.floor(Math.log10(Math.abs(n)));
+  const m=(n/Math.pow(10,e)).toFixed(2);
+  const sup=(e<0?'⁻':'')+Math.abs(e).toString().split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+  return m+'×10'+sup;
 }
-
-function flash(id, val, color) {
-  const el = document.getElementById(id);
-  el.textContent = val;
-  if(color) el.style.color = color;
+function fmtTime(s){
+  s=Math.abs(s);
+  return [Math.floor(s/3600)%24, Math.floor((s%3600)/60), Math.floor(s%60)]
+    .map(x=>String(x).padStart(2,'0')).join(':');
+}
+function flash(id){
+  const el=document.getElementById(id);
+  if(!el)return;
   el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
 }
 
-function calc() {
-  const M  = parseFloat(document.getElementById('masa').value) || MASAS.tierra;
-  const r1 = (parseFloat(document.getElementById('r1').value) || 6371) * km;
-  const r2 = (parseFloat(document.getElementById('r2').value) || 26560) * km;
-
-  // Gravitational time dilation (pure Newtonian potential — valid since a_N >> a0 always here)
-  const dPhi = G * M * (1/r1 - 1/r2);  // Φ(r2) - Φ(r1), positive = r2 weaker field
-  const dt_grav_us = (dPhi / (c*c)) * SPD * 1e6; // μs/day
-
-  // Velocity correction (SR): satellite in circular orbit at r2
-  // v_orbital = sqrt(GM/r2), time dilation = -v²/(2c²) per day
-  const v2 = Math.sqrt(G * M / r2);
-  const v1 = 0; // surface approx
-  const dt_vel_us = -(v2*v2 - v1*v1) / (2*c*c) * SPD * 1e6;
-
-  const dt_net_us = dt_grav_us + dt_vel_us;
-
-  // TIE correction (fractional): a0/a_N — totally negligible in Newton regime
-  const aN = G * M / (r2*r2);
-  const tie_correction = 1 - a0/(2*aN); // first order TIE correction to potential
-  const dt_tie_us = dt_grav_us * tie_correction;
-
-  // Regime
-  const ratio = aN / a0;
-  const logRatio = Math.log10(ratio);
-  const barW = Math.min(100, Math.max(0, (logRatio / 12) * 100)); // log scale 0-12 orders
-
-  // Update UI
-  flash('r-grav', (dt_grav_us >= 0 ? '+' : '') + dt_grav_us.toFixed(1), dt_grav_us >= 0 ? 'var(--gold)' : 'var(--red)');
-  flash('r-vel',  (dt_vel_us >= 0 ? '+' : '') + dt_vel_us.toFixed(1),  'var(--red)');
-  flash('r-net',  (dt_net_us >= 0 ? '+' : '') + dt_net_us.toFixed(1),  dt_net_us >= 0 ? 'var(--green)' : 'var(--red)');
-  flash('aN-val', fmtSci(aN, 3), 'var(--blue)');
-  flash('ratio-val', fmtSci(ratio, 1), ratio > 1000 ? 'var(--green)' : 'var(--gold)');
-  flash('c-tie', (dt_tie_us >= 0 ? '+' : '') + dt_tie_us.toFixed(1), 'var(--gold)');
-
-  // Error vs GPS reference (only for Earth preset)
-  const ref = 45.9;
-  const err = Math.abs((dt_tie_us - ref) / ref * 100);
-  document.getElementById('c-err').textContent = `ERROR: ${err.toFixed(1)}%`;
-  document.getElementById('c-err').className = `cmp-badge ${err < 5 ? 'green' : 'ref'}`;
-
-  // Regime bar
-  document.getElementById('rb-fill').style.width = barW + '%';
-  const regimeText = ratio > 1e6
-    ? `Régimen: NEWTONIANO PROFUNDO — corrección TIE < ${fmtSci(a0/aN,1)} (inmensurable)`
-    : ratio > 10
-    ? `Régimen: TRANSICIÓN — corrección TIE ~ ${fmtSci(a0/aN,2)} (pequeña)`
-    : `Régimen: TIE PURO — corrección máxima, curvas de rotación`;
-  document.getElementById('regime-label').textContent = regimeText;
-
-  // Chart note
-  const note = ratio > 1e8
-    ? `Con aₙ/a₀=${fmtSci(ratio)} la corrección TIE al potencial gravitacional es ${fmtSci(a0/aN)} — completamente inmensurable. Por eso TIE y GR dan resultados idénticos aquí. La diferencia entre teorías solo emerge en aceleraciones ≤ a₀, como en los bordes de las galaxias.`
-    : ratio > 1
-    ? `aₙ/a₀=${fmtSci(ratio)} — en zona de transición. TIE empieza a diferir de Newton. La corrección al potencial es ~${(a0/aN*100).toFixed(1)}%.`
-    : `Estás en régimen TIE puro (aₙ < a₀). Aquí es donde las curvas de rotación son planas — el dominio donde TIE predice y GR necesita materia oscura.`;
-  document.getElementById('chart-note').textContent = note;
+function updateMetrics(){
+  const v=visc(currentLoc), r=rate(currentLoc);
+  const dPerDay=(1-r)*SPD*1e6;
+  document.getElementById('visc-val').textContent=fmtSci(v); flash('visc-val');
+  document.getElementById('rate-val').textContent=r.toFixed(10); flash('rate-val');
+  const acc=(motorT-localT)*1e6;
+  document.getElementById('delta-acc').textContent=acc.toFixed(3)+' μs';
+  document.getElementById('db-day').textContent=(dPerDay>0?'−':'')+Math.abs(dPerDay).toFixed(1)+' μs'; flash('db-day');
+  document.getElementById('db-year').textContent=(dPerDay>0?'−':'')+Math.abs(dPerDay*365.25/1000).toFixed(2)+' ms'; flash('db-year');
+  document.getElementById('db-century').textContent=(dPerDay>0?'−':'')+Math.abs(dPerDay*365.25*100/1e6).toFixed(3)+' s'; flash('db-century');
+  const st=document.getElementById('db-state');
+  if(v>1e-6){st.textContent='MUY ALTA';st.style.color='var(--red)';}
+  else if(v>1e-9){st.textContent='ALTA';st.style.color='var(--gold)';}
+  else if(v>1e-12){st.textContent='MEDIA';st.style.color='var(--blue)';}
+  else{st.textContent='MÍNIMA';st.style.color='var(--green)';}
+  const pkt=Math.round(1e6*r);
+  document.getElementById('pkt-fill').style.width=(r*100)+'%';
+  document.getElementById('pkt-count').textContent=pkt.toLocaleString('es');
+  document.getElementById('pkt-name').textContent='Local ('+LOCS[currentLoc].name+')';
 }
 
-window.onload = () => {
-  calc();
-  renderMathInElement(document.body, {
-    delimiters:[
-      {left:'\\(',right:'\\)',display:false},
-      {left:'\\[',right:'\\]',display:true},
-    ]
-  });
+function setLoc(btn, key){
+  currentLoc=key;
+  document.querySelectorAll('#loc-btns .loc-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('local-title').textContent='Reloj local · '+LOCS[key].name;
+  document.getElementById('local-desc').innerHTML=LOCS[key].desc;
+  updateMetrics();
+}
+
+function tick(ts){
+  requestAnimationFrame(tick);
+  if(!lastTS){lastTS=ts;return;}
+  const dt=(ts-lastTS)/1000; lastTS=ts;
+  const r=rate(currentLoc);
+  motorT+=dt; localT+=dt*r;
+  document.getElementById('motor-cycles').textContent='2π × '+Math.floor(motorT*100).toLocaleString('es');
+  document.getElementById('time-motor').textContent=fmtTime(motorT);
+  document.getElementById('time-local').textContent=fmtTime(localT);
+  const ro=x=>document.getElementById(x);
+  ro('hand-motor-sec').style.transform=`rotate(${(motorT%60)*6}deg)`;
+  ro('hand-motor-min').style.transform=`rotate(${((motorT/60)%60)*6}deg)`;
+  ro('hand-local-sec').style.transform=`rotate(${(localT%60)*6}deg)`;
+  ro('hand-local-min').style.transform=`rotate(${((localT/60)%60)*6}deg)`;
+  if(Math.floor(motorT*2)!==Math.floor((motorT-dt)*2)) updateMetrics();
+}
+
+window.onload=()=>{
+  updateMetrics();
+  requestAnimationFrame(tick);
+  renderMathInElement(document.body,{delimiters:[{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});
 };
 </script>
 </body>
 </html>
-

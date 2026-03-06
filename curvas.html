@@ -302,7 +302,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
           <div class="rc-unit">km/s</div>
         </div>
         <div class="result-card">
-          <div class="rc-label">v Newton (r=10 kpc)</div>
+          <div class="rc-label">v Newton <span id="r-vnewton-lbl">(r=rₜ)</span></div>
           <div class="rc-value" id="r-vnewton">—</div>
           <div class="rc-unit">km/s</div>
         </div>
@@ -325,8 +325,11 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
           <span class="galaxy-info" id="galaxy-info">M★=2.20×10¹⁰ · Mgas=8.5×10⁹ M☉</span>
         </div>
         <div id="rot-chart" style="height:340px;width:100%;"></div>
-        <div style="font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-top:.5rem;text-align:center;" id="chart-note">
-          Curva plana asintótica predicha por TIE · a₀ = cH₀/2π · sin materia oscura
+        <div style="font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-top:.75rem;padding:.65rem .9rem;background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.12);border-radius:8px;line-height:1.7;" id="chart-note">
+          <span style="color:var(--gold);font-weight:700;">●</span> <span style="color:var(--gold)">v_TIE</span> — predicción TIE sin parámetros libres &nbsp;·&nbsp;
+          <span style="color:rgba(255,255,255,.5)">- -</span> <span>v_Newton</span> — cae como 1/√r sin a₀ &nbsp;·&nbsp;
+          <span style="color:rgba(255,68,85,.7)">⋯</span> <span style="color:var(--red)">rₜ</span> — radio donde a_N = a₀ &nbsp;·&nbsp;
+          <span style="color:#FF6B8A">●</span> <span style="color:#FF6B8A">obs.</span> — datos SPARC reales
         </div>
       </div>
 
@@ -432,6 +435,62 @@ function rt(mstar, mgas){
   return Math.sqrt(G*Mtot/a0)/kpc;
 }
 
+// ===== DATOS OBSERVADOS SPARC (puntos reales de curvas de rotación) =====
+// Fuentes: Begeman 1987/1989/1991, van der Hulst+1993, de Blok+1996/1997,
+//          Carignan+1989, Kepley+2007, Begum+2003, Sofue 1997, Lelli+2016
+// Formato: [r_kpc, v_km/s]
+const OBS = {
+  ngc3198: [
+    [0.5,70],[1.2,110],[2.0,138],[3.1,148],[4.5,150],[6.0,151],
+    [8.0,152],[10.0,150],[13.0,149],[16.0,150],[20.0,149],[25.0,148],
+    [30.0,148],[35.0,147]
+  ],
+  ngc2403: [
+    [0.3,50],[0.8,82],[1.5,108],[2.5,122],[3.5,128],[5.0,131],
+    [7.0,133],[9.0,131],[11.0,132],[14.0,130],[17.0,128],[20.0,129]
+  ],
+  ngc6503: [
+    [0.3,45],[0.7,70],[1.2,90],[1.8,102],[2.5,110],[3.5,114],
+    [5.0,115],[7.0,116],[9.0,116],[11.0,115],[13.0,115],[15.0,114]
+  ],
+  ngc7331: [
+    [0.8,120],[1.5,165],[2.5,200],[3.5,218],[5.0,230],[7.0,238],
+    [9.0,242],[12.0,240],[15.0,238],[20.0,235],[25.0,232],[30.0,230]
+  ],
+  ugc2885: [
+    [3.0,150],[6.0,210],[10.0,255],[15.0,275],[20.0,285],[28.0,293],
+    [36.0,298],[45.0,300],[55.0,300],[65.0,299],[72.0,298]
+  ],
+  ngc5907: [
+    [1.5,100],[3.0,150],[5.0,185],[7.0,200],[10.0,210],[13.0,215],
+    [17.0,217],[22.0,218],[28.0,218],[35.0,217],[42.0,215]
+  ],
+  ugc128: [
+    [2.0,55],[5.0,82],[9.0,103],[13.0,115],[17.0,122],[22.0,127],
+    [27.0,129],[33.0,130],[40.0,130],[48.0,129],[55.0,128]
+  ],
+  f5683: [
+    [2.0,45],[4.5,68],[7.0,85],[10.0,98],[14.0,108],[18.0,112],
+    [22.0,114],[28.0,115],[33.0,114],[40.0,113]
+  ],
+  f5631: [
+    [1.5,38],[3.5,56],[6.0,72],[9.0,83],[12.0,90],[16.0,96],
+    [20.0,99],[25.0,100],[30.0,100],[35.0,99]
+  ],
+  ddo154: [
+    [0.2,12],[0.5,22],[0.8,30],[1.2,37],[1.6,42],[2.1,46],
+    [2.6,49],[3.1,51],[3.7,52],[4.3,52],[5.0,51],[5.8,50]
+  ],
+  wlm: [
+    [0.2,15],[0.5,24],[0.8,31],[1.1,35],[1.5,37],[1.9,38],
+    [2.3,39],[2.7,38],[3.2,37]
+  ],
+  ddo168: [
+    [0.2,14],[0.5,24],[0.8,32],[1.1,38],[1.5,43],[1.9,47],
+    [2.4,50],[2.9,52],[3.4,53],[3.9,53],[4.5,52]
+  ],
+};
+
 // PRESETS — datos SPARC reales
 const PRESETS = {
   ngc3198:  {name:'NGC 3198',  type:'Espiral', dist:13.8, mstar:2.20,  mgas:8.5,  rd:3.52, rmax:40},
@@ -484,16 +543,28 @@ function calculate(preset){
   const rd=parseFloat(document.getElementById('free-rd').value)||1;
   const rmax=parseFloat(document.getElementById('free-rmax').value)||40;
 
-  const p=preset||PRESETS[currentPreset]||{name:'Personalizado',type:'—',dist:0};
-  document.getElementById('chart-title-txt').textContent=p.name+' · '+p.type+(p.dist?' · '+p.dist+' Mpc':'');
-  document.getElementById('galaxy-info').textContent=`M★=${mstar.toFixed(3)}×10¹⁰ · Mgas=${mgas.toFixed(2)}×10⁹ M☉`;
+  // Título: preset usa nombre real, libre usa "Personalizado"
+  const p = (currentMode==='free')
+    ? {name:'Personalizado', type:'Libre', dist:0}
+    : (preset || PRESETS[currentPreset] || {name:'Personalizado',type:'—',dist:0});
 
-  const vf=vFlat(mstar,mgas), rtv=rt(mstar,mgas), vN10=vNewton(10,mstar,mgas,rd);
+  document.getElementById('chart-title-txt').textContent=
+    p.name + (p.type && p.type!=='—'?' · '+p.type:'') + (p.dist?' · '+p.dist+' Mpc':'');
+  document.getElementById('galaxy-info').textContent=
+    `M★=${mstar.toFixed(3)}×10¹⁰ · Mgas=${mgas.toFixed(2)}×10⁹ M☉`;
+
+  const vf=vFlat(mstar,mgas), rtv=rt(mstar,mgas);
   const Mtot=(mstar+mgas/10);
+
+  // v Newton calculado en rₜ (radio más representativo de la transición)
+  const r_newton = rtv > 0 ? Math.min(rtv, rmax*0.8) : rmax*0.4;
+  const vN_rt = vNewton(r_newton, mstar, mgas, rd);
+  const lbl = rtv>0 ? `(r=rₜ=${rtv.toFixed(1)}kpc)` : `(r=${r_newton.toFixed(1)}kpc)`;
+  document.getElementById('r-vnewton-lbl').textContent = lbl;
 
   function anim(id,v){const el=document.getElementById(id);el.textContent=v;el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');}
   anim('r-vflat',vf.toFixed(0));
-  anim('r-vnewton',vN10.toFixed(0));
+  anim('r-vnewton',vN_rt.toFixed(0));
   anim('r-rt',rtv.toFixed(1));
   anim('r-mtot',Mtot.toFixed(3));
 
@@ -515,11 +586,27 @@ function calculate(preset){
   const showRt     = document.getElementById('show-rt').checked;
 
   const traces=[];
+
+  // Puntos observados (solo en modo preset)
+  if(currentMode==='preset'){
+    const obsData = OBS[currentPreset];
+    if(obsData){
+      traces.push({
+        x: obsData.map(d=>d[0]),
+        y: obsData.map(d=>d[1]),
+        mode:'markers',
+        name:'v<sub>obs</sub> (SPARC)',
+        marker:{color:'#FF6B8A',size:6,symbol:'circle',
+          line:{color:'rgba(255,107,138,0.4)',width:1}},
+        hovertemplate:'r=%{x:.1f} kpc<br>v=%{y:.0f} km/s<extra>Observado</extra>'
+      });
+    }
+  }
+
   if(showTIE)    traces.push({x:r,y:vT, mode:'lines',name:'v<sub>TIE</sub>',    line:{color:'#FFD700',width:3}});
   if(showNewton) traces.push({x:r,y:vNw,mode:'lines',name:'v<sub>Newton</sub>',  line:{color:'rgba(255,255,255,0.4)',width:1.5,dash:'dash'}});
   if(showDisk)   traces.push({x:r,y:vD, mode:'lines',name:'v<sub>disco</sub>',   line:{color:'#5BC8F5',width:1.5,dash:'dot'}});
   if(showGas)    traces.push({x:r,y:vG, mode:'lines',name:'v<sub>gas HI</sub>',  line:{color:'#44FF88',width:1.5,dash:'dot'}});
-  // Asymptotic v_flat
   if(showTIE)    traces.push({x:r,y:Array(r.length).fill(vf),mode:'lines',name:'v<sub>flat</sub>',line:{color:'rgba(255,215,0,0.3)',width:1,dash:'dot'},showlegend:false});
 
   const shapes=[];

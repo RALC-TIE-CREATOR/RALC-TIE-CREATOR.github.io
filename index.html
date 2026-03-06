@@ -568,20 +568,24 @@ footer {
 <nav>
   <a href="index.html" class="nav-logo">TIE / R@LC</a>
   
-  <!-- SELECTOR DE IDIOMA - BANDERAS CON ESTILO FORZADO -->
+  <!-- SELECTOR DE IDIOMA - BANDERAS CON COLORES CORRECTOS -->
   <div style="display:flex; gap:1rem; align-items:center; margin:0 2rem;">
-    <a href="index.html" style="font-size:2rem !important; line-height:1 !important; text-decoration:none !important; color:var(--gold) !important; opacity:1 !important; border-bottom:2px solid var(--gold) !important; padding-bottom:2px !important;">🇪🇸</a>
-    <span style="color:var(--dim); font-size:1.8rem;">|</span>
-    <a href="index-en.html" style="font-size:2rem !important; line-height:1 !important; text-decoration:none !important; color:var(--dim) !important; opacity:0.7 !important; transition:0.3s !important;">🇬🇧</a>
+    <!-- Bandera activa (ES) - dorada con borde -->
+    <a href="index.html" style="font-size:2rem !important; line-height:1 !important; text-decoration:none !important; color:#FFD700 !important; opacity:1 !important; border-bottom:2px solid #FFD700 !important; padding-bottom:2px !important;">🇪🇸</a>
+    
+    <span style="color:#a0a0b0; font-size:1.8rem;">|</span>
+    
+    <!-- Bandera inactiva (EN) - gris claro -->
+    <a href="index-en.html" style="font-size:2rem !important; line-height:1 !important; text-decoration:none !important; color:#a0a0b0 !important; opacity:0.7 !important; transition:0.3s !important;">🇬🇧</a>
   </div>
   
   <a href="index.html" class="nav-back">← VOLVER AL INICIO</a>
 </nav>
 
 <style>
-/* Hover para la bandera inactiva */
+/* Hover para la bandera inactiva (EN) */
 nav a[href="index-en.html"]:hover {
-  color: var(--gold) !important;
+  color: #FFD700 !important;
   opacity: 1 !important;
 }
 </style>

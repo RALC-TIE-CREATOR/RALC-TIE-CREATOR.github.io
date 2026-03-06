@@ -149,8 +149,8 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="stat-item"><div class="stat-val" style="color:var(--gold)">22</div><div class="stat-lbl">GIGANTES</div></div>
     <div class="stat-item"><div class="stat-val" style="color:var(--green)">33</div><div class="stat-lbl">LSB</div></div>
     <div class="stat-item"><div class="stat-val" style="color:#dd88ff">61</div><div class="stat-lbl">ENANAS</div></div>
-    <div class="stat-item"><div class="stat-val" style="color:var(--green)">99</div><div class="stat-lbl">CALIDAD Q=1</div></div>
-    <div class="stat-item"><div class="stat-val" id="avg-err">—</div><div class="stat-lbl">ERROR TIE Q=1</div></div>
+    <div class="stat-item"><div class="stat-val" style="color:var(--green)">87</div><div class="stat-lbl">CON v_flat Q=1</div></div>
+    <div class="stat-item"><div class="stat-val" id="avg-err">—</div><div class="stat-lbl">ERROR MEDIO TIE</div></div>
   </div>
 
   <!-- CHART -->
@@ -165,6 +165,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       </div>
     </div>
     <div id="chart" style="height:320px;width:100%;"></div>
+    <div id="chart-note" style="font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-top:.6rem;padding:.6rem .9rem;background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.1);border-radius:8px;line-height:1.8;"></div>
   </div>
 
   <!-- CONTROLS -->
@@ -191,6 +192,14 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
         <span class="qpill" data-q="1" onclick="setQ('1',this)">Q=1 Alta</span>
         <span class="qpill" data-q="2" onclick="setQ('2',this)">Q=2 Media</span>
         <span class="qpill" data-q="3" onclick="setQ('3',this)">Q=3 Baja</span>
+      </div>
+    </div>
+    <div class="quality-wrap">
+      <label>v_flat MEDIDA</label>
+      <div class="qpills">
+        <span class="qpill active" data-vf="all" onclick="setVf('all',this)">Todas</span>
+        <span class="qpill" data-vf="yes" onclick="setVf('yes',this)" style="border-color:rgba(68,255,136,.3);color:var(--green)">Con v_obs</span>
+        <span class="qpill" data-vf="no"  onclick="setVf('no',this)"  style="border-color:rgba(160,160,176,.2)">Sin v_obs</span>
       </div>
     </div>
   </div>
@@ -249,6 +258,9 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       </div>
     </div>
     <div class="err-bar-track"><div class="err-bar-fill" id="m-err-bar" style="width:0%;background:var(--green)"></div></div>
+    <div id="m-curvas-link" style="display:none;margin-top:1rem;">
+      <a id="m-curvas-btn" href="curvas.html" style="display:inline-block;font-family:var(--mono);font-size:.65rem;color:#000;background:var(--gold);border-radius:6px;padding:.4rem .9rem;text-decoration:none;font-weight:700;transition:opacity .2s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">→ Ver curva de rotación completa</a>
+    </div>
   </div>
 </div>
 
@@ -457,14 +469,42 @@ const SPARC = [
 ];
 
 // ===== STATE =====
-let currentType='all', currentQ='all', currentSearch='', chartMode='scatter', selectedName=null;
+let currentType='all', currentQ='all', currentVf='all', currentSearch='', chartMode='scatter', selectedName=null;
 
 const TYPE_COLOR={Espiral:'#5BC8F5',Gigante:'#FFD700',LSB:'#44FF88',Enana:'#dd88ff',Irregular:'#FF4455'};
+
+// Galaxias disponibles en curvas.html como presets
+const CURVAS_PRESETS = new Set(['NGC3198','NGC2403','NGC6503','NGC7331','UGC2885','NGC5907','UGC128','F568-3','F563-1','DDO154','WLM','DDO168']);
+function toCurvasKey(name){ return name.replace(/\s/g,'').toUpperCase(); }
+
+// Descripciones enriquecidas para galaxias conocidas
+const EXTRA_DESC = {
+  'NGC3198':   'Referencia clásica del problema de materia oscura. Curva plana hasta 30 kpc con masa estelar solo en los primeros 10 kpc.',
+  'NGC2403':   'Espiral tardía del grupo M81. Una de las primeras en mostrar curva de rotación plana inequívoca (Begeman 1989).',
+  'NGC6503':   'Espiral aislada en el Vacío Local. Baja densidad de entorno — curva limpia sin perturbaciones externas.',
+  'NGC7331':   'Análogo de la Vía Láctea a 14.7 Mpc. Masa estelar dominante en el interior, gas extendido en la periferia.',
+  'NGC2841':   'Espiral masiva de alta velocidad plana (280 km/s). Fuerte evidencia de deficit bariónico en modelos Newtonianos.',
+  'NGC5055':   'Galaxia Girasol. Espiral floculenta con brazos difusos — curva de rotación bien trazada hasta 45 kpc.',
+  'NGC4736':   'Espiral compacta con anillo estelar interno. Alta densidad central, transición a régimen TIE visible a ~3 kpc.',
+  'UGC2885':   'La galaxia espiral más grande conocida en el universo local. v_flat=300 km/s. Disco de 240 kpc de diámetro.',
+  'NGC5907':   'Galaxia navaja — vista completamente de filo. Disco de polvo visible. Curva plana a 218 km/s hasta 42 kpc.',
+  'UGC128':    'LSB prototipo. Baja brillo superficial central: disco casi transparente en óptico. Gas HI domina la masa bariónica.',
+  'DDO154':    'Enana irregular con masa bariónica ~99% en gas HI. Test extremo de TIE: sin disco estelar, solo gas.',
+  'DDO168':    'Enana irregular cercana (4.2 Mpc). Buen acuerdo TIE: err=2.6%. Gas distribuido en disco extendido.',
+  'IC2574':    'Enana irregular del grupo M81. Morfología perturbada — curva de rotación irregular pero v_flat medible.',
+  'NGC300':    'Espiral del grupo del Escultor. Muy cercana (2.1 Mpc). Curva de rotación extendida y bien muestreada.',
+  'NGC7793':   'Espiral tardía del grupo del Escultor. v_flat=100 km/s. Masa bariónica moderada, buena predicción TIE.',
+  'ESO563-G021':'Espiral masiva muy inclinada (83°). Corrección geométrica importante. Curva extendida hasta 55 kpc.',
+  'NGC1003':   'Espiral tardía aislada. Error TIE 2.1% — una de las mejores predicciones del catálogo.',
+  'NGC3741':   'Enana LSB con disco de gas HI 8× más grande que el disco estelar. Caso extremo de masa-gas dominante.',
+};
 
 function filtered(){
   return SPARC.filter(g=>{
     if(currentType!=='all' && g.type!==currentType) return false;
     if(currentQ!=='all' && String(g.Q)!==currentQ) return false;
+    if(currentVf==='yes' && g.vflat<=0) return false;
+    if(currentVf==='no'  && g.vflat>0)  return false;
     if(currentSearch && !g.name.toLowerCase().includes(currentSearch.toLowerCase())) return false;
     return true;
   });
@@ -478,7 +518,13 @@ function setType(t,el){
 }
 function setQ(q,el){
   currentQ=q;
-  document.querySelectorAll('.qpill').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.qpill[data-q]').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+function setVf(v,el){
+  currentVf=v;
+  document.querySelectorAll('.qpill[data-vf]').forEach(p=>p.classList.remove('active'));
   el.classList.add('active');
   render();
 }
@@ -489,10 +535,18 @@ function setMode(m){
   updateChart();
 }
 
+// Notas explicativas por modo
+const CHART_NOTES = {
+  scatter: '<span style="color:var(--gold)">Relación de Tully-Fisher bariónica</span> · Cada punto es una galaxia. La línea dorada es la predicción TIE <em>v=(GMa₀)¼</em> sin parámetros libres. Eje log-log — una línea recta indica ley de potencia. La dispersión refleja errores de medición y variaciones en M/L.',
+  vtie:    '<span style="color:var(--gold)">Predicción vs observación</span> · Eje X = velocidad observada, eje Y = predicción TIE. La línea 1:1 punteada es la predicción perfecta. Puntos <em>sobre</em> la línea → TIE sobreestima. Puntos <em>bajo</em> → subestima. La mayoría deben estar cerca de la diagonal.',
+  err:     '<span style="color:var(--gold)">Distribución de errores</span> · <span style="color:var(--green)">Verde</span> = error &lt;10% (excelente), <span style="color:var(--gold)">Oro</span> = 10-25% (bueno), <span style="color:var(--red)">Rojo</span> = &gt;25% (outlier). Los outliers suelen ser galaxias con M/L mal estimado o curvas de calidad Q=3.',
+  dist:    '<span style="color:var(--gold)">Distribución de distancias</span> · Muestra el alcance del catálogo SPARC. LSB y gigantes tienden a estar más lejos (necesitan mayor distancia para ser incluidas). Enanas se concentran en el volumen local &lt;15 Mpc.',
+};
+
 function render(){
   const data=filtered();
   document.getElementById('count-display').textContent=data.length+' galaxias';
-  // Avg error Q=1
+  // Error promedio correcto: solo Q=1 con vflat medida
   const q1=SPARC.filter(g=>g.Q===1&&g.vflat>0);
   const avgErr=q1.length?( q1.reduce((s,g)=>s+g.err,0)/q1.length ).toFixed(1)+'%':'—';
   document.getElementById('avg-err').textContent=avgErr;
@@ -502,14 +556,15 @@ function render(){
     const sel=g.name===selectedName?'selected':'';
     const errColor=g.err<10?'var(--green)':g.err<25?'var(--gold)':'var(--red)';
     const vDisplay=g.vflat>0?g.vflat.toFixed(1)+' km/s':'—';
-    return `<div class="galaxy-card ${sel}" onclick="selectGalaxy('${g.name}')">
-      <div class="gc-name">${g.name}</div>
+    const noV = g.vflat<=0 ? ' style="opacity:.6"' : '';
+    return `<div class="galaxy-card ${sel}"${noV} onclick="selectGalaxy('${g.name}')">
+      <div class="gc-name">${g.name}${g.vflat<=0?' <span style="font-size:.5rem;color:var(--dim);font-family:var(--mono)">sin v</span>':''}</div>
       <div class="gc-type ${g.type}">${g.type} · ${g.dist} Mpc</div>
       <div class="gc-stats">
         <span>M★: ${g.Mdisk.toFixed(3)}×10¹⁰ M☉</span>
         <span>Mgas: ${g.Mgas.toFixed(2)}×10⁹ M☉</span>
         <span class="gc-vflat">v_obs: ${vDisplay}</span>
-        ${g.vflat>0?`<span class="gc-err" style="color:${errColor}">v_TIE: ${g.v_tie.toFixed(1)} · err ${g.err.toFixed(1)}%</span>`:''}
+        ${g.vflat>0?`<span class="gc-err" style="color:${errColor}">v_TIE: ${g.v_tie.toFixed(1)} · err ${g.err.toFixed(1)}%</span>`:'<span class="gc-err" style="color:var(--dim)">v_flat no medida</span>'}
       </div>
       <span class="gc-q q${g.Q}">Q=${g.Q}</span>
     </div>`;
@@ -522,10 +577,11 @@ function selectGalaxy(name){
   const g=SPARC.find(x=>x.name===name);
   if(!g) return;
   render();
-  // Populate modal
   document.getElementById('m-name').textContent=g.name;
   document.getElementById('m-type').textContent=g.type+' · T='+g.T+' · D='+g.dist+' Mpc · Q='+g.Q;
-  document.getElementById('m-desc').textContent=g.desc;
+  // Descripción enriquecida
+  const richDesc = EXTRA_DESC[g.name] || g.desc;
+  document.getElementById('m-desc').textContent=richDesc;
   document.getElementById('m-dist').textContent=g.dist;
   document.getElementById('m-inc').textContent=g.inc+'°';
   document.getElementById('m-mdisk').textContent=g.Mdisk.toFixed(4);
@@ -539,17 +595,25 @@ function selectGalaxy(name){
   const errBg=g.err<10?'var(--green)':g.err<25?'var(--gold)':'var(--red)';
   document.getElementById('m-err-bar').style.width=errW+'%';
   document.getElementById('m-err-bar').style.background=errBg;
+  // Link a curvas.html si es preset disponible
+  const key = toCurvasKey(g.name);
+  const hasCurva = CURVAS_PRESETS.has(key) || [...CURVAS_PRESETS].some(p=>p===key);
+  const linkDiv = document.getElementById('m-curvas-link');
+  linkDiv.style.display = hasCurva ? 'block' : 'none';
   document.getElementById('modal').classList.add('open');
 }
 
 function closeModal(e){
-  if(!e || e.target===document.getElementById('modal')||e.currentTarget===document.querySelector('.modal-close')){
+  if(!e || e.target===document.getElementById('modal')){
     document.getElementById('modal').classList.remove('open');
   }
 }
 
 function updateChart(){
   const data=filtered();
+  // Actualizar nota explicativa
+  document.getElementById('chart-note').innerHTML = CHART_NOTES[chartMode] || '';
+
   const plotLayout={
     paper_bgcolor:'transparent',plot_bgcolor:'rgba(5,5,15,0.5)',
     font:{family:'Space Mono',color:'#a0a0b0',size:10},

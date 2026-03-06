@@ -208,18 +208,16 @@ nav {
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 2px;
-  cursor: pointer;
+  cursor: default;
   transition: 0.3s;
   text-decoration: none;
   display: inline-block;
   border-radius: 4px;
-  opacity: 0.7;
-  pointer-events: none;
+  opacity: 1;
 }
 
 .hero-paper-btn:hover {
-  background: var(--green);
-  color: #000;
+  background: rgba(68,255,136,0.1);
   box-shadow: 0 0 30px rgba(68,255,136,0.3);
 }
 
@@ -440,8 +438,9 @@ footer {
           <span class="value">Preventa activa</span>
         </div>
       </div>
-      <button class="hero-paper-btn" disabled>🔗 VER EN AMAZON (PRÓXIMAMENTE)</button>
-      <div class="hero-paper-note">El libro ya está en preventa. El link se habilitará en cuanto Amazon lo confirme.</div>
+      <!-- BOTÓN CORREGIDO CON FECHA -->
+      <a href="#" class="hero-paper-btn" style="pointer-events:none;">🔗 PREVENTA · 21/03/2026</a>
+      <div class="hero-paper-note">El libro estará disponible en Amazon a partir del 21 de marzo de 2026.</div>
     </div>
   </div>
 

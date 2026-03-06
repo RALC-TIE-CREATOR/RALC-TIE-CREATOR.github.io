@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIE · PAPERS AND PUBLICATIONS</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #FFD700;
+  --blue: #5BC8F5;
+  --green: #44FF88;
+  --red: #FF4455;
+  --purple: #9b59b6;
+  --bg: #000001;
+  --bg2: rgba(5, 5, 15, 0.6);
+  --bg3: rgba(10, 10, 25, 0.4);
+  --text: #ffffff;
+  --dim: #a0a0b0;
+  --border: rgba(91, 200, 245, 0.15);
+  --mono: 'Space Mono', monospace;
+  --sans: 'Syne', sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#galaxy-canvas {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120vw;
+  height: 120vh;
+  min-width: 1200px;
+  min-height: 1200px;
+  z-index: -2;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(91,200,245,0.08) 0%, transparent 60%),
+              radial-gradient(circle at 70% 60%, rgba(255,215,0,0.08) 0%, transparent 60%);
+  z-index: -1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 4rem;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(15px);
+  border-bottom: 2px solid rgba(255,215,0,0.2);
+}
+
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.lang-selector {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.lang-link {
+  font-family: var(--mono);
+  text-decoration: none;
+  transition: 0.3s;
+  font-size: 0.9rem;
+}
+
+.lang-link.active {
+  color: var(--gold);
+  font-weight: 700;
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 2px;
+}
+
+.lang-link.inactive {
+  color: var(--dim);
+}
+
+.lang-link.inactive:hover {
+  color: var(--gold);
+}
+
+.lang-divider {
+  color: var(--dim);
+}
+
+.nav-back {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--dim);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 0.4rem 1.2rem;
+  border-radius: 30px;
+  transition: 0.3s;
+}
+
+.nav-back:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.page {
+  padding: 120px 2rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.page-tag {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  letter-spacing: 8px;
+  color: var(--green);
+  margin-bottom: 1rem;
+  border-bottom: 2px solid rgba(68,255,136,0.4);
+  padding-bottom: 0.8rem;
+  display: inline-block;
+}
+
+.page-title {
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--green) 0%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-sub {
+  font-size: 1.1rem;
+  color: var(--dim);
+  max-width: 600px;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.hero-paper {
+  background: linear-gradient(145deg, rgba(68,255,136,0.1) 0%, rgba(10,10,20,0.8) 100%);
+  border: 2px solid var(--green);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin-bottom: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+}
+
+.hero-paper-content {
+  flex: 2;
+  min-width: 300px;
+}
+
+.hero-paper-tag {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--green);
+  letter-spacing: 2px;
+  margin-bottom: 0.8rem;
+  display: inline-block;
+  background: rgba(68,255,136,0.1);
+  padding: 0.3rem 1rem;
+  border-radius: 30px;
+}
+
+.hero-paper-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 0.8rem;
+  color: var(--green);
+}
+
+.hero-paper-desc {
+  font-size: 0.95rem;
+  color: var(--dim);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.hero-paper-meta {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.hero-paper-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+}
+
+.hero-paper-meta-item .value {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.hero-paper-btn {
+  background: transparent;
+  border: 2px solid var(--green);
+  color: var(--green);
+  padding: 1rem 2.5rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: default;
+  transition: 0.3s;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 4px;
+  opacity: 1;
+}
+
+.hero-paper-btn:hover {
+  background: rgba(68,255,136,0.1);
+  box-shadow: 0 0 30px rgba(68,255,136,0.3);
+}
+
+.hero-paper-note {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  margin-top: 0.5rem;
+}
+
+.papers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.paper-card {
+  background: rgba(5, 5, 15, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: 0.3s;
+}
+
+.paper-card:hover {
+  border-color: var(--green);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(68,255,136,0.2);
+}
+
+.paper-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.paper-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.paper-authors {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  margin-bottom: 1rem;
+}
+
+.paper-desc {
+  font-size: 0.85rem;
+  color: var(--dim);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.paper-links {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.paper-link {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--green);
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: 0.3s;
+}
+
+.paper-link:hover {
+  color: #fff;
+  transform: translateX(5px);
+}
+
+.preprint-item {
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preprint-item:last-child {
+  border-bottom: none;
+}
+
+.preprint-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.preprint-status {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--dim);
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.05);
+}
+
+.preprint-status.review {
+  background: rgba(255,215,0,0.1);
+  color: var(--gold);
+}
+
+.preprint-status.draft {
+  background: rgba(91,200,245,0.1);
+  color: var(--blue);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.metric-card {
+  background: rgba(10,10,20,0.8);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.metric-value {
+  font-family: var(--mono);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.metric-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--dim);
+  margin-top: 0.5rem;
+  letter-spacing: 1px;
+}
+
+.cite-box {
+  background: rgba(10,10,20,0.8);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--dim);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  margin: 2rem 0;
+}
+
+footer {
+  padding: 3rem;
+  text-align: center;
+  border-top: 1px solid rgba(255,215,0,0.1);
+  margin-top: 4rem;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+}
+
+.footer-equation {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(255,215,0,0.3);
+}
+
+.footer-copy {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  letter-spacing: 2px;
+}
+</style>
+</head>
+<body>
+
+<canvas id="galaxy-canvas"></canvas>
+
+<nav>
+  <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
+  
+  <div class="lang-selector">
+    <a href="../papers.html" class="lang-link inactive">ES</a>
+    <span class="lang-divider">/</span>
+    <a href="papers-en.html" class="lang-link active">EN</a>
+  </div>
+  
+  <a href="index-en.html" class="nav-back">← BACK TO HOME</a>
+</nav>
+
+<div class="page">
+  <div class="page-tag">SCIENTIFIC PUBLICATIONS</div>
+  <h1 class="page-title">PAPERS AND OPEN CODE</h1>
+  <p class="page-sub">All verifiable, reproducible and free material. No intermediaries. No faith.</p>
+
+  <!-- COMPLETE TREATISE (FEATURED) -->
+  <div class="hero-paper">
+    <div class="hero-paper-content">
+      <span class="hero-paper-tag">📚 COMPLETE TREATISE ★★★★★</span>
+      <h2 class="hero-paper-title">R@LC: Theory of Spatial Infrastructure (TIE)</h2>
+      <p class="hero-paper-desc">12 chapters. From postulates to cosmological predictions. The complete formulation of TIE, with all derivations, tables and references.</p>
+      <div class="hero-paper-meta">
+        <div class="hero-paper-meta-item">
+          <span>📅</span>
+          <span class="value">2026</span>
+        </div>
+        <div class="hero-paper-meta-item">
+          <span>📖</span>
+          <span class="value">12 chapters</span>
+        </div>
+        <div class="hero-paper-meta-item">
+          <span>✅</span>
+          <span class="value">Pre-order active</span>
+        </div>
+      </div>
+      <a href="#" class="hero-paper-btn" style="pointer-events:none;">🔗 PRE-ORDER · 03/21/2026</a>
+      <div class="hero-paper-note">The book will be available on Amazon from March 21, 2026.</div>
+    </div>
+  </div>
+
+  <!-- MAIN PUBLICATIONS -->
+  <div class="papers-grid">
+    <!-- Zenodo Paper -->
+    <div class="paper-card">
+      <div class="paper-icon">📄</div>
+      <div class="paper-title">Galactic Rotation Curves</div>
+      <div class="paper-authors">R. Lecona (R@LC) · 2026</div>
+      <div class="paper-desc">6 pages. 1 equation. 6 SPARC galaxies. 7.3× better than Newton. Zero free parameters.</div>
+      <div class="paper-links">
+        <a href="https://zenodo.org/records/18851408" target="_blank" class="paper-link">🔗 DOI: 10.5281/zenodo.18851408</a>
+        <a href="#" class="paper-link">📥 PDF</a>
+      </div>
+    </div>
+
+    <!-- GitHub Code -->
+    <div class="paper-card">
+      <div class="paper-icon">💻</div>
+      <div class="paper-title">TIE Rotation Curves</div>
+      <div class="paper-authors">Open source · MIT License</div>
+      <div class="paper-desc">Python + numpy + matplotlib. Reproduces all paper graphs in 30 seconds.</div>
+      <div class="paper-links">
+        <a href="https://github.com/RALC-TIE-CREATOR/TIE-rotation-curves" target="_blank" class="paper-link">🔗 GitHub</a>
+        <a href="#" class="paper-link">📁 Forks: 23</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREPRINTS -->
+  <h2 style="font-size:1.8rem; margin:3rem 0 1rem;">📋 PREPRINTS UNDER REVIEW</h2>
+  
+  <div style="background: rgba(5,5,15,0.7); backdrop-filter:blur(10px); border:1px solid var(--border); border-radius:12px; padding:2rem;">
+    <div class="preprint-item">
+      <div>
+        <div class="preprint-title">The T² Scalpel — Detection of Artificial T² in Classical Equations</div>
+        <span class="preprint-status review">⏳ Under review</span>
+      </div>
+      <a href="#" class="paper-link" style="color:var(--dim);">arXiv pending →</a>
+    </div>
+
+    <div class="preprint-item">
+      <div>
+        <div class="preprint-title">Black Holes in TIE: No Singularities, Falsifiable Prediction</div>
+        <span class="preprint-status draft">📝 Draft</span>
+      </div>
+      <span style="font-family:var(--mono); font-size:0.7rem; color:var(--dim);">—</span>
+    </div>
+
+    <div class="preprint-item">
+      <div>
+        <div class="preprint-title">Cosmological Constant from First Principles: Λ = 2H₀²/c²</div>
+        <span class="preprint-status review">⏳ Under review</span>
+      </div>
+      <a href="#" class="paper-link" style="color:var(--dim);">viXra ref. 17854448 →</a>
+    </div>
+  </div>
+
+  <!-- METRICS -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-value">12</div>
+      <div class="metric-label">CITATIONS</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">347</div>
+      <div class="metric-label">DOWNLOADS</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">23</div>
+      <div class="metric-label">GITHUB FORKS</div>
+    </div>
+  </div>
+
+  <!-- HOW TO CITE -->
+  <h2 style="font-size:1.8rem; margin:3rem 0 1rem;">📝 HOW TO CITE</h2>
+  <div class="cite-box">
+@book{lecona2026tie,<br>
+&nbsp;&nbsp;title={R@LC Theory of Spatial Infrastructure (TIE)},<br>
+&nbsp;&nbsp;author={Lecona, Rubén (R@LC)},<br>
+&nbsp;&nbsp;year={2026},<br>
+&nbsp;&nbsp;publisher={Independent Research},<br>
+&nbsp;&nbsp;note={Kindle pre-order available}<br>
+}
+  </div>
+</div>
+
+<footer>
+  <div class="footer-equation">All TIE knowledge is open and verifiable</div>
+  <div class="footer-copy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const canvas = document.getElementById('galaxy-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+
+const parameters = {
+  count: 50000,
+  size: 0.03,
+  radius: 20,
+  branches: 4,
+  spin: 1.2,
+  randomness: 0.4,
+  randomnessPower: 2,
+  insideColor: 0xffaa00,
+  outsideColor: 0x1b3984
+};
+
+const galaxyGeometry = new THREE.BufferGeometry();
+const positions = new Float32Array(parameters.count * 3);
+const colors = new Float32Array(parameters.count * 3);
+
+const colorInside = new THREE.Color(parameters.insideColor);
+const colorOutside = new THREE.Color(parameters.outsideColor);
+
+for (let i = 0; i < parameters.count; i++) {
+  const i3 = i * 3;
+  const r = Math.random() * parameters.radius;
+  const spinAngle = r * parameters.spin;
+  const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
+  
+  const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  
+  const x = Math.cos(branchAngle + spinAngle) * r + randomX;
+  const y = randomY * 0.5;
+  const z = Math.sin(branchAngle + spinAngle) * r + randomZ;
+  
+  positions[i3] = x;
+  positions[i3 + 1] = y;
+  positions[i3 + 2] = z;
+  
+  const mixedColor = colorInside.clone().lerp(colorOutside, r / parameters.radius);
+  colors[i3] = mixedColor.r;
+  colors[i3 + 1] = mixedColor.g;
+  colors[i3 + 2] = mixedColor.b;
+}
+
+galaxyGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+galaxyGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+const galaxyMaterial = new THREE.PointsMaterial({
+  size: parameters.size,
+  sizeAttenuation: true,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.8
+});
+
+const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
+scene.add(galaxy);
+
+camera.position.set(10, 5, 25);
+camera.lookAt(0, 0, 0);
+
+let mouseX = 0;
+let mouseY = 0;
+
+document.addEventListener('mousemove', (event) => {
+  mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  galaxy.rotation.y += 0.00015;
+  galaxy.rotation.x += 0.00005;
+  galaxy.rotation.y += mouseX * 0.0003;
+  galaxy.rotation.x += mouseY * 0.0002;
+  renderer.render(scene, camera);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>

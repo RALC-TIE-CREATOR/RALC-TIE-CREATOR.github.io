@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TIE · TEORÍA DE LA INFRAESTRUCTURA ESPACIAL</title>
+<title>TIE · THEORY OF SPATIAL INFRASTRUCTURE</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -11,7 +11,7 @@
   --blue: #5BC8F5;
   --green: #44FF88;
   --red: #FF4455;
-  --purple: #9b59b6; /* NUEVO COLOR MORADO */
+  --purple: #9b59b6;
   --bg: #000001;
   --bg2: rgba(5, 5, 15, 0.6);
   --bg3: rgba(10, 10, 25, 0.4);
@@ -33,7 +33,6 @@ body {
   position: relative;
 }
 
-/* ===== CANVAS 3D (Galaxia de fondo) ===== */
 #galaxy-canvas {
   position: fixed;
   top: 50%;
@@ -48,7 +47,6 @@ body {
   pointer-events: none;
 }
 
-/* ===== CAPA DE PROFUNDIDAD ===== */
 body::before {
   content: '';
   position: fixed;
@@ -60,7 +58,6 @@ body::before {
   mix-blend-mode: screen;
 }
 
-/* ===== NAVBAR ===== */
 nav {
   position: fixed;
   top: 0;
@@ -88,24 +85,55 @@ nav {
   text-shadow: 0 0 15px rgba(255,215,0,0.5);
 }
 
-.nav-status {
+/* SELECTOR DE IDIOMA */
+.lang-selector {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.lang-link {
   font-family: var(--mono);
-  font-size: 0.6rem;
-  color: var(--blue);
-  border: 1px solid rgba(91,200,245,0.3);
-  padding: 6px 18px;
+  text-decoration: none;
+  transition: 0.3s;
+  font-size: 0.9rem;
+}
+
+.lang-link.active {
+  color: var(--gold);
+  font-weight: 700;
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 2px;
+}
+
+.lang-link.inactive {
+  color: var(--dim);
+}
+
+.lang-link.inactive:hover {
+  color: var(--gold);
+}
+
+.lang-divider {
+  color: var(--dim);
+}
+
+.nav-back {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--dim);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 0.4rem 1.2rem;
   border-radius: 30px;
-  letter-spacing: 2px;
-  text-shadow: 0 0 10px rgba(91,200,245,0.5);
-  animation: pulse-border 2s infinite;
+  transition: 0.3s;
 }
 
-@keyframes pulse-border {
-  0%, 100% { border-color: rgba(91,200,245,0.3); }
-  50% { border-color: rgba(255,215,0,0.5); }
+.nav-back:hover {
+  border-color: var(--gold);
+  color: var(--gold);
 }
 
-/* ===== HERO SECTION ===== */
 .hero {
   min-height: 100vh;
   display: flex;
@@ -118,7 +146,6 @@ nav {
   z-index: 10;
 }
 
-/* TÍTULO PRINCIPAL */
 .hero-title {
   font-family: var(--mono);
   font-size: 1.5rem;
@@ -135,7 +162,6 @@ nav {
   font-weight: 700;
 }
 
-/* ===== CARRUSEL DE FRASES ===== */
 .hero-rotator {
   height: 120px;
   display: flex;
@@ -161,7 +187,6 @@ nav {
   padding: 0 2rem;
 }
 
-/* ===== ESTADÍSTICAS ===== */
 .stats-container {
   display: flex;
   gap: 3rem;
@@ -223,7 +248,6 @@ nav {
   50% { opacity: 1; }
 }
 
-/* ===== BOTONES PRINCIPALES COMO CUADROS ===== */
 .hero-actions {
   display: flex;
   gap: 1.5rem;
@@ -347,7 +371,6 @@ nav {
   color: #fff;
 }
 
-/* ===== CUADROS DE INFORMACIÓN (5 ahora) ===== */
 .hero-cards {
   display: flex;
   gap: 1.5rem;
@@ -357,11 +380,11 @@ nav {
   opacity: 0;
   animation: fadeInUp 1s 1s forwards;
   width: 100%;
-  max-width: 1400px; /* Más ancho para 5 cuadros */
+  max-width: 1400px;
 }
 
 .info-card {
-  flex: 1 1 220px; /* Más pequeños para que quepan 5 */
+  flex: 1 1 220px;
   min-width: 200px;
   padding: 1.5rem;
   border-radius: 8px;
@@ -398,7 +421,6 @@ nav {
   box-shadow: 0 0 40px rgba(255, 68, 85, 0.3);
 }
 
-/* NUEVO CUADRO MORADO - TEORÍA */
 .info-card.theory {
   border-color: rgba(155, 89, 182, 0.3);
   box-shadow: 0 0 20px rgba(155, 89, 182, 0.2);
@@ -496,7 +518,6 @@ nav {
   color: #fff;
 }
 
-/* ===== FOOTER ===== */
 footer {
   padding: 3rem;
   text-align: center;
@@ -523,7 +544,6 @@ footer {
   letter-spacing: 2px;
 }
 
-/* ===== ANIMACIONES ===== */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -541,92 +561,98 @@ footer {
 <canvas id="galaxy-canvas"></canvas>
 
 <nav>
-  <a href="#" class="nav-logo">TIE / R@LC</a>
-  <span class="nav-status">V.3.0 · INFRAESTRUCTURA</span>
+  <a href="../index.html" class="nav-logo">TIE / R@LC</a>
+  
+  <!-- SELECTOR DE IDIOMA -->
+  <div class="lang-selector">
+    <a href="../index.html" class="lang-link inactive">ES</a>
+    <span class="lang-divider">/</span>
+    <a href="index.html" class="lang-link active">EN</a>
+  </div>
+  
+  <a href="../index.html" class="nav-back">← BACK TO HOME</a>
 </nav>
 
 <section class="hero">
-  <!-- TÍTULO PRINCIPAL -->
-  <div class="hero-title">TIE · TEORÍA DE LA INFRAESTRUCTURA ESPACIAL</div>
+  <!-- MAIN TITLE -->
+  <div class="hero-title">TIE · THEORY OF SPATIAL INFRASTRUCTURE</div>
   
-  <!-- CARRUSEL DE FRASES -->
+  <!-- PHRASE ROTATOR -->
   <div class="hero-rotator">
-    <div id="rotating-phrase" class="rotating-phrase">EL TIEMPO ES ABSOLUTO.</div>
+    <div id="rotating-phrase" class="rotating-phrase">TIME IS ABSOLUTE.</div>
   </div>
 
-  <!-- ESTADÍSTICAS -->
+  <!-- STATISTICS -->
   <div class="stats-container">
     <div class="stat-item">
       <span class="stat-number">7.3×</span>
-      <span class="stat-label">MEJOR QUE NEWTON</span>
+      <span class="stat-label">BETTER THAN NEWTON</span>
     </div>
     <div class="stat-item">
       <span class="stat-number">84.1%</span>
-      <span class="stat-label">LA "MATERIA OSCURA"</span>
+      <span class="stat-label">"DARK MATTER"</span>
     </div>
     <div class="stat-item">
       <span class="stat-number">3.5%</span>
-      <span class="stat-label">ERROR EN Λ</span>
+      <span class="stat-label">Λ ERROR</span>
     </div>
     <div class="stat-item">
       <span class="stat-number">0</span>
-      <span class="stat-label">PARÁMETROS LIBRES</span>
+      <span class="stat-label">FREE PARAMETERS</span>
     </div>
   </div>
 
-  <!-- BOTONES PRINCIPALES COMO CUADROS -->
+  <!-- MAIN ACTION CARDS -->
   <div class="hero-actions">
-    <a href="labs.html" class="action-card lab">
-      <span class="action-tag">LABORATORIO</span>
-      <div class="action-title">Entrar al Laboratorio</div>
-      <div class="action-desc">10 herramientas interactivas para verificar TIE por ti mismo.</div>
-      <span class="action-link">→ ACCEDER</span>
+    <a href="lab.html" class="action-card lab">
+      <span class="action-tag">LABORATORY</span>
+      <div class="action-title">Enter the Lab</div>
+      <div class="action-desc">10 interactive tools to verify TIE yourself.</div>
+      <span class="action-link">→ ACCESS</span>
     </a>
     
-    <a href="https://github.com/RALC-TIE-CREATOR/TIE-rotation-curves" target="_blank" class="action-card github">
-      <span class="action-tag">CÓDIGO ABIERTO</span>
+    <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" class="action-card github">
+      <span class="action-tag">OPEN SOURCE</span>
       <div class="action-title">GitHub</div>
-      <div class="action-desc">Todo el código fuente, papers y documentación. Reproducible y libre.</div>
-      <span class="action-link">↗ REPOSITORIO</span>
+      <div class="action-desc">All source code, papers, and documentation. Reproducible and free.</div>
+      <span class="action-link">↗ REPOSITORY</span>
     </a>
   </div>
 
-  <!-- AHORA 5 CUADROS INFERIORES (verde, rojo, morado NUEVO, y los de acción ya están arriba) -->
-  <!-- Espera, mejor reorganicemos: los cuadros de acción ya están arriba, estos son los de info -->
+  <!-- INFO CARDS (5 colors) -->
   <div class="hero-cards">
     <a href="papers.html" class="info-card papers">
-      <span class="info-tag">PUBLICACIONES</span>
-      <div class="info-title">Papers y Código</div>
-      <div class="info-desc">Zenodo DOI · Tratado completo · Todo abierto y verificable.</div>
-      <span class="info-link">→ ACCEDER</span>
+      <span class="info-tag">PUBLICATIONS</span>
+      <div class="info-title">Papers & Code</div>
+      <div class="info-desc">Zenodo DOI · Complete treatise · All open and verifiable.</div>
+      <span class="info-link">→ ACCESS</span>
     </a>
     
-    <a href="predicciones.html" class="info-card predictions">
-      <span class="info-tag">VERIFICACIÓN</span>
-      <div class="info-title">Predicciones</div>
-      <div class="info-desc">11 predicciones · 8 confirmadas · 3 pendientes · Semáforo.</div>
-      <span class="info-link">→ VER ESTADO</span>
+    <a href="predictions.html" class="info-card predictions">
+      <span class="info-tag">VERIFICATION</span>
+      <div class="info-title">Predictions</div>
+      <div class="info-desc">11 predictions · 8 confirmed · 3 pending · Traffic light.</div>
+      <span class="info-link">→ SEE STATUS</span>
     </a>
 
-    <!-- NUEVO CUADRO MORADO - TEORÍA -->
-    <a href="teoria.html" class="info-card theory">
-      <span class="info-tag">FUNDAMENTOS</span>
-      <div class="info-title">La Teoría TIE</div>
-      <div class="info-desc">4 postulados · El Bisturí T² · Constantes · Fórmulas reinterpretadas.</div>
-      <span class="info-link">→ EXPLORAR</span>
+    <a href="theory.html" class="info-card theory">
+      <span class="info-tag">FOUNDATIONS</span>
+      <div class="info-title">TIE Theory</div>
+      <div class="info-desc">4 postulates · The T² Scalpel · Constants · Reinterpreted formulas.</div>
+      <span class="info-link">→ EXPLORE</span>
     </a>
   </div>
 </section>
 
 <footer>
   <div class="footer-equation">a₀ = c·H₀/2π</div>
-  <div class="footer-copy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+  <div class="footer-copy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
 </footer>
 
 <!-- Three.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// ===== GALAXIA 3D =====
+// ===== 3D GALAXY =====
 const canvas = document.getElementById('galaxy-canvas');
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -721,29 +747,29 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// ===== CARRUSEL DE FRASES =====
-const frases = [
-  "EL TIEMPO ES ABSOLUTO.",
-  "EL ESPACIO ES INFRAESTRUCTURA.",
-  "LA MATERIA OSCURA NO EXISTE.",
-  "UNA ECUACIÓN. CERO PARÁMETROS.",
-  "2π ES EL CICLO DEL UNIVERSO.",
-  "EL VACÍO TIENE DENSIDAD DE PROCESAMIENTO.",
-  "LA GRAVEDAD ES VISCOSIDAD.",
-  "EL UNIVERSO ES UN PROCESADOR DE PAQUETES-ħ.",
-  "NO HAY SINGULARIDADES. HAY SATURACIÓN.",
-  "LA FÍSICA ESTÁ COMPLETA."
+// ===== PHRASE ROTATOR (English) =====
+const phrases = [
+  "TIME IS ABSOLUTE.",
+  "SPACE IS INFRASTRUCTURE.",
+  "DARK MATTER DOES NOT EXIST.",
+  "ONE EQUATION. ZERO PARAMETERS.",
+  "2π IS THE CYCLE OF THE UNIVERSE.",
+  "THE VACUUM HAS PROCESSING DENSITY.",
+  "GRAVITY IS VISCOSITY.",
+  "THE UNIVERSE IS A ħ-PACKET PROCESSOR.",
+  "NO SINGULARITIES. ONLY SATURATION.",
+  "PHYSICS IS COMPLETE."
 ];
 
 let index = 0;
 const phraseElement = document.getElementById('rotating-phrase');
 
 function rotatePhrase() {
-  index = (index + 1) % frases.length;
+  index = (index + 1) % phrases.length;
   phraseElement.style.opacity = '0';
   
   setTimeout(() => {
-    phraseElement.textContent = frases[index];
+    phraseElement.textContent = phrases[index];
     phraseElement.style.opacity = '1';
   }, 400);
 }

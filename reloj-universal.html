@@ -148,6 +148,15 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="loc-btn" onclick="setLoc(this,'espacio')">
         <span class="lname">🌌 Espacio libre</span><span class="lmeta">sin masa · ρ = ρ∞</span>
       </div>
+      <div class="loc-btn" onclick="setLoc(this,'neutron')" style="border-color:rgba(255,68,85,.3);">
+        <span class="lname" style="color:var(--red)">⭐ Estrella neutrones</span><span class="lmeta">M=1.4M☉ · r=10 km · 83%</span>
+      </div>
+      <div class="loc-btn" onclick="setLoc(this,'bh3rs')" style="border-color:rgba(255,68,85,.3);">
+        <span class="lname" style="color:var(--red)">⚫ Ag. negro r=3rₛ</span><span class="lmeta">fotosfera externa · 86%</span>
+      </div>
+      <div class="loc-btn" onclick="setLoc(this,'bh15rs')" style="border-color:rgba(255,68,85,.5);">
+        <span class="lname" style="color:var(--red)">⚫ Ag. negro r=1.5rₛ</span><span class="lmeta">fotosfera de fotones · 75%</span>
+      </div>
     </div>
 
     <!-- DOS RELOJES -->
@@ -327,13 +336,17 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 </script>
 <script>
 const G=6.674e-11, c=2.998e8, c2=c*c, SPD=86400;
+const MS=1.989e30;
 const LOCS={
-  tierra: {M:5.972e24, r:6.371e6,   name:'Tierra',      desc:'Alta viscosidad gravitacional<br>menos paquetes ħ por pulso del Motor'},
-  gps:    {M:5.972e24, r:26560e3,   name:'Órbita GPS',  desc:'Viscosidad reducida — reloj va más rápido<br>más paquetes ħ procesados por pulso'},
-  marte:  {M:6.39e23,  r:3.389e6,   name:'Marte',       desc:'Viscosidad baja · Marte tiene ~38% gravedad terrestre<br>reloj ligeramente más rápido que en Tierra'},
-  jupiter:{M:1.898e27, r:69.911e6,  name:'Júpiter',     desc:'Viscosidad alta · 2.5× gravedad terrestre<br>reloj más lento que en Tierra'},
-  sol:    {M:1.989e30, r:696e6,     name:'Sol',         desc:'Viscosidad muy alta · campo gravitacional solar<br>reloj significativamente más lento'},
-  espacio:{M:0,        r:1e30,      name:'Espacio libre',desc:'Sin viscosidad · ρ = ρ∞ · procesamiento máximo<br>este es el pulso del Motor Absoluto'},
+  tierra: {M:5.972e24, r:6.371e6,              name:'Tierra',             desc:'Alta viscosidad gravitacional<br>menos paquetes ħ por pulso del Motor'},
+  gps:    {M:5.972e24, r:26560e3,              name:'Órbita GPS',         desc:'Viscosidad reducida — reloj va más rápido<br>más paquetes ħ procesados por pulso'},
+  marte:  {M:6.39e23,  r:3.389e6,              name:'Marte',              desc:'Viscosidad baja · Marte tiene ~38% gravedad terrestre<br>reloj ligeramente más rápido que en Tierra'},
+  jupiter:{M:1.898e27, r:69.911e6,             name:'Júpiter',            desc:'Viscosidad alta · 2.5× gravedad terrestre<br>reloj más lento que en Tierra'},
+  sol:    {M:1.989e30, r:696e6,                name:'Sol',                desc:'Viscosidad muy alta · campo gravitacional solar<br>reloj significativamente más lento'},
+  espacio:{M:0,        r:1e30,                 name:'Espacio libre',      desc:'Sin viscosidad · ρ = ρ∞ · procesamiento máximo<br>este es el pulso del Motor Absoluto'},
+  neutron:{M:1.4*MS,   r:10e3,                 name:'Estrella neutrones', desc:'<strong style="color:var(--red)">VISCOSIDAD EXTREMA</strong> — reloj corre al ~83% del Motor<br>diferencia visible a simple vista en las manecillas'},
+  bh3rs:  {M:10*MS,    r:3*(2*G*10*MS/c2),     name:'Ag. negro r=3rₛ',   desc:'<strong style="color:var(--red)">VISCOSIDAD MUY ALTA</strong> — reloj al ~86% del Motor<br>fotosfera externa · r=3rₛ del agujero negro'},
+  bh15rs: {M:10*MS,    r:1.5*(2*G*10*MS/c2),   name:'Ag. negro r=1.5rₛ', desc:'<strong style="color:var(--red)">VISCOSIDAD CRÍTICA</strong> — reloj al ~75% del Motor<br>fotosfera de fotones · la luz orbita aquí'},
 };
 let currentLoc='tierra', motorT=0, localT=0, lastTS=null;
 
@@ -351,10 +364,13 @@ function fmtSci(n){
   const sup=(e<0?'⁻':'')+Math.abs(e).toString().split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
   return m+'×10'+sup;
 }
-function fmtTime(s){
+function fmtTime(s, showTenths){
   s=Math.abs(s);
-  return [Math.floor(s/3600)%24, Math.floor((s%3600)/60), Math.floor(s%60)]
-    .map(x=>String(x).padStart(2,'0')).join(':');
+  const h=Math.floor(s/3600)%24;
+  const m=Math.floor((s%3600)/60);
+  const sec=s%60;
+  const base=[h,m,Math.floor(sec)].map(x=>String(x).padStart(2,'0')).join(':');
+  return showTenths ? base+'.'+String(Math.floor((sec%1)*10)) : base;
 }
 function flash(id){
   const el=document.getElementById(id);
@@ -399,8 +415,9 @@ function tick(ts){
   const r=rate(currentLoc);
   motorT+=dt; localT+=dt*r;
   document.getElementById('motor-cycles').textContent='2π × '+Math.floor(motorT*100).toLocaleString('es');
-  document.getElementById('time-motor').textContent=fmtTime(motorT);
-  document.getElementById('time-local').textContent=fmtTime(localT);
+  const extreme = ['neutron','bh3rs','bh15rs'].includes(currentLoc);
+  document.getElementById('time-motor').textContent=fmtTime(motorT, extreme);
+  document.getElementById('time-local').textContent=fmtTime(localT, extreme);
   const ro=x=>document.getElementById(x);
   ro('hand-motor-sec').style.transform=`rotate(${(motorT%60)*6}deg)`;
   ro('hand-motor-min').style.transform=`rotate(${((motorT/60)%60)*6}deg)`;
@@ -417,3 +434,4 @@ window.onload=()=>{
 </script>
 </body>
 </html>
+

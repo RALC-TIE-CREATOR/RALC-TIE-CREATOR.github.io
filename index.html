@@ -11,7 +11,7 @@
   --blue: #5BC8F5;
   --green: #44FF88;
   --red: #FF4455;
-  --purple: #9b59b6; /* NUEVO COLOR MORADO */
+  --purple: #9b59b6;
   --bg: #000001;
   --bg2: rgba(5, 5, 15, 0.6);
   --bg3: rgba(10, 10, 25, 0.4);
@@ -33,7 +33,6 @@ body {
   position: relative;
 }
 
-/* ===== CANVAS 3D (Galaxia de fondo) ===== */
 #galaxy-canvas {
   position: fixed;
   top: 50%;
@@ -48,7 +47,6 @@ body {
   pointer-events: none;
 }
 
-/* ===== CAPA DE PROFUNDIDAD ===== */
 body::before {
   content: '';
   position: fixed;
@@ -60,7 +58,6 @@ body::before {
   mix-blend-mode: screen;
 }
 
-/* ===== NAVBAR ===== */
 nav {
   position: fixed;
   top: 0;
@@ -88,16 +85,53 @@ nav {
   text-shadow: 0 0 15px rgba(255,215,0,0.5);
 }
 
-.nav-status {
+/* SELECTOR DE IDIOMA */
+.lang-selector {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.lang-link {
   font-family: var(--mono);
-  font-size: 0.6rem;
-  color: var(--blue);
-  border: 1px solid rgba(91,200,245,0.3);
-  padding: 6px 18px;
+  text-decoration: none;
+  transition: 0.3s;
+  font-size: 0.9rem;
+}
+
+.lang-link.active {
+  color: var(--gold);
+  font-weight: 700;
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 2px;
+}
+
+.lang-link.inactive {
+  color: var(--dim);
+}
+
+.lang-link.inactive:hover {
+  color: var(--gold);
+}
+
+.lang-divider {
+  color: var(--dim);
+}
+
+.nav-back {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--dim);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 0.4rem 1.2rem;
   border-radius: 30px;
-  letter-spacing: 2px;
-  text-shadow: 0 0 10px rgba(91,200,245,0.5);
-  animation: pulse-border 2s infinite;
+  transition: 0.3s;
+}
+
+.nav-back:hover {
+  border-color: var(--gold);
+  color: var(--gold);
 }
 
 @keyframes pulse-border {
@@ -105,7 +139,6 @@ nav {
   50% { border-color: rgba(255,215,0,0.5); }
 }
 
-/* ===== HERO SECTION ===== */
 .hero {
   min-height: 100vh;
   display: flex;
@@ -118,7 +151,6 @@ nav {
   z-index: 10;
 }
 
-/* TÍTULO PRINCIPAL */
 .hero-title {
   font-family: var(--mono);
   font-size: 1.5rem;
@@ -135,7 +167,6 @@ nav {
   font-weight: 700;
 }
 
-/* ===== CARRUSEL DE FRASES ===== */
 .hero-rotator {
   height: 120px;
   display: flex;
@@ -161,7 +192,6 @@ nav {
   padding: 0 2rem;
 }
 
-/* ===== ESTADÍSTICAS ===== */
 .stats-container {
   display: flex;
   gap: 3rem;
@@ -223,7 +253,6 @@ nav {
   50% { opacity: 1; }
 }
 
-/* ===== BOTONES PRINCIPALES COMO CUADROS ===== */
 .hero-actions {
   display: flex;
   gap: 1.5rem;
@@ -347,7 +376,6 @@ nav {
   color: #fff;
 }
 
-/* ===== CUADROS DE INFORMACIÓN (5 ahora) ===== */
 .hero-cards {
   display: flex;
   gap: 1.5rem;
@@ -357,11 +385,11 @@ nav {
   opacity: 0;
   animation: fadeInUp 1s 1s forwards;
   width: 100%;
-  max-width: 1400px; /* Más ancho para 5 cuadros */
+  max-width: 1400px;
 }
 
 .info-card {
-  flex: 1 1 220px; /* Más pequeños para que quepan 5 */
+  flex: 1 1 220px;
   min-width: 200px;
   padding: 1.5rem;
   border-radius: 8px;
@@ -398,7 +426,6 @@ nav {
   box-shadow: 0 0 40px rgba(255, 68, 85, 0.3);
 }
 
-/* NUEVO CUADRO MORADO - TEORÍA */
 .info-card.theory {
   border-color: rgba(155, 89, 182, 0.3);
   box-shadow: 0 0 20px rgba(155, 89, 182, 0.2);
@@ -496,7 +523,6 @@ nav {
   color: #fff;
 }
 
-/* ===== FOOTER ===== */
 footer {
   padding: 3rem;
   text-align: center;
@@ -523,7 +549,6 @@ footer {
   letter-spacing: 2px;
 }
 
-/* ===== ANIMACIONES ===== */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -542,7 +567,15 @@ footer {
 
 <nav>
   <a href="#" class="nav-logo">TIE / R@LC</a>
-  <span class="nav-status">V.3.0 · INFRAESTRUCTURA</span>
+  
+  <!-- SELECTOR DE IDIOMA -->
+  <div class="lang-selector">
+    <a href="index.html" class="lang-link active">ES</a>
+    <span class="lang-divider">/</span>
+    <a href="index-en.html" class="lang-link inactive">EN</a>
+  </div>
+  
+  <a href="index.html" class="nav-back">← VOLVER AL INICIO</a>
 </nav>
 
 <section class="hero">
@@ -583,7 +616,7 @@ footer {
       <span class="action-link">→ ACCEDER</span>
     </a>
     
-    <a href="https://github.com/RALC-TIE-CREATOR/TIE-rotation-curves" target="_blank" class="action-card github">
+    <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" class="action-card github">
       <span class="action-tag">CÓDIGO ABIERTO</span>
       <div class="action-title">GitHub</div>
       <div class="action-desc">Todo el código fuente, papers y documentación. Reproducible y libre.</div>
@@ -591,8 +624,7 @@ footer {
     </a>
   </div>
 
-  <!-- AHORA 5 CUADROS INFERIORES (verde, rojo, morado NUEVO, y los de acción ya están arriba) -->
-  <!-- Espera, mejor reorganicemos: los cuadros de acción ya están arriba, estos son los de info -->
+  <!-- 5 CUADROS INFERIORES -->
   <div class="hero-cards">
     <a href="papers.html" class="info-card papers">
       <span class="info-tag">PUBLICACIONES</span>
@@ -608,7 +640,6 @@ footer {
       <span class="info-link">→ VER ESTADO</span>
     </a>
 
-    <!-- NUEVO CUADRO MORADO - TEORÍA -->
     <a href="teoria.html" class="info-card theory">
       <span class="info-tag">FUNDAMENTOS</span>
       <div class="info-title">La Teoría TIE</div>
@@ -752,4 +783,3 @@ setInterval(rotatePhrase, 4000);
 </script>
 </body>
 </html>
-

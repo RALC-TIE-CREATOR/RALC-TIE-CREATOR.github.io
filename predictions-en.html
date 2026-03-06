@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIE · VERIFIABLE PREDICTIONS</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #FFD700;
+  --blue: #5BC8F5;
+  --green: #44FF88;
+  --red: #FF4455;
+  --yellow: #FFD700;
+  --bg: #000001;
+  --bg2: rgba(5, 5, 15, 0.6);
+  --bg3: rgba(10, 10, 25, 0.4);
+  --text: #ffffff;
+  --dim: #a0a0b0;
+  --border: rgba(91, 200, 245, 0.15);
+  --mono: 'Space Mono', monospace;
+  --sans: 'Syne', sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#galaxy-canvas {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120vw;
+  height: 120vh;
+  min-width: 1200px;
+  min-height: 1200px;
+  z-index: -2;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(91,200,245,0.08) 0%, transparent 60%),
+              radial-gradient(circle at 70% 60%, rgba(255,215,0,0.08) 0%, transparent 60%);
+  z-index: -1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 4rem;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(15px);
+  border-bottom: 2px solid rgba(255,215,0,0.2);
+}
+
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.lang-selector {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.lang-link {
+  font-family: var(--mono);
+  text-decoration: none;
+  transition: 0.3s;
+  font-size: 0.9rem;
+}
+
+.lang-link.active {
+  color: var(--gold);
+  font-weight: 700;
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 2px;
+}
+
+.lang-link.inactive {
+  color: var(--dim);
+}
+
+.lang-link.inactive:hover {
+  color: var(--gold);
+}
+
+.lang-divider {
+  color: var(--dim);
+}
+
+.nav-back {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--dim);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 0.4rem 1.2rem;
+  border-radius: 30px;
+  transition: 0.3s;
+}
+
+.nav-back:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.page {
+  padding: 120px 2rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.page-tag {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  letter-spacing: 8px;
+  color: var(--red);
+  margin-bottom: 1rem;
+  border-bottom: 2px solid rgba(255,68,85,0.4);
+  padding-bottom: 0.8rem;
+  display: inline-block;
+}
+
+.page-title {
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--red) 0%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-sub {
+  font-size: 1.1rem;
+  color: var(--dim);
+  max-width: 600px;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.big-traffic-light {
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  margin: 3rem 0;
+}
+
+.light-item {
+  text-align: center;
+}
+
+.light-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 0 auto 0.5rem;
+  box-shadow: 0 0 30px currentColor;
+}
+
+.light-circle.green {
+  background: var(--green);
+  color: var(--green);
+}
+
+.light-circle.yellow {
+  background: var(--yellow);
+  color: var(--yellow);
+}
+
+.light-circle.red {
+  background: var(--red);
+  color: var(--red);
+}
+
+.light-number {
+  font-family: var(--mono);
+  font-size: 2rem;
+  font-weight: 700;
+  display: block;
+  line-height: 1;
+}
+
+.light-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  letter-spacing: 2px;
+}
+
+.predictions-list {
+  background: rgba(5,5,15,0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 3rem 0;
+}
+
+.prediction-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.prediction-item:last-child {
+  border-bottom: none;
+}
+
+.prediction-status {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.prediction-status.green {
+  background: rgba(68,255,136,0.2);
+  color: var(--green);
+  border: 2px solid var(--green);
+}
+
+.prediction-status.yellow {
+  background: rgba(255,215,0,0.2);
+  color: var(--yellow);
+  border: 2px solid var(--yellow);
+}
+
+.prediction-content {
+  flex: 1;
+  min-width: 250px;
+}
+
+.prediction-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.prediction-values {
+  display: flex;
+  gap: 2rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.prediction-tie {
+  color: var(--gold);
+}
+
+.prediction-obs {
+  color: var(--dim);
+}
+
+.prediction-error {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--green);
+  background: rgba(68,255,136,0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: 30px;
+  white-space: nowrap;
+}
+
+.prediction-error.yellow {
+  color: var(--yellow);
+  background: rgba(255,215,0,0.1);
+}
+
+.falsifiability-box {
+  background: linear-gradient(145deg, rgba(255,68,85,0.1) 0%, rgba(10,10,20,0.8) 100%);
+  border: 2px solid var(--red);
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 3rem 0;
+}
+
+.falsifiability-title {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--red);
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+}
+
+.falsifiability-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+.falsifiability-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.falsifiability-list li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--dim);
+}
+
+.falsifiability-list li::before {
+  content: '🔴';
+  font-size: 1rem;
+}
+
+.changelog {
+  background: rgba(5,5,15,0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+.changelog-item {
+  display: flex;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+
+.changelog-item:last-child {
+  border-bottom: none;
+}
+
+.changelog-date {
+  color: var(--gold);
+  min-width: 90px;
+}
+
+.changelog-text {
+  color: var(--dim);
+}
+
+.changelog-text .green {
+  color: var(--green);
+}
+
+.progress-section {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 20px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 30px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--green));
+  width: 73%;
+  border-radius: 30px;
+  box-shadow: 0 0 20px rgba(68,255,136,0.5);
+}
+
+.progress-label {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--dim);
+}
+
+footer {
+  padding: 3rem;
+  text-align: center;
+  border-top: 1px solid rgba(255,215,0,0.1);
+  margin-top: 4rem;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+}
+
+.footer-equation {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(255,215,0,0.3);
+}
+
+.footer-copy {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  letter-spacing: 2px;
+}
+</style>
+</head>
+<body>
+
+<canvas id="galaxy-canvas"></canvas>
+
+<nav>
+  <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
+  
+  <div class="lang-selector">
+    <a href="../predicciones.html" class="lang-link inactive">ES</a>
+    <span class="lang-divider">/</span>
+    <a href="predictions-en.html" class="lang-link active">EN</a>
+  </div>
+  
+  <a href="index-en.html" class="nav-back">← BACK TO HOME</a>
+</nav>
+
+<div class="page">
+  <div class="page-tag">VERIFICATION STATUS</div>
+  <h1 class="page-title">VERIFIABLE PREDICTIONS</h1>
+  <p class="page-sub">11 predictions. 8 confirmed. 3 pending. Zero free parameters. No faith. Only numbers.</p>
+
+  <!-- BIG TRAFFIC LIGHT -->
+  <div class="big-traffic-light">
+    <div class="light-item">
+      <div class="light-circle green"></div>
+      <span class="light-number">8</span>
+      <span class="light-label">CONFIRMED</span>
+    </div>
+    <div class="light-item">
+      <div class="light-circle yellow"></div>
+      <span class="light-number">3</span>
+      <span class="light-label">PENDING</span>
+    </div>
+    <div class="light-item">
+      <div class="light-circle red"></div>
+      <span class="light-number">0</span>
+      <span class="light-label">REFUTED</span>
+    </div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-section">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill"></div>
+    </div>
+    <div class="progress-label">8/11 confirmed · 73% verified</div>
+  </div>
+
+  <!-- PREDICTIONS LIST -->
+  <div class="predictions-list">
+    <!-- 1. Dark matter -->
+    <div class="prediction-item">
+      <div class="prediction-status green">✅</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Dark matter</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: 84.1%</span>
+          <span class="prediction-obs">Obs: ~84%</span>
+        </div>
+      </div>
+      <span class="prediction-error">error &lt;1%</span>
+    </div>
+
+    <!-- 2. Cosmological constant Λ -->
+    <div class="prediction-item">
+      <div class="prediction-status green">✅</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Cosmological constant Λ</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: 1.145×10⁻⁵² m⁻²</span>
+          <span class="prediction-obs">Planck: 1.106×10⁻⁵² m⁻²</span>
+        </div>
+      </div>
+      <span class="prediction-error">error 3.5%</span>
+    </div>
+
+    <!-- 3. GPS correction -->
+    <div class="prediction-item">
+      <div class="prediction-status green">✅</div>
+      <div class="prediction-content">
+        <div class="prediction-name">GPS correction</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: 45.7 μs/day</span>
+          <span class="prediction-obs">Obs: 45.9 μs/day</span>
+        </div>
+      </div>
+      <span class="prediction-error">error 0.4%</span>
+    </div>
+
+    <!-- 4. Mercury precession -->
+    <div class="prediction-item">
+      <div class="prediction-status green">✅</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Mercury precession</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: 43.0″/century</span>
+          <span class="prediction-obs">Obs: 43.1±0.5″/century</span>
+        </div>
+      </div>
+      <span class="prediction-error">error 0.2%</span>
+    </div>
+
+    <!-- 5. Bohr radius -->
+    <div class="prediction-item">
+      <div class="prediction-status green">✅</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Bohr radius</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: 5.292×10⁻¹¹ m</span>
+          <span class="prediction-obs">Obs: 5.297×10⁻¹¹ m</span>
+        </div>
+      </div>
+      <span class="prediction-error">error 0.10%</span>
+    </div>
+
+    <!-- 6. Fine structure α -->
+    <div class="prediction-item">
+      <div class="prediction-status green">✅</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Fine structure constant α</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: 1/137.12</span>
+          <span class="prediction-obs">Obs: 1/137.04</span>
+        </div>
+      </div>
+      <span class="prediction-error">error &lt;0.1%</span>
+    </div>
+
+    <!-- 7. Cluster factor -->
+    <div class="prediction-item">
+      <div class="prediction-status green">✅</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Galaxy cluster factor</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: 2π = 6.28×</span>
+          <span class="prediction-obs">Obs: ~6.25×</span>
+        </div>
+      </div>
+      <span class="prediction-error">error 0.5%</span>
+    </div>
+
+    <!-- 8. Fermi's Golden Rule -->
+    <div class="prediction-item">
+      <div class="prediction-status green">✅</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Fermi's Golden Rule</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: 2π/ħ native</span>
+          <span class="prediction-obs">Fermi 1934</span>
+        </div>
+      </div>
+      <span class="prediction-error">independent validation</span>
+    </div>
+
+    <!-- 9. EHT shadow (pending) -->
+    <div class="prediction-item">
+      <div class="prediction-status yellow">⏳</div>
+      <div class="prediction-content">
+        <div class="prediction-name">EHT shadow (M87*, Sgr A*)</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: rₕ ≫ rₛ</span>
+          <span class="prediction-obs">Pending (ngEHT)</span>
+        </div>
+      </div>
+      <span class="prediction-error yellow">falsifiable 2028+</span>
+    </div>
+
+    <!-- 10. LISA signal -->
+    <div class="prediction-item">
+      <div class="prediction-status yellow">⏳</div>
+      <div class="prediction-content">
+        <div class="prediction-name">LISA signal</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: ~2.4 mHz</span>
+          <span class="prediction-obs">Pending (2030+)</span>
+        </div>
+      </div>
+      <span class="prediction-error yellow">to be verified</span>
+    </div>
+
+    <!-- 11. Intergalactic cross-field -->
+    <div class="prediction-item">
+      <div class="prediction-status yellow">⏳</div>
+      <div class="prediction-content">
+        <div class="prediction-name">Intergalactic cross-field</div>
+        <div class="prediction-values">
+          <span class="prediction-tie">TIE: Residual acceleration</span>
+          <span class="prediction-obs">Pending (Euclid)</span>
+        </div>
+      </div>
+      <span class="prediction-error yellow">in progress</span>
+    </div>
+  </div>
+
+  <!-- FALSIFIABILITY SECTION -->
+  <div class="falsifiability-box">
+    <div class="falsifiability-title">🔴 FALSIFIABILITY</div>
+    <div class="falsifiability-text">
+      TIE does not ask for faith. It asks to be measured. If these experiments do not confirm the predictions, the theory is wrong.
+    </div>
+    <ul class="falsifiability-list">
+      <li>ngEHT (next generation) — if the shadow of M87* or Sgr A* matches rₛ and not rₕ</li>
+      <li>LISA (2030+) — if the ~2.4 mHz signal of the φ field is not detected</li>
+      <li>Euclid — if residual acceleration in intergalactic space is not measured</li>
+      <li>Next generation GPS — if the correction systematically differs from 45.7 μs/day</li>
+    </ul>
+  </div>
+
+  <!-- SCIENTIFIC CHANGELOG -->
+  <h2 style="font-size:1.8rem; margin:3rem 0 1rem;">📋 SCIENTIFIC CHANGELOG</h2>
+  <div class="changelog">
+    <div class="changelog-item">
+      <span class="changelog-date">2026-03-05</span>
+      <span class="changelog-text"><span class="green">✅ Confirmed</span> fine structure α with error &lt;0.1%</span>
+    </div>
+    <div class="changelog-item">
+      <span class="changelog-date">2026-03-04</span>
+      <span class="changelog-text"><span class="green">✅ Confirmed</span> GPS correction (error 0.4%)</span>
+    </div>
+    <div class="changelog-item">
+      <span class="changelog-date">2026-03-03</span>
+      <span class="changelog-text"><span class="green">✅ Confirmed</span> cosmological constant Λ (error 3.5%)</span>
+    </div>
+    <div class="changelog-item">
+      <span class="changelog-date">2026-03-02</span>
+      <span class="changelog-text"><span class="green">✅ Confirmed</span> dark matter 84.1% (Planck 2018)</span>
+    </div>
+    <div class="changelog-item">
+      <span class="changelog-date">2026-03-01</span>
+      <span class="changelog-text"><span class="green">✅ Confirmed</span> Fermi's Golden Rule (independent validation 1934)</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-equation">11 predictions · 8 confirmed · 3 pending · 0 refuted</div>
+  <div class="footer-copy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const canvas = document.getElementById('galaxy-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+
+const parameters = {
+  count: 50000,
+  size: 0.03,
+  radius: 20,
+  branches: 4,
+  spin: 1.2,
+  randomness: 0.4,
+  randomnessPower: 2,
+  insideColor: 0xffaa00,
+  outsideColor: 0x1b3984
+};
+
+const galaxyGeometry = new THREE.BufferGeometry();
+const positions = new Float32Array(parameters.count * 3);
+const colors = new Float32Array(parameters.count * 3);
+
+const colorInside = new THREE.Color(parameters.insideColor);
+const colorOutside = new THREE.Color(parameters.outsideColor);
+
+for (let i = 0; i < parameters.count; i++) {
+  const i3 = i * 3;
+  const r = Math.random() * parameters.radius;
+  const spinAngle = r * parameters.spin;
+  const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
+  
+  const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  
+  const x = Math.cos(branchAngle + spinAngle) * r + randomX;
+  const y = randomY * 0.5;
+  const z = Math.sin(branchAngle + spinAngle) * r + randomZ;
+  
+  positions[i3] = x;
+  positions[i3 + 1] = y;
+  positions[i3 + 2] = z;
+  
+  const mixedColor = colorInside.clone().lerp(colorOutside, r / parameters.radius);
+  colors[i3] = mixedColor.r;
+  colors[i3 + 1] = mixedColor.g;
+  colors[i3 + 2] = mixedColor.b;
+}
+
+galaxyGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+galaxyGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+const galaxyMaterial = new THREE.PointsMaterial({
+  size: parameters.size,
+  sizeAttenuation: true,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.8
+});
+
+const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
+scene.add(galaxy);
+
+camera.position.set(10, 5, 25);
+camera.lookAt(0, 0, 0);
+
+let mouseX = 0;
+let mouseY = 0;
+
+document.addEventListener('mousemove', (event) => {
+  mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  galaxy.rotation.y += 0.00015;
+  galaxy.rotation.x += 0.00005;
+  galaxy.rotation.y += mouseX * 0.0003;
+  galaxy.rotation.x += mouseY * 0.0002;
+  renderer.render(scene, camera);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>

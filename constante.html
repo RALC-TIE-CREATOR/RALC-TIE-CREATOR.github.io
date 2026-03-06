@@ -3,273 +3,317 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>H-08 · a₀ y Λ — TIE</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<title>TIE · H-08 · a₀ y Constante Cosmológica</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 <style>
-:root {
-  --gold: #FFD700;
-  --blue: #5BC8F5;
-  --green: #44FF88;
-  --red: #FF4455;
-  --bg: #06060f;
-  --bg2: #0d0d1a;
-  --bg3: #111122;
-  --text: #e8e8f0;
-  --dim: #7777aa;
-  --border: #1e1e3a;
-  --mono: 'Space Mono', monospace;
-  --sans: 'Syne', sans-serif;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-body {
-  background:var(--bg); color:var(--text);
-  font-family:var(--sans); height:100vh; display:flex; flex-direction:column;
-  overflow-y:auto; /* Solo scroll del navegador */
-}
+:root{--gold:#FFD700;--blue:#5BC8F5;--green:#44FF88;--red:#FF4455;--bg:#000001;--bg2:rgba(5,5,15,0.75);--bg3:rgba(10,10,25,0.55);--text:#ffffff;--dim:#a0a0b0;--border:rgba(91,200,245,0.15);--mono:'Space Mono',monospace;--sans:'Syne',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+#galaxy-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.4;}
+nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
+.nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
+.nav-center{display:flex;gap:.5rem;}
+.lang-link{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;transition:all .2s;}
+.lang-link.active{color:#000;background:var(--gold);}
+.lang-link.inactive{color:var(--dim);border:1px solid var(--border);}
+.lang-link.inactive:hover{color:var(--gold);border-color:var(--gold);}
+.nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-back:hover{color:var(--gold);}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:7rem 2rem 4rem;}
+.page-tag{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:.75rem;}
+.page-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;letter-spacing:-2px;margin-bottom:.5rem;}
+.page-title span{color:var(--gold);}
+.page-sub{font-family:var(--mono);font-size:.8rem;color:var(--dim);max-width:580px;line-height:1.6;margin-bottom:2rem;}
+.hero-eq{background:var(--bg2);border:1px solid rgba(255,215,0,0.3);border-radius:16px;padding:1.5rem 2rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;backdrop-filter:blur(8px);}
+.hero-eq-badge{font-family:var(--mono);font-size:.65rem;color:var(--green);background:rgba(68,255,136,0.08);border:1px solid rgba(68,255,136,0.25);border-radius:6px;padding:.4rem .8rem;letter-spacing:2px;white-space:nowrap;}
+.tool-grid{display:grid;grid-template-columns:360px 1fr;gap:1.5rem;align-items:start;}
+@media(max-width:900px){.tool-grid{grid-template-columns:1fr;}}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;backdrop-filter:blur(8px);}
+.panel-title{font-family:var(--mono);font-size:.65rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;padding-bottom:.5rem;border-bottom:1px solid var(--border);margin-bottom:1.25rem;}
 
-nav {
-  flex-shrink:0;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:.8rem 2rem;
-  background:rgba(6,6,15,.95); backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border);
-}
-.nav-back  { font-family:var(--mono); font-size:.85rem; color:var(--dim); text-decoration:none; }
-.nav-back:hover { color:var(--gold); }
-.nav-tag   { font-family:var(--mono); font-size:.75rem; color:var(--dim); letter-spacing:.1em; }
+/* Slider */
+.slider-wrap{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.5rem;}
+.slider-header{display:flex;justify-content:space-between;}
+.slider-lbl{font-family:var(--mono);font-size:.65rem;color:var(--dim);}
+.slider-val{font-family:var(--mono);font-size:.85rem;color:var(--gold);font-weight:700;}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:linear-gradient(to right,var(--gold) var(--pct,50%),rgba(91,200,245,0.2) var(--pct,50%));border-radius:2px;outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(255,215,0,0.5);}
+.range-limits{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-top:.2rem;}
 
-.page {
-  flex:1; display:flex; flex-direction:column;
-  max-width:1000px; margin:0 auto; padding:1.2rem 2rem; width:100%;
-  /* ELIMINADO overflow-y:auto - ahora usa el scroll del body */
-}
+/* Result cards */
+.results-stack{display:flex;flex-direction:column;gap:1rem;}
+.result-card-big{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;display:flex;justify-content:space-between;align-items:center;}
+.result-card-big.hi{border-color:rgba(255,215,0,.35);}
+.rcb-left .label{font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:.3rem;}
+.rcb-left .eq{font-size:.75rem;color:var(--dim);}
+.rcb-right .value{font-family:var(--mono);font-size:1.6rem;font-weight:700;color:var(--gold);text-align:right;}
+.rcb-right .unit{font-family:var(--mono);font-size:.6rem;color:var(--dim);text-align:right;}
+.error-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;}
+.error-card .ec-header{display:flex;justify-content:space-between;margin-bottom:.75rem;}
+.error-card .ec-title{font-family:var(--mono);font-size:.65rem;color:var(--gold);letter-spacing:2px;}
+.error-bar-track{width:100%;height:8px;background:rgba(255,255,255,.05);border-radius:4px;overflow:hidden;margin-bottom:.5rem;}
+.error-bar-fill{height:100%;background:var(--green);border-radius:4px;transition:width .5s ease;}
+.error-rows{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.65rem;}
+.error-rows .er-val{color:var(--gold);}
+.error-rows .er-err{color:var(--green);}
 
-.page-header { margin-bottom:1.2rem; }
-.page-tag {
-  font-family:var(--mono); font-size:.8rem; letter-spacing:.2em; color:var(--gold);
-  text-transform:uppercase;
-}
-.page-title { font-size:1.9rem; font-weight:800; margin-bottom:0.3rem; }
+/* Chart */
+.chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.25rem;backdrop-filter:blur(8px);margin-top:1.25rem;}
+.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.chart-title{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
 
-.eq-highlight {
-  background:var(--bg2); border-left:4px solid var(--gold);
-  border-radius:0 8px 8px 0; padding:1rem 1.8rem;
-  margin:1rem 0;
-  font-family:var(--mono); font-size:1.3rem; text-align:center;
-}
-.eq-highlight .gold { color:var(--gold); font-weight:700; }
-.eq-highlight .small { font-size:0.9rem; margin-top:0.3rem; color:var(--dim); }
+/* Comparison 3-col */
+.comp3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.25rem;}
+@media(max-width:600px){.comp3{grid-template-columns:1fr;}}
+.comp3-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:center;}
+.comp3-card.hi{border-color:rgba(255,215,0,.3);}
+.comp3-card.bad{border-color:rgba(255,68,85,.3);}
+.comp3-src{font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-bottom:.4rem;letter-spacing:1px;}
+.comp3-val{font-family:var(--mono);font-size:1.1rem;font-weight:700;margin-bottom:.25rem;}
+.comp3-val.g{color:var(--gold);}
+.comp3-val.b{color:var(--blue);}
+.comp3-val.r{color:var(--red);}
+.comp3-err{font-family:var(--mono);font-size:.6rem;}
+.comp3-note{font-family:var(--mono);font-size:.55rem;color:var(--dim);margin-top:.2rem;font-style:italic;}
 
-.calculator-panel {
-  background:var(--bg2); border:1px solid var(--border);
-  border-radius:10px; padding:1.5rem;
-  display:flex; flex-direction:column; gap:1.2rem;
-}
-
-.input-group {
-  display:flex; align-items:center; gap:1.5rem;
-}
-.input-group label {
-  font-family:var(--mono); font-size:.9rem; color:var(--dim); min-width:70px;
-}
-.range-group {
-  flex:1; display:flex; align-items:center; gap:1rem;
-}
-.range-group input[type=range] {
-  flex:1; accent-color:var(--gold); height:6px;
-}
-.range-group .range-value {
-  font-family:var(--mono); font-size:1.1rem; color:var(--gold); min-width:55px;
-}
-
-.results-grid {
-  display:grid; grid-template-columns:repeat(3, 1fr);
-  gap:1rem;
-}
-.result-card {
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:8px; padding:1rem 1.2rem;
-}
-.result-label {
-  font-family:var(--mono); font-size:.7rem; color:var(--dim);
-  text-transform:uppercase; letter-spacing:.05em; margin-bottom:0.3rem;
-}
-.result-value {
-  font-family:var(--mono); font-size:1.5rem; font-weight:700;
-  color:var(--gold); line-height:1.2;
-}
-.result-unit {
-  font-family:var(--mono); font-size:.7rem; color:var(--dim); margin-top:0.3rem;
-}
-
-.comparison-grid {
-  display:grid; grid-template-columns:repeat(3, 1fr);
-  gap:1rem; text-align:center; background:var(--bg3); padding:1rem;
-  border-radius:8px; border:1px solid var(--border);
-}
-.comp-item .source { font-family:var(--mono); font-size:.75rem; color:var(--dim); margin-bottom:0.3rem; }
-.comp-item .value { font-family:var(--mono); font-size:1.1rem; font-weight:700; }
-.comp-item .tie { color:var(--gold); }
-.comp-item .error { font-family:var(--mono); font-size:.7rem; margin-top:0.3rem; }
-
-/* Nota adicional para QFT */
-.qft-note {
-  font-family:var(--mono); font-size:.6rem; color:var(--dim);
-  margin-top:0.2rem; font-style:italic;
-}
-
-.constants-row {
-  display:flex; justify-content:space-around; gap:1.2rem;
-  background:var(--bg3); padding:0.8rem; border-radius:8px;
-  border:1px solid var(--border); font-family:var(--mono); font-size:.85rem;
-}
-.const-item .label { color:var(--dim); }
-.const-item .value { color:var(--gold); margin-left:0.4rem; }
-
-.explanation-box {
-  background:rgba(255,215,0,.05); border:1px solid rgba(255,215,0,.2);
-  border-radius:6px; padding:1rem 1.2rem;
-  font-size:0.9rem; line-height:1.5;
-}
-.explanation-box .highlight { color:var(--gold); font-weight:700; }
-
-.links-row {
-  display:flex; justify-content:center; gap:2rem;
-  font-family:var(--mono); font-size:.85rem; margin:0.3rem 0;
-}
-.links-row a { color:var(--gold); text-decoration:none; }
-
-.footer-note {
-  text-align:center; font-family:var(--mono); font-size:.75rem;
-  color:var(--dim); margin-top:0.8rem;
-}
+.const-row{display:flex;flex-wrap:wrap;gap:.75rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.75rem 1.25rem;backdrop-filter:blur(8px);margin-top:1.25rem;}
+.ci{font-family:var(--mono);font-size:.65rem;}
+.ci .cl{color:var(--dim);}
+.ci .cv{color:var(--gold);font-weight:700;}
+.nav-links{display:flex;justify-content:center;gap:2rem;margin-top:2rem;flex-wrap:wrap;}
+.nav-links a{font-family:var(--mono);font-size:.7rem;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);margin-top:2rem;}
+footer .feq{font-family:var(--mono);font-size:.85rem;color:var(--gold);margin-bottom:.5rem;}
+footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;}
+@keyframes flash{0%{color:var(--green);}100%{color:var(--gold);}}
+.flash{animation:flash .4s ease-out forwards;}
 </style>
 </head>
 <body>
-
+<canvas id="galaxy-canvas"></canvas>
 <nav>
-  <a href="index.html" class="nav-back">← Inicio</a>
-  <span class="nav-tag">H-08 · a₀ y Λ</span>
-  <a href="materia-oscura.html" class="nav-back">MO →</a>
+  <a href="index.html" class="nav-logo">TIE / R@LC</a>
+  <div class="nav-center">
+    <a href="constante.html" class="lang-link active">ES</a>
+    <a href="constant-en.html" class="lang-link inactive">EN</a>
+  </div>
+  <a href="labs.html" class="nav-back">← LABORATORIO</a>
 </nav>
-
 <div class="page">
-  <div class="page-header">
-    <div class="page-tag">La misma constante conecta galaxias y cosmos</div>
-    <div class="page-title">Calculadora a₀ y Λ</div>
+  <div class="page-tag">H-08 · LA MISMA CONSTANTE · DOS ESCALAS</div>
+  <h1 class="page-title">a₀ <span>y Λ</span></h1>
+  <p class="page-sub">Una sola H₀ genera a₀ (galaxias) y Λ (cosmos). La constante cosmológica no es energía oscura: es la curvatura de fondo de la infraestructura.</p>
+
+  <div class="hero-eq">
+    <div>\( a_0 = \dfrac{cH_0}{2\pi} \qquad \Lambda_{\text{TIE}} = \dfrac{2H_0^2}{c^2} = \dfrac{8\pi^2 a_0^2}{c^4} \)</div>
+    <div class="hero-eq-badge">✓ ERROR 3.5% VS PLANCK 2018</div>
   </div>
 
-  <div class="eq-highlight">
-    <span class="gold">a₀</span> = c·H₀/2π = <span id="a0-display">1.082×10⁻¹⁰</span> m/s²
-    <span style="margin:0 1rem; color:var(--dim);">|</span>
-    <span class="gold">Λ</span> = 2H₀²/c² = <span id="lambda-display">1.148×10⁻⁵²</span> m⁻²
+  <div class="tool-grid">
+    <!-- CONTROLS -->
+    <div class="panel">
+      <div class="panel-title">Constante de Hubble H₀</div>
+      <div class="slider-wrap">
+        <div class="slider-header">
+          <span class="slider-lbl">H₀</span>
+          <span class="slider-val"><span id="h0-display">70.0</span> km/s/Mpc</span>
+        </div>
+        <input type="range" id="h0" min="67" max="74" value="70" step="0.1" oninput="update()" style="--pct:43%">
+        <div class="range-limits">
+          <span>67 · Planck CMB</span>
+          <span>70 · consenso</span>
+          <span>74 · SH0ES</span>
+        </div>
+      </div>
+
+      <div class="panel-title">Resultados</div>
+      <div class="results-stack">
+        <div class="result-card-big hi">
+          <div class="rcb-left">
+            <div class="label">a₀ — Aceleración crítica</div>
+            <div class="eq">\( a_0 = cH_0/2\pi \)</div>
+          </div>
+          <div class="rcb-right">
+            <div class="value" id="a0">1.082×10⁻¹⁰</div>
+            <div class="unit">m/s²</div>
+          </div>
+        </div>
+        <div class="result-card-big">
+          <div class="rcb-left">
+            <div class="label">Λ TIE — Constante cosmológica</div>
+            <div class="eq">\( \Lambda = 2H_0^2/c^2 \)</div>
+          </div>
+          <div class="rcb-right">
+            <div class="value" id="lambda">1.145×10⁻⁵²</div>
+            <div class="unit">m⁻²</div>
+          </div>
+        </div>
+        <div class="result-card-big">
+          <div class="rcb-left">
+            <div class="label">Radio de transición — Vía Láctea</div>
+            <div class="eq">\( r_t = \sqrt{GM_{\text{VL}}/a_0} \)</div>
+          </div>
+          <div class="rcb-right">
+            <div class="value" id="rt">17.1</div>
+            <div class="unit">kpc</div>
+          </div>
+        </div>
+        <div class="error-card">
+          <div class="ec-header">
+            <span class="ec-title">ERROR vs Planck 2018</span>
+            <span class="ec-title" id="error-pct" style="color:var(--green)">3.5%</span>
+          </div>
+          <div class="error-bar-track"><div class="error-bar-fill" id="error-bar" style="width:3.5%"></div></div>
+          <div class="error-rows">
+            <span>Planck: <span class="er-val">1.106×10⁻⁵²</span></span>
+            <span>TIE: <span class="er-val" id="lambda-small">1.145×10⁻⁵²</span></span>
+            <span>QFT: <span class="er-err" style="color:var(--red)">10¹²⁰ órdenes ✗</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS RIGHT -->
+    <div style="display:flex;flex-direction:column;gap:1.25rem;">
+      <div class="comp3">
+        <div class="comp3-card b" style="border-color:rgba(91,200,245,.3)">
+          <div class="comp3-src">PLANCK 2018</div>
+          <div class="comp3-val b">1.106×10⁻⁵²</div>
+          <div class="comp3-err" style="color:var(--blue)">observado</div>
+        </div>
+        <div class="comp3-card hi">
+          <div class="comp3-src">TIE (H₀ variable)</div>
+          <div class="comp3-val g" id="lambda-comp">1.145×10⁻⁵²</div>
+          <div class="comp3-err" style="color:var(--green)">error <span id="error-comp">3.5</span>%</div>
+        </div>
+        <div class="comp3-card bad">
+          <div class="comp3-src">QFT (energía de vacío)</div>
+          <div class="comp3-val r">~10⁶⁸ m⁻²</div>
+          <div class="comp3-err" style="color:var(--red)">120 órdenes ✗</div>
+          <div class="comp3-note">no depende de H₀</div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <span class="chart-title">Λ TIE vs H₀ · rango Planck–SH0ES</span>
+        </div>
+        <div id="chart" style="height:260px;width:100%;"></div>
+      </div>
+
+      <div class="panel" style="background:rgba(255,215,0,.04);border-color:rgba(255,215,0,.2);">
+        <div class="panel-title">Por qué importa</div>
+        <p style="font-size:.85rem;line-height:1.7;color:var(--dim);">
+          La <span style="color:var(--gold);font-weight:700;">constante cosmológica</span> es el mayor problema sin resolver de la física: la QFT predice un valor 10¹²⁰ veces mayor que el observado. TIE lo resuelve sin energía oscura: Λ es simplemente la curvatura de fondo de la infraestructura, determinada por H₀. El error del 3.5% se reduce si H₀ = 67.74 km/s/Mpc (Planck 2018). Mueve el slider.
+        </p>
+      </div>
+
+      <div class="const-row">
+        <div class="ci"><span class="cl">c = </span><span class="cv">2.998×10⁸ m/s</span></div>
+        <div class="ci"><span class="cl">2π = </span><span class="cv">6.283185</span></div>
+        <div class="ci"><span class="cl">kpc = </span><span class="cv">3.086×10¹⁹ m</span></div>
+        <div class="ci"><span class="cl">M_VL = </span><span class="cv">6×10¹⁰ M☉</span></div>
+      </div>
+    </div>
   </div>
 
-  <div class="calculator-panel">
-
-    <div class="input-group">
-      <label>H₀ (km/s/Mpc)</label>
-      <div class="range-group">
-        <input type="range" id="h0" min="67" max="74" value="70" step="0.1" oninput="update()">
-        <span class="range-value" id="h0-display">70.0</span>
-      </div>
-    </div>
-
-    <div class="results-grid">
-      <div class="result-card">
-        <div class="result-label">a₀</div>
-        <div class="result-value" id="a0">1.082×10⁻¹⁰</div>
-        <div class="result-unit">m/s²</div>
-      </div>
-      <div class="result-card">
-        <div class="result-label">Λ TIE</div>
-        <div class="result-value" id="lambda">1.148×10⁻⁵²</div>
-        <div class="result-unit">m⁻²</div>
-      </div>
-      <div class="result-card">
-        <div class="result-label">error vs Planck</div>
-        <div class="result-value" id="error" style="font-size:1.1rem;">3.5%</div>
-        <div class="result-unit">(Planck: 1.106e-52)</div>
-      </div>
-    </div>
-
-    <div class="comparison-grid">
-      <div class="comp-item">
-        <div class="source">Planck 2018</div>
-        <div class="value">1.106×10⁻⁵²</div>
-        <div class="error">observado</div>
-      </div>
-      <div class="comp-item">
-        <div class="source">TIE</div>
-        <div class="value tie" id="lambda-compare">1.148×10⁻⁵²</div>
-        <div class="error">error <span id="error-small">3.5</span>%</div>
-      </div>
-      <div class="comp-item">
-        <div class="source">QFT (vacío)</div>
-        <div class="value" style="color:var(--red);">~10⁶⁸</div>
-        <div class="error" style="color:var(--red);">120 órdenes ✗</div>
-        <div class="qft-note">(no depende de H₀ — error fijo)</div>
-      </div>
-    </div>
-
-    <div class="constants-row">
-      <span class="const-item"><span class="label">c =</span><span class="value">2.998×10⁸ m/s</span></span>
-      <span class="const-item"><span class="label">2π =</span><span class="value">6.28318</span></span>
-      <span class="const-item"><span class="label">8π² =</span><span class="value">78.9568</span></span>
-    </div>
-
-    <div class="explanation-box">
-      <span class="highlight">Una constante, dos escalas:</span> 
-      La misma H₀ da a₀ (galaxias) y Λ (cosmos). 
-      Λ no es energía oscura, es curvatura de fondo de la infraestructura.
-    </div>
-
-    <div class="links-row">
-      <a href="2pi.html">← Calculadora 2π</a>
-      <a href="sparc.html">Explorador SPARC</a>
-      <a href="materia-oscura.html">Conversor MO →</a>
-    </div>
-
-    <div class="footer-note">
-      a₀ = cH₀/2π · Λ = 2H₀²/c² · Cero parámetros libres
-    </div>
-
+  <div class="nav-links">
+    <a href="materia-oscura.html">← Materia Oscura</a>
+    <a href="agujeros.html">Agujeros Negros →</a>
   </div>
 </div>
+<footer>
+  <div class="feq">\( a_0 = cH_0/2\pi \quad \cdot \quad \Lambda_{\text{TIE}} = 2H_0^2/c^2 \quad \cdot \quad \text{cero parámetros libres} \)</div>
+  <div class="fcopy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+</footer>
 
 <script>
-const c = 2.998e8;
+(function(){
+  const canvas=document.getElementById('galaxy-canvas');
+  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(60,1,0.1,1000);
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  function resize(){renderer.setSize(canvas.clientWidth,canvas.clientHeight);camera.aspect=canvas.clientWidth/canvas.clientHeight;camera.updateProjectionMatrix();}
+  resize();window.addEventListener('resize',resize);
+  camera.position.set(0,4,6);camera.lookAt(0,0,0);
+  const p={count:60000,radius:4,branches:5,spin:1.2,randomness:0.4,randomPower:2.5};
+  const geo=new THREE.BufferGeometry(),pos=new Float32Array(p.count*3),col=new Float32Array(p.count*3);
+  const cIn=new THREE.Color('#FFD700'),cOut=new THREE.Color('#1a1a4e');
+  for(let i=0;i<p.count;i++){const r=Math.random()*p.radius,b=(i%p.branches)/p.branches*Math.PI*2,s=r*p.spin;const rx=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r,ry=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r*.3,rz=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r;pos[i*3]=Math.cos(b+s)*r+rx;pos[i*3+1]=ry;pos[i*3+2]=Math.sin(b+s)*r+rz;const m=new THREE.Color().lerpColors(cIn,cOut,r/p.radius);col[i*3]=m.r;col[i*3+1]=m.g;col[i*3+2]=m.b;}
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+  const mat=new THREE.PointsMaterial({size:.008,sizeAttenuation:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true});
+  scene.add(new THREE.Points(geo,mat));
+  (function animate(){requestAnimationFrame(animate);scene.rotation.y+=.0007;renderer.render(scene,camera);})();
+})();
 
-function getH0_si() {
-  return parseFloat(document.getElementById('h0').value) * 1000 / 3.0857e22;
+const c=2.998e8,G=6.674e-11,MS=1.989e30,kpc=3.0857e19,Lambda_planck=1.106e-52;
+const MVL=6e10*MS;
+
+function fmtExp(v){const e=Math.floor(Math.log10(Math.abs(v)));const m=(v/Math.pow(10,e)).toFixed(3);return m+'×10'+(e<0?'⁻'+Math.abs(e):'⁺'+e);}
+
+function update(){
+  const h0k=parseFloat(document.getElementById('h0').value);
+  const h0si=h0k*1000/3.0857e22;
+  const pct=((h0k-67)/(74-67)*100).toFixed(1);
+  document.getElementById('h0').style.setProperty('--pct',pct+'%');
+  document.getElementById('h0-display').textContent=h0k.toFixed(1);
+  const a0=c*h0si/(2*Math.PI);
+  const lambda=2*h0si*h0si/(c*c);
+  const rt=Math.sqrt(G*MVL/a0)/kpc;
+  const error=((lambda-Lambda_planck)/Lambda_planck*100);
+  const errAbs=Math.abs(error).toFixed(1);
+
+  function animSet(id,val){const el=document.getElementById(id);el.textContent=val;el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');}
+  animSet('a0',fmtExp(a0));
+  animSet('lambda',fmtExp(lambda));
+  animSet('rt',rt.toFixed(1));
+  document.getElementById('lambda-small').textContent=fmtExp(lambda);
+  document.getElementById('lambda-comp').textContent=fmtExp(lambda);
+  document.getElementById('error-pct').textContent=errAbs+'%';
+  document.getElementById('error-pct').style.color=parseFloat(errAbs)<5?'var(--green)':'var(--red)';
+  document.getElementById('error-comp').textContent=errAbs;
+  const barW=Math.min(parseFloat(errAbs)*3,100);
+  document.getElementById('error-bar').style.width=barW+'%';
+  document.getElementById('error-bar').style.background=parseFloat(errAbs)<5?'var(--green)':'var(--red)';
+  updateChart(h0k);
 }
 
-function update() {
-  const h0k = parseFloat(document.getElementById('h0').value);
-  const h0si = h0k * 1000 / 3.0857e22;
-  
-  document.getElementById('h0-display').textContent = h0k.toFixed(1);
-  
-  const a0 = c * h0si / (2 * Math.PI);
-  const lambda = 2 * h0si * h0si / (c * c);
-  const lambda_planck = 1.106e-52;
-  const error = ((lambda - lambda_planck) / lambda_planck * 100).toFixed(1);
-  
-  document.getElementById('a0').innerHTML = a0.toExponential(3).replace('e', '×10');
-  document.getElementById('lambda').innerHTML = lambda.toExponential(3).replace('e', '×10');
-  document.getElementById('lambda-compare').innerHTML = lambda.toExponential(3).replace('e', '×10');
-  document.getElementById('a0-display').innerHTML = a0.toExponential(3).replace('e', '×10');
-  document.getElementById('lambda-display').innerHTML = lambda.toExponential(3).replace('e', '×10');
-  
-  const errEl = document.getElementById('error');
-  errEl.innerHTML = error + '%';
-  errEl.style.color = Math.abs(error) < 5 ? 'var(--green)' : 'var(--red)';
-  
-  document.getElementById('error-small').textContent = error;
+function updateChart(currentH0){
+  const h0arr=[],a0arr=[],lambdaArr=[];
+  for(let h=67;h<=74;h+=0.1){
+    const si=h*1000/3.0857e22;
+    h0arr.push(h);
+    a0arr.push(c*si/(2*Math.PI));
+    lambdaArr.push(2*si*si/(c*c));
+  }
+  const trL={x:h0arr,y:lambdaArr,mode:'lines',name:'Λ TIE',line:{color:'#FFD700',width:2.5},yaxis:'y'};
+  const trA={x:h0arr,y:a0arr,mode:'lines',name:'a₀ TIE',line:{color:'#5BC8F5',width:2,dash:'dot'},yaxis:'y2'};
+  const planckLine={x:[67,74],y:[Lambda_planck,Lambda_planck],mode:'lines',name:'Planck 2018',line:{color:'#5BC8F5',width:1.5,dash:'dash'},yaxis:'y'};
+  const h0si=currentH0*1000/3.0857e22;
+  const curL=2*h0si*h0si/(c*c);
+  const curA=c*h0si/(2*Math.PI);
+  const marker={x:[currentH0],y:[curL],mode:'markers',name:'H₀ actual',marker:{color:'#FFD700',size:10,symbol:'circle',line:{color:'#fff',width:1.5}},yaxis:'y'};
+  Plotly.react('chart',[trL,planckLine,trA,marker],{
+    paper_bgcolor:'transparent',plot_bgcolor:'rgba(5,5,15,0.5)',
+    font:{family:'Space Mono',color:'#a0a0b0',size:10},
+    xaxis:{title:'H₀ (km/s/Mpc)',gridcolor:'rgba(91,200,245,0.1)',tickfont:{size:9}},
+    yaxis:{title:'Λ (m⁻²)',gridcolor:'rgba(91,200,245,0.1)',tickfont:{size:9},side:'left'},
+    yaxis2:{title:'a₀ (m/s²)',overlaying:'y',side:'right',tickfont:{size:9},showgrid:false},
+    legend:{font:{size:9},bgcolor:'transparent'},
+    margin:{t:10,b:45,l:65,r:65},
+  },{displayModeBar:false,responsive:true});
 }
 
-window.onload = update;
+window.onload=()=>{
+  update();
+  renderMathInElement(document.body,{delimiters:[{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});
+};
 </script>
 </body>
 </html>

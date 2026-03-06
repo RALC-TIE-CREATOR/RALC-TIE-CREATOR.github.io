@@ -254,11 +254,20 @@ nav {
   line-height: 1.5;
 }
 
-/* SECCIÓN CONSTANTES */
+/* SECCIÓN CONSTANTES (dos grupos) */
+.constants-subtitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 2.5rem 0 1.5rem;
+  color: var(--gold);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+
 .constants-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.8rem;
   margin: 2rem 0;
 }
 
@@ -267,7 +276,7 @@ nav {
   backdrop-filter: blur(10px);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 2rem;
+  padding: 1.5rem;
   text-align: center;
   transition: 0.3s;
 }
@@ -279,28 +288,35 @@ nav {
 
 .constant-symbol {
   font-family: var(--mono);
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: var(--purple);
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
 
 .constant-value {
   font-family: var(--mono);
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: var(--gold);
   margin-bottom: 0.5rem;
   word-break: break-word;
 }
 
-.constant-desc {
+.constant-num {
+  font-family: var(--mono);
   font-size: 0.8rem;
+  color: var(--dim);
+  margin-bottom: 0.5rem;
+}
+
+.constant-desc {
+  font-size: 0.75rem;
   color: var(--dim);
   line-height: 1.5;
 }
 
-/* SECCIÓN FÓRMULAS (con "Donde:") */
+/* SECCIÓN FÓRMULAS */
 .formulas-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -347,7 +363,6 @@ nav {
   font-weight: 700;
 }
 
-/* NUEVO ESTILO PARA "Donde:" */
 .formula-variables {
   background: rgba(10,10,20,0.8);
   border-left: 3px solid var(--gold);
@@ -552,27 +567,76 @@ footer {
     </div>
   </div>
 
-  <!-- CONSTANTES CLAVE -->
-  <div class="section-title">CONSTANTES CLAVE</div>
+  <!-- CONSTANTES FUNDAMENTALES (HEREDADAS) -->
+  <div class="constants-subtitle">⚙️ CONSTANTES FUNDAMENTALES (HEREDADAS)</div>
   <div class="constants-grid">
+    <!-- G -->
     <div class="constant-card">
-      <span class="constant-symbol">$a_0$</span>
-      <div class="constant-value">$a_0 = \dfrac{cH_0}{2\pi} = 1.082\times10^{-10}\,\text{m/s}^2$</div>
-      <div class="constant-desc">Aceleración de transición. Conecta galaxias, agujeros negros y cosmología.</div>
+      <span class="constant-symbol">$G$</span>
+      <div class="constant-value">$G = 6.674\times10^{-11}\,\text{m}^3\text{kg}^{-1}\text{s}^{-2}$</div>
+      <div class="constant-desc">Constante gravitacional (medida con masas observadas)</div>
     </div>
+
+    <!-- c -->
     <div class="constant-card">
-      <span class="constant-symbol">$\Lambda$</span>
-      <div class="constant-value">$\Lambda_{\text{TIE}} = \dfrac{2H_0^2}{c^2} = 1.148\times10^{-52}\,\text{m}^{-2}$</div>
-      <div class="constant-desc">Constante cosmológica. Curvatura de fondo de la infraestructura.</div>
+      <span class="constant-symbol">$c$</span>
+      <div class="constant-value">$c = 2.998\times10^{8}\,\text{m/s}$</div>
+      <div class="constant-desc">Velocidad de la luz en el vacío</div>
     </div>
+
+    <!-- ħ -->
     <div class="constant-card">
-      <span class="constant-symbol">$\mathcal{R}$</span>
-      <div class="constant-value">$\mathcal{R} = 2\pi = 6.283185\ldots$</div>
-      <div class="constant-desc">Constante de RALC. El ciclo completo que sincroniza el universo.</div>
+      <span class="constant-symbol">$\hbar$</span>
+      <div class="constant-value">$\hbar = 1.055\times10^{-34}\,\text{J·s}$</div>
+      <div class="constant-desc">Cuanto mínimo de acción (píxel de realidad)</div>
+    </div>
+
+    <!-- H₀ -->
+    <div class="constant-card">
+      <span class="constant-symbol">$H_0$</span>
+      <div class="constant-value">$H_0 \approx 70\,\text{km/s/Mpc}$</div>
+      <div class="constant-num">$2.268\times10^{-18}\,\text{s}^{-1}$</div>
+      <div class="constant-desc">Constante de Hubble (ritmo de expansión)</div>
     </div>
   </div>
 
-  <!-- FÓRMULAS REINTERPRETADAS (con "Donde:") -->
+  <!-- CONSTANTES TIE (DERIVADAS) -->
+  <div class="constants-subtitle">🔬 CONSTANTES TIE (DERIVADAS)</div>
+  <div class="constants-grid">
+    <!-- a₀ -->
+    <div class="constant-card">
+      <span class="constant-symbol">$a_0$</span>
+      <div class="constant-value">$a_0 = \dfrac{cH_0}{2\pi}$</div>
+      <div class="constant-num">$1.082\times10^{-10}\,\text{m/s}^2$</div>
+      <div class="constant-desc">Aceleración de transición (conecta galaxias y cosmos)</div>
+    </div>
+
+    <!-- Λ_TIE -->
+    <div class="constant-card">
+      <span class="constant-symbol">$\Lambda_{\text{TIE}}$</span>
+      <div class="constant-value">$\Lambda_{\text{TIE}} = \dfrac{2H_0^2}{c^2}$</div>
+      <div class="constant-num">$1.148\times10^{-52}\,\text{m}^{-2}$</div>
+      <div class="constant-desc">Constante cosmológica TIE (curvatura de fondo)</div>
+    </div>
+
+    <!-- ℛ -->
+    <div class="constant-card">
+      <span class="constant-symbol">$\mathcal{R}$</span>
+      <div class="constant-value">$\mathcal{R} = 2\pi$</div>
+      <div class="constant-num">$6.283185\ldots$</div>
+      <div class="constant-desc">Constante de RALC (ciclo completo de sincronía)</div>
+    </div>
+
+    <!-- G_TIE -->
+    <div class="constant-card">
+      <span class="constant-symbol">$G_{\text{TIE}}$</span>
+      <div class="constant-value">$G_{\text{TIE}} = \dfrac{G}{4\pi^2}$</div>
+      <div class="constant-num">$1.689\times10^{-12}\,\text{m}^3\text{kg}^{-1}\text{s}^{-2}$</div>
+      <div class="constant-desc">Constante gravitacional TIE (con masas reales)</div>
+    </div>
+  </div>
+
+  <!-- FÓRMULAS REINTERPRETADAS -->
   <div class="section-title">FÓRMULAS REINTERPRETADAS</div>
   <div class="formulas-grid">
     

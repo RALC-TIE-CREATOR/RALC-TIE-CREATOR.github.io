@@ -508,7 +508,7 @@ footer .fcopy {
     <div class="hero-eq-main">
       \( v_{\text{flat}} = \left(G \cdot M_{\text{tot}} \cdot a_0\right)^{1/4} \qquad a_0 = \dfrac{c H_0}{2\pi} \)
     </div>
-    <div class="hero-eq-badge">✓ VERIFICADO · 55 GALAXIAS SPARC</div>
+    <div class="hero-eq-badge">✓ VERIFICADO · 53 GALAXIAS SPARC</div>
   </div>
 
   <!-- GALAXY INFO -->
@@ -626,7 +626,7 @@ footer .fcopy {
           <div class="rc-label">Masa total</div>
           <div class="rc-value" id="mtot">2.27</div>
           <div class="rc-unit">× 10¹⁰ M☉</div>
-          <div class="rc-eq">\( M_{\text{tot}} = M_d + M_g/10 \)</div>
+          <div class="rc-eq">\( M_{\text{tot}} = M_d \cdot 10^{10} + M_g \cdot 10^9 \)</div>
         </div>
         <div class="result-card">
           <div class="rc-label">Radio de transición</div>
@@ -643,10 +643,11 @@ footer .fcopy {
           <div class="chart-mode-btns">
             <button class="chart-mode-btn active" onclick="setChartMode('tie')" id="btn-tie">TIE</button>
             <button class="chart-mode-btn" onclick="setChartMode('both')" id="btn-both">TIE + NEWTON</button>
-            <button class="chart-mode-btn" onclick="setChartMode('sparc')" id="btn-sparc">SPARC DATA</button>
+            <button class="chart-mode-btn" onclick="setChartMode('sparc')" id="btn-sparc">v_obs REALES</button>
           </div>
         </div>
         <div id="chart" style="height:280px; width:100%;"></div>
+        <div id="chart-note" style="font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-top:.6rem;padding:.6rem .9rem;background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.1);border-radius:8px;line-height:1.8;"></div>
       </div>
 
       <!-- Constants -->
@@ -734,75 +735,79 @@ const km  = 1e3;
 const kpc = 3.0857e19;
 
 const SPARC = [
-  { name:"NGC 3198",  type:"Espiral",    Mdisk:2.20,  Mgas:8.5,  desc:"Galaxia espiral de referencia SPARC" },
-  { name:"NGC 2403",  type:"Espiral",    Mdisk:0.82,  Mgas:12.0, desc:"Espiral clásica bien estudiada" },
-  { name:"NGC 6503",  type:"Espiral",    Mdisk:0.79,  Mgas:3.8,  desc:"Espiral pequeña en el Vacío Local" },
-  { name:"NGC 7331",  type:"Espiral",    Mdisk:6.33,  Mgas:9.4,  desc:"Espiral análoga a la Vía Láctea" },
-  { name:"NGC 2841",  type:"Espiral",    Mdisk:8.40,  Mgas:6.1,  desc:"Espiral masiva de alta superficie" },
-  { name:"NGC 3521",  type:"Espiral",    Mdisk:5.50,  Mgas:9.2,  desc:"Espiral floculenta cercana" },
-  { name:"NGC 5055",  type:"Espiral",    Mdisk:4.10,  Mgas:11.0, desc:"El Girasol — espiral magnífica" },
-  { name:"NGC 4736",  type:"Espiral",    Mdisk:1.10,  Mgas:1.8,  desc:"Espiral con anillo interno" },
-  { name:"NGC 3031",  type:"Espiral",    Mdisk:4.60,  Mgas:7.0,  desc:"M81 — espiral del Grupo M81" },
-  { name:"NGC 300",   type:"Espiral",    Mdisk:0.15,  Mgas:2.8,  desc:"Espiral abierta del Grupo Escultor" },
-  { name:"NGC 7793",  type:"Espiral",    Mdisk:0.28,  Mgas:2.1,  desc:"Espiral del Grupo Escultor" },
-  { name:"NGC 2976",  type:"Espiral",    Mdisk:0.28,  Mgas:0.9,  desc:"Galaxia irregular del Grupo M81" },
-  { name:"NGC 4559",  type:"Espiral",    Mdisk:0.85,  Mgas:12.0, desc:"Espiral de baja superficie" },
-  { name:"NGC 5585",  type:"Espiral",    Mdisk:0.18,  Mgas:5.2,  desc:"Espiral de bajo brillo superficial" },
-  { name:"NGC 3741",  type:"Espiral",    Mdisk:0.007, Mgas:1.5,  desc:"Espiral dominada por gas" },
-  { name:"NGC 6015",  type:"Espiral",    Mdisk:1.60,  Mgas:7.5,  desc:"Espiral de cara en el cielo boreal" },
-  { name:"NGC 4085",  type:"Espiral",    Mdisk:1.20,  Mgas:2.2,  desc:"Espiral de canto" },
-  { name:"NGC 1003",  type:"Espiral",    Mdisk:0.45,  Mgas:9.0,  desc:"Espiral de bajo brillo" },
-  { name:"NGC 3893",  type:"Espiral",    Mdisk:2.50,  Mgas:5.5,  desc:"Espiral en interacción" },
-  { name:"NGC 4051",  type:"Espiral",    Mdisk:1.10,  Mgas:3.2,  desc:"Seyfert 1 — núcleo activo" },
-  { name:"NGC 5033",  type:"Espiral",    Mdisk:3.20,  Mgas:11.0, desc:"Espiral Seyfert inclinada" },
-  { name:"NGC 6946",  type:"Espiral",    Mdisk:3.20,  Mgas:12.0, desc:"Galaxia de Fuegos Artificiales" },
-  { name:"NGC 7814",  type:"Gigante",    Mdisk:7.80,  Mgas:3.5,  desc:"Galaxia de canto — Pequeño Sombrero" },
-  { name:"UGC 2885",  type:"Gigante",    Mdisk:17.5,  Mgas:82.0, desc:"La espiral más grande conocida" },
-  { name:"NGC 5907",  type:"Gigante",    Mdisk:8.20,  Mgas:13.0, desc:"Galaxia aguja — de canto" },
-  { name:"NGC 5371",  type:"Gigante",    Mdisk:9.50,  Mgas:14.0, desc:"Espiral masiva del Coma I" },
-  { name:"UGC 6614",  type:"LSB",        Mdisk:1.80,  Mgas:28.0, desc:"Galaxia de bajo brillo superficial" },
-  { name:"UGC 128",   type:"LSB",        Mdisk:0.55,  Mgas:18.0, desc:"LSB extrema — dominada por gas" },
-  { name:"UGC 1230",  type:"LSB",        Mdisk:0.42,  Mgas:14.5, desc:"LSB aislada" },
-  { name:"F568-3",    type:"LSB",        Mdisk:0.31,  Mgas:9.8,  desc:"LSB del catálogo Malin" },
-  { name:"F583-1",    type:"LSB",        Mdisk:0.12,  Mgas:6.2,  desc:"LSB de muy bajo brillo" },
-  { name:"UGC 4325", type:"LSB",         Mdisk:0.089, Mgas:3.8,  desc:"LSB pequeña" },
-  { name:"UGC 5005", type:"LSB",         Mdisk:0.22,  Mgas:10.5, desc:"LSB con alta fracción de gas" },
-  { name:"UGC 11748",type:"LSB",         Mdisk:0.75,  Mgas:8.2,  desc:"LSB de tamaño mediano" },
-  { name:"F563-1",   type:"LSB",         Mdisk:0.08,  Mgas:5.5,  desc:"LSB extrema de Malin" },
-  { name:"UGC 3060", type:"LSB",         Mdisk:0.35,  Mgas:15.5, desc:"LSB con anillo HI extendido" },
-  { name:"F574-1",   type:"LSB",         Mdisk:0.28,  Mgas:12.0, desc:"LSB del catálogo Malin" },
-  { name:"DDO 154",  type:"Enana",       Mdisk:0.0028,Mgas:0.71, desc:"Enana irregular — 99% gas" },
-  { name:"DDO 168",  type:"Enana",       Mdisk:0.0033,Mgas:0.65, desc:"Enana irregular del Grupo M81" },
-  { name:"DDO 52",   type:"Enana",       Mdisk:0.021, Mgas:1.9,  desc:"Enana aislada" },
-  { name:"DDO 87",   type:"Enana",       Mdisk:0.014, Mgas:1.1,  desc:"Enana del Grupo M81" },
-  { name:"DDO 64",   type:"Enana",       Mdisk:0.008, Mgas:0.85, desc:"Enana muy pequeña" },
-  { name:"DDO 161",  type:"Enana",       Mdisk:0.018, Mgas:1.4,  desc:"Enana con baja metalicidad" },
-  { name:"WLM",      type:"Enana",       Mdisk:0.0038,Mgas:0.38, desc:"Wolf-Lundmark-Melotte — enana local" },
-  { name:"NGC 1569", type:"Enana",       Mdisk:0.035, Mgas:0.45, desc:"Enana con brote estelar" },
-  { name:"DDO 43",   type:"Enana",       Mdisk:0.012, Mgas:1.0,  desc:"Enana irregular aislada" },
-  { name:"IC 2574",  type:"Irregular",   Mdisk:0.048, Mgas:5.1,  desc:"Irregular del Grupo M81" },
-  { name:"NGC 4214", type:"Irregular",   Mdisk:0.062, Mgas:1.4,  desc:"Irregular con brote estelar" },
-  { name:"NGC 2366", type:"Irregular",   Mdisk:0.028, Mgas:2.0,  desc:"Irregular con HII masivos" },
-  { name:"NGC 3109", type:"Irregular",   Mdisk:0.022, Mgas:3.2,  desc:"Irregular del Grupo Local" },
-  { name:"NGC 4395", type:"Irregular",   Mdisk:0.030, Mgas:4.8,  desc:"Irregular con AGN" },
-  { name:"NGC 1560", type:"Irregular",   Mdisk:0.031, Mgas:3.5,  desc:"Irregular de baja masa" },
-  { name:"NGC 2915", type:"Irregular",   Mdisk:0.048, Mgas:2.8,  desc:"Enana de bajo brillo" },
+  { name:"NGC 3198",  type:"Espiral",    Mdisk:2.20,  Mgas:8.5,  vobs:150, desc:"Galaxia espiral de referencia SPARC" },
+  { name:"NGC 2403",  type:"Espiral",    Mdisk:0.82,  Mgas:12.0, vobs:134, desc:"Espiral clásica bien estudiada" },
+  { name:"NGC 6503",  type:"Espiral",    Mdisk:0.79,  Mgas:3.8,  vobs:116, desc:"Espiral pequeña en el Vacío Local" },
+  { name:"NGC 7331",  type:"Espiral",    Mdisk:6.33,  Mgas:9.4,  vobs:240, desc:"Espiral análoga a la Vía Láctea" },
+  { name:"NGC 2841",  type:"Espiral",    Mdisk:8.40,  Mgas:6.1,  vobs:280, desc:"Espiral masiva de alta superficie" },
+  { name:"NGC 3521",  type:"Espiral",    Mdisk:5.50,  Mgas:9.2,  vobs:230, desc:"Espiral floculenta cercana" },
+  { name:"NGC 5055",  type:"Espiral",    Mdisk:4.10,  Mgas:11.0, vobs:183, desc:"El Girasol — espiral magnífica" },
+  { name:"NGC 4736",  type:"Espiral",    Mdisk:1.10,  Mgas:1.8,  vobs:180, desc:"Espiral con anillo interno" },
+  { name:"NGC 3031",  type:"Espiral",    Mdisk:4.60,  Mgas:7.0,  vobs:220, desc:"M81 — espiral del Grupo M81" },
+  { name:"NGC 300",   type:"Espiral",    Mdisk:0.15,  Mgas:2.8,  vobs:90,  desc:"Espiral abierta del Grupo Escultor" },
+  { name:"NGC 7793",  type:"Espiral",    Mdisk:0.28,  Mgas:2.1,  vobs:100, desc:"Espiral del Grupo Escultor" },
+  { name:"NGC 2976",  type:"Espiral",    Mdisk:0.28,  Mgas:0.9,  vobs:87,  desc:"Galaxia del Grupo M81" },
+  { name:"NGC 4559",  type:"Espiral",    Mdisk:0.85,  Mgas:12.0, vobs:120, desc:"Espiral de baja superficie" },
+  { name:"NGC 5585",  type:"Espiral",    Mdisk:0.18,  Mgas:5.2,  vobs:85,  desc:"Espiral de bajo brillo superficial" },
+  { name:"NGC 3741",  type:"Enana",      Mdisk:0.007, Mgas:1.5,  vobs:52,  desc:"Enana dominada por gas HI" },
+  { name:"NGC 6015",  type:"Espiral",    Mdisk:1.60,  Mgas:7.5,  vobs:140, desc:"Espiral de cara en el cielo boreal" },
+  { name:"NGC 4085",  type:"Espiral",    Mdisk:1.20,  Mgas:2.2,  vobs:145, desc:"Espiral de canto" },
+  { name:"NGC 1003",  type:"Espiral",    Mdisk:0.45,  Mgas:9.0,  vobs:110, desc:"Espiral de bajo brillo" },
+  { name:"NGC 3893",  type:"Espiral",    Mdisk:2.50,  Mgas:5.5,  vobs:175, desc:"Espiral en interacción" },
+  { name:"NGC 4051",  type:"Espiral",    Mdisk:1.10,  Mgas:3.2,  vobs:140, desc:"Seyfert 1 — núcleo activo" },
+  { name:"NGC 5033",  type:"Espiral",    Mdisk:3.20,  Mgas:11.0, vobs:190, desc:"Espiral Seyfert inclinada" },
+  { name:"NGC 6946",  type:"Espiral",    Mdisk:3.20,  Mgas:12.0, vobs:195, desc:"Galaxia de Fuegos Artificiales" },
+  { name:"NGC 7814",  type:"Gigante",    Mdisk:7.80,  Mgas:3.5,  vobs:230, desc:"Galaxia de canto — Pequeño Sombrero" },
+  { name:"UGC 2885",  type:"Gigante",    Mdisk:17.5,  Mgas:82.0, vobs:300, desc:"La espiral más grande conocida" },
+  { name:"NGC 5907",  type:"Gigante",    Mdisk:8.20,  Mgas:13.0, vobs:218, desc:"Galaxia aguja — de canto" },
+  { name:"NGC 5371",  type:"Gigante",    Mdisk:9.50,  Mgas:14.0, vobs:255, desc:"Espiral masiva del Coma I" },
+  { name:"UGC 6614",  type:"LSB",        Mdisk:1.80,  Mgas:28.0, vobs:179, desc:"Galaxia de bajo brillo superficial" },
+  { name:"UGC 128",   type:"LSB",        Mdisk:0.55,  Mgas:18.0, vobs:130, desc:"LSB extrema — dominada por gas" },
+  { name:"UGC 1230",  type:"LSB",        Mdisk:0.42,  Mgas:14.5, vobs:107, desc:"LSB aislada" },
+  { name:"F568-3",    type:"LSB",        Mdisk:0.31,  Mgas:9.8,  vobs:96,  desc:"LSB del catálogo Malin" },
+  { name:"F583-1",    type:"LSB",        Mdisk:0.12,  Mgas:6.2,  vobs:80,  desc:"LSB de muy bajo brillo" },
+  { name:"UGC 4325",  type:"LSB",        Mdisk:0.089, Mgas:3.8,  vobs:90,  desc:"LSB pequeña" },
+  { name:"UGC 5005",  type:"LSB",        Mdisk:0.22,  Mgas:10.5, vobs:98,  desc:"LSB con alta fracción de gas" },
+  { name:"UGC 11748", type:"LSB",        Mdisk:0.75,  Mgas:8.2,  vobs:115, desc:"LSB de tamaño mediano" },
+  { name:"F563-1",    type:"LSB",        Mdisk:0.08,  Mgas:5.5,  vobs:70,  desc:"LSB extrema de Malin" },
+  { name:"UGC 3060",  type:"LSB",        Mdisk:0.35,  Mgas:15.5, vobs:118, desc:"LSB con anillo HI extendido" },
+  { name:"F574-1",    type:"LSB",        Mdisk:0.28,  Mgas:12.0, vobs:90,  desc:"LSB del catálogo Malin" },
+  { name:"DDO 154",   type:"Enana",      Mdisk:0.0028,Mgas:0.71, vobs:47,  desc:"Enana irregular — 99% gas" },
+  { name:"DDO 168",   type:"Enana",      Mdisk:0.0033,Mgas:0.65, vobs:52,  desc:"Enana irregular del Grupo M81" },
+  { name:"DDO 52",    type:"Enana",      Mdisk:0.021, Mgas:1.9,  vobs:66,  desc:"Enana aislada" },
+  { name:"DDO 87",    type:"Enana",      Mdisk:0.014, Mgas:1.1,  vobs:58,  desc:"Enana del Grupo M81" },
+  { name:"DDO 64",    type:"Enana",      Mdisk:0.008, Mgas:0.85, vobs:45,  desc:"Enana muy pequeña" },
+  { name:"DDO 161",   type:"Enana",      Mdisk:0.018, Mgas:1.4,  vobs:60,  desc:"Enana con baja metalicidad" },
+  { name:"WLM",       type:"Enana",      Mdisk:0.0038,Mgas:0.38, vobs:38,  desc:"Wolf-Lundmark-Melotte — enana local" },
+  { name:"NGC 1569",  type:"Enana",      Mdisk:0.035, Mgas:0.45, vobs:40,  desc:"Enana con brote estelar" },
+  { name:"DDO 43",    type:"Enana",      Mdisk:0.012, Mgas:1.0,  vobs:50,  desc:"Enana irregular aislada" },
+  { name:"IC 2574",   type:"Irregular",  Mdisk:0.048, Mgas:5.1,  vobs:65,  desc:"Irregular del Grupo M81" },
+  { name:"NGC 4214",  type:"Irregular",  Mdisk:0.062, Mgas:1.4,  vobs:60,  desc:"Irregular con brote estelar" },
+  { name:"NGC 2366",  type:"Irregular",  Mdisk:0.028, Mgas:2.0,  vobs:55,  desc:"Irregular con HII masivos" },
+  { name:"NGC 3109",  type:"Irregular",  Mdisk:0.022, Mgas:3.2,  vobs:67,  desc:"Irregular del Grupo Local" },
+  { name:"NGC 4395",  type:"Irregular",  Mdisk:0.030, Mgas:4.8,  vobs:68,  desc:"Irregular con AGN" },
+  { name:"NGC 1560",  type:"Irregular",  Mdisk:0.031, Mgas:3.5,  vobs:72,  desc:"Irregular de baja masa" },
+  { name:"NGC 2915",  type:"Irregular",  Mdisk:0.048, Mgas:2.8,  vobs:75,  desc:"Enana de bajo brillo" },
 ];
+
+const CHART_NOTES = {
+  tie:   '<span style="color:var(--gold)">Relación de Tully-Fisher TIE</span> · La línea dorada es <em>v=(GMa₀)¼</em> — una sola ecuación para todo el universo. La estrella ★ marca la galaxia actual. Mueve el slider H₀ y observa cómo se desplaza toda la curva.',
+  both:  '<span style="color:var(--gold)">TIE vs Newton</span> · Newton (rojo) calculado en rₜ — el radio de transición propio de cada masa. A igual masa, Newton <em>cae</em> mientras TIE predice la velocidad asintótica observada. La brecha entre ambas es el "problema de la materia oscura".',
+  sparc: '<span style="color:var(--gold)">Velocidades observadas reales</span> · Puntos coloreados por error TIE: <span style="color:#44FF88">verde</span> &lt;10% · <span style="color:#FFD700">oro</span> 10–25% · <span style="color:#FF4455">rojo</span> &gt;25%. Hover para ver nombre y error individual. La línea dorada es la predicción sin ajuste.',
+};
 
 let currentFilter = 'Todas';
 let chartMode = 'tie';
 
 function getA0() {
   const H0 = parseFloat(document.getElementById('h0').value);
-  const H0_si = H0 * 1000 / 3.0857e22;
-  return 2.998e8 * H0_si / (2 * Math.PI);
+  return 2.998e8 * (H0 * 1000 / 3.0857e22) / (2 * Math.PI);
 }
 
 function updateH0() {
   const val = parseFloat(document.getElementById('h0').value);
   document.getElementById('h0-display').textContent = val.toFixed(1);
   document.getElementById('h0-val').textContent = val.toFixed(1);
-  // Update slider gradient
   const pct = ((val - 67) / (74 - 67) * 100).toFixed(1);
   document.getElementById('h0').style.setProperty('--pct', pct + '%');
   const a0 = getA0();
@@ -819,19 +824,16 @@ function calculate() {
   const Mtot_solar = Mdisk + Mgas / 10;
   const vFlat = Math.pow(G * Mtot_kg * a0, 0.25) / km;
   const rt    = Math.sqrt(G * Mtot_kg / a0) / kpc;
-
   animVal('vflat', vFlat.toFixed(0));
   animVal('mtot',  Mtot_solar.toFixed(2));
   animVal('rt',    rt.toFixed(1));
   updateChart();
 }
 
-function animVal(id, newVal) {
+function animVal(id, v) {
   const el = document.getElementById(id);
-  el.textContent = newVal;
-  el.classList.remove('flash');
-  void el.offsetWidth;
-  el.classList.add('flash');
+  el.textContent = v;
+  el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
 }
 
 function filterType(type) {
@@ -877,8 +879,7 @@ function loadPreset(preset) {
     ddo154: { name:'DDO 154',  Mdisk:0.0028,Mgas:0.71 },
     ngc2403:{ name:'NGC 2403', Mdisk:0.82,  Mgas:12.0 },
   };
-  const p = map[preset];
-  if (!p) return;
+  const p = map[preset]; if (!p) return;
   document.getElementById('mdisk').value = p.Mdisk;
   document.getElementById('mgas').value  = p.Mgas;
   const g = SPARC.find(x => x.name === p.name);
@@ -901,93 +902,79 @@ function setChartMode(mode) {
 
 function updateChart() {
   const a0 = getA0();
-  const masses = [];
-  const vTIE   = [];
-  const vNewt  = [];
-  const r_fixed = 10 * kpc;
+  const masses = [], vTIE = [], vNewtLine = [];
 
-  for (let exp = 7; exp <= 12; exp += 0.1) {
-    const M_solar = Math.pow(10, exp);
-    const M_kg    = M_solar * MS;
-    masses.push(M_solar);
+  for (let exp = 7; exp <= 12; exp += 0.08) {
+    const M_kg = Math.pow(10, exp) * MS;
+    masses.push(Math.pow(10, exp));
     vTIE.push(Math.pow(G * M_kg * a0, 0.25) / km);
-    // Newtonian at fixed radius
-    vNewt.push(Math.sqrt(G * M_kg / r_fixed) / km);
+    // Newton at r_t — transition radius for each mass
+    const rt_m = Math.sqrt(G * M_kg / a0);
+    vNewtLine.push(Math.sqrt(G * M_kg / rt_m) / km);
   }
 
-  // Current galaxy marker
   const Mdisk = parseFloat(document.getElementById('mdisk').value) || 0;
   const Mgas  = parseFloat(document.getElementById('mgas').value)  || 0;
   const Mtot  = (Mdisk * 1e10 + Mgas * 1e9) * MS;
   const vCurr = Math.pow(G * Mtot * a0, 0.25) / km;
 
   const traceTIE = {
-    x: masses, y: vTIE,
-    mode: 'lines',
-    name: 'TIE v_flat',
+    x: masses, y: vTIE, mode: 'lines', name: 'TIE v_flat = (GMa₀)¼',
     line: { color: '#FFD700', width: 2.5 },
   };
   const traceNewt = {
-    x: masses, y: vNewt,
-    mode: 'lines',
-    name: 'Newton (r=10kpc)',
+    x: masses, y: vNewtLine, mode: 'lines', name: 'Newton (en rₜ)',
     line: { color: '#FF4455', width: 2, dash: 'dash' },
-    visible: chartMode === 'both' ? true : false,
+    visible: chartMode === 'both',
   };
 
-  // SPARC points
-  const sparcX = SPARC.map(g => (g.Mdisk*1e10 + g.Mgas*1e9) * MS / MS);  // in solar
-  const sparcY = SPARC.map(g => {
-    const M_kg = (g.Mdisk*1e10 + g.Mgas*1e9) * MS;
-    return Math.pow(G * M_kg * a0, 0.25) / km;
+  // v_obs reales coloreados por error
+  const sparcColors = SPARC.map(g => {
+    const vt = Math.pow(G * (g.Mdisk*1e10+g.Mgas*1e9)*MS*a0, 0.25)/km;
+    const e  = Math.abs(vt - g.vobs) / g.vobs * 100;
+    return e < 10 ? '#44FF88' : e < 25 ? '#FFD700' : '#FF4455';
   });
-  const traceSPARC = {
-    x: sparcX, y: sparcY,
-    mode: 'markers',
-    name: '55 Galaxias SPARC',
-    marker: { color: '#5BC8F5', size: 5, opacity: 0.7 },
-    visible: chartMode === 'sparc' ? true : false,
+  const traceObs = {
+    x: SPARC.map(g => g.Mdisk*1e10 + g.Mgas*1e9),
+    y: SPARC.map(g => g.vobs),
+    mode: 'markers', name: 'v_obs real (SPARC)',
+    marker: { color: sparcColors, size: 7, opacity: 0.85,
+              line: { color: 'rgba(0,0,0,0.3)', width: 0.5 } },
+    text: SPARC.map(g => {
+      const vt = Math.pow(G*(g.Mdisk*1e10+g.Mgas*1e9)*MS*a0,0.25)/km;
+      const e  = Math.abs(vt - g.vobs)/g.vobs*100;
+      return `${g.name}<br>v_obs=${g.vobs} · v_TIE=${vt.toFixed(0)}<br>err=${e.toFixed(1)}%`;
+    }),
+    hovertemplate: '%{text}<extra></extra>',
+    visible: chartMode === 'sparc',
   };
-
   const traceCurr = {
-    x: [Mtot/MS], y: [vCurr],
-    mode: 'markers',
-    name: 'Galaxia actual',
-    marker: { color: '#FFD700', size: 12, symbol: 'star', line:{color:'#fff',width:1} },
+    x: [Mtot/MS], y: [vCurr], mode: 'markers', name: 'Galaxia actual',
+    marker: { color: '#FFD700', size: 14, symbol: 'star', line:{color:'#fff',width:1.5} },
   };
 
   const layout = {
-    paper_bgcolor: 'transparent',
-    plot_bgcolor:  'rgba(5,5,15,0.5)',
-    font: { family: 'Space Mono', color: '#a0a0b0', size: 10 },
-    xaxis: {
-      title: 'Masa total (M☉)',
-      type: 'log',
-      gridcolor: 'rgba(91,200,245,0.1)',
-      linecolor: 'rgba(91,200,245,0.2)',
-      tickfont: { size: 9 },
-    },
-    yaxis: {
-      title: 'v_flat (km/s)',
-      gridcolor: 'rgba(91,200,245,0.1)',
-      linecolor: 'rgba(91,200,245,0.2)',
-      tickfont: { size: 9 },
-    },
-    legend: { font:{size:9}, bgcolor:'transparent' },
-    margin: { t:10, b:45, l:55, r:10 },
-    showlegend: true,
+    paper_bgcolor:'transparent', plot_bgcolor:'rgba(5,5,15,0.5)',
+    font:{ family:'Space Mono', color:'#a0a0b0', size:10 },
+    xaxis:{ title:'Masa total (M☉)', type:'log',
+            gridcolor:'rgba(91,200,245,0.1)', tickfont:{size:9} },
+    yaxis:{ title:'v_flat (km/s)',
+            gridcolor:'rgba(91,200,245,0.1)', tickfont:{size:9} },
+    legend:{ font:{size:9}, bgcolor:'transparent' },
+    margin:{ t:10, b:45, l:55, r:10 },
   };
 
-  Plotly.react('chart', [traceTIE, traceNewt, traceSPARC, traceCurr], layout,
-    { displayModeBar: false, responsive: true });
+  Plotly.react('chart', [traceTIE, traceNewt, traceObs, traceCurr], layout,
+    { displayModeBar:false, responsive:true });
+
+  document.getElementById('chart-note').innerHTML = CHART_NOTES[chartMode] || '';
 }
 
 window.onload = () => {
   populateSelect();
   updateH0();
-  // KaTeX render
   renderMathInElement(document.body, {
-    delimiters: [
+    delimiters:[
       { left:'\\(', right:'\\)', display:false },
       { left:'\\[', right:'\\]', display:true  },
     ]
@@ -997,4 +984,3 @@ window.onload = () => {
 
 </body>
 </html>
-

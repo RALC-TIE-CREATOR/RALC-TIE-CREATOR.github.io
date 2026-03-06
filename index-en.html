@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIE · THEORY OF SPATIAL INFRASTRUCTURE</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #FFD700;
+  --blue: #5BC8F5;
+  --green: #44FF88;
+  --red: #FF4455;
+  --purple: #9b59b6;
+  --bg: #000001;
+  --bg2: rgba(5, 5, 15, 0.6);
+  --bg3: rgba(10, 10, 25, 0.4);
+  --text: #ffffff;
+  --dim: #a0a0b0;
+  --border: rgba(91, 200, 245, 0.15);
+  --mono: 'Space Mono', monospace;
+  --sans: 'Syne', sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#galaxy-canvas {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120vw;
+  height: 120vh;
+  min-width: 1200px;
+  min-height: 1200px;
+  z-index: -2;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(91,200,245,0.08) 0%, transparent 60%),
+              radial-gradient(circle at 70% 60%, rgba(255,215,0,0.08) 0%, transparent 60%);
+  z-index: -1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 4rem;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(15px);
+  border-bottom: 2px solid rgba(255,215,0,0.2);
+  box-shadow: 0 0 30px rgba(255,215,0,0.1);
+}
+
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-decoration: none;
+  position: relative;
+  font-weight: 700;
+  text-shadow: 0 0 15px rgba(255,215,0,0.5);
+}
+
+.lang-selector {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.lang-link {
+  font-family: var(--mono);
+  text-decoration: none;
+  transition: 0.3s;
+  font-size: 0.9rem;
+}
+
+.lang-link.active {
+  color: var(--gold);
+  font-weight: 700;
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 2px;
+}
+
+.lang-link.inactive {
+  color: var(--dim);
+}
+
+.lang-link.inactive:hover {
+  color: var(--gold);
+}
+
+.lang-divider {
+  color: var(--dim);
+}
+
+.nav-back {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--dim);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 0.4rem 1.2rem;
+  border-radius: 30px;
+  transition: 0.3s;
+}
+
+.nav-back:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 120px 2rem 5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.hero-title {
+  font-family: var(--mono);
+  font-size: 1.5rem;
+  letter-spacing: 8px;
+  color: var(--gold);
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  border-bottom: 2px solid rgba(255,215,0,0.4);
+  padding-bottom: 0.8rem;
+  display: inline-block;
+  opacity: 0;
+  animation: fadeInUp 1s 0.4s forwards;
+  font-weight: 700;
+}
+
+.hero-rotator {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0 2rem;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.rotating-phrase {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.2;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(255,215,0,0.3);
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+  width: 100%;
+  text-align: center;
+  padding: 0 2rem;
+}
+
+.stats-container {
+  display: flex;
+  gap: 3rem;
+  margin: 2rem 0 3rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeInUp 1s 0.6s forwards;
+}
+
+.stat-item {
+  text-align: center;
+  position: relative;
+  min-width: 130px;
+}
+
+.stat-item::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 25%;
+  width: 50%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: scan 3s infinite;
+}
+
+.stat-number {
+  font-family: var(--mono);
+  font-size: 2.8rem;
+  font-weight: 800;
+  display: block;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 0 30px rgba(255,215,0,0.5);
+  animation: flicker 3s infinite;
+}
+
+.stat-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--dim);
+  letter-spacing: 1.5px;
+  margin-top: 0.6rem;
+  display: block;
+  text-transform: uppercase;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  3% { opacity: 0.4; }
+  6% { opacity: 1; }
+  9% { opacity: 0.6; }
+  12% { opacity: 1; }
+}
+
+@keyframes scan {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeInUp 1s 0.8s forwards;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.action-card {
+  flex: 1 1 280px;
+  padding: 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+  background: rgba(5, 5, 15, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid transparent;
+  text-align: left;
+}
+
+.action-card.lab {
+  border-color: rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.action-card.lab:hover {
+  border-color: var(--gold);
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+}
+
+.action-card.github {
+  border-color: rgba(91, 200, 245, 0.3);
+  box-shadow: 0 0 20px rgba(91, 200, 245, 0.2);
+}
+
+.action-card.github:hover {
+  border-color: var(--blue);
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(91, 200, 245, 0.3);
+}
+
+.action-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
+  animation: shine 10s infinite;
+  pointer-events: none;
+}
+
+.action-tag {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  letter-spacing: 2px;
+  margin-bottom: 0.8rem;
+  display: block;
+}
+
+.action-card.lab .action-tag {
+  color: var(--gold);
+}
+
+.action-card.github .action-tag {
+  color: var(--blue);
+}
+
+.action-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.action-card.lab .action-title {
+  color: var(--gold);
+}
+
+.action-card.github .action-title {
+  color: var(--blue);
+}
+
+.action-desc {
+  font-size: 0.85rem;
+  color: var(--dim);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.action-link {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: inherit;
+  letter-spacing: 2px;
+  transition: 0.3s;
+  display: inline-block;
+}
+
+.action-card.lab .action-link {
+  color: var(--gold);
+}
+
+.action-card.github .action-link {
+  color: var(--blue);
+}
+
+.action-card.lab:hover .action-link,
+.action-card.github:hover .action-link {
+  transform: translateX(10px);
+  color: #fff;
+}
+
+.hero-cards {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeInUp 1s 1s forwards;
+  width: 100%;
+  max-width: 1400px;
+}
+
+.info-card {
+  flex: 1 1 220px;
+  min-width: 200px;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+  background: rgba(5, 5, 15, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid transparent;
+  text-align: left;
+}
+
+.info-card.papers {
+  border-color: rgba(68, 255, 136, 0.3);
+  box-shadow: 0 0 20px rgba(68, 255, 136, 0.2);
+}
+
+.info-card.papers:hover {
+  border-color: var(--green);
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(68, 255, 136, 0.3);
+}
+
+.info-card.predictions {
+  border-color: rgba(255, 68, 85, 0.3);
+  box-shadow: 0 0 20px rgba(255, 68, 85, 0.2);
+}
+
+.info-card.predictions:hover {
+  border-color: var(--red);
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(255, 68, 85, 0.3);
+}
+
+.info-card.theory {
+  border-color: rgba(155, 89, 182, 0.3);
+  box-shadow: 0 0 20px rgba(155, 89, 182, 0.2);
+}
+
+.info-card.theory:hover {
+  border-color: var(--purple);
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(155, 89, 182, 0.3);
+}
+
+.info-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
+  animation: shine 10s infinite;
+  pointer-events: none;
+}
+
+.info-tag {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--dim);
+  letter-spacing: 2px;
+  margin-bottom: 0.6rem;
+  display: block;
+}
+
+.info-card.papers .info-tag {
+  color: var(--green);
+}
+
+.info-card.predictions .info-tag {
+  color: var(--red);
+}
+
+.info-card.theory .info-tag {
+  color: var(--purple);
+}
+
+.info-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+
+.info-card.papers .info-title {
+  color: var(--green);
+}
+
+.info-card.predictions .info-title {
+  color: var(--red);
+}
+
+.info-card.theory .info-title {
+  color: var(--purple);
+}
+
+.info-desc {
+  font-size: 0.8rem;
+  color: var(--dim);
+  line-height: 1.5;
+  margin-bottom: 1.2rem;
+}
+
+.info-link {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: inherit;
+  letter-spacing: 2px;
+  transition: 0.3s;
+  display: inline-block;
+}
+
+.info-card.papers .info-link {
+  color: var(--green);
+}
+
+.info-card.predictions .info-link {
+  color: var(--red);
+}
+
+.info-card.theory .info-link {
+  color: var(--purple);
+}
+
+.info-card.papers:hover .info-link,
+.info-card.predictions:hover .info-link,
+.info-card.theory:hover .info-link {
+  transform: translateX(10px);
+  color: #fff;
+}
+
+footer {
+  padding: 3rem;
+  text-align: center;
+  border-top: 1px solid rgba(255,215,0,0.1);
+  margin-top: 2rem;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 30;
+}
+
+.footer-equation {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(255,215,0,0.3);
+}
+
+.footer-copy {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  letter-spacing: 2px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+</head>
+<body>
+
+<canvas id="galaxy-canvas"></canvas>
+
+<nav>
+  <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
+  
+  <div class="lang-selector">
+    <a href="index.html" class="lang-link inactive">ES</a>
+    <span class="lang-divider">/</span>
+    <a href="index-en.html" class="lang-link active">EN</a>
+  </div>
+  
+  <a href="index.html" class="nav-back">← BACK TO HOME</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-title">TIE · THEORY OF SPATIAL INFRASTRUCTURE</div>
+  
+  <div class="hero-rotator">
+    <div id="rotating-phrase" class="rotating-phrase">TIME IS ABSOLUTE.</div>
+  </div>
+
+  <div class="stats-container">
+    <div class="stat-item">
+      <span class="stat-number">7.3×</span>
+      <span class="stat-label">BETTER THAN NEWTON</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">84.1%</span>
+      <span class="stat-label">"DARK MATTER"</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">3.5%</span>
+      <span class="stat-label">Λ ERROR</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">0</span>
+      <span class="stat-label">FREE PARAMETERS</span>
+    </div>
+  </div>
+
+  <div class="hero-actions">
+    <a href="labs.html" class="action-card lab">
+      <span class="action-tag">LABORATORY</span>
+      <div class="action-title">Enter the Lab</div>
+      <div class="action-desc">10 interactive tools to verify TIE yourself.</div>
+      <span class="action-link">→ ACCESS</span>
+    </a>
+    
+    <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" class="action-card github">
+      <span class="action-tag">OPEN SOURCE</span>
+      <div class="action-title">GitHub</div>
+      <div class="action-desc">All source code, papers, and documentation. Reproducible and free.</div>
+      <span class="action-link">↗ REPOSITORY</span>
+    </a>
+  </div>
+
+  <div class="hero-cards">
+    <a href="papers.html" class="info-card papers">
+      <span class="info-tag">PUBLICATIONS</span>
+      <div class="info-title">Papers & Code</div>
+      <div class="info-desc">Zenodo DOI · Complete treatise · All open and verifiable.</div>
+      <span class="info-link">→ ACCESS</span>
+    </a>
+    
+    <a href="predicciones.html" class="info-card predictions">
+      <span class="info-tag">VERIFICATION</span>
+      <div class="info-title">Predictions</div>
+      <div class="info-desc">11 predictions · 8 confirmed · 3 pending · Traffic light.</div>
+      <span class="info-link">→ SEE STATUS</span>
+    </a>
+
+    <a href="teoria.html" class="info-card theory">
+      <span class="info-tag">FOUNDATIONS</span>
+      <div class="info-title">TIE Theory</div>
+      <div class="info-desc">4 postulates · The T² Scalpel · Constants · Reinterpreted formulas.</div>
+      <span class="info-link">→ EXPLORE</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-equation">a₀ = c·H₀/2π</div>
+  <div class="footer-copy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const canvas = document.getElementById('galaxy-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+
+const parameters = {
+  count: 50000,
+  size: 0.03,
+  radius: 20,
+  branches: 4,
+  spin: 1.2,
+  randomness: 0.4,
+  randomnessPower: 2,
+  insideColor: 0xffaa00,
+  outsideColor: 0x1b3984
+};
+
+const galaxyGeometry = new THREE.BufferGeometry();
+const positions = new Float32Array(parameters.count * 3);
+const colors = new Float32Array(parameters.count * 3);
+
+const colorInside = new THREE.Color(parameters.insideColor);
+const colorOutside = new THREE.Color(parameters.outsideColor);
+
+for (let i = 0; i < parameters.count; i++) {
+  const i3 = i * 3;
+  const r = Math.random() * parameters.radius;
+  const spinAngle = r * parameters.spin;
+  const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
+  
+  const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  
+  const x = Math.cos(branchAngle + spinAngle) * r + randomX;
+  const y = randomY * 0.5;
+  const z = Math.sin(branchAngle + spinAngle) * r + randomZ;
+  
+  positions[i3] = x;
+  positions[i3 + 1] = y;
+  positions[i3 + 2] = z;
+  
+  const mixedColor = colorInside.clone().lerp(colorOutside, r / parameters.radius);
+  colors[i3] = mixedColor.r;
+  colors[i3 + 1] = mixedColor.g;
+  colors[i3 + 2] = mixedColor.b;
+}
+
+galaxyGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+galaxyGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+const galaxyMaterial = new THREE.PointsMaterial({
+  size: parameters.size,
+  sizeAttenuation: true,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.8
+});
+
+const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
+scene.add(galaxy);
+
+camera.position.set(10, 5, 25);
+camera.lookAt(0, 0, 0);
+
+let mouseX = 0;
+let mouseY = 0;
+
+document.addEventListener('mousemove', (event) => {
+  mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  galaxy.rotation.y += 0.00015;
+  galaxy.rotation.x += 0.00005;
+  galaxy.rotation.y += mouseX * 0.0003;
+  galaxy.rotation.x += mouseY * 0.0002;
+  renderer.render(scene, camera);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+const phrases = [
+  "TIME IS ABSOLUTE.",
+  "SPACE IS INFRASTRUCTURE.",
+  "DARK MATTER DOES NOT EXIST.",
+  "ONE EQUATION. ZERO PARAMETERS.",
+  "2π IS THE CYCLE OF THE UNIVERSE.",
+  "THE VACUUM HAS PROCESSING DENSITY.",
+  "GRAVITY IS VISCOSITY.",
+  "THE UNIVERSE IS A ħ-PACKET PROCESSOR.",
+  "NO SINGULARITIES. ONLY SATURATION.",
+  "PHYSICS IS COMPLETE."
+];
+
+let index = 0;
+const phraseElement = document.getElementById('rotating-phrase');
+
+function rotatePhrase() {
+  index = (index + 1) % phrases.length;
+  phraseElement.style.opacity = '0';
+  
+  setTimeout(() => {
+    phraseElement.textContent = phrases[index];
+    phraseElement.style.opacity = '1';
+  }, 400);
+}
+
+setInterval(rotatePhrase, 4000);
+</script>
+</body>
+</html>

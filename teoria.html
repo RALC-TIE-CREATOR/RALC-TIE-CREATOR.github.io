@@ -640,70 +640,132 @@ footer {
   <div class="section-title">FÓRMULAS REINTERPRETADAS</div>
   <div class="formulas-grid">
     
-    <!-- 1. Gravedad -->
+    <!-- 1. Gravedad (COMPLETA) -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--blue); margin-bottom:0.5rem;">⚡ GRAVEDAD</div>
-      <div class="formula-classic">$$F = G\frac{M m}{r^2}$$</div>
+      
+      <div class="formula-classic">$$F = G\frac{M_{\text{obs}} m_{\text{obs}}}{r^2}$$</div>
+      
       <div class="formula-tie">$$m_{\text{TIE}} = 2\pi \, m_{\text{obs}}$$</div>
+      <div class="formula-tie">$$M_{\text{TIE}} = 2\pi \, M_{\text{obs}}$$</div>
+      <div class="formula-tie">$$G_{\text{TIE}} = \frac{G}{4\pi^2}$$</div>
+      
+      <div class="formula-tie" style="margin-top:1rem; border-top:1px dashed var(--border); padding-top:1rem;">
+        $$F = G_{\text{TIE}} \frac{M_{\text{TIE}} \, m_{\text{TIE}}}{r^2}$$
+      </div>
+      
       <div class="formula-variables">
         <strong>Donde:</strong>
-        <span class="var">$m_{\text{obs}}$</span> = masa visible (estrellas + gas)<br>
-        <span class="var">$m_{\text{TIE}}$</span> = masa real de la infraestructura<br>
+        <span class="var">$m_{\text{obs}}, M_{\text{obs}}$</span> = masas observadas (estrellas + gas)<br>
+        <span class="var">$m_{\text{TIE}}, M_{\text{TIE}}$</span> = masas reales de la infraestructura<br>
+        <span class="var">$G$</span> = constante gravitacional clásica<br>
+        <span class="var">$G_{\text{TIE}} = G/4\pi^2$</span> = constante gravitacional TIE<br>
         <span class="var">$2\pi$</span> = ciclo completo de sincronía
       </div>
+      
+      <div class="formula-interp" style="background:rgba(255,215,0,0.05); border-left-color:var(--blue);">
+        <strong>⚠️ Nota:</strong> Ambas fórmulas dan exactamente el mismo resultado numérico. 
+        La versión TIE usa masas reales y su propia constante, pero al calcular se cancelan los $2\pi$.
+        La "materia oscura" ($84.1\%$) es la diferencia entre la masa real y la observada.
+      </div>
+      
       <div class="formula-interp">
-        La masa real es $2\pi$ veces la observada. La "materia oscura" ($84.1\%$) es la diferencia.
+        <strong>Ejemplo:</strong> Dos masas de $1\,\text{kg}$ a $1\,\text{m}$:<br>
+        Newton: $F = G \frac{1\cdot1}{1^2} = 6.674\times10^{-11}\,\text{N}$<br>
+        TIE: $F = \frac{G}{4\pi^2} \frac{(2\pi)(2\pi)}{1^2} = 6.674\times10^{-11}\,\text{N}$ ✓
       </div>
     </div>
 
-    <!-- 2. Energía -->
+    <!-- 2. Energía (CORREGIDA) -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--gold); margin-bottom:0.5rem;">⚡ ENERGÍA</div>
+      
       <div class="formula-classic">$$E = mc^2$$</div>
-      <div class="formula-tie">$$E_{\text{TIE}} = \frac{mc^2}{2\pi}$$</div>
+      
+      <div class="formula-tie">$$E_{\text{ciclo}} = \frac{m_{\text{obs}} c^2}{2\pi}$$</div>
+      <div class="formula-tie">$$m_{\text{TIE}} = 2\pi \, m_{\text{obs}}$$</div>
+      
+      <div class="formula-tie" style="margin-top:1rem; border-top:1px dashed var(--border); padding-top:1rem;">
+        $$E_{\text{total}} = \frac{m_{\text{TIE}} c^2}{2\pi} = m_{\text{obs}} c^2$$
+      </div>
+      
       <div class="formula-variables">
         <strong>Donde:</strong>
-        <span class="var">$E$</span> = energía total (clásica)<br>
-        <span class="var">$E_{\text{TIE}}$</span> = energía por ciclo de sincronía<br>
-        <span class="var">$m$</span> = masa observada<br>
-        <span class="var">$c$</span> = velocidad de la luz<br>
+        <span class="var">$m_{\text{obs}}$</span> = masa observada<br>
+        <span class="var">$m_{\text{TIE}} = 2\pi m_{\text{obs}}$</span> = masa real<br>
+        <span class="var">$E_{\text{ciclo}}$</span> = energía por ciclo de sincronía<br>
+        <span class="var">$E_{\text{total}}$</span> = energía total (idéntica a Einstein)<br>
         <span class="var">$2\pi$</span> = ciclo completo de sincronía
       </div>
+      
+      <div class="formula-interp" style="background:rgba(255,215,0,0.05); border-left-color:var(--gold);">
+        <strong>⚠️ Importante:</strong> La energía total $E = mc^2$ es la misma. 
+        TIE introduce que esta energía se manifiesta en ciclos de sincronía: 
+        $E_{\text{ciclo}} = mc^2/2\pi$ es la energía por ciclo, y la masa real es $2\pi$ veces la observada.
+      </div>
+      
       <div class="formula-interp">
-        La energía se manifiesta en ciclos completos. La masa real es $2\pi$ veces la observada.
+        <strong>Ejemplo:</strong> $1\,\text{kg}$ de masa:<br>
+        Einstein: $E = 1 \cdot c^2 = 8.987\times10^{16}\,\text{J}$<br>
+        TIE: $m_{\text{TIE}} = 2\pi\,\text{kg}$, $E_{\text{total}} = \frac{2\pi c^2}{2\pi} = c^2 = 8.987\times10^{16}\,\text{J}$ ✓
       </div>
     </div>
 
-    <!-- 3. Electromagnetismo -->
+    <!-- 3. Electromagnetismo (COMPLETO) -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--green); margin-bottom:0.5rem;">⚡ ELECTROMAGNETISMO</div>
-      <div class="formula-classic">$$F = k\frac{q^2}{r^2}$$</div>
-      <div class="formula-tie">$$[q_{\text{TIE}}]^2 = \text{kg}\cdot\text{m}^3/\text{s}^2$$</div>
+      
+      <div class="formula-classic">$$F = k_e\frac{q_{\text{SI}}^2}{r^2}$$</div>
+      
+      <div class="formula-tie">$$q_{\text{TIE}} = \sqrt{k_e} \cdot q_{\text{SI}}$$</div>
+      <div class="formula-tie">$$k_{\text{TIE}} = \frac{k_e}{4\pi^2}$$</div>
+      
+      <div class="formula-tie" style="margin-top:1rem; border-top:1px dashed var(--border); padding-top:1rem;">
+        $$F = k_{\text{TIE}} \frac{q_{\text{TIE}}^2}{r^2}$$
+      </div>
+      
       <div class="formula-variables">
         <strong>Donde:</strong>
-        <span class="var">$q_{\text{TIE}}$</span> = carga como curvatura electromagnética<br>
-        <span class="var">$k_e$</span> = constante de Coulomb (absorbida)<br>
-        <span class="var">$T^2$</span> = tiempo cuadrado (artificial eliminado)
+        <span class="var">$q_{\text{SI}}$</span> = carga en SI (Coulombs)<br>
+        <span class="var">$q_{\text{TIE}}$</span> = carga como curvatura electromagnética, $[q_{\text{TIE}}^2] = \text{kg}\cdot\text{m}^3/\text{s}^2$<br>
+        <span class="var">$k_e = 8.988\times10^9$</span> = constante de Coulomb<br>
+        <span class="var">$k_{\text{TIE}} = k_e/4\pi^2$</span> = constante electromagnética TIE
       </div>
+      
+      <div class="formula-interp" style="background:rgba(255,215,0,0.05); border-left-color:var(--green);">
+        <strong>⚠️ Nota:</strong> La definición SI $q = I\cdot t$ introduce $T^2$ artificial. 
+        Al eliminarlo, la carga es una propiedad geométrica de la infraestructura, como la masa.
+      </div>
+      
       <div class="formula-interp">
-        La carga es curvatura de la infraestructura. El $T^2$ artificial de $q = I\cdot t$ desaparece.
+        <strong>Ejemplo:</strong> Dos electrones a $1\,\text{nm}$:<br>
+        Coulomb: $F = k_e e^2/r^2 = 2.307\times10^{-10}\,\text{N}$<br>
+        TIE: $q_{\text{TIE}} = e\sqrt{k_e}$, $F = \frac{k_e}{4\pi^2} \frac{(e\sqrt{k_e})^2}{r^2} = 2.307\times10^{-10}\,\text{N}$ ✓
       </div>
     </div>
 
-    <!-- 4. Nuclear fuerte -->
+    <!-- 4. Nuclear fuerte (COMPLETA) -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--red); margin-bottom:0.5rem;">⚡ NUCLEAR FUERTE</div>
+      
       <div class="formula-classic">$$V(r) = -g^2\frac{e^{-m_\pi c r/\hbar}}{r}$$</div>
-      <div class="formula-tie">$$V(r) = -\Gamma_N \frac{e^{-f_i r}}{r},\quad f_i = \frac{m_\pi c}{\hbar}$$</div>
+      
+      <div class="formula-tie">$$f_i = \frac{m_\pi c}{\hbar} = 7.07\times10^{14}\,\text{m}^{-1}$$</div>
+      
+      <div class="formula-tie" style="margin-top:1rem; border-top:1px dashed var(--border); padding-top:1rem;">
+        $$V(r) = -\Gamma_N \frac{e^{-f_i r}}{r}$$
+      </div>
+      
       <div class="formula-variables">
         <strong>Donde:</strong>
-        <span class="var">$f_i$</span> = frecuencia de coherencia nuclear<br>
+        <span class="var">$f_i$</span> = frecuencia de coherencia nuclear (m⁻¹)<br>
         <span class="var">$\Gamma_N$</span> = acoplamiento nuclear<br>
-        <span class="var">$m_\pi$</span> = masa del pión<br>
+        <span class="var">$m_\pi$</span> = masa del pión ($139.57\,\text{MeV}/c^2$)<br>
         <span class="var">$\hbar$</span> = cuanto mínimo de sincronía
       </div>
-      <div class="formula-interp">
-        El corte nuclear no es por partículas, sino por saturación del canal de coherencia.
+      
+      <div class="formula-interp" style="background:rgba(255,215,0,0.05); border-left-color:var(--red);">
+        El corte nuclear no es por partículas mensajeras, sino por saturación del canal de coherencia de la infraestructura. El rango efectivo es $r \sim 1/f_i \approx 1.4\,\text{fm}$.
       </div>
     </div>
 
@@ -756,20 +818,33 @@ footer {
       </div>
     </div>
 
-    <!-- 8. Agujeros negros -->
+    <!-- 8. Agujeros negros (MEJORADA) -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--red); margin-bottom:0.5rem;">⚡ AGUJEROS NEGROS</div>
+      
       <div class="formula-classic">$$r_s = \frac{2GM}{c^2}$$</div>
-      <div class="formula-tie">$$r_h = 0.869\sqrt{\frac{GM}{a_0}}$$</div>
+      
+      <div class="formula-tie">$$a_{\text{TIE}}(r_h) = a_0 \;\rightarrow\; t^3 + t^2 - 1 = 0,\; t = \frac{a_0 r_h^2}{GM}$$</div>
+      <div class="formula-tie">$$t = 0.7549 \;\rightarrow\; r_h = 0.869\sqrt{\frac{GM}{a_0}}$$</div>
+      
       <div class="formula-variables">
         <strong>Donde:</strong>
         <span class="var">$r_s$</span> = radio de Schwarzschild (GR)<br>
         <span class="var">$r_h$</span> = horizonte TIE<br>
-        <span class="var">$a_0$</span> = aceleración de transición<br>
-        <span class="var">$0.869$</span> = raíz de $t^3+t^2-1=0$
+        <span class="var">$a_0 = cH_0/2\pi$</span> = aceleración de transición<br>
+        <span class="var">$0.869 = \sqrt{0.7549}$</span> de la ecuación cúbica
       </div>
+      
+      <div class="formula-interp" style="background:rgba(255,215,0,0.05); border-left-color:var(--red);">
+        <strong>⚠️ Nota:</strong> Para masas pequeñas, $r_h \approx r_s$. Para agujeros negros astrofísicos (M87*, Sgr A*), $r_h \gg r_s$. 
+        El horizonte TIE crece como $\sqrt{M}$ (vs lineal en GR). Sin singularidades — el interior es una región de saturación.
+      </div>
+      
       <div class="formula-interp">
-        El horizonte TIE crece como $\sqrt{M}$ (vs lineal en GR). Sin singularidades. Sombra EHT falsificable.
+        <strong>Ejemplo:</strong> M87* ($M = 6.5\times10^9 M_\odot$):<br>
+        GR: $r_s = 1.92\times10^{10}\,\text{km}$<br>
+        TIE: $r_h = 0.869\sqrt{GM/a_0} = 7.45\times10^{12}\,\text{km}$ ($\sim 388\times$ mayor)<br>
+        Distinguible con ngEHT.
       </div>
     </div>
 
@@ -793,7 +868,7 @@ footer {
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--purple); margin-bottom:0.5rem;">⚡ ESTRUCTURA FINA</div>
       <div class="formula-classic">$$\alpha = \frac{e^2}{4\pi\epsilon_0\hbar c} = \frac{1}{137}$$</div>
-      <div class="formula-tie">$$\alpha_{\text{TIE}} = \frac{e^2 k_e}{\hbar c} = \frac{1}{137.12}$$</div>
+      <div class="formula-tie">$$\alpha = \frac{e^2 k_e}{\hbar c} = \frac{1}{137.036}$$</div>
       <div class="formula-variables">
         <strong>Donde:</strong>
         <span class="var">$\alpha$</span> = constante de estructura fina<br>

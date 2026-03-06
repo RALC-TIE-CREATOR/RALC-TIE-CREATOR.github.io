@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIE · LABORATORY</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+
+<!-- KaTeX for scientific formulas -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+
+<style>
+:root {
+  --gold: #FFD700;
+  --blue: #5BC8F5;
+  --green: #44FF88;
+  --red: #FF4455;
+  --purple: #9b59b6;
+  --bg: #000001;
+  --bg2: rgba(5, 5, 15, 0.6);
+  --bg3: rgba(10, 10, 25, 0.4);
+  --text: #ffffff;
+  --dim: #a0a0b0;
+  --border: rgba(91, 200, 245, 0.15);
+  --mono: 'Space Mono', monospace;
+  --sans: 'Syne', sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#galaxy-canvas {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120vw;
+  height: 120vh;
+  min-width: 1200px;
+  min-height: 1200px;
+  z-index: -2;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(91,200,245,0.08) 0%, transparent 60%),
+              radial-gradient(circle at 70% 60%, rgba(255,215,0,0.08) 0%, transparent 60%);
+  z-index: -1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 4rem;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(15px);
+  border-bottom: 2px solid rgba(255,215,0,0.2);
+}
+
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.lang-selector {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.lang-link {
+  font-family: var(--mono);
+  text-decoration: none;
+  transition: 0.3s;
+  font-size: 0.9rem;
+}
+
+.lang-link.active {
+  color: var(--gold);
+  font-weight: 700;
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 2px;
+}
+
+.lang-link.inactive {
+  color: var(--dim);
+}
+
+.lang-link.inactive:hover {
+  color: var(--gold);
+}
+
+.lang-divider {
+  color: var(--dim);
+}
+
+.nav-back {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--dim);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 0.4rem 1.2rem;
+  border-radius: 30px;
+  transition: 0.3s;
+}
+
+.nav-back:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.page {
+  padding: 120px 2rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.page-tag {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  letter-spacing: 8px;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  border-bottom: 2px solid rgba(255,215,0,0.4);
+  padding-bottom: 0.8rem;
+  display: inline-block;
+}
+
+.page-title {
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-sub {
+  font-size: 1.1rem;
+  color: var(--dim);
+  max-width: 600px;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.tool-card {
+  background: rgba(5,5,15,0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  text-decoration: none;
+  color: inherit;
+  transition: 0.3s;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.tool-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(255,215,0,0.2);
+}
+
+.tool-id {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--gold);
+  margin-bottom: 0.8rem;
+  display: block;
+}
+
+.tool-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+
+.tool-desc {
+  font-size: 0.85rem;
+  color: var(--dim);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+.tool-desc .katex {
+  color: var(--gold);
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  display: inline-block;
+}
+
+.tool-terms {
+  background: rgba(255,215,0,0.08);
+  border-left: 3px solid var(--gold);
+  padding: 0.8rem;
+  margin: 0.8rem 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  border-radius: 0 4px 4px 0;
+}
+
+.tool-terms .term {
+  font-family: var(--mono);
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.tool-terms .katex {
+  color: var(--gold);
+}
+
+.tool-link {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--gold);
+  letter-spacing: 2px;
+  transition: 0.3s;
+  margin-top: 0.5rem;
+  align-self: flex-start;
+}
+
+.tool-card:hover .tool-link {
+  transform: translateX(10px);
+  color: var(--blue);
+}
+
+.tool-card[data-color="blue"] .tool-id { color: var(--blue); }
+.tool-card[data-color="blue"] .tool-link { color: var(--blue); }
+.tool-card[data-color="blue"] .tool-terms { border-left-color: var(--blue); background: rgba(91,200,245,0.08); }
+.tool-card[data-color="blue"] .tool-terms .term { color: var(--blue); }
+.tool-card[data-color="blue"] .tool-desc .katex { color: var(--blue); }
+
+.tool-card[data-color="green"] .tool-id { color: var(--green); }
+.tool-card[data-color="green"] .tool-link { color: var(--green); }
+.tool-card[data-color="green"] .tool-terms { border-left-color: var(--green); background: rgba(68,255,136,0.08); }
+.tool-card[data-color="green"] .tool-terms .term { color: var(--green); }
+.tool-card[data-color="green"] .tool-desc .katex { color: var(--green); }
+
+.tool-card[data-color="red"] .tool-id { color: var(--red); }
+.tool-card[data-color="red"] .tool-link { color: var(--red); }
+.tool-card[data-color="red"] .tool-terms { border-left-color: var(--red); background: rgba(255,68,85,0.08); }
+.tool-card[data-color="red"] .tool-terms .term { color: var(--red); }
+.tool-card[data-color="red"] .tool-desc .katex { color: var(--red); }
+
+.tool-card[data-color="purple"] .tool-id { color: var(--purple); }
+.tool-card[data-color="purple"] .tool-link { color: var(--purple); }
+.tool-card[data-color="purple"] .tool-terms { border-left-color: var(--purple); background: rgba(155,89,182,0.08); }
+.tool-card[data-color="purple"] .tool-terms .term { color: var(--purple); }
+.tool-card[data-color="purple"] .tool-desc .katex { color: var(--purple); }
+
+footer {
+  padding: 3rem;
+  text-align: center;
+  border-top: 1px solid rgba(255,215,0,0.1);
+  margin-top: 4rem;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+}
+
+.footer-equation {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(255,215,0,0.3);
+}
+
+.footer-copy {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  letter-spacing: 2px;
+}
+</style>
+</head>
+<body>
+
+<canvas id="galaxy-canvas"></canvas>
+
+<nav>
+  <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
+  
+  <div class="lang-selector">
+    <a href="../labs.html" class="lang-link inactive">ES</a>
+    <span class="lang-divider">/</span>
+    <a href="lab-en.html" class="lang-link active">EN</a>
+  </div>
+  
+  <a href="index-en.html" class="nav-back">← BACK TO HOME</a>
+</nav>
+
+<div class="page">
+  <div class="page-tag">INFRASTRUCTURE LABORATORY</div>
+  <h1 class="page-title">VERIFICATION TOOLS</h1>
+  <p class="page-sub">10 interactive modules to test TIE with real data. No faith. Only numbers.</p>
+
+  <div class="tools-grid">
+    <!-- H-01 Rotation Curves -->
+    <a href="curvas.html" class="tool-card" data-color="gold">
+      <span class="tool-id">H-01 · LIVE</span>
+      <div class="tool-name">Rotation Curves</div>
+      <div class="tool-desc">
+        <span>$$v_{\text{flat}} = (G M a_0)^{1/4}$$</span>
+        <span style="display:block; margin-top:0.5rem;">175 SPARC galaxies. TIE predicts flat curves without dark matter.</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$a_0 = \dfrac{cH_0}{2\pi}$</span> · 
+        <span class="term">$M$</span> total mass · 
+        <span class="term">$v_{\text{flat}}$</span> asymptotic velocity
+      </div>
+      <span class="tool-link">→ RUN</span>
+    </a>
+
+    <!-- H-02 SPARC Explorer -->
+    <a href="sparc.html" class="tool-card" data-color="blue">
+      <span class="tool-id">H-02 · LIVE</span>
+      <div class="tool-name">SPARC Explorer</div>
+      <div class="tool-desc">
+        <span>Catalog of 175 real galaxies with observational data.</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$M_{\text{disc}}$</span> stellar mass · 
+        <span class="term">$M_{\text{gas}}$</span> gas mass · 
+        <span class="term">$v_{\text{obs}}$</span> observed velocity
+      </div>
+      <span class="tool-link">→ EXPLORE</span>
+    </a>
+
+    <!-- H-02.1 The T² Scalpel -->
+    <a href="fix-sparc.html" class="tool-card" data-color="red">
+      <span class="tool-id">H-02.1 · LIVE</span>
+      <div class="tool-name">The T² Scalpel</div>
+      <div class="tool-desc">
+        <span>Correction of observational data: geometry, mass and pressure.</span>
+        <span style="display:block; margin-top:0.5rem;">$$T^2 \text{ artificial} \rightarrow \text{removed}$$</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$T^2$</span> squared time · 
+        <span class="term">$\Upsilon$</span> mass adjustment · 
+        <span class="term">$\sigma$</span> pressure
+      </div>
+      <span class="tool-link">→ RUN</span>
+    </a>
+
+    <!-- H-03 2π Calculator -->
+    <a href="2pi.html" class="tool-card" data-color="gold">
+      <span class="tool-id">H-03 · LIVE</span>
+      <div class="tool-name">2π Calculator</div>
+      <div class="tool-desc">
+        <span>$$E_{\text{cycle}} = \frac{m_{\text{obs}} c^2}{2\pi}$$</span>
+        <span>$$m_{\text{TIE}} = 2\pi \cdot m_{\text{obs}}$$</span>
+        <span style="display:block; margin-top:0.5rem;">Total energy: $E_{\text{total}} = m_{\text{obs}} c^2$ (identical to Einstein)</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$E_{\text{cycle}}$</span> energy per cycle · 
+        <span class="term">$2\pi$</span> synchronization cycle · 
+        <span class="term">$m_{\text{TIE}} = 2\pi m_{\text{obs}}$</span> real mass
+      </div>
+      <span class="tool-link">→ RUN</span>
+    </a>
+
+    <!-- H-05 Dark Matter Converter -->
+    <a href="materia-oscura.html" class="tool-card" data-color="green">
+      <span class="tool-id">H-05 · LIVE</span>
+      <div class="tool-name">Dark Matter Converter</div>
+      <div class="tool-desc">
+        <span>$$1 - \frac{1}{2\pi} = 84.1\%$$</span>
+        <span>$$m_{\text{TIE}} = 2\pi \cdot m_{\text{obs}}$$</span>
+        <span style="display:block; margin-top:0.5rem;">Dark matter is not a particle — it's unaccounted real mass.</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$2\pi$</span> complete cycle · 
+        <span class="term">$84.1\%$</span> "dark" fraction · 
+        <span class="term">$m_{\text{TIE}}$</span> real mass
+      </div>
+      <span class="tool-link">→ RUN</span>
+    </a>
+
+    <!-- H-08 a₀ and Lambda -->
+    <a href="constante.html" class="tool-card" data-color="blue">
+      <span class="tool-id">H-08 · LIVE</span>
+      <div class="tool-name">a₀ and Lambda</div>
+      <div class="tool-desc">
+        <span>$$a_0 = \frac{cH_0}{2\pi}$$</span>
+        <span>$$\Lambda_{\text{TIE}} = \frac{2H_0^2}{c^2}$$</span>
+        <span>$$G_{\text{TIE}} = \frac{G}{4\pi^2}$$</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$a_0$</span> transition acceleration · 
+        <span class="term">$\Lambda$</span> cosmological constant · 
+        <span class="term">$G_{\text{TIE}}$</span> TIE gravitational constant
+      </div>
+      <span class="tool-link">→ RUN</span>
+    </a>
+
+    <!-- H-11 Black Holes -->
+    <a href="agujeros.html" class="tool-card" data-color="red">
+      <span class="tool-id">H-11 · LIVE</span>
+      <div class="tool-name">Black Holes</div>
+      <div class="tool-desc">
+        <span>$$r_h = 0.869\sqrt{\frac{GM}{a_0}}$$</span>
+        <span>vs $$r_s = \frac{2GM}{c^2}$$</span>
+        <span>$$G_{\text{TIE}} = \frac{G}{4\pi^2}$$</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$r_h$</span> TIE horizon · 
+        <span class="term">$r_s$</span> Schwarzschild · 
+        <span class="term">$G_{\text{TIE}}$</span> TIE constant
+      </div>
+      <span class="tool-link">→ RUN</span>
+    </a>
+
+    <!-- H-12 GPS Correction -->
+    <a href="gps.html" class="tool-card" data-color="blue">
+      <span class="tool-id">H-12 · LIVE</span>
+      <div class="tool-name">GPS Correction</div>
+      <div class="tool-desc">
+        <span>$$\Delta t = \frac{\Phi_2 - \Phi_1}{c^2} T$$</span>
+        <span style="display:block; margin-top:0.5rem;">45.9 μs/day observed vs 45.7 TIE.</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$\Phi$</span> gravitational potential · 
+        <span class="term">$c^2$</span> invariant · 
+        <span class="term">viscosity</span> gravitational
+      </div>
+      <span class="tool-link">→ RUN</span>
+    </a>
+
+    <!-- H-12.1 TIE Synchronizer -->
+    <a href="sincronizador.html" class="tool-card" data-color="purple">
+      <span class="tool-id">H-12.1 · LIVE</span>
+      <div class="tool-name">TIE Synchronizer</div>
+      <div class="tool-desc">
+        <span>$$\text{local}_{\text{cycles}} = \frac{\text{absolute}_{\text{cycles}}}{g}$$</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">$g$</span> local gravity · 
+        <span class="term">$2\pi$</span> universal cycle · 
+        <span class="term">Absolute Engine</span>
+      </div>
+      <span class="tool-link">→ RUN</span>
+    </a>
+
+    <!-- H-12.2 Universal Clock -->
+    <a href="reloj-universal.html" class="tool-card" data-color="purple">
+      <span class="tool-id">H-12.2 · LIVE</span>
+      <div class="tool-name">Universal Clock</div>
+      <div class="tool-desc">
+        <span>Dual clocks: GR vs TIE in real time.</span>
+        <span style="display:block; margin-top:0.5rem;">$$\frac{dt_{\text{GR}}}{dt_{\text{TIE}}} = \frac{1}{g}$$</span>
+      </div>
+      <div class="tool-terms">
+        <span class="term">GR</span> curved time · 
+        <span class="term">TIE</span> processed time · 
+        <span class="term">$g$</span> local gravity
+      </div>
+      <span class="tool-link">→ RUN</span>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-equation">$a_0 = \dfrac{cH_0}{2\pi}$ · $\Lambda = \dfrac{2H_0^2}{c^2}$ · $\mathcal{R} = 2\pi$ · $G_{\text{TIE}} = \dfrac{G}{4\pi^2}$</div>
+  <div class="footer-copy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const canvas = document.getElementById('galaxy-canvas');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+
+const parameters = {
+  count: 50000,
+  size: 0.03,
+  radius: 20,
+  branches: 4,
+  spin: 1.2,
+  randomness: 0.4,
+  randomnessPower: 2,
+  insideColor: 0xffaa00,
+  outsideColor: 0x1b3984
+};
+
+const galaxyGeometry = new THREE.BufferGeometry();
+const positions = new Float32Array(parameters.count * 3);
+const colors = new Float32Array(parameters.count * 3);
+
+const colorInside = new THREE.Color(parameters.insideColor);
+const colorOutside = new THREE.Color(parameters.outsideColor);
+
+for (let i = 0; i < parameters.count; i++) {
+  const i3 = i * 3;
+  const r = Math.random() * parameters.radius;
+  const spinAngle = r * parameters.spin;
+  const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
+  
+  const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
+  
+  const x = Math.cos(branchAngle + spinAngle) * r + randomX;
+  const y = randomY * 0.5;
+  const z = Math.sin(branchAngle + spinAngle) * r + randomZ;
+  
+  positions[i3] = x;
+  positions[i3 + 1] = y;
+  positions[i3 + 2] = z;
+  
+  const mixedColor = colorInside.clone().lerp(colorOutside, r / parameters.radius);
+  colors[i3] = mixedColor.r;
+  colors[i3 + 1] = mixedColor.g;
+  colors[i3 + 2] = mixedColor.b;
+}
+
+galaxyGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+galaxyGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+const galaxyMaterial = new THREE.PointsMaterial({
+  size: parameters.size,
+  sizeAttenuation: true,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.8
+});
+
+const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
+scene.add(galaxy);
+
+camera.position.set(10, 5, 25);
+camera.lookAt(0, 0, 0);
+
+let mouseX = 0;
+let mouseY = 0;
+
+document.addEventListener('mousemove', (event) => {
+  mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  galaxy.rotation.y += 0.00015;
+  galaxy.rotation.x += 0.00005;
+  galaxy.rotation.y += mouseX * 0.0003;
+  galaxy.rotation.x += mouseY * 0.0002;
+  renderer.render(scene, camera);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  if (typeof renderMathInElement === 'function') {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });
+  }
+});
+</script>
+</body>
+</html>

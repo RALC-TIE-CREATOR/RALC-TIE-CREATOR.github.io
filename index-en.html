@@ -559,21 +559,22 @@ footer {
 <canvas id="galaxy-canvas"></canvas>
 
 <nav>
-  <a href="index.html" class="nav-logo">TIE / R@LC</a>
+  <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
   
-  <!-- SELECTOR DE IDIOMA - SOLO BANDERAS -->
-  <div style="display:flex; gap:1rem; align-items:center; margin:0 1rem;">
-    <a href="index.html" style="font-size:1.8rem; line-height:1; text-decoration:none; opacity:1; border-bottom:2px solid var(--gold);">🇪🇸</a>
-    <span style="color:var(--dim); font-size:1.5rem;">|</span>
-    <a href="index-en.html" style="font-size:1.8rem; line-height:1; text-decoration:none; opacity:0.5; transition:0.3s;">🇬🇧</a>
+  <!-- LANGUAGE SELECTOR - FLAGS WITH FORCED STYLES -->
+  <div style="display:flex; gap:1rem; align-items:center; margin:0 2rem;">
+    <a href="../index.html" style="font-size:2rem !important; line-height:1 !important; text-decoration:none !important; color:var(--dim) !important; opacity:0.7 !important; transition:0.3s !important;">🇪🇸</a>
+    <span style="color:var(--dim); font-size:1.8rem;">|</span>
+    <a href="index-en.html" style="font-size:2rem !important; line-height:1 !important; text-decoration:none !important; color:var(--gold) !important; opacity:1 !important; border-bottom:2px solid var(--gold) !important; padding-bottom:2px !important;">🇬🇧</a>
   </div>
   
-  <a href="index.html" class="nav-back">← VOLVER AL INICIO</a>
+  <a href="index-en.html" class="nav-back">← BACK TO HOME</a>
 </nav>
 
 <style>
-/* Para el hover de la bandera inactiva */
-.nav a[href="index-en.html"]:hover {
+/* Hover for inactive flag */
+nav a[href="../index.html"]:hover {
+  color: var(--gold) !important;
   opacity: 1 !important;
 }
 </style>

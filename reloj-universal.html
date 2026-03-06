@@ -3,702 +3,409 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TIE · RELOJ UNIVERSAL</title>
+<title>TIE · H-12.1 · Reloj Universal</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
-:root {
-  --gold: #FFD700;
-  --blue: #5BC8F5;
-  --green: #44FF88;
-  --red: #FF4455;
-  --purple: #9b59b6;
-  --bg: #000001;
-  --bg2: rgba(5, 5, 15, 0.6);
-  --bg3: rgba(10, 10, 25, 0.4);
-  --text: #ffffff;
-  --dim: #a0a0b0;
-  --border: rgba(91, 200, 245, 0.15);
-  --mono: 'Space Mono', monospace;
-  --sans: 'Syne', sans-serif;
-}
+:root{--gold:#FFD700;--blue:#5BC8F5;--green:#44FF88;--red:#FF4455;--bg:#000001;--bg2:rgba(5,5,15,0.78);--bg3:rgba(10,10,25,0.6);--text:#ffffff;--dim:#a0a0b0;--border:rgba(91,200,245,0.15);--mono:'Space Mono',monospace;--sans:'Syne',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+#galaxy-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.38;}
+nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
+.nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
+.nav-center{display:flex;gap:.5rem;}
+.lang-link{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;transition:all .2s;}
+.lang-link.active{color:#000;background:var(--gold);}
+.lang-link.inactive{color:var(--dim);border:1px solid var(--border);}
+.lang-link.inactive:hover{color:var(--gold);border-color:var(--gold);}
+.nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-back:hover{color:var(--gold);}
+.page{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:7rem 2rem 4rem;}
+.page-tag{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:.75rem;}
+.page-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;letter-spacing:-2px;margin-bottom:.5rem;}
+.page-title span{color:var(--gold);}
+.page-sub{font-family:var(--mono);font-size:.8rem;color:var(--dim);max-width:600px;line-height:1.6;margin-bottom:2rem;}
+.hero-eq{background:var(--bg2);border:1px solid rgba(255,215,0,0.3);border-radius:16px;padding:1.5rem 2rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;backdrop-filter:blur(8px);}
+.hero-eq-badge{font-family:var(--mono);font-size:.65rem;color:var(--green);background:rgba(68,255,136,0.08);border:1px solid rgba(68,255,136,0.25);border-radius:6px;padding:.4rem .8rem;letter-spacing:2px;white-space:nowrap;}
 
-* { margin:0; padding:0; box-sizing:border-box; }
+/* MOTOR ABSOLUTO — big central display */
+.motor-display{background:linear-gradient(135deg,rgba(5,5,15,0.9) 0%,rgba(10,10,30,0.85) 100%);border:2px solid rgba(255,215,0,.4);border-radius:20px;padding:2rem;text-align:center;margin-bottom:2rem;position:relative;overflow:hidden;backdrop-filter:blur(12px);}
+.motor-display::before{content:'∞';position:absolute;bottom:-15px;right:15px;font-size:5rem;color:rgba(255,215,0,.07);font-family:serif;pointer-events:none;}
+.motor-tag{font-family:var(--mono);font-size:.65rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:.5rem;}
+.motor-value{font-family:var(--mono);font-size:clamp(1.5rem,4vw,2.5rem);font-weight:700;color:var(--gold);line-height:1;margin-bottom:.3rem;}
+.motor-sub{font-family:var(--mono);font-size:.65rem;color:var(--dim);margin-top:.25rem;}
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
-}
+/* CLOCK GRID */
+.clock-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;}
+@media(max-width:700px){.clock-grid{grid-template-columns:1fr;}}
+.clock-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;backdrop-filter:blur(8px);}
+.clock-card.gr-card{border-color:rgba(91,200,245,.25);}
+.clock-card.tie-card{border-color:rgba(255,215,0,.25);}
+.clock-card-title{font-family:var(--mono);font-size:.65rem;letter-spacing:3px;text-transform:uppercase;padding-bottom:.6rem;border-bottom:1px solid var(--border);margin-bottom:1.25rem;display:flex;align-items:center;gap:.5rem;}
+.clock-card-title.gr{color:var(--blue);}
+.clock-card-title.tie{color:var(--gold);}
 
-#galaxy-canvas {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 120vw;
-  height: 120vh;
-  min-width: 1200px;
-  min-height: 1200px;
-  z-index: -2;
-  opacity: 0.7;
-  pointer-events: none;
-}
+/* Analog clock face */
+.clock-visual{display:flex;align-items:center;gap:1.25rem;margin-bottom:1.25rem;}
+.clock-face-wrap{position:relative;width:100px;height:100px;flex-shrink:0;}
+.clock-face{width:100%;height:100%;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;}
+.clock-face.gr{background:rgba(91,200,245,.05);border:2px solid rgba(91,200,245,.3);box-shadow:0 0 20px rgba(91,200,245,.15);}
+.clock-face.tie{background:rgba(255,215,0,.05);border:2px solid rgba(255,215,0,.35);box-shadow:0 0 20px rgba(255,215,0,.15);}
+.clock-hand{position:absolute;bottom:50%;left:50%;transform-origin:bottom center;border-radius:2px;}
+.clock-hand.gr{width:2px;background:var(--blue);}
+.clock-hand.tie{width:2px;background:var(--gold);}
+.clock-center-dot{width:8px;height:8px;border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
+.clock-center-dot.gr{background:var(--blue);}
+.clock-center-dot.tie{background:var(--gold);}
+/* tick marks */
+.clock-ticks{position:absolute;top:0;left:0;width:100%;height:100%;}
+.clock-info{}
+.clock-time{font-family:var(--mono);font-size:1.4rem;font-weight:700;line-height:1;margin-bottom:.25rem;}
+.clock-time.gr{color:var(--blue);}
+.clock-time.tie{color:var(--gold);}
+.clock-time-label{font-family:var(--mono);font-size:.6rem;color:var(--dim);}
+.clock-desc{font-size:.78rem;color:var(--dim);margin-top:.5rem;line-height:1.5;}
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle at 30% 40%, rgba(91,200,245,0.08) 0%, transparent 60%),
-              radial-gradient(circle at 70% 60%, rgba(255,215,0,0.08) 0%, transparent 60%);
-  z-index: -1;
-  pointer-events: none;
-  mix-blend-mode: screen;
-}
+/* Phase/cycles */
+.phase-row{display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid rgba(91,200,245,.08);font-family:var(--mono);font-size:.65rem;}
+.phase-row:last-child{border-bottom:none;}
+.phase-key{color:var(--dim);}
+.phase-val{color:var(--gold);font-weight:700;}
+.phase-val.green{color:var(--green);}
+.phase-val.red{color:var(--red);}
+.phase-val.blue{color:var(--blue);}
 
-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.2rem 4rem;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(15px);
-  border-bottom: 2px solid rgba(255,215,0,0.2);
-}
+/* Controls panel */
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;backdrop-filter:blur(8px);}
+.panel-title{font-family:var(--mono);font-size:.65rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;padding-bottom:.5rem;border-bottom:1px solid var(--border);margin-bottom:1.25rem;}
+.loc-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1.25rem;}
+.loc-btn{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.6rem .75rem;cursor:pointer;transition:all .2s;text-align:center;}
+.loc-btn:hover{border-color:var(--gold);}
+.loc-btn.active{border-color:var(--gold);background:rgba(255,215,0,.08);}
+.loc-btn .lname{font-family:var(--mono);font-size:.75rem;color:var(--text);display:block;margin-bottom:.1rem;}
+.loc-btn .lgrav{font-family:var(--mono);font-size:.6rem;color:var(--dim);}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:linear-gradient(to right,var(--gold) var(--pct,50%),rgba(91,200,245,0.2) var(--pct,50%));border-radius:2px;outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(255,215,0,0.5);}
+.slider-header{display:flex;justify-content:space-between;margin-bottom:.4rem;}
+.slider-lbl{font-family:var(--mono);font-size:.65rem;color:var(--dim);}
+.slider-val{font-family:var(--mono);font-size:.75rem;color:var(--gold);font-weight:700;}
 
-.nav-logo {
-  font-family: var(--mono);
-  font-size: 1rem;
-  color: var(--gold);
-  letter-spacing: 4px;
-  text-decoration: none;
-  font-weight: 700;
-}
+/* Comparison table */
+.data-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.68rem;}
+.data-table th{color:var(--dim);font-weight:400;text-align:left;padding:.45rem .6rem;border-bottom:1px solid var(--border);}
+.data-table td{padding:.4rem .6rem;border-bottom:1px solid rgba(91,200,245,.07);}
+.data-table .gold{color:var(--gold);}
+.data-table .blue{color:var(--blue);}
+.data-table .dim{color:var(--dim);}
 
-.nav-back {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  color: var(--dim);
-  text-decoration: none;
-  border: 1px solid var(--border);
-  padding: 0.4rem 1.2rem;
-  border-radius: 30px;
-  transition: 0.3s;
-}
-
-.nav-back:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-}
-
-.page {
-  padding: 120px 2rem 4rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 10;
-}
-
-.page-tag {
-  font-family: var(--mono);
-  font-size: 0.9rem;
-  letter-spacing: 8px;
-  color: var(--purple);
-  margin-bottom: 1rem;
-  border-bottom: 2px solid rgba(155,89,182,0.4);
-  padding-bottom: 0.8rem;
-  display: inline-block;
-}
-
-.page-title {
-  font-size: 3rem;
-  font-weight: 900;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--purple) 0%, var(--gold) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.page-sub {
-  font-size: 1.1rem;
-  color: var(--dim);
-  max-width: 600px;
-  margin-bottom: 3rem;
-  line-height: 1.6;
-}
-
-.clock-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin-bottom: 2rem;
-}
-
-.clock-card {
-  background: rgba(5, 5, 15, 0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 2rem;
-}
-
-.clock-card-title {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  color: var(--gold);
-  letter-spacing: 2px;
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.clock-visual {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-
-.clock-face {
-  width: 120px;
-  height: 120px;
-  border: 3px solid;
-  border-radius: 50%;
-  position: relative;
-  background: rgba(0,0,0,0.5);
-  flex-shrink: 0;
-}
-
-.clock-face.gr {
-  border-color: var(--red);
-}
-
-.clock-face.tie {
-  border-color: var(--gold);
-}
-
-.hand {
-  width: 3px;
-  height: 50px;
-  background: #fff;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform-origin: top center;
-  transform: translate(-50%, 0) rotate(0deg);
-  border-radius: 2px;
-}
-
-.hand.gr-hand {
-  background: var(--red);
-}
-
-.hand.tie-hand {
-  background: var(--gold);
-}
-
-.center-dot {
-  width: 10px;
-  height: 10px;
-  background: #fff;
-  border-radius: 50%;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.clock-info {
-  flex: 1;
-}
-
-.clock-time {
-  font-family: var(--mono);
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 0.3rem;
-}
-
-.clock-time.gr {
-  color: var(--red);
-}
-
-.clock-time.tie {
-  color: var(--gold);
-}
-
-.clock-label-sm {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--dim);
-}
-
-.clock-desc {
-  font-size: 0.8rem;
-  color: var(--dim);
-  margin-top: 0.5rem;
-  line-height: 1.5;
-}
-
-.control-panel {
-  background: rgba(5, 5, 15, 0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 2rem;
-  margin-top: 2rem;
-}
-
-.control-title {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  color: var(--gold);
-  letter-spacing: 2px;
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 0.5rem;
-}
-
-.location-selector {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 2rem;
-}
-
-.loc-btn {
-  background: rgba(10,10,20,0.8);
-  border: 1px solid var(--border);
-  border-radius: 30px;
-  padding: 0.6rem 1.5rem;
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--dim);
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.loc-btn:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-}
-
-.loc-btn.active {
-  background: var(--gold);
-  color: #000;
-  border-color: var(--gold);
-}
-
-.slider-container {
-  margin-bottom: 2rem;
-}
-
-.slider-label {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--dim);
-  margin-bottom: 0.5rem;
-}
-
-.slider {
-  width: 100%;
-  height: 4px;
-  background: var(--border);
-  accent-color: var(--gold);
-  cursor: pointer;
-}
-
-.metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-.metric-card {
-  background: rgba(10,10,20,0.8);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-}
-
-.metric-label {
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  color: var(--dim);
-  margin-bottom: 0.3rem;
-}
-
-.metric-value {
-  font-family: var(--mono);
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--gold);
-}
-
-.metric-unit {
-  font-family: var(--mono);
-  font-size: 0.5rem;
-  color: var(--dim);
-  margin-top: 0.2rem;
-}
-
-.universal-box {
-  background: linear-gradient(145deg, rgba(20,20,40,0.8) 0%, rgba(5,5,15,0.8) 100%);
-  border: 2px solid var(--gold);
-  border-radius: 16px;
-  padding: 2rem;
-  text-align: center;
-  margin: 2rem 0;
-}
-
-.universal-title {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--dim);
-  letter-spacing: 3px;
-  margin-bottom: 1rem;
-}
-
-.universal-number {
-  font-family: var(--mono);
-  font-size: 3rem;
-  font-weight: 800;
-  color: var(--gold);
-  line-height: 1;
-  margin-bottom: 0.5rem;
-}
-
-.universal-label {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  color: var(--dim);
-}
-
-footer {
-  padding: 3rem;
-  text-align: center;
-  border-top: 1px solid rgba(255,215,0,0.1);
-  margin-top: 4rem;
-  background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(10px);
-}
-
-.footer-equation {
-  font-family: var(--mono);
-  font-size: 1rem;
-  color: var(--gold);
-  margin-bottom: 0.5rem;
-  text-shadow: 0 0 20px rgba(255,215,0,0.3);
-}
-
-.footer-copy {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--dim);
-  letter-spacing: 2px;
-}
+.const-row{display:flex;flex-wrap:wrap;gap:.75rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.75rem 1.25rem;backdrop-filter:blur(8px);margin-top:1.25rem;}
+.ci{font-family:var(--mono);font-size:.65rem;}
+.ci .cl{color:var(--dim);}
+.ci .cv{color:var(--gold);font-weight:700;}
+.nav-links{display:flex;justify-content:center;gap:2rem;margin-top:2rem;flex-wrap:wrap;}
+.nav-links a{font-family:var(--mono);font-size:.7rem;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);margin-top:2rem;}
+footer .feq{font-family:var(--mono);font-size:.85rem;color:var(--gold);margin-bottom:.5rem;}
+footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;}
 </style>
 </head>
 <body>
-
 <canvas id="galaxy-canvas"></canvas>
-
 <nav>
   <a href="index.html" class="nav-logo">TIE / R@LC</a>
-  <a href="labs.html" class="nav-back">← VOLVER AL LABORATORIO</a>
+  <div class="nav-center">
+    <a href="reloj-universal.html" class="lang-link active">ES</a>
+    <a href="clock-en.html" class="lang-link inactive">EN</a>
+  </div>
+  <a href="labs.html" class="nav-back">← LABORATORIO</a>
 </nav>
 
 <div class="page">
-  <div class="page-tag">H-12.2 · RELOJ UNIVERSAL</div>
-  <h1 class="page-title">EL MOTOR ABSOLUTO</h1>
-  <p class="page-sub">El tiempo es el mismo en todo el cosmos. Los relojes locales procesan según la gravedad.</p>
+  <div class="page-tag">H-12.1 · MOTOR ABSOLUTO · CICLOS DE INFRAESTRUCTURA</div>
+  <h1 class="page-title">RELOJ <span>UNIVERSAL</span></h1>
+  <p class="page-sub">El Motor Absoluto produce ciclos constantes. Los relojes locales procesan según la viscosidad gravitacional. Menos gravedad = más ciclos procesados = reloj más rápido.</p>
 
-  <!-- RELOJES DUALES -->
-  <div class="clock-grid">
-    <!-- Reloj GR -->
-    <div class="clock-card">
-      <div class="clock-card-title">
-        <span>🌀</span> RELATIVIDAD GENERAL (GR)
-      </div>
-      <div class="clock-visual">
-        <div class="clock-face gr" id="clock-gr-face">
-          <div class="hand gr-hand" id="hand-gr"></div>
-          <div class="center-dot"></div>
-        </div>
-        <div class="clock-info">
-          <div class="clock-time gr" id="time-gr">12:00:00</div>
-          <div class="clock-label-sm">Tiempo local</div>
-          <div class="clock-desc">La gravedad curva el espacio-tiempo. El tiempo fluye a diferente ritmo según el lugar.</div>
-        </div>
-      </div>
-    </div>
+  <div class="hero-eq">
+    <div>\( \tau_{\text{local}} = \frac{\tau_{\text{Motor}}}{g_{\text{relativo}}} \qquad \text{Menos gravedad} \Rightarrow \text{más ciclos} \Rightarrow \text{reloj más rápido} \)</div>
+    <div class="hero-eq-badge">✓ CORREGIDO · VERIFICADO GPS</div>
+  </div>
 
-    <!-- Reloj TIE -->
-    <div class="clock-card">
-      <div class="clock-card-title">
-        <span>⚛️</span> INFRAESTRUCTURA (TIE)
+  <!-- MOTOR ABSOLUTO -->
+  <div class="motor-display">
+    <div class="motor-tag">⚛️ Motor Absoluto — referencia universal TIE</div>
+    <div class="motor-value" id="motor-value">2π · 0</div>
+    <div class="motor-sub">ciclos de infraestructura producidos</div>
+    <div style="margin-top:.75rem;display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <div style="font-family:var(--mono);font-size:.6rem;color:var(--dim);">TIEMPO TRANSCURRIDO</div>
+        <div style="font-family:var(--mono);font-size:1rem;color:var(--gold);font-weight:700;" id="motor-time">0m 0s</div>
       </div>
-      <div class="clock-visual">
-        <div class="clock-face tie" id="clock-tie-face">
-          <div class="hand tie-hand" id="hand-tie"></div>
-          <div class="center-dot"></div>
-        </div>
-        <div class="clock-info">
-          <div class="clock-time tie" id="time-tie">12:00:00</div>
-          <div class="clock-label-sm">Tiempo procesado</div>
-          <div class="clock-desc">El Motor Absoluto es universal. Los relojes procesan ciclos según la viscosidad local.</div>
-        </div>
+      <div style="text-align:center;">
+        <div style="font-family:var(--mono);font-size:.6rem;color:var(--dim);">ANCLAJE DE FASE</div>
+        <div style="font-family:var(--mono);font-size:.85rem;color:var(--blue);">PSR B1937+21</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:var(--mono);font-size:.6rem;color:var(--dim);">INVARIANTE</div>
+        <div style="font-family:var(--mono);font-size:.85rem;color:var(--gold);">2π = 6.283185...</div>
       </div>
     </div>
   </div>
 
-  <!-- PANEL DE CONTROL -->
-  <div class="control-panel">
-    <div class="control-title">🌍 AJUSTE DE GRAVEDAD LOCAL</div>
-
-    <div class="location-selector">
-      <span class="loc-btn active" data-loc="tierra">🌍 Tierra (1.0g)</span>
-      <span class="loc-btn" data-loc="marte">🔴 Marte (0.38g)</span>
-      <span class="loc-btn" data-loc="jupiter">🪐 Júpiter (2.5g)</span>
-      <span class="loc-btn" data-loc="espacio">🌌 Espacio (~0g)</span>
-    </div>
-
-    <div class="slider-container">
-      <div class="slider-label">
-        <span>Factor de gravedad (relativo a Tierra)</span>
-        <span id="gravity-display">1.00</span>
+  <!-- CLOCKS SIDE BY SIDE -->
+  <div class="clock-grid">
+    <!-- GR clock -->
+    <div class="clock-card gr-card">
+      <div class="clock-card-title gr">🌀 Relatividad General (GR)</div>
+      <div class="clock-visual">
+        <div class="clock-face-wrap">
+          <div class="clock-face gr" id="face-gr">
+            <canvas class="clock-ticks" id="ticks-gr" width="100" height="100"></canvas>
+            <div class="clock-hand gr" id="hand-sec-gr" style="height:38px;width:1.5px;"></div>
+            <div class="clock-hand gr" id="hand-min-gr" style="height:28px;width:2px;opacity:.8;"></div>
+            <div class="clock-center-dot gr"></div>
+          </div>
+        </div>
+        <div class="clock-info">
+          <div class="clock-time gr" id="time-gr">00:00:00</div>
+          <div class="clock-time-label">Tiempo local (curva)</div>
+          <div class="clock-desc">La gravedad curva el espacio-tiempo. El tiempo fluye a distinto ritmo según la posición.</div>
+        </div>
       </div>
-      <input type="range" class="slider" id="gravity-slider" min="0.001" max="3.0" value="1.0" step="0.001">
-    </div>
-
-    <!-- RELOJ UNIVERSAL -->
-    <div class="universal-box">
-      <div class="universal-title">MOTOR ABSOLUTO</div>
-      <div class="universal-number" id="universal-cycles">2π · 1,000,000</div>
-      <div class="universal-label">ciclos de infraestructura</div>
-    </div>
-
-    <!-- MÉTRICAS -->
-    <div class="metrics-grid">
-      <div class="metric-card">
-        <div class="metric-label">Ciclos (Tierra)</div>
-        <div class="metric-value" id="cycles-earth">1,000,000</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">Ciclos (local)</div>
-        <div class="metric-value" id="cycles-local">1,000,000</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">Diferencia</div>
-        <div class="metric-value" id="diff-display">0</div>
-        <div class="metric-unit">ciclos</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">Estado</div>
-        <div class="metric-value" id="sync-state" style="font-size:0.9rem;">EN FASE</div>
+      <div>
+        <div class="phase-row"><span class="phase-key">Ciclos procesados (GR)</span><span class="phase-val blue" id="cyc-gr">0</span></div>
+        <div class="phase-row"><span class="phase-key">Diferencia vs Motor</span><span class="phase-val" id="diff-gr">0</span></div>
       </div>
     </div>
+
+    <!-- TIE clock -->
+    <div class="clock-card tie-card">
+      <div class="clock-card-title tie">⚛️ Infraestructura (TIE)</div>
+      <div class="clock-visual">
+        <div class="clock-face-wrap">
+          <div class="clock-face tie" id="face-tie">
+            <canvas class="clock-ticks" id="ticks-tie" width="100" height="100"></canvas>
+            <div class="clock-hand tie" id="hand-sec-tie" style="height:38px;width:1.5px;"></div>
+            <div class="clock-hand tie" id="hand-min-tie" style="height:28px;width:2px;opacity:.8;"></div>
+            <div class="clock-center-dot tie"></div>
+          </div>
+        </div>
+        <div class="clock-info">
+          <div class="clock-time tie" id="time-tie">00:00:00</div>
+          <div class="clock-time-label">Ciclos procesados</div>
+          <div class="clock-desc">El Motor Absoluto es universal. Los relojes procesan según la viscosidad gravitacional local.</div>
+        </div>
+      </div>
+      <div>
+        <div class="phase-row"><span class="phase-key">Ciclos procesados (TIE)</span><span class="phase-val" id="cyc-tie">0</span></div>
+        <div class="phase-row"><span class="phase-key">Estado vs Tierra</span><span class="phase-val green" id="sync-state">EN FASE</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLS + TABLE -->
+  <div style="display:grid;grid-template-columns:360px 1fr;gap:1.5rem;align-items:start;">
+    <div class="panel">
+      <div class="panel-title">Ubicación del reloj local</div>
+      <div class="loc-grid">
+        <div class="loc-btn active" onclick="setLoc('tierra',1.0,this)">
+          <span class="lname">🌍 Tierra</span><span class="lgrav">g = 1.000×</span>
+        </div>
+        <div class="loc-btn" onclick="setLoc('iss',0.89,this)">
+          <span class="lname">🛸 ISS</span><span class="lgrav">g = 0.890×</span>
+        </div>
+        <div class="loc-btn" onclick="setLoc('luna',0.165,this)">
+          <span class="lname">🌙 Luna</span><span class="lgrav">g = 0.165×</span>
+        </div>
+        <div class="loc-btn" onclick="setLoc('marte',0.38,this)">
+          <span class="lname">🔴 Marte</span><span class="lgrav">g = 0.380×</span>
+        </div>
+        <div class="loc-btn" onclick="setLoc('jupiter',2.5,this)">
+          <span class="lname">🪐 Júpiter</span><span class="lgrav">g = 2.500×</span>
+        </div>
+        <div class="loc-btn" onclick="setLoc('espacio',0.001,this)">
+          <span class="lname">🌌 Espacio</span><span class="lgrav">g = 0.001×</span>
+        </div>
+      </div>
+
+      <div class="panel-title">Ajuste fino</div>
+      <div class="slider-header">
+        <span class="slider-lbl">Factor de gravedad local</span>
+        <span class="slider-val" id="grav-disp">1.000×</span>
+      </div>
+      <input type="range" id="grav-slider" min="0.001" max="3.0" value="1.0" step="0.001"
+             oninput="setGravity(parseFloat(this.value))" style="--pct:33.3%">
+      <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.58rem;color:var(--dim);margin-top:.3rem;">
+        <span>0.001× más rápido</span>
+        <span>1.0× Tierra</span>
+        <span>3.0× más lento</span>
+      </div>
+
+      <div style="height:1rem"></div>
+      <div>
+        <div class="phase-row"><span class="phase-key">Motor Absoluto</span><span class="phase-val" id="mc">0</span></div>
+        <div class="phase-row"><span class="phase-key">Ciclos Tierra</span><span class="phase-val blue" id="ct">0</span></div>
+        <div class="phase-row"><span class="phase-key">Ciclos local</span><span class="phase-val" id="cl">0</span></div>
+        <div class="phase-row"><span class="phase-key">Diferencia acumulada</span><span class="phase-val green" id="cd">0</span></div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:1.25rem;">
+      <div class="panel">
+        <div class="panel-title">TIE vs GR · Naturaleza del tiempo</div>
+        <table class="data-table">
+          <tr><th>Aspecto</th><th>Relatividad General</th><th>Infraestructura (TIE)</th></tr>
+          <tr><td>Naturaleza</td><td class="dim">Dimensión deformable</td><td class="gold">Conteo de ciclos 2π</td></tr>
+          <tr><td>Causa del retraso</td><td class="dim">Curvatura espacio-temporal</td><td class="gold">Viscosidad de infraestructura</td></tr>
+          <tr><td>Referencia universal</td><td class="dim">No existe</td><td class="gold">Motor Absoluto</td></tr>
+          <tr><td>Instrumento</td><td class="dim">Reloj atómico (pasivo)</td><td class="gold">Contador de fase (activo)</td></tr>
+          <tr><td>Sincronización</td><td class="dim">Imposible</td><td class="gold">Posible por anclaje de fase</td></tr>
+          <tr><td>Error en GPS</td><td class="blue">~0% (predicción exacta)</td><td class="gold">0.4% (cero parámetros libres)</td></tr>
+        </table>
+      </div>
+
+      <div class="panel" style="background:rgba(255,215,0,.04);border-color:rgba(255,215,0,.2);">
+        <div class="panel-title">Interpretación física</div>
+        <p style="font-size:.85rem;line-height:1.7;color:var(--dim);">
+          En TIE, el tiempo no se <em>curva</em> — los relojes procesan ciclos del Motor Absoluto a un ritmo que depende de la <span style="color:var(--gold);font-weight:700;">densidad de infraestructura local</span>. En regiones de alta gravedad (alta densidad), la infraestructura es más viscosa: los relojes procesan <em>menos</em> ciclos por segundo → atrasan. En el espacio profundo (baja densidad) → adelantan. El Motor Absoluto nunca cambia. 2π es invariante.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-links">
+    <a href="gps.html">← GPS</a>
+    <a href="labs.html">Laboratorio →</a>
   </div>
 </div>
 
 <footer>
-  <div class="footer-equation">El Motor Absoluto es universal · 2π es invariante</div>
-  <div class="footer-copy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+  <div class="feq">\( \tau_{\text{local}} = \tau_{\text{Motor}} / g \quad \cdot \quad \text{2π invariante} \quad \cdot \quad \text{Motor Absoluto universal} \)</div>
+  <div class="fcopy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// ===== GALAXIA 3D =====
-const canvas = document.getElementById('galaxy-canvas');
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
+// THREE.JS BACKGROUND
+(function(){
+  const canvas=document.getElementById('galaxy-canvas');
+  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(60,1,0.1,1000);
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  function resize(){renderer.setSize(canvas.clientWidth,canvas.clientHeight);camera.aspect=canvas.clientWidth/canvas.clientHeight;camera.updateProjectionMatrix();}
+  resize();window.addEventListener('resize',resize);
+  camera.position.set(0,4,6);camera.lookAt(0,0,0);
+  const p={count:55000,radius:4,branches:5,spin:1.0,randomness:0.4,randomPower:2.5};
+  const geo=new THREE.BufferGeometry(),pos=new Float32Array(p.count*3),col=new Float32Array(p.count*3);
+  const cIn=new THREE.Color('#FFD700'),cOut=new THREE.Color('#0a0a2e');
+  for(let i=0;i<p.count;i++){const r=Math.random()*p.radius,b=(i%p.branches)/p.branches*Math.PI*2,s=r*p.spin;const rx=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r,ry=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r*.3,rz=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r;pos[i*3]=Math.cos(b+s)*r+rx;pos[i*3+1]=ry;pos[i*3+2]=Math.sin(b+s)*r+rz;const m=new THREE.Color().lerpColors(cIn,cOut,r/p.radius);col[i*3]=m.r;col[i*3+1]=m.g;col[i*3+2]=m.b;}
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+  const mat=new THREE.PointsMaterial({size:.008,sizeAttenuation:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true});
+  scene.add(new THREE.Points(geo,mat));
+  (function animate(){requestAnimationFrame(animate);scene.rotation.y+=.0006;renderer.render(scene,camera);})();
+})();
 
-const parameters = {
-  count: 50000,
-  size: 0.03,
-  radius: 20,
-  branches: 4,
-  spin: 1.2,
-  randomness: 0.4,
-  randomnessPower: 2,
-  insideColor: 0xffaa00,
-  outsideColor: 0x1b3984
-};
-
-const galaxyGeometry = new THREE.BufferGeometry();
-const positions = new Float32Array(parameters.count * 3);
-const colors = new Float32Array(parameters.count * 3);
-
-const colorInside = new THREE.Color(parameters.insideColor);
-const colorOutside = new THREE.Color(parameters.outsideColor);
-
-for (let i = 0; i < parameters.count; i++) {
-  const i3 = i * 3;
-  const r = Math.random() * parameters.radius;
-  const spinAngle = r * parameters.spin;
-  const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
-  
-  const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
-  const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
-  const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
-  
-  const x = Math.cos(branchAngle + spinAngle) * r + randomX;
-  const y = randomY * 0.5;
-  const z = Math.sin(branchAngle + spinAngle) * r + randomZ;
-  
-  positions[i3] = x;
-  positions[i3 + 1] = y;
-  positions[i3 + 2] = z;
-  
-  const mixedColor = colorInside.clone().lerp(colorOutside, r / parameters.radius);
-  colors[i3] = mixedColor.r;
-  colors[i3 + 1] = mixedColor.g;
-  colors[i3 + 2] = mixedColor.b;
-}
-
-galaxyGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-galaxyGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-const galaxyMaterial = new THREE.PointsMaterial({
-  size: parameters.size,
-  sizeAttenuation: true,
-  depthWrite: false,
-  blending: THREE.AdditiveBlending,
-  vertexColors: true,
-  transparent: true,
-  opacity: 0.8
-});
-
-const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
-scene.add(galaxy);
-
-camera.position.set(10, 5, 25);
-camera.lookAt(0, 0, 0);
-
-let mouseX = 0;
-let mouseY = 0;
-
-document.addEventListener('mousemove', (event) => {
-  mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
-  mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
-});
-
-function animate() {
-  requestAnimationFrame(animate);
-  galaxy.rotation.y += 0.00015;
-  galaxy.rotation.x += 0.00005;
-  galaxy.rotation.y += mouseX * 0.0003;
-  galaxy.rotation.x += mouseY * 0.0002;
-  renderer.render(scene, camera);
-}
-
-animate();
-
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
-// ===== LÓGICA DEL RELOJ =====
-let cycles = 1000000;
-let lastUpdate = Date.now();
-
-function formatTime(cycles) {
-  let totalSeconds = Math.floor(cycles / 1000);
-  let hours = Math.floor(totalSeconds / 3600) % 24;
-  let minutes = Math.floor((totalSeconds % 3600) / 60);
-  let seconds = totalSeconds % 60;
-  return `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
-}
-
-function updateClocks() {
-  let now = Date.now();
-  let dt = (now - lastUpdate) / 1000;
-  
-  let gravity = parseFloat(document.getElementById('gravity-slider').value);
-  document.getElementById('gravity-display').textContent = gravity.toFixed(2);
-  
-  cycles += Math.floor(dt * 1000);
-  
-  let cyclesEarth = cycles;
-  let cyclesLocal = Math.floor(cycles / gravity);
-  
-  // Actualizar displays
-  document.getElementById('universal-cycles').innerHTML = '2π · ' + cycles.toLocaleString();
-  document.getElementById('cycles-earth').textContent = cyclesEarth.toLocaleString();
-  document.getElementById('cycles-local').textContent = cyclesLocal.toLocaleString();
-  
-  // Tiempos
-  document.getElementById('time-gr').textContent = formatTime(cyclesEarth);
-  document.getElementById('time-tie').textContent = formatTime(cyclesLocal);
-  
-  // Manecillas
-  let secondsEarth = Math.floor(cyclesEarth / 1000) % 60;
-  let secondsLocal = Math.floor(cyclesLocal / 1000) % 60;
-  
-  document.getElementById('hand-gr').style.transform = `translate(-50%, 0) rotate(${secondsEarth * 6}deg)`;
-  document.getElementById('hand-tie').style.transform = `translate(-50%, 0) rotate(${secondsLocal * 6}deg)`;
-  
-  // Diferencia
-  let diff = cyclesLocal - cyclesEarth;
-  document.getElementById('diff-display').textContent = (diff > 0 ? '+' : '') + diff.toLocaleString();
-  
-  // Estado
-  let syncEl = document.getElementById('sync-state');
-  if (Math.abs(diff) < 100) {
-    syncEl.textContent = 'EN FASE';
-    syncEl.style.color = 'var(--green)';
-  } else if (diff > 0) {
-    syncEl.textContent = 'ADELANTADO';
-    syncEl.style.color = 'var(--gold)';
-  } else {
-    syncEl.textContent = 'ATRASADO';
-    syncEl.style.color = 'var(--red)';
+// DRAW TICK MARKS on canvas
+function drawTicks(canvasId, color){
+  const c=document.getElementById(canvasId);
+  const ctx=c.getContext('2d');
+  const cx=50,cy=50,r=44;
+  ctx.clearRect(0,0,100,100);
+  for(let i=0;i<12;i++){
+    const a=i/12*Math.PI*2-Math.PI/2;
+    const x1=cx+Math.cos(a)*(r-6),y1=cy+Math.sin(a)*(r-6);
+    const x2=cx+Math.cos(a)*r,y2=cy+Math.sin(a)*r;
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);
+    ctx.strokeStyle=color;ctx.lineWidth=i%3===0?2:1;ctx.globalAlpha=i%3===0?0.7:0.3;
+    ctx.stroke();
   }
-  
-  lastUpdate = now;
 }
 
-// Presets
-document.querySelectorAll('.loc-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.loc-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    
-    let loc = this.dataset.loc;
-    if (loc === 'tierra') document.getElementById('gravity-slider').value = 1.0;
-    if (loc === 'marte') document.getElementById('gravity-slider').value = 0.38;
-    if (loc === 'jupiter') document.getElementById('gravity-slider').value = 2.5;
-    if (loc === 'espacio') document.getElementById('gravity-slider').value = 0.001;
-  });
-});
+// CLOCK LOGIC
+let motorCycles=0, lastTs=null, gravityFactor=1.0;
 
-document.getElementById('gravity-slider').addEventListener('input', () => {
-  document.querySelectorAll('.loc-btn').forEach(b => b.classList.remove('active'));
-});
+function fmtTime(cycles){
+  const ts=Math.floor(cycles/1000);
+  const h=Math.floor(ts/3600)%24, m=Math.floor((ts%3600)/60), s=ts%60;
+  return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+function fmtMotorTime(cycles){
+  const ts=Math.floor(cycles/1000);
+  return Math.floor(ts/60)+'m '+ts%60+'s';
+}
+function fmtNum(n){return Math.abs(n)>1e6?n.toExponential(2):n.toLocaleString();}
 
-setInterval(updateClocks, 100);
-updateClocks();
+function setHandAngle(id, angleDeg){
+  document.getElementById(id).style.transform=`translateX(-50%) rotate(${angleDeg}deg)`;
+}
+
+function tick(ts){
+  if(lastTs===null)lastTs=ts;
+  const dt=(ts-lastTs)/1000;
+  lastTs=ts;
+  motorCycles+=Math.round(dt*1000);
+
+  const cyclesTierra=motorCycles;
+  const cyclesLocal=Math.round(motorCycles/gravityFactor);
+
+  // Analog hands — Motor = seconds, Local = local
+  const motorSec=(motorCycles/1000)%60;
+  const motorMin=((motorCycles/1000)/60)%60;
+  const localSec=(cyclesLocal/1000)%60;
+  const localMin=((cyclesLocal/1000)/60)%60;
+
+  setHandAngle('hand-sec-gr', motorSec/60*360-90+90);  // GR shows Motor time
+  setHandAngle('hand-min-gr', motorMin/60*360-90+90);
+  setHandAngle('hand-sec-tie', localSec/60*360-90+90); // TIE shows local
+  setHandAngle('hand-min-tie', localMin/60*360-90+90);
+
+  // Digital displays
+  document.getElementById('time-gr').textContent=fmtTime(cyclesTierra);
+  document.getElementById('time-tie').textContent=fmtTime(cyclesLocal);
+  document.getElementById('motor-value').textContent='2π · '+motorCycles.toLocaleString();
+  document.getElementById('motor-time').textContent=fmtMotorTime(motorCycles);
+
+  const diff=cyclesLocal-cyclesTierra;
+  document.getElementById('cyc-gr').textContent=fmtNum(cyclesTierra);
+  document.getElementById('cyc-tie').textContent=fmtNum(cyclesLocal);
+  document.getElementById('diff-gr').textContent=(diff>=0?'+':'')+fmtNum(diff);
+  document.getElementById('mc').textContent=fmtNum(motorCycles);
+  document.getElementById('ct').textContent=fmtNum(cyclesTierra);
+  document.getElementById('cl').textContent=fmtNum(cyclesLocal);
+  document.getElementById('cd').textContent=(diff>=0?'+':'')+fmtNum(diff);
+
+  const syncEl=document.getElementById('sync-state');
+  if(Math.abs(diff)<100){syncEl.textContent='EN FASE CON TIERRA ✓';syncEl.className='phase-val green';}
+  else if(diff>0){syncEl.textContent='ADELANTADO ⚡';syncEl.className='phase-val';}
+  else{syncEl.textContent='ATRASADO ⏳';syncEl.className='phase-val red';}
+
+  requestAnimationFrame(tick);
+}
+
+function setGravity(v){
+  gravityFactor=v;
+  const pct=((v-0.001)/(3.0-0.001)*100).toFixed(1);
+  document.getElementById('grav-slider').style.setProperty('--pct',pct+'%');
+  document.getElementById('grav-disp').textContent=v.toFixed(3)+'×';
+}
+
+function setLoc(name, grav, btn){
+  setGravity(grav);
+  document.getElementById('grav-slider').value=grav;
+  document.querySelectorAll('.loc-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+window.onload=()=>{
+  drawTicks('ticks-gr','rgba(91,200,245,0.5)');
+  drawTicks('ticks-tie','rgba(255,215,0,0.5)');
+  // Set initial hand positions
+  document.querySelectorAll('.clock-hand').forEach(h=>{h.style.transformOrigin='50% 100%';h.style.left='50%';h.style.bottom='50%';});
+  requestAnimationFrame(tick);
+  renderMathInElement(document.body,{delimiters:[{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});
+};
 </script>
 </body>
 </html>

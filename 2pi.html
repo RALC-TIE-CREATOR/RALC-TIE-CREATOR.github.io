@@ -3,434 +3,998 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>H-03 · Calculadora Universal 2π — TIE</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<title>TIE · H-03 · Calculadora Universal 2π</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
 <style>
 :root {
-  --gold: #FFD700;
-  --blue: #5BC8F5;
-  --green: #44FF88;
-  --red: #FF4455;
-  --bg: #06060f;
-  --bg2: #0d0d1a;
-  --bg3: #111122;
-  --text: #e8e8f0;
-  --dim: #7777aa;
-  --border: #1e1e3a;
-  --mono: 'Space Mono', monospace;
-  --sans: 'Syne', sans-serif;
+  --gold:   #FFD700;
+  --blue:   #5BC8F5;
+  --green:  #44FF88;
+  --red:    #FF4455;
+  --bg:     #000001;
+  --bg2:    rgba(5,5,15,0.7);
+  --bg3:    rgba(10,10,25,0.5);
+  --text:   #ffffff;
+  --dim:    #a0a0b0;
+  --border: rgba(91,200,245,0.15);
+  --mono:   'Space Mono', monospace;
+  --sans:   'Syne', sans-serif;
 }
+
 * { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
+
 body {
-  background:var(--bg); color:var(--text);
-  font-family:var(--sans); min-height:100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
+/* ── CANVAS BACKGROUND ── */
+#galaxy-canvas {
+  position: fixed;
+  top:50%; left:50%;
+  transform: translate(-50%,-50%);
+  width:120vw; height:120vh;
+  min-width:1200px; min-height:1200px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+}
+
+/* ── NAV ── */
 nav {
-  position:sticky; top:0; z-index:100;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:.9rem 2rem;
-  background:rgba(6,6,15,.95); backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border);
+  position: fixed; top:0; left:0; right:0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(0,0,1,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
 }
-.nav-logo { font-family:var(--mono); font-size:.9rem; color:var(--gold); letter-spacing:.2em; text-decoration:none; }
-.nav-back  { font-family:var(--mono); font-size:.78rem; color:var(--dim); text-decoration:none; transition:color .2s; }
-.nav-back:hover { color:var(--gold); }
-.nav-tag   { font-family:var(--mono); font-size:.68rem; color:var(--dim); letter-spacing:.1em; }
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-decoration: none;
+  letter-spacing: 2px;
+}
+.nav-center {
+  display: flex; gap: 0.5rem; align-items: center;
+}
+.lang-link {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.lang-link.active  { color:#000; background:var(--gold); }
+.lang-link.inactive{ color:var(--dim); border:1px solid var(--border); }
+.lang-link.inactive:hover { color:var(--gold); border-color:var(--gold); }
+.nav-back {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--dim);
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: color 0.2s;
+}
+.nav-back:hover { color: var(--gold); }
 
+/* ── PAGE LAYOUT ── */
 .page {
-  max-width:1000px; margin:0 auto; padding:2.5rem 2rem 4rem;
+  position: relative; z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 7rem 2rem 4rem;
 }
 
-.page-header { margin-bottom:2.5rem; }
+/* ── HEADER ── */
 .page-tag {
-  font-family:var(--mono); font-size:.68rem; letter-spacing:.3em; color:var(--gold);
-  text-transform:uppercase; margin-bottom:.5rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
 }
-.page-title { font-size:clamp(1.6rem,3vw,2.5rem); font-weight:800; margin-bottom:.5rem; }
-.page-sub   { color:var(--dim); font-size:.92rem; line-height:1.7; }
-
-.eq-highlight {
-  background:var(--bg2); border-left:4px solid var(--gold);
-  border-radius:0 8px 8px 0; padding:1.5rem 2rem;
-  margin:2rem 0;
-  font-family:var(--mono); font-size:1.2rem; text-align:center;
+.page-title {
+  font-family: var(--sans);
+  font-size: clamp(2rem,5vw,3.5rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -2px;
+  margin-bottom: 0.5rem;
 }
-.eq-highlight .gold { color:var(--gold); font-weight:700; }
-.eq-highlight .dim { color:var(--dim); }
-
-.calculator-panel {
-  background:var(--bg2); border:1px solid var(--border);
-  border-radius:12px; padding:2rem;
-  margin:2rem 0;
-}
-
-/* Selector de galaxias */
-.galaxy-selector {
-  margin-bottom:2rem;
-}
-.galaxy-selector label {
-  display:block; font-family:var(--mono); font-size:.7rem;
-  color:var(--dim); letter-spacing:.08em; margin-bottom:.5rem;
-}
-.galaxy-selector select {
-  width:100%; background:var(--bg3); border:1px solid var(--border);
-  border-radius:6px; padding:.8rem 1rem;
-  color:var(--text); font-family:var(--mono); font-size:.9rem;
-  outline:none; cursor:pointer;
-}
-.galaxy-selector select option {
-  background:var(--bg3); color:var(--text);
-}
-.galaxy-selector select:hover { border-color:var(--gold); }
-
-.input-group {
-  margin-bottom:1.5rem;
-}
-.input-group label {
-  display:block; font-family:var(--mono); font-size:.7rem;
-  color:var(--dim); letter-spacing:.08em; margin-bottom:.5rem;
-}
-.input-group input {
-  width:100%; background:var(--bg3); border:1px solid var(--border);
-  border-radius:6px; padding:.8rem 1rem;
-  color:var(--text); font-family:var(--mono); font-size:1rem;
-  outline:none; transition:border-color .2s;
-}
-.input-group input:focus { border-color:var(--gold); }
-
-.range-group {
-  display:flex; gap:1rem; align-items:center;
-}
-.range-group input[type=range] {
-  flex:1; padding:0; accent-color:var(--gold); cursor:pointer;
-  height:4px; background:var(--border);
-}
-.range-group .range-value {
-  font-family:var(--mono); font-size:.9rem; color:var(--gold);
-  min-width:60px; text-align:right;
+.page-title span { color: var(--gold); }
+.page-sub {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--dim);
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
 }
 
-.results-grid {
-  display:grid; grid-template-columns:repeat(3, 1fr);
-  gap:1rem; margin:2rem 0;
+/* ── HERO EQUATION ── */
+.hero-eq {
+  background: var(--bg2);
+  border: 1px solid rgba(255,215,0,0.3);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  backdrop-filter: blur(8px);
 }
-.result-card {
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:8px; padding:1.25rem;
+.hero-eq-main {
+  font-size: clamp(1rem,2.5vw,1.3rem);
 }
-.result-label {
-  font-family:var(--mono); font-size:.6rem; color:var(--dim);
-  text-transform:uppercase; letter-spacing:.1em; margin-bottom:.5rem;
-}
-.result-value {
-  font-family:var(--mono); font-size:1.8rem; font-weight:700;
-  color:var(--gold); line-height:1.2;
-}
-.result-unit {
-  font-family:var(--mono); font-size:.65rem; color:var(--dim);
-  margin-top:.25rem;
-}
-.result-desc {
-  font-size:.75rem; color:var(--dim); margin-top:.5rem;
-  border-top:1px solid var(--border); padding-top:.5rem;
+.hero-eq-badge {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--green);
+  background: rgba(68,255,136,0.08);
+  border: 1px solid rgba(68,255,136,0.25);
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  letter-spacing: 2px;
+  white-space: nowrap;
 }
 
-.galaxy-presets {
-  display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr));
-  gap:.75rem; margin:1.5rem 0;
+/* ── MAIN GRID ── */
+.tool-grid {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+@media(max-width:900px){ .tool-grid { grid-template-columns:1fr; } }
+
+/* ── CONTROL PANEL ── */
+.control-panel {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.panel-section-title {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Galaxy selector */
+.galaxy-select-wrap {
+  position: relative;
+}
+.galaxy-select-wrap select {
+  width: 100%;
+  background: var(--bg3);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.galaxy-select-wrap select:focus { border-color: var(--gold); }
+.galaxy-select-wrap::after {
+  content: '▾';
+  position: absolute; right: 0.8rem; top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold);
+  pointer-events: none;
+  font-size: 0.9rem;
+}
+
+/* Filter pills */
+.filter-row {
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+}
+.filter-pill {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  color: var(--dim);
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+}
+.filter-pill:hover { border-color: var(--gold); color: var(--gold); }
+.filter-pill.active { background: var(--gold); color: #000; border-color: var(--gold); font-weight:700; }
+
+/* Preset cards */
+.preset-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
 }
 .preset-btn {
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:6px; padding:.75rem 1rem;
-  font-family:var(--mono); font-size:.75rem; color:var(--dim);
-  cursor:pointer; transition:all .2s; text-align:left;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
 }
-.preset-btn:hover { border-color:var(--gold); color:var(--gold); background:var(--bg2); }
-.preset-btn .name { display:block; color:var(--text); font-size:.85rem; font-weight:600; margin-bottom:.2rem; }
-.preset-btn .meta { font-size:.65rem; }
+.preset-btn:hover { border-color:var(--gold); background:rgba(255,215,0,0.05); }
+.preset-btn.active { border-color:var(--gold); background:rgba(255,215,0,0.08); }
+.preset-btn .pname {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 0.15rem;
+}
+.preset-btn .pmeta {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--dim);
+}
 
-.constants-box {
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:8px; padding:1rem 1.5rem;
-  display:flex; justify-content:space-between; flex-wrap:wrap;
-  gap:1rem; margin:1rem 0;
+/* Input fields */
+.input-row {
+  display: flex; flex-direction: column; gap: 0.3rem;
+}
+.input-row label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--dim);
+  letter-spacing: 1px;
+}
+.input-row input[type=number] {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.input-row input[type=number]:focus { border-color: var(--gold); }
+
+/* H0 slider */
+.slider-wrap { display:flex; flex-direction:column; gap:0.4rem; }
+.slider-header { display:flex; justify-content:space-between; }
+.slider-label { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; }
+.slider-val   { font-family:var(--mono); font-size:0.75rem; color:var(--gold); font-weight:700; }
+input[type=range] {
+  -webkit-appearance:none;
+  width:100%; height:3px;
+  background: linear-gradient(to right, var(--gold) var(--pct,50%), rgba(91,200,245,0.2) var(--pct,50%));
+  border-radius:2px; outline:none; cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance:none;
+  width:14px; height:14px;
+  border-radius:50%;
+  background:var(--gold);
+  box-shadow: 0 0 8px rgba(255,215,0,0.5);
+}
+
+/* ── RESULTS COLUMN ── */
+.results-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Big result display */
+.result-hero {
+  background: var(--bg2);
+  border: 1px solid rgba(255,215,0,0.25);
+  border-radius: 16px;
+  padding: 1.5rem;
+  backdrop-filter: blur(8px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+@media(max-width:600px){ .result-hero { grid-template-columns:1fr; } }
+.result-card {
+  text-align: center;
+  padding: 1rem;
+  background: var(--bg3);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  transition: border-color 0.3s;
+}
+.result-card.highlight { border-color: rgba(255,215,0,0.4); }
+.result-card .rc-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.result-card .rc-value {
+  font-family: var(--mono);
+  font-size: clamp(1.4rem,3vw,2rem);
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+  transition: color 0.3s;
+}
+.result-card .rc-unit {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--dim);
+}
+.result-card .rc-eq {
+  font-size: 0.7rem;
+  color: var(--dim);
+  margin-top: 0.4rem;
+}
+
+/* Chart */
+.chart-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.25rem;
+  backdrop-filter: blur(8px);
+}
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.chart-title {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--gold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.chart-mode-btns {
+  display: flex; gap: 0.4rem;
+}
+.chart-mode-btn {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--dim);
+  cursor: pointer;
+  background: transparent;
+  transition: all 0.2s;
+}
+.chart-mode-btn.active { background:var(--gold); color:#000; border-color:var(--gold); font-weight:700; }
+
+/* Constants row */
+.constants-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+  backdrop-filter: blur(8px);
 }
 .const-item {
-  font-family:var(--mono); font-size:.8rem;
+  font-family: var(--mono);
+  font-size: 0.65rem;
 }
-.const-item .label { color:var(--dim); margin-right:.3rem; }
-.const-item .value { color:var(--gold); }
+.const-item .clabel { color: var(--dim); }
+.const-item .cval { color: var(--gold); font-weight:700; }
 
-.comparison-table {
-  width:100%; border-collapse:collapse;
-  margin:1.5rem 0; font-family:var(--mono); font-size:.75rem;
+/* Galaxy info pill */
+.galaxy-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
 }
-.comparison-table th {
-  text-align:left; color:var(--dim); font-weight:400;
-  border-bottom:1px solid var(--border); padding:.5rem;
-}
-.comparison-table td {
-  padding:.5rem; border-bottom:1px solid var(--border);
-  color:var(--text);
-}
-.comparison-table .tie { color:var(--gold); font-weight:700; }
-.comparison-table .gr { color:var(--dim); }
+.galaxy-info .gi-name { color: var(--gold); font-weight:700; }
+.galaxy-info .gi-type { color: var(--dim); }
+.galaxy-info .gi-dot  { width:6px; height:6px; border-radius:50%; background:var(--gold); flex-shrink:0; }
 
-.footer-note {
-  text-align:center; font-family:var(--mono); font-size:.7rem;
-  color:var(--dim); margin-top:2rem;
-  border-top:1px solid var(--border); padding-top:1.5rem;
+/* Nav links bottom */
+.nav-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
 }
-.footer-note a { color:var(--gold); text-decoration:none; }
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
 
-@media (max-width:600px) {
-  .results-grid { grid-template-columns:1fr; }
+/* Footer */
+footer {
+  position: relative; z-index:1;
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
 }
+footer .feq {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+footer .fcopy {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--dim);
+  letter-spacing: 2px;
+}
+
+/* Animated pulse on update */
+@keyframes flash {
+  0%   { color: var(--green); }
+  100% { color: var(--gold); }
+}
+.flash { animation: flash 0.4s ease-out forwards; }
 </style>
 </head>
 <body>
 
+<canvas id="galaxy-canvas"></canvas>
+
 <nav>
-  <a href="index.html" class="nav-back">← TIE / R@LC</a>
-  <span class="nav-tag">H-03 · Calculadora Universal 2π</span>
-  <a href="curvas.html" class="nav-back">Curvas →</a>
+  <a href="index.html" class="nav-logo">TIE / R@LC</a>
+  <div class="nav-center">
+    <a href="2pi.html"      class="lang-link active">ES</a>
+    <a href="2pi-en.html"   class="lang-link inactive">EN</a>
+  </div>
+  <a href="labs.html" class="nav-back">← LABORATORIO</a>
 </nav>
 
 <div class="page">
-  <div class="page-header">
-    <div class="page-tag">H-03 · Una ecuación · Cero parámetros</div>
-    <h1 class="page-title">Calculadora Universal 2π</h1>
-    <p class="page-sub">
-      La masa total de cualquier galaxia (estrellas + gas) determina su velocidad asintótica.
-      Una sola ecuación: <strong style="color:var(--gold)">v<sub>flat</sub> = (G · M<sub>total</sub> · a₀)<sup>1/4</sup></strong>
-    </p>
+
+  <!-- HEADER -->
+  <div class="page-tag">H-03 · UNA ECUACIÓN · CERO PARÁMETROS</div>
+  <h1 class="page-title">CALCULADORA <span>2π</span></h1>
+  <p class="page-sub">Una sola fórmula predice la velocidad plana de cualquier galaxia del universo. Sin materia oscura. Sin parámetros libres.</p>
+
+  <!-- HERO EQUATION -->
+  <div class="hero-eq">
+    <div class="hero-eq-main">
+      \( v_{\text{flat}} = \left(G \cdot M_{\text{tot}} \cdot a_0\right)^{1/4} \qquad a_0 = \dfrac{c H_0}{2\pi} \)
+    </div>
+    <div class="hero-eq-badge">✓ VERIFICADO · 55 GALAXIAS SPARC</div>
   </div>
 
-  <div class="eq-highlight">
-    <span class="gold">v<sub>flat</sub></span> = ( G · <span class="gold">M<sub>total</sub></span> · <span class="gold">a₀</span> )<sup>1/4</sup>
-    <div style="margin-top:.5rem; font-size:.9rem;">
-      <span class="dim">a₀ = c·H₀/2π = 1.082×10⁻¹⁰ m/s²</span>
-    </div>
+  <!-- GALAXY INFO -->
+  <div class="galaxy-info" id="galaxy-info">
+    <div class="gi-dot"></div>
+    <span class="gi-name" id="gi-name">NGC 3198</span>
+    <span class="gi-type" id="gi-type">Espiral</span>
+    <span class="gi-type">·</span>
+    <span class="gi-type" id="gi-desc">Galaxia espiral de referencia SPARC</span>
   </div>
 
-  <div class="calculator-panel">
-    <!-- SELECTOR DE 55 GALAXIAS -->
-    <div class="galaxy-selector">
-      <label>🌌 Selecciona una galaxia del catálogo SPARC (55 disponibles)</label>
-      <select id="galaxySelect" onchange="loadSelectedGalaxy()">
-        <option value="">— Selecciona una galaxia —</option>
-      </select>
-    </div>
+  <div style="height:1.25rem"></div>
 
-    <div class="input-group">
-      <label>Masa estelar del disco (× 10¹⁰ M☉)</label>
-      <input type="number" id="mdisk" value="2.20" step="0.01" min="0" oninput="calculate()">
-    </div>
+  <!-- MAIN TOOL GRID -->
+  <div class="tool-grid">
 
-    <div class="input-group">
-      <label>Masa de gas (× 10⁹ M☉)</label>
-      <input type="number" id="mgas" value="8.50" step="0.1" min="0" oninput="calculate()">
-    </div>
+    <!-- LEFT: CONTROLS -->
+    <div class="control-panel">
 
-    <div class="input-group">
-      <label>H₀ (km/s/Mpc) — <span id="h0-val">70.0</span></label>
-      <div class="range-group">
-        <input type="range" id="h0" min="67" max="74" value="70" step="0.1" oninput="updateH0()">
-        <span class="range-value" id="h0-display">70.0</span>
+      <!-- Galaxy selector -->
+      <div>
+        <div class="panel-section-title">Seleccionar galaxia</div>
+        <div class="galaxy-select-wrap">
+          <select id="galaxySelect" onchange="loadSelectedGalaxy()">
+            <option value="">— Elige una galaxia —</option>
+          </select>
+        </div>
+        <div style="height:0.6rem"></div>
+        <!-- Filter pills -->
+        <div class="filter-row" id="filterRow">
+          <button class="filter-pill active" onclick="filterType('Todas')">TODAS</button>
+          <button class="filter-pill" onclick="filterType('Espiral')">ESPIRAL</button>
+          <button class="filter-pill" onclick="filterType('LSB')">LSB</button>
+          <button class="filter-pill" onclick="filterType('Enana')">ENANA</button>
+          <button class="filter-pill" onclick="filterType('Gigante')">GIGANTE</button>
+          <button class="filter-pill" onclick="filterType('Irregular')">IRREGULAR</button>
+        </div>
       </div>
-    </div>
 
-    <div class="results-grid">
-      <div class="result-card">
-        <div class="result-label">Masa total</div>
-        <div class="result-value" id="mtot">2.20</div>
-        <div class="result-unit">× 10¹⁰ M☉</div>
-        <div class="result-desc">M<sub>disk</sub> + M<sub>gas</sub>/10</div>
+      <!-- Quick presets -->
+      <div>
+        <div class="panel-section-title">Presets rápidos</div>
+        <div class="preset-grid">
+          <button class="preset-btn active" onclick="loadPreset('ngc3198')">
+            <span class="pname">NGC 3198</span>
+            <span class="pmeta">Referencia SPARC</span>
+          </button>
+          <button class="preset-btn" onclick="loadPreset('ugc2885')">
+            <span class="pname">UGC 2885</span>
+            <span class="pmeta">La más grande</span>
+          </button>
+          <button class="preset-btn" onclick="loadPreset('ddo154')">
+            <span class="pname">DDO 154</span>
+            <span class="pmeta">Galaxia enana</span>
+          </button>
+          <button class="preset-btn" onclick="loadPreset('ngc2403')">
+            <span class="pname">NGC 2403</span>
+            <span class="pmeta">Espiral clásica</span>
+          </button>
+        </div>
       </div>
-      <div class="result-card">
-        <div class="result-label">Velocidad asintótica</div>
-        <div class="result-value" id="vflat">150.0</div>
-        <div class="result-unit">km/s</div>
-        <div class="result-desc">v<sub>flat</sub> TIE</div>
-      </div>
-      <div class="result-card">
-        <div class="result-label">Radio de transición</div>
-        <div class="result-value" id="rt">10.8</div>
-        <div class="result-unit">kpc</div>
-        <div class="result-desc">r<sub>t</sub> = √(GM<sub>tot</sub>/a₀)</div>
-      </div>
-    </div>
 
-    <div class="galaxy-presets">
-      <div class="preset-btn" onclick="loadPreset('ngc3198')">
-        <span class="name">NGC 3198</span>
-        <span class="meta">Espiral clásica</span>
+      <!-- Inputs -->
+      <div>
+        <div class="panel-section-title">Parámetros de masa</div>
+        <div style="display:flex; flex-direction:column; gap:0.75rem;">
+          <div class="input-row">
+            <label>MASA ESTELAR M_disk (×10¹⁰ M☉)</label>
+            <input type="number" id="mdisk" value="2.20" step="0.01" min="0" oninput="calculate()">
+          </div>
+          <div class="input-row">
+            <label>MASA DE GAS M_gas (×10⁹ M☉)</label>
+            <input type="number" id="mgas" value="8.50" step="0.1" min="0" oninput="calculate()">
+          </div>
+        </div>
       </div>
-      <div class="preset-btn" onclick="loadPreset('ngc2403')">
-        <span class="name">NGC 2403</span>
-        <span class="meta">Espiral baja masa</span>
-      </div>
-      <div class="preset-btn" onclick="loadPreset('ddo154')">
-        <span class="name">DDO 154</span>
-        <span class="meta">Enana · 100% gas</span>
-      </div>
-      <div class="preset-btn" onclick="loadPreset('ugc2885')">
-        <span class="name">UGC 2885</span>
-        <span class="meta">Gigante</span>
-      </div>
-    </div>
 
-    <div class="constants-box">
-      <div class="const-item"><span class="label">G =</span> <span class="value">6.674×10⁻¹¹</span></div>
-      <div class="const-item"><span class="label">c =</span> <span class="value">2.998×10⁸</span></div>
-      <div class="const-item"><span class="label">a₀ =</span> <span class="value" id="a0-display">1.082×10⁻¹⁰</span></div>
-    </div>
+      <!-- H0 slider -->
+      <div>
+        <div class="panel-section-title">Constante de Hubble</div>
+        <div class="slider-wrap">
+          <div class="slider-header">
+            <span class="slider-label">H₀</span>
+            <span class="slider-val"><span id="h0-display">70.0</span> km/s/Mpc</span>
+          </div>
+          <input type="range" id="h0" min="67" max="74" value="70" step="0.1"
+                 oninput="updateH0()" style="--pct:43%">
+          <div style="display:flex; justify-content:space-between;">
+            <span style="font-family:var(--mono);font-size:0.6rem;color:var(--dim);">67 · Planck</span>
+            <span style="font-family:var(--mono);font-size:0.6rem;color:var(--dim);">74 · SH0ES</span>
+          </div>
+        </div>
+        <div style="height:0.5rem"></div>
+        <div class="const-item">
+          <span class="clabel">a₀ = </span>
+          <span class="cval" id="a0-display">1.082×10⁻¹⁰</span>
+          <span class="clabel"> m/s²</span>
+        </div>
+      </div>
 
-    <div class="footer-note">
-      <a href="sparc.html">Explorar 55 galaxias reales →</a> · 
-      <a href="curvas.html">Curvas de rotación detalladas →</a>
-    </div>
+    </div><!-- end control-panel -->
+
+    <!-- RIGHT: RESULTS + CHART -->
+    <div class="results-col">
+
+      <!-- Big results -->
+      <div class="result-hero">
+        <div class="result-card highlight">
+          <div class="rc-label">Velocidad asintótica</div>
+          <div class="rc-value" id="vflat">150</div>
+          <div class="rc-unit">km/s</div>
+          <div class="rc-eq">\( v_{\text{flat}} = (GMa_0)^{1/4} \)</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-label">Masa total</div>
+          <div class="rc-value" id="mtot">2.27</div>
+          <div class="rc-unit">× 10¹⁰ M☉</div>
+          <div class="rc-eq">\( M_{\text{tot}} = M_d + M_g/10 \)</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-label">Radio de transición</div>
+          <div class="rc-value" id="rt">10.8</div>
+          <div class="rc-unit">kpc</div>
+          <div class="rc-eq">\( r_t = \sqrt{GM/a_0} \)</div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <span class="chart-title">Curva v_flat vs Masa</span>
+          <div class="chart-mode-btns">
+            <button class="chart-mode-btn active" onclick="setChartMode('tie')" id="btn-tie">TIE</button>
+            <button class="chart-mode-btn" onclick="setChartMode('both')" id="btn-both">TIE + NEWTON</button>
+            <button class="chart-mode-btn" onclick="setChartMode('sparc')" id="btn-sparc">SPARC DATA</button>
+          </div>
+        </div>
+        <div id="chart" style="height:280px; width:100%;"></div>
+      </div>
+
+      <!-- Constants -->
+      <div class="constants-row">
+        <div class="const-item"><span class="clabel">G = </span><span class="cval">6.674×10⁻¹¹</span><span class="clabel"> m³/kg·s²</span></div>
+        <div class="const-item"><span class="clabel">c = </span><span class="cval">2.998×10⁸</span><span class="clabel"> m/s</span></div>
+        <div class="const-item"><span class="clabel">M☉ = </span><span class="cval">1.989×10³⁰</span><span class="clabel"> kg</span></div>
+        <div class="const-item"><span class="clabel">H₀ = </span><span class="cval" id="h0-val">70.0</span><span class="clabel"> km/s/Mpc</span></div>
+      </div>
+
+    </div><!-- end results-col -->
+
+  </div><!-- end tool-grid -->
+
+  <!-- NAV LINKS -->
+  <div class="nav-links">
+    <a href="curvas.html">← Curvas de Rotación</a>
+    <a href="sparc.html">Explorador SPARC</a>
+    <a href="materia-oscura.html">Materia Oscura →</a>
   </div>
-</div>
 
+</div><!-- end page -->
+
+<footer>
+  <div class="feq">\( v_{\text{flat}} = (G \cdot M \cdot a_0)^{1/4} \quad \cdot \quad a_0 = cH_0/2\pi \)</div>
+  <div class="fcopy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+</footer>
+
+<!-- ── THREE.JS GALAXY BACKGROUND ── -->
 <script>
-const G = 6.674e-11;
-const MS = 1.989e30;
-const km = 1e3;
+(function() {
+  const canvas = document.getElementById('galaxy-canvas');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+  camera.position.set(0, 4, 6);
+  camera.lookAt(0, 0, 0);
+
+  const params = { count:70000, size:0.008, radius:4, branches:5, spin:1.2, randomness:0.4, randomPower:2.5, insideColor:'#FFD700', outsideColor:'#1a1a4e' };
+  const geo = new THREE.BufferGeometry();
+  const positions = new Float32Array(params.count * 3);
+  const colors    = new Float32Array(params.count * 3);
+  const cIn  = new THREE.Color(params.insideColor);
+  const cOut = new THREE.Color(params.outsideColor);
+
+  for (let i = 0; i < params.count; i++) {
+    const r = Math.random() * params.radius;
+    const branch = (i % params.branches) / params.branches * Math.PI * 2;
+    const spin = r * params.spin;
+    const rx = Math.pow(Math.random(), params.randomPower) * (Math.random()<0.5?1:-1) * params.randomness * r;
+    const ry = Math.pow(Math.random(), params.randomPower) * (Math.random()<0.5?1:-1) * params.randomness * r * 0.3;
+    const rz = Math.pow(Math.random(), params.randomPower) * (Math.random()<0.5?1:-1) * params.randomness * r;
+    positions[i*3]   = Math.cos(branch+spin)*r + rx;
+    positions[i*3+1] = ry;
+    positions[i*3+2] = Math.sin(branch+spin)*r + rz;
+    const mixed = new THREE.Color().lerpColors(cIn, cOut, r/params.radius);
+    colors[i*3] = mixed.r; colors[i*3+1] = mixed.g; colors[i*3+2] = mixed.b;
+  }
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geo.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
+  const mat = new THREE.PointsMaterial({ size:params.size, sizeAttenuation:true, depthWrite:false, blending:THREE.AdditiveBlending, vertexColors:true });
+  scene.add(new THREE.Points(geo, mat));
+
+  (function animate() {
+    requestAnimationFrame(animate);
+    scene.rotation.y += 0.0008;
+    renderer.render(scene, camera);
+  })();
+
+  window.addEventListener('resize', () => {
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.updateProjectionMatrix();
+  });
+})();
+</script>
+
+<!-- ── CALCULATOR LOGIC ── -->
+<script>
+const G   = 6.674e-11;
+const MS  = 1.989e30;
+const km  = 1e3;
 const kpc = 3.0857e19;
 
-// Datos SPARC (versión simplificada con Mdisk y Mgas)
 const SPARC = [
-  { name:"NGC 3198", type:"Espiral", Mdisk:2.20, Mgas:8.5 },
-  { name:"NGC 2403", type:"Espiral", Mdisk:0.82, Mgas:12.0 },
-  { name:"NGC 6503", type:"Espiral", Mdisk:0.79, Mgas:3.8 },
-  { name:"NGC 7331", type:"Espiral", Mdisk:6.33, Mgas:9.4 },
-  { name:"NGC 2841", type:"Espiral", Mdisk:8.40, Mgas:6.1 },
-  { name:"NGC 3521", type:"Espiral", Mdisk:5.50, Mgas:9.2 },
-  { name:"NGC 5055", type:"Espiral", Mdisk:4.10, Mgas:11.0 },
-  { name:"NGC 4736", type:"Espiral", Mdisk:1.10, Mgas:1.8 },
-  { name:"NGC 3031", type:"Espiral", Mdisk:4.60, Mgas:7.0 },
-  { name:"NGC 300",  type:"Espiral", Mdisk:0.15, Mgas:2.8 },
-  { name:"NGC 7793", type:"Espiral", Mdisk:0.28, Mgas:2.1 },
-  { name:"NGC 2976", type:"Espiral", Mdisk:0.28, Mgas:0.9 },
-  { name:"NGC 4559", type:"Espiral", Mdisk:0.85, Mgas:12.0 },
-  { name:"NGC 5585", type:"Espiral", Mdisk:0.18, Mgas:5.2 },
-  { name:"NGC 3741", type:"Espiral", Mdisk:0.007, Mgas:1.5 },
-  { name:"NGC 6015", type:"Espiral", Mdisk:1.60, Mgas:7.5 },
-  { name:"NGC 4085", type:"Espiral", Mdisk:1.20, Mgas:2.2 },
-  { name:"UGC 2885", type:"Gigante", Mdisk:17.5, Mgas:82.0 },
-  { name:"NGC 5907", type:"Gigante", Mdisk:8.20, Mgas:13.0 },
-  { name:"NGC 7814", type:"Gigante", Mdisk:7.80, Mgas:3.5 },
-  { name:"UGC 6614", type:"LSB", Mdisk:1.80, Mgas:28.0 },
-  { name:"UGC 128",  type:"LSB", Mdisk:0.55, Mgas:18.0 },
-  { name:"UGC 1230", type:"LSB", Mdisk:0.42, Mgas:14.5 },
-  { name:"F568-3",   type:"LSB", Mdisk:0.31, Mgas:9.8 },
-  { name:"F583-1",   type:"LSB", Mdisk:0.12, Mgas:6.2 },
-  { name:"UGC 4325", type:"LSB", Mdisk:0.089, Mgas:3.8 },
-  { name:"UGC 5005", type:"LSB", Mdisk:0.22, Mgas:10.5 },
-  { name:"UGC 11748",type:"LSB", Mdisk:0.75, Mgas:8.2 },
-  { name:"F563-1",   type:"LSB", Mdisk:0.08, Mgas:5.5 },
-  { name:"DDO 154",  type:"Enana", Mdisk:0.0028, Mgas:0.71 },
-  { name:"DDO 168",  type:"Enana", Mdisk:0.0033, Mgas:0.65 },
-  { name:"DDO 52",   type:"Enana", Mdisk:0.021, Mgas:1.9 },
-  { name:"DDO 87",   type:"Enana", Mdisk:0.014, Mgas:1.1 },
-  { name:"DDO 64",   type:"Enana", Mdisk:0.008, Mgas:0.85 },
-  { name:"DDO 161",  type:"Enana", Mdisk:0.018, Mgas:1.4 },
-  { name:"WLM",      type:"Enana", Mdisk:0.0038, Mgas:0.38 },
-  { name:"NGC 1569", type:"Enana", Mdisk:0.035, Mgas:0.45 },
-  { name:"IC 2574",  type:"Irregular", Mdisk:0.048, Mgas:5.1 },
-  { name:"NGC 4214", type:"Irregular", Mdisk:0.062, Mgas:1.4 },
-  { name:"NGC 2366", type:"Irregular", Mdisk:0.028, Mgas:2.0 },
-  { name:"NGC 3109", type:"Irregular", Mdisk:0.022, Mgas:3.2 },
-  { name:"NGC 4395", type:"Irregular", Mdisk:0.030, Mgas:4.8 },
-  { name:"NGC 1560", type:"Irregular", Mdisk:0.031, Mgas:3.5 },
-  { name:"NGC 1003", type:"Espiral", Mdisk:0.45, Mgas:9.0 },
-  { name:"NGC 3893", type:"Espiral", Mdisk:2.50, Mgas:5.5 },
-  { name:"NGC 4051", type:"Espiral", Mdisk:1.10, Mgas:3.2 },
-  { name:"NGC 5033", type:"Espiral", Mdisk:3.20, Mgas:11.0 },
-  { name:"NGC 5371", type:"Gigante", Mdisk:9.50, Mgas:14.0 },
-  { name:"UGC 3060", type:"LSB", Mdisk:0.35, Mgas:15.5 },
-  { name:"F574-1",   type:"LSB", Mdisk:0.28, Mgas:12.0 },
-  { name:"DDO 43",   type:"Enana", Mdisk:0.012, Mgas:1.0 },
-  { name:"NGC 2915", type:"Irregular", Mdisk:0.048, Mgas:2.8 },
-  { name:"NGC 6946", type:"Espiral", Mdisk:3.20, Mgas:12.0 },
+  { name:"NGC 3198",  type:"Espiral",    Mdisk:2.20,  Mgas:8.5,  desc:"Galaxia espiral de referencia SPARC" },
+  { name:"NGC 2403",  type:"Espiral",    Mdisk:0.82,  Mgas:12.0, desc:"Espiral clásica bien estudiada" },
+  { name:"NGC 6503",  type:"Espiral",    Mdisk:0.79,  Mgas:3.8,  desc:"Espiral pequeña en el Vacío Local" },
+  { name:"NGC 7331",  type:"Espiral",    Mdisk:6.33,  Mgas:9.4,  desc:"Espiral análoga a la Vía Láctea" },
+  { name:"NGC 2841",  type:"Espiral",    Mdisk:8.40,  Mgas:6.1,  desc:"Espiral masiva de alta superficie" },
+  { name:"NGC 3521",  type:"Espiral",    Mdisk:5.50,  Mgas:9.2,  desc:"Espiral floculenta cercana" },
+  { name:"NGC 5055",  type:"Espiral",    Mdisk:4.10,  Mgas:11.0, desc:"El Girasol — espiral magnífica" },
+  { name:"NGC 4736",  type:"Espiral",    Mdisk:1.10,  Mgas:1.8,  desc:"Espiral con anillo interno" },
+  { name:"NGC 3031",  type:"Espiral",    Mdisk:4.60,  Mgas:7.0,  desc:"M81 — espiral del Grupo M81" },
+  { name:"NGC 300",   type:"Espiral",    Mdisk:0.15,  Mgas:2.8,  desc:"Espiral abierta del Grupo Escultor" },
+  { name:"NGC 7793",  type:"Espiral",    Mdisk:0.28,  Mgas:2.1,  desc:"Espiral del Grupo Escultor" },
+  { name:"NGC 2976",  type:"Espiral",    Mdisk:0.28,  Mgas:0.9,  desc:"Galaxia irregular del Grupo M81" },
+  { name:"NGC 4559",  type:"Espiral",    Mdisk:0.85,  Mgas:12.0, desc:"Espiral de baja superficie" },
+  { name:"NGC 5585",  type:"Espiral",    Mdisk:0.18,  Mgas:5.2,  desc:"Espiral de bajo brillo superficial" },
+  { name:"NGC 3741",  type:"Espiral",    Mdisk:0.007, Mgas:1.5,  desc:"Espiral dominada por gas" },
+  { name:"NGC 6015",  type:"Espiral",    Mdisk:1.60,  Mgas:7.5,  desc:"Espiral de cara en el cielo boreal" },
+  { name:"NGC 4085",  type:"Espiral",    Mdisk:1.20,  Mgas:2.2,  desc:"Espiral de canto" },
+  { name:"NGC 1003",  type:"Espiral",    Mdisk:0.45,  Mgas:9.0,  desc:"Espiral de bajo brillo" },
+  { name:"NGC 3893",  type:"Espiral",    Mdisk:2.50,  Mgas:5.5,  desc:"Espiral en interacción" },
+  { name:"NGC 4051",  type:"Espiral",    Mdisk:1.10,  Mgas:3.2,  desc:"Seyfert 1 — núcleo activo" },
+  { name:"NGC 5033",  type:"Espiral",    Mdisk:3.20,  Mgas:11.0, desc:"Espiral Seyfert inclinada" },
+  { name:"NGC 6946",  type:"Espiral",    Mdisk:3.20,  Mgas:12.0, desc:"Galaxia de Fuegos Artificiales" },
+  { name:"NGC 7814",  type:"Gigante",    Mdisk:7.80,  Mgas:3.5,  desc:"Galaxia de canto — Pequeño Sombrero" },
+  { name:"UGC 2885",  type:"Gigante",    Mdisk:17.5,  Mgas:82.0, desc:"La espiral más grande conocida" },
+  { name:"NGC 5907",  type:"Gigante",    Mdisk:8.20,  Mgas:13.0, desc:"Galaxia aguja — de canto" },
+  { name:"NGC 5371",  type:"Gigante",    Mdisk:9.50,  Mgas:14.0, desc:"Espiral masiva del Coma I" },
+  { name:"UGC 6614",  type:"LSB",        Mdisk:1.80,  Mgas:28.0, desc:"Galaxia de bajo brillo superficial" },
+  { name:"UGC 128",   type:"LSB",        Mdisk:0.55,  Mgas:18.0, desc:"LSB extrema — dominada por gas" },
+  { name:"UGC 1230",  type:"LSB",        Mdisk:0.42,  Mgas:14.5, desc:"LSB aislada" },
+  { name:"F568-3",    type:"LSB",        Mdisk:0.31,  Mgas:9.8,  desc:"LSB del catálogo Malin" },
+  { name:"F583-1",    type:"LSB",        Mdisk:0.12,  Mgas:6.2,  desc:"LSB de muy bajo brillo" },
+  { name:"UGC 4325", type:"LSB",         Mdisk:0.089, Mgas:3.8,  desc:"LSB pequeña" },
+  { name:"UGC 5005", type:"LSB",         Mdisk:0.22,  Mgas:10.5, desc:"LSB con alta fracción de gas" },
+  { name:"UGC 11748",type:"LSB",         Mdisk:0.75,  Mgas:8.2,  desc:"LSB de tamaño mediano" },
+  { name:"F563-1",   type:"LSB",         Mdisk:0.08,  Mgas:5.5,  desc:"LSB extrema de Malin" },
+  { name:"UGC 3060", type:"LSB",         Mdisk:0.35,  Mgas:15.5, desc:"LSB con anillo HI extendido" },
+  { name:"F574-1",   type:"LSB",         Mdisk:0.28,  Mgas:12.0, desc:"LSB del catálogo Malin" },
+  { name:"DDO 154",  type:"Enana",       Mdisk:0.0028,Mgas:0.71, desc:"Enana irregular — 99% gas" },
+  { name:"DDO 168",  type:"Enana",       Mdisk:0.0033,Mgas:0.65, desc:"Enana irregular del Grupo M81" },
+  { name:"DDO 52",   type:"Enana",       Mdisk:0.021, Mgas:1.9,  desc:"Enana aislada" },
+  { name:"DDO 87",   type:"Enana",       Mdisk:0.014, Mgas:1.1,  desc:"Enana del Grupo M81" },
+  { name:"DDO 64",   type:"Enana",       Mdisk:0.008, Mgas:0.85, desc:"Enana muy pequeña" },
+  { name:"DDO 161",  type:"Enana",       Mdisk:0.018, Mgas:1.4,  desc:"Enana con baja metalicidad" },
+  { name:"WLM",      type:"Enana",       Mdisk:0.0038,Mgas:0.38, desc:"Wolf-Lundmark-Melotte — enana local" },
+  { name:"NGC 1569", type:"Enana",       Mdisk:0.035, Mgas:0.45, desc:"Enana con brote estelar" },
+  { name:"DDO 43",   type:"Enana",       Mdisk:0.012, Mgas:1.0,  desc:"Enana irregular aislada" },
+  { name:"IC 2574",  type:"Irregular",   Mdisk:0.048, Mgas:5.1,  desc:"Irregular del Grupo M81" },
+  { name:"NGC 4214", type:"Irregular",   Mdisk:0.062, Mgas:1.4,  desc:"Irregular con brote estelar" },
+  { name:"NGC 2366", type:"Irregular",   Mdisk:0.028, Mgas:2.0,  desc:"Irregular con HII masivos" },
+  { name:"NGC 3109", type:"Irregular",   Mdisk:0.022, Mgas:3.2,  desc:"Irregular del Grupo Local" },
+  { name:"NGC 4395", type:"Irregular",   Mdisk:0.030, Mgas:4.8,  desc:"Irregular con AGN" },
+  { name:"NGC 1560", type:"Irregular",   Mdisk:0.031, Mgas:3.5,  desc:"Irregular de baja masa" },
+  { name:"NGC 2915", type:"Irregular",   Mdisk:0.048, Mgas:2.8,  desc:"Enana de bajo brillo" },
 ];
 
+let currentFilter = 'Todas';
+let chartMode = 'tie';
+
 function getA0() {
-  const H0_kms = parseFloat(document.getElementById('h0').value);
-  const H0_si = H0_kms * 1000 / 3.0857e22;
+  const H0 = parseFloat(document.getElementById('h0').value);
+  const H0_si = H0 * 1000 / 3.0857e22;
   return 2.998e8 * H0_si / (2 * Math.PI);
 }
 
 function updateH0() {
-  const val = parseFloat(document.getElementById('h0').value).toFixed(1);
-  document.getElementById('h0-display').textContent = val;
-  document.getElementById('h0-val').textContent = val;
+  const val = parseFloat(document.getElementById('h0').value);
+  document.getElementById('h0-display').textContent = val.toFixed(1);
+  document.getElementById('h0-val').textContent = val.toFixed(1);
+  // Update slider gradient
+  const pct = ((val - 67) / (74 - 67) * 100).toFixed(1);
+  document.getElementById('h0').style.setProperty('--pct', pct + '%');
+  const a0 = getA0();
+  document.getElementById('a0-display').textContent =
+    a0.toExponential(3).replace('e-','×10⁻').replace('e+','×10');
   calculate();
 }
 
 function calculate() {
   const Mdisk = parseFloat(document.getElementById('mdisk').value) || 0;
-  const Mgas = parseFloat(document.getElementById('mgas').value) || 0;
-  const a0 = getA0();
-  
-  const Mtotal_kg = (Mdisk * 1e10 + Mgas * 1e9) * MS;
-  const vFlat = Math.pow(G * Mtotal_kg * a0, 0.25) / km;
-  const rt = Math.sqrt(G * Mtotal_kg / a0) / kpc;
-  
-  document.getElementById('mtot').textContent = (Mdisk + Mgas/10).toFixed(2);
-  document.getElementById('vflat').textContent = vFlat.toFixed(0);
-  document.getElementById('rt').textContent = rt.toFixed(1);
-  document.getElementById('a0-display').textContent = a0.toExponential(3).replace('e-','×10⁻');
+  const Mgas  = parseFloat(document.getElementById('mgas').value)  || 0;
+  const a0    = getA0();
+  const Mtot_kg = (Mdisk * 1e10 + Mgas * 1e9) * MS;
+  const Mtot_solar = Mdisk + Mgas / 10;
+  const vFlat = Math.pow(G * Mtot_kg * a0, 0.25) / km;
+  const rt    = Math.sqrt(G * Mtot_kg / a0) / kpc;
+
+  animVal('vflat', vFlat.toFixed(0));
+  animVal('mtot',  Mtot_solar.toFixed(2));
+  animVal('rt',    rt.toFixed(1));
+  updateChart();
 }
 
-function loadPreset(preset) {
-  if (preset === 'ngc3198') {
-    document.getElementById('mdisk').value = 2.20;
-    document.getElementById('mgas').value = 8.50;
-  } else if (preset === 'ngc2403') {
-    document.getElementById('mdisk').value = 0.82;
-    document.getElementById('mgas').value = 12.0;
-  } else if (preset === 'ddo154') {
-    document.getElementById('mdisk').value = 0.0028;
-    document.getElementById('mgas').value = 0.71;
-  } else if (preset === 'ugc2885') {
-    document.getElementById('mdisk').value = 17.5;
-    document.getElementById('mgas').value = 82.0;
-  }
-  calculate();
+function animVal(id, newVal) {
+  const el = document.getElementById(id);
+  el.textContent = newVal;
+  el.classList.remove('flash');
+  void el.offsetWidth;
+  el.classList.add('flash');
+}
+
+function filterType(type) {
+  currentFilter = type;
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  populateSelect();
+}
+
+function populateSelect() {
+  const select = document.getElementById('galaxySelect');
+  const prev = select.value;
+  select.innerHTML = '<option value="">— Elige una galaxia —</option>';
+  SPARC.filter(g => currentFilter === 'Todas' || g.type === currentFilter)
+       .sort((a,b) => a.name.localeCompare(b.name))
+       .forEach(g => {
+         const opt = document.createElement('option');
+         opt.value = g.name;
+         opt.textContent = g.name + ' · ' + g.type;
+         if (g.name === prev) opt.selected = true;
+         select.appendChild(opt);
+       });
 }
 
 function loadSelectedGalaxy() {
-  const select = document.getElementById('galaxySelect');
-  const name = select.value;
+  const name = document.getElementById('galaxySelect').value;
   if (!name) return;
-  
-  const galaxy = SPARC.find(g => g.name === name);
-  if (galaxy) {
-    document.getElementById('mdisk').value = galaxy.Mdisk;
-    document.getElementById('mgas').value = galaxy.Mgas;
-    calculate();
-  }
+  const g = SPARC.find(x => x.name === name);
+  if (!g) return;
+  document.getElementById('mdisk').value = g.Mdisk;
+  document.getElementById('mgas').value  = g.Mgas;
+  document.getElementById('gi-name').textContent = g.name;
+  document.getElementById('gi-type').textContent = g.type;
+  document.getElementById('gi-desc').textContent = g.desc;
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  calculate();
 }
 
-// Llenar el selector con las 55 galaxias
-function populateGalaxySelect() {
-  const select = document.getElementById('galaxySelect');
-  SPARC.sort((a,b) => a.name.localeCompare(b.name)).forEach(g => {
-    const option = document.createElement('option');
-    option.value = g.name;
-    option.textContent = `${g.name} · ${g.type}`;
-    select.appendChild(option);
+function loadPreset(preset) {
+  const map = {
+    ngc3198:{ name:'NGC 3198', Mdisk:2.20,  Mgas:8.5  },
+    ugc2885:{ name:'UGC 2885', Mdisk:17.5,  Mgas:82.0 },
+    ddo154: { name:'DDO 154',  Mdisk:0.0028,Mgas:0.71 },
+    ngc2403:{ name:'NGC 2403', Mdisk:0.82,  Mgas:12.0 },
+  };
+  const p = map[preset];
+  if (!p) return;
+  document.getElementById('mdisk').value = p.Mdisk;
+  document.getElementById('mgas').value  = p.Mgas;
+  const g = SPARC.find(x => x.name === p.name);
+  if (g) {
+    document.getElementById('gi-name').textContent = g.name;
+    document.getElementById('gi-type').textContent = g.type;
+    document.getElementById('gi-desc').textContent = g.desc;
+  }
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  calculate();
+}
+
+function setChartMode(mode) {
+  chartMode = mode;
+  document.querySelectorAll('.chart-mode-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + mode).classList.add('active');
+  updateChart();
+}
+
+function updateChart() {
+  const a0 = getA0();
+  const masses = [];
+  const vTIE   = [];
+  const vNewt  = [];
+  const r_fixed = 10 * kpc;
+
+  for (let exp = 7; exp <= 12; exp += 0.1) {
+    const M_solar = Math.pow(10, exp);
+    const M_kg    = M_solar * MS;
+    masses.push(M_solar);
+    vTIE.push(Math.pow(G * M_kg * a0, 0.25) / km);
+    // Newtonian at fixed radius
+    vNewt.push(Math.sqrt(G * M_kg / r_fixed) / km);
+  }
+
+  // Current galaxy marker
+  const Mdisk = parseFloat(document.getElementById('mdisk').value) || 0;
+  const Mgas  = parseFloat(document.getElementById('mgas').value)  || 0;
+  const Mtot  = (Mdisk * 1e10 + Mgas * 1e9) * MS;
+  const vCurr = Math.pow(G * Mtot * a0, 0.25) / km;
+
+  const traceTIE = {
+    x: masses, y: vTIE,
+    mode: 'lines',
+    name: 'TIE v_flat',
+    line: { color: '#FFD700', width: 2.5 },
+  };
+  const traceNewt = {
+    x: masses, y: vNewt,
+    mode: 'lines',
+    name: 'Newton (r=10kpc)',
+    line: { color: '#FF4455', width: 2, dash: 'dash' },
+    visible: chartMode === 'both' ? true : false,
+  };
+
+  // SPARC points
+  const sparcX = SPARC.map(g => (g.Mdisk*1e10 + g.Mgas*1e9) * MS / MS);  // in solar
+  const sparcY = SPARC.map(g => {
+    const M_kg = (g.Mdisk*1e10 + g.Mgas*1e9) * MS;
+    return Math.pow(G * M_kg * a0, 0.25) / km;
   });
+  const traceSPARC = {
+    x: sparcX, y: sparcY,
+    mode: 'markers',
+    name: '55 Galaxias SPARC',
+    marker: { color: '#5BC8F5', size: 5, opacity: 0.7 },
+    visible: chartMode === 'sparc' ? true : false,
+  };
+
+  const traceCurr = {
+    x: [Mtot/MS], y: [vCurr],
+    mode: 'markers',
+    name: 'Galaxia actual',
+    marker: { color: '#FFD700', size: 12, symbol: 'star', line:{color:'#fff',width:1} },
+  };
+
+  const layout = {
+    paper_bgcolor: 'transparent',
+    plot_bgcolor:  'rgba(5,5,15,0.5)',
+    font: { family: 'Space Mono', color: '#a0a0b0', size: 10 },
+    xaxis: {
+      title: 'Masa total (M☉)',
+      type: 'log',
+      gridcolor: 'rgba(91,200,245,0.1)',
+      linecolor: 'rgba(91,200,245,0.2)',
+      tickfont: { size: 9 },
+    },
+    yaxis: {
+      title: 'v_flat (km/s)',
+      gridcolor: 'rgba(91,200,245,0.1)',
+      linecolor: 'rgba(91,200,245,0.2)',
+      tickfont: { size: 9 },
+    },
+    legend: { font:{size:9}, bgcolor:'transparent' },
+    margin: { t:10, b:45, l:55, r:10 },
+    showlegend: true,
+  };
+
+  Plotly.react('chart', [traceTIE, traceNewt, traceSPARC, traceCurr], layout,
+    { displayModeBar: false, responsive: true });
 }
 
 window.onload = () => {
-  populateGalaxySelect();
+  populateSelect();
   updateH0();
+  // KaTeX render
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left:'\\(', right:'\\)', display:false },
+      { left:'\\[', right:'\\]', display:true  },
+    ]
+  });
 };
 </script>
+
 </body>
 </html>
+

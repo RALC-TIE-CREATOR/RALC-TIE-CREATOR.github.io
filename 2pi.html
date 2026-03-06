@@ -792,7 +792,7 @@ const SPARC = [
 
 const CHART_NOTES = {
   tie:   '<span style="color:var(--gold)">Relación de Tully-Fisher TIE</span> · La línea dorada es <em>v=(GMa₀)¼</em> — una sola ecuación para todo el universo. La estrella ★ marca la galaxia actual. Mueve el slider H₀ y observa cómo se desplaza toda la curva.',
-  both:  '<span style="color:var(--gold)">TIE vs Newton</span> · Newton (rojo) calculado en rₜ — el radio de transición propio de cada masa. A igual masa, Newton <em>cae</em> mientras TIE predice la velocidad asintótica observada. La brecha entre ambas es el "problema de la materia oscura".',
+  both:  '<span style="color:var(--gold)">TIE vs Newton</span> · Newton (rojo) calculado a <strong>r=5 kpc</strong> — radio típico donde se mide la discrepancia en galaxias reales. Para enanas (masa baja) Newton predice velocidades muy por debajo de lo observado. La brecha es el "problema de la materia oscura".',
   sparc: '<span style="color:var(--gold)">Velocidades observadas reales</span> · Puntos coloreados por error TIE: <span style="color:#44FF88">verde</span> &lt;10% · <span style="color:#FFD700">oro</span> 10–25% · <span style="color:#FF4455">rojo</span> &gt;25%. Hover para ver nombre y error individual. La línea dorada es la predicción sin ajuste.',
 };
 
@@ -903,32 +903,31 @@ function setChartMode(mode) {
 function updateChart() {
   const a0 = getA0();
   const masses = [], vTIE = [], vNewtLine = [];
+  const r_obs = 5 * kpc; // radio observacional típico — donde se mide la discrepancia real
 
   for (let exp = 7; exp <= 12; exp += 0.08) {
     const M_kg = Math.pow(10, exp) * MS;
     masses.push(Math.pow(10, exp));
     vTIE.push(Math.pow(G * M_kg * a0, 0.25) / km);
-    // Newton at r_t — transition radius for each mass
-    const rt_m = Math.sqrt(G * M_kg / a0);
-    vNewtLine.push(Math.sqrt(G * M_kg / rt_m) / km);
+    // Newton a r=5 kpc fijo — muestra la caída real vs TIE
+    vNewtLine.push(Math.sqrt(G * M_kg / r_obs) / km);
   }
 
   const Mdisk = parseFloat(document.getElementById('mdisk').value) || 0;
   const Mgas  = parseFloat(document.getElementById('mgas').value)  || 0;
   const Mtot  = (Mdisk * 1e10 + Mgas * 1e9) * MS;
-  const vCurr = Math.pow(G * Mtot * a0, 0.25) / km;
 
   const traceTIE = {
     x: masses, y: vTIE, mode: 'lines', name: 'TIE v_flat = (GMa₀)¼',
     line: { color: '#FFD700', width: 2.5 },
   };
   const traceNewt = {
-    x: masses, y: vNewtLine, mode: 'lines', name: 'Newton (en rₜ)',
+    x: masses, y: vNewtLine, mode: 'lines', name: 'Newton (r=5 kpc)',
     line: { color: '#FF4455', width: 2, dash: 'dash' },
     visible: chartMode === 'both',
   };
 
-  // v_obs reales coloreados por error
+  // v_obs reales — colores recalculados con a0 actual (se actualizan con H₀)
   const sparcColors = SPARC.map(g => {
     const vt = Math.pow(G * (g.Mdisk*1e10+g.Mgas*1e9)*MS*a0, 0.25)/km;
     const e  = Math.abs(vt - g.vobs) / g.vobs * 100;
@@ -948,10 +947,6 @@ function updateChart() {
     hovertemplate: '%{text}<extra></extra>',
     visible: chartMode === 'sparc',
   };
-  const traceCurr = {
-    x: [Mtot/MS], y: [vCurr], mode: 'markers', name: 'Galaxia actual',
-    marker: { color: '#FFD700', size: 14, symbol: 'star', line:{color:'#fff',width:1.5} },
-  };
 
   const layout = {
     paper_bgcolor:'transparent', plot_bgcolor:'rgba(5,5,15,0.5)',
@@ -964,7 +959,7 @@ function updateChart() {
     margin:{ t:10, b:45, l:55, r:10 },
   };
 
-  Plotly.react('chart', [traceTIE, traceNewt, traceObs, traceCurr], layout,
+  Plotly.react('chart', [traceTIE, traceNewt, traceObs], layout,
     { displayModeBar:false, responsive:true });
 
   document.getElementById('chart-note').innerHTML = CHART_NOTES[chartMode] || '';

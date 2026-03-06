@@ -3,686 +3,350 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>H-12 · Corrección GPS TIE · Calculadora Universal</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<title>TIE · H-12 · Corrección GPS</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 <style>
-:root {
-  --gold: #FFD700;
-  --blue: #5BC8F5;
-  --green: #44FF88;
-  --red: #FF4455;
-  --bg: #06060f;
-  --bg2: #0d0d1a;
-  --bg3: #111122;
-  --text: #e8e8f0;
-  --dim: #7777aa;
-  --border: #1e1e3a;
-  --mono: 'Space Mono', monospace;
-  --sans: 'Syne', sans-serif;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-body {
-  background:var(--bg); color:var(--text);
-  font-family:var(--sans); min-height:100vh; display:flex; flex-direction:column;
-}
+:root{--gold:#FFD700;--blue:#5BC8F5;--green:#44FF88;--red:#FF4455;--bg:#000001;--bg2:rgba(5,5,15,0.75);--bg3:rgba(10,10,25,0.55);--text:#ffffff;--dim:#a0a0b0;--border:rgba(91,200,245,0.15);--mono:'Space Mono',monospace;--sans:'Syne',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+#galaxy-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.35;}
+nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
+.nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
+.nav-center{display:flex;gap:.5rem;}
+.lang-link{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;transition:all .2s;}
+.lang-link.active{color:#000;background:var(--gold);}
+.lang-link.inactive{color:var(--dim);border:1px solid var(--border);}
+.lang-link.inactive:hover{color:var(--gold);border-color:var(--gold);}
+.nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-back:hover{color:var(--gold);}
+.page{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:7rem 2rem 4rem;}
+.page-tag{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:.75rem;}
+.page-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;letter-spacing:-2px;margin-bottom:.5rem;}
+.page-title span{color:var(--gold);}
+.page-sub{font-family:var(--mono);font-size:.8rem;color:var(--dim);max-width:620px;line-height:1.6;margin-bottom:2rem;}
+.hero-eq{background:var(--bg2);border:1px solid rgba(255,215,0,0.3);border-radius:16px;padding:1.5rem 2rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;backdrop-filter:blur(8px);}
+.hero-eq-badge{font-family:var(--mono);font-size:.65rem;color:var(--green);background:rgba(68,255,136,0.08);border:1px solid rgba(68,255,136,0.25);border-radius:6px;padding:.4rem .8rem;letter-spacing:2px;white-space:nowrap;}
 
-nav {
-  flex-shrink:0;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:.8rem 2rem;
-  background:rgba(6,6,15,.95); backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border);
-}
-.nav-back  { font-family:var(--mono); font-size:.85rem; color:var(--dim); text-decoration:none; }
-.nav-back:hover { color:var(--gold); }
-.nav-tag   { font-family:var(--mono); font-size:.75rem; color:var(--dim); letter-spacing:.1em; }
+/* Big result hero */
+.result-hero{background:var(--bg2);border:1px solid rgba(255,215,0,.3);border-radius:16px;padding:1.5rem 2rem;backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:space-around;flex-wrap:wrap;gap:1.5rem;margin-bottom:1.5rem;}
+.rh-item{text-align:center;}
+.rh-label{font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:.3rem;}
+.rh-value{font-family:var(--mono);font-size:2.5rem;font-weight:700;line-height:1;}
+.rh-unit{font-family:var(--mono);font-size:.65rem;color:var(--dim);margin-top:.2rem;}
+.rh-value.gold{color:var(--gold);}
+.rh-value.blue{color:var(--blue);}
+.rh-value.green{color:var(--green);}
+.rh-divider{width:1px;height:60px;background:var(--border);}
 
-.page {
-  max-width:1200px; margin:0 auto; padding:1.5rem 2rem; width:100%;
-}
+.tool-grid{display:grid;grid-template-columns:360px 1fr;gap:1.5rem;align-items:start;}
+@media(max-width:900px){.tool-grid{grid-template-columns:1fr;}}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;backdrop-filter:blur(8px);}
+.panel-title{font-family:var(--mono);font-size:.65rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;padding-bottom:.5rem;border-bottom:1px solid var(--border);margin-bottom:1.25rem;}
+.input-row{display:flex;flex-direction:column;gap:.3rem;margin-bottom:.75rem;}
+.input-row label{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:1px;}
+.input-row input[type=number]{background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:1rem;padding:.5rem .75rem;width:100%;outline:none;transition:border-color .2s;}
+.input-row input[type=number]:focus{border-color:var(--gold);}
+.preset-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem;}
+.preset-btn{font-family:var(--mono);font-size:.6rem;padding:.25rem .6rem;border-radius:4px;border:1px solid var(--border);color:var(--dim);cursor:pointer;background:transparent;transition:all .2s;}
+.preset-btn:hover{border-color:var(--gold);color:var(--gold);}
+.preset-btn.active{background:var(--gold);color:#000;border-color:var(--gold);font-weight:700;}
 
-.page-header { margin-bottom:1.2rem; }
-.page-tag {
-  font-family:var(--mono); font-size:.8rem; letter-spacing:.2em; color:var(--gold);
-  text-transform:uppercase;
-}
-.page-title { font-size:2rem; font-weight:800; margin-bottom:0.3rem; }
-.page-sub { color:var(--dim); font-size:.95rem; line-height:1.5; }
+/* Mission table */
+.data-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.68rem;}
+.data-table th{color:var(--dim);font-weight:400;text-align:left;padding:.45rem .6rem;border-bottom:1px solid var(--border);}
+.data-table td{padding:.4rem .6rem;border-bottom:1px solid rgba(91,200,245,.07);}
+.data-table tr:hover td{background:rgba(255,215,0,.03);}
+.data-table .gold{color:var(--gold);}
+.data-table .green{color:var(--green);}
+.data-table .tie{color:var(--gold);font-weight:700;}
+.data-table .obs{color:var(--blue);}
 
-.eq-highlight {
-  background:var(--bg2); border-left:4px solid var(--gold);
-  border-radius:0 8px 8px 0; padding:1rem 1.8rem;
-  margin:1rem 0;
-  font-family:var(--mono); font-size:1.1rem; text-align:center;
-}
-.eq-highlight .gold { color:var(--gold); font-weight:700; }
-.eq-highlight .small { font-size:0.85rem; margin-top:0.3rem; color:var(--dim); }
+/* 3-col comparison */
+.comp3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.25rem;}
+@media(max-width:600px){.comp3{grid-template-columns:1fr;}}
+.comp3-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:center;}
+.comp3-card.hi{border-color:rgba(255,215,0,.35);}
+.c3-src{font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-bottom:.4rem;}
+.c3-val{font-family:var(--mono);font-size:1.3rem;font-weight:700;margin-bottom:.2rem;}
+.c3-err{font-family:var(--mono);font-size:.6rem;}
 
-.calculator-panel {
-  background:var(--bg2); border:1px solid var(--border);
-  border-radius:12px; padding:1.5rem;
-  display:flex; flex-direction:column; gap:1.2rem;
-}
+/* Record box */
+.record-box{background:rgba(91,200,245,.05);border:1px solid rgba(91,200,245,.2);border-radius:12px;padding:1.1rem 1.25rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+.record-icon{font-size:2rem;flex-shrink:0;}
+.record-title{font-family:var(--mono);font-size:.6rem;color:var(--blue);letter-spacing:2px;text-transform:uppercase;margin-bottom:.25rem;}
+.record-name{font-weight:700;color:var(--text);}
+.record-value{color:var(--gold);font-weight:700;}
+.record-desc{font-family:var(--mono);font-size:.65rem;color:var(--dim);margin-top:.2rem;}
 
-/* NUEVA SECCIÓN: CALCULADORA UNIVERSAL */
-.calculator-grid {
-  display:grid; grid-template-columns:1fr 1fr;
-  gap:1.5rem; margin:1rem 0;
-}
-.calculator-card {
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:8px; padding:1.2rem;
-}
-.calculator-card h3 {
-  font-family:var(--mono); font-size:.8rem; color:var(--gold);
-  margin-bottom:0.8rem; border-bottom:1px solid var(--border); padding-bottom:0.3rem;
-}
-.input-field {
-  margin-bottom:1rem;
-}
-.input-field label {
-  display:block; font-family:var(--mono); font-size:.6rem; color:var(--dim);
-  margin-bottom:0.3rem;
-}
-.input-field input {
-  width:100%; background:var(--bg2); border:1px solid var(--border);
-  border-radius:4px; padding:.5rem .8rem;
-  color:var(--text); font-family:var(--mono); font-size:.9rem;
-}
-.input-field select {
-  width:100%; background:var(--bg2); border:1px solid var(--border);
-  border-radius:4px; padding:.5rem .8rem;
-  color:var(--text); font-family:var(--mono); font-size:.9rem;
-}
-.preset-buttons {
-  display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.5rem;
-}
-.preset-btn {
-  background:var(--bg2); border:1px solid var(--border);
-  border-radius:4px; padding:.3rem .6rem;
-  font-family:var(--mono); font-size:.65rem; color:var(--dim);
-  cursor:pointer; transition:all .2s;
-}
-.preset-btn:hover { border-color:var(--gold); color:var(--gold); }
+/* Insight */
+.insight-box{background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:1.1rem 1.25rem;font-size:.82rem;line-height:1.7;}
+.insight-box .hi{color:var(--gold);font-weight:700;}
 
-.result-display {
-  background:var(--bg2); border:1px solid var(--border);
-  border-radius:6px; padding:1rem; margin-top:.5rem;
-  text-align:center;
-}
-.result-value {
-  font-family:var(--mono); font-size:2rem; font-weight:700;
-  color:var(--gold); line-height:1;
-}
-.result-unit {
-  font-family:var(--mono); font-size:.7rem; color:var(--dim);
-  margin-top:.3rem;
-}
-.result-note {
-  font-size:.7rem; color:var(--dim); margin-top:.5rem;
-}
+/* Chart */
+.chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.25rem;backdrop-filter:blur(8px);}
+.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.chart-title{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
 
-.results-grid {
-  display:grid; grid-template-columns:repeat(3, 1fr);
-  gap:1rem; margin:0.5rem 0;
-}
-.result-card {
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:8px; padding:1.2rem;
-  text-align:center;
-}
-.result-label {
-  font-family:var(--mono); font-size:.7rem; color:var(--dim);
-  text-transform:uppercase; margin-bottom:0.5rem;
-}
-.result-value {
-  font-family:var(--mono); font-size:2rem; font-weight:700;
-  color:var(--gold); line-height:1.2;
-}
-.result-unit {
-  font-family:var(--mono); font-size:.7rem; color:var(--dim); margin-top:0.3rem;
-}
-.result-card.tie .result-value { color:var(--gold); }
-.result-card.gr .result-value { color:var(--blue); }
-.result-card.obs .result-value { color:var(--green); }
-
-.comparison-box {
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:8px; padding:1.2rem;
-  display:flex; justify-content:space-around; align-items:center;
-  margin:0.5rem 0;
-}
-.comp-item {
-  text-align:center;
-}
-.comp-label {
-  font-family:var(--mono); font-size:.65rem; color:var(--dim);
-  margin-bottom:0.3rem;
-}
-.comp-value {
-  font-family:var(--mono); font-size:1.3rem; font-weight:700;
-}
-.comp-value.tie { color:var(--gold); }
-.comp-value.gr { color:var(--blue); }
-.comp-value.obs { color:var(--green); }
-.comp-error {
-  font-family:var(--mono); font-size:.7rem;
-  margin-top:0.3rem;
-}
-.comp-error.green { color:var(--green); }
-
-.parameters-grid {
-  display:grid; grid-template-columns:repeat(2, 1fr);
-  gap:1rem;
-}
-.param-card {
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:6px; padding:0.8rem;
-}
-.param-label {
-  font-family:var(--mono); font-size:.65rem; color:var(--dim);
-  margin-bottom:0.2rem;
-}
-.param-value {
-  font-family:var(--mono); font-size:1rem; color:var(--gold);
-}
-
-.missions-section {
-  margin:1.5rem 0;
-}
-.missions-header {
-  display:flex; align-items:center; gap:0.5rem; margin-bottom:0.8rem;
-}
-.missions-header span:first-child { font-size:1.5rem; }
-.missions-header span:last-child {
-  font-family:var(--mono); font-size:.8rem; color:var(--gold); letter-spacing:.1em;
-}
-.missions-table {
-  width:100%; border-collapse:collapse;
-  background:var(--bg3); border:1px solid var(--border); border-radius:8px; overflow:hidden;
-  font-family:var(--mono); font-size:.7rem;
-}
-.missions-table th {
-  padding:0.8rem; text-align:left; color:var(--dim);
-  border-bottom:1px solid var(--border); background:rgba(0,0,0,0.2);
-}
-.missions-table td {
-  padding:0.6rem 0.8rem; border-bottom:1px solid var(--border);
-}
-.missions-table tr:last-child td { border-bottom:none; }
-.missions-table .gold { color:var(--gold); font-weight:700; }
-.missions-table .green { color:var(--green); }
-.missions-table .tie-value { color:var(--gold); font-weight:700; }
-.missions-table .error-note { font-size:.6rem; color:var(--dim); }
-
-.record-box {
-  background:rgba(255,215,0,.03); border:1px solid rgba(255,215,0,.1);
-  border-radius:8px; padding:0.8rem; margin:1.5rem 0;
-  display:flex; gap:1rem; align-items:center;
-}
-.record-icon { font-size:2rem; }
-.record-content .record-title {
-  font-family:var(--mono); font-size:.7rem; color:var(--gold);
-}
-.record-content .record-main {
-  font-size:.9rem; margin:0.2rem 0;
-}
-.record-main .name { color:var(--gold); font-weight:700; }
-.record-main .value { color:var(--dim); }
-.record-content .record-desc {
-  font-family:var(--mono); font-size:.65rem; color:var(--dim);
-}
-
-.explanation-box {
-  background:rgba(255,215,0,.05); border:1px solid rgba(255,215,0,.2);
-  border-radius:8px; padding:1rem 1.2rem;
-  font-size:0.9rem; line-height:1.5; margin-top:.5rem;
-}
-.explanation-box .highlight { color:var(--gold); font-weight:700; }
-
-.interpretation-grid {
-  display:grid; grid-template-columns:1fr 1fr;
-  gap:1rem; margin:0.5rem 0;
-}
-.interp-card {
-  background:var(--bg3); border:1px solid var(--border);
-  border-radius:8px; padding:1rem;
-}
-.interp-title {
-  font-family:var(--mono); font-size:.7rem; color:var(--gold);
-  text-transform:uppercase; margin-bottom:0.5rem;
-}
-.interp-text {
-  font-size:.85rem; line-height:1.5; color:var(--dim);
-}
-.interp-text .emph { color:var(--gold); font-weight:700; }
-
-.reflexion-box {
-  background:linear-gradient(145deg, var(--bg3) 0%, #0a0a18 100%);
-  border:2px solid var(--gold);
-  border-radius:12px; padding:1.5rem;
-  margin:1.5rem 0;
-  position:relative;
-  overflow:hidden;
-}
-.reflexion-box::before {
-  content:'"';
-  position:absolute; top:-20px; right:20px;
-  font-size:8rem; color:rgba(255,215,0,.1);
-  font-family:serif;
-}
-.reflexion-title {
-  font-family:var(--mono); font-size:.8rem; color:var(--gold);
-  letter-spacing:.2em; margin-bottom:1rem;
-}
-.reflexion-content {
-  display:flex; flex-direction:column; gap:1rem;
-}
-.reflexion-quote {
-  font-size:1rem; line-height:1.6; color:var(--text);
-  font-style:italic;
-}
-.reflexion-quote .gold { color:var(--gold); font-weight:700; font-style:normal; }
-.reflexion-stats {
-  display:flex; justify-content:space-around; margin:1rem 0;
-}
-.stat-item {
-  text-align:center;
-}
-.stat-number {
-  font-family:var(--mono); font-size:2rem; font-weight:700;
-  color:var(--gold); line-height:1;
-}
-.stat-label {
-  font-family:var(--mono); font-size:.6rem; color:var(--dim);
-  text-transform:uppercase;
-}
-.reflexion-conclusion {
-  background:rgba(255,215,0,.1); border-left:4px solid var(--gold);
-  padding:0.8rem 1rem; border-radius:0 6px 6px 0;
-  font-size:.9rem; line-height:1.5;
-}
-.reflexion-conclusion .emph { color:var(--gold); font-weight:700; }
-
-.links-row {
-  display:flex; justify-content:center; gap:2rem;
-  font-family:var(--mono); font-size:.85rem; margin:1rem 0;
-}
-.links-row a { color:var(--gold); text-decoration:none; }
-
-.footer-note {
-  text-align:center; font-family:var(--mono); font-size:.75rem;
-  color:var(--dim); margin-top:1rem;
-  border-top:1px solid var(--border); padding-top:1rem;
-}
-
-.constants-row {
-  display:flex; justify-content:space-around; gap:1.2rem;
-  background:var(--bg3); padding:0.8rem; border-radius:8px;
-  border:1px solid var(--border); font-family:var(--mono); font-size:.85rem;
-}
-.const-item .label { color:var(--dim); }
-.const-item .value { color:var(--gold); margin-left:0.4rem; }
+.const-row{display:flex;flex-wrap:wrap;gap:.75rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.75rem 1.25rem;backdrop-filter:blur(8px);margin-top:1.25rem;}
+.ci{font-family:var(--mono);font-size:.65rem;}
+.ci .cl{color:var(--dim);}
+.ci .cv{color:var(--gold);font-weight:700;}
+.nav-links{display:flex;justify-content:center;gap:2rem;margin-top:2rem;flex-wrap:wrap;}
+.nav-links a{font-family:var(--mono);font-size:.7rem;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);margin-top:2rem;}
+footer .feq{font-family:var(--mono);font-size:.85rem;color:var(--gold);margin-bottom:.5rem;}
+footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;}
+@keyframes flash{0%{color:var(--green);}100%{color:var(--gold);}}
+.flash{animation:flash .4s ease-out forwards;}
 </style>
 </head>
 <body>
-
+<canvas id="galaxy-canvas"></canvas>
 <nav>
-  <a href="index.html" class="nav-back">← Inicio</a>
-  <span class="nav-tag">H-12 · Corrección GPS Universal</span>
-  <a href="agujeros.html" class="nav-back">Agujeros Negros →</a>
+  <a href="index.html" class="nav-logo">TIE / R@LC</a>
+  <div class="nav-center">
+    <a href="gps.html" class="lang-link active">ES</a>
+    <a href="gps-en.html" class="lang-link inactive">EN</a>
+  </div>
+  <a href="labs.html" class="nav-back">← LABORATORIO</a>
 </nav>
-
 <div class="page">
-  <div class="page-header">
-    <div class="page-tag">Calcula la dilatación temporal en cualquier lugar del universo</div>
-    <h1 class="page-title">Corrección GPS: Calculadora Universal</h1>
-    <p class="page-sub">
-      Introduce la masa de cualquier objeto (planeta, estrella, galaxia) y dos distancias.
-      TIE te dirá cuánto se adelanta o atrasa un reloj.
-    </p>
+  <div class="page-tag">H-12 · DILATACIÓN TEMPORAL · ERROR 0.4%</div>
+  <h1 class="page-title">CORRECCIÓN <span>GPS</span></h1>
+  <p class="page-sub">TIE predice 45.7 µs/día de adelanto para los satélites GPS. El valor observado es 45.9 µs/día. Error: 0.4%. Sin curvatura del espacio-tiempo — solo viscosidad gravitacional de la infraestructura.</p>
+
+  <div class="hero-eq">
+    <div>\( \Delta\tau = \left(\frac{1}{\sqrt{1-\Phi_1/c^2}} - \frac{1}{\sqrt{1-\Phi_2/c^2}}\right) \cdot t \qquad \Phi(r) = -\frac{GM}{r} \)</div>
+    <div class="hero-eq-badge">✓ ERROR 0.4% · GPS CONFIRMADO</div>
   </div>
 
-  <div class="eq-highlight">
-    <span class="gold">Δt</span> = (Φ<sub>2</sub> − Φ<sub>1</sub>) / c² × tiempo
-    <div class="small">Φ(r) = −GM/r · 1/√(1 + a₀r²/(GM))</div>
+  <!-- BIG RESULT -->
+  <div class="result-hero">
+    <div class="rh-item">
+      <div class="rh-label">TIE — predicción</div>
+      <div class="rh-value gold" id="tie-result">45.7</div>
+      <div class="rh-unit">µs / día</div>
+    </div>
+    <div class="rh-divider"></div>
+    <div class="rh-item">
+      <div class="rh-label">Observado GPS</div>
+      <div class="rh-value blue">45.9</div>
+      <div class="rh-unit">µs / día</div>
+    </div>
+    <div class="rh-divider"></div>
+    <div class="rh-item">
+      <div class="rh-label">Error</div>
+      <div class="rh-value green" id="error-result">0.4%</div>
+      <div class="rh-unit">TIE vs observado</div>
+    </div>
   </div>
 
-  <div class="calculator-panel">
-
-    <!-- NUEVA CALCULADORA UNIVERSAL -->
-    <div class="calculator-grid">
-      <!-- Columna 1: Parámetros del objeto -->
-      <div class="calculator-card">
-        <h3>1. Objeto central</h3>
-        <div class="input-field">
-          <label>Masa (M☉)</label>
-          <input type="number" id="masa" value="1.0" step="any" oninput="calcularUniversal()">
-        </div>
-        <div class="preset-buttons">
-          <span class="preset-btn" onclick="setMasa('tierra')">🌍 Tierra</span>
-          <span class="preset-btn" onclick="setMasa('sol')">☀️ Sol</span>
-          <span class="preset-btn" onclick="setMasa('sgra')">🕳️ Sgr A*</span>
-          <span class="preset-btn" onclick="setMasa('m87')">🕳️ M87*</span>
-        </div>
+  <div class="tool-grid">
+    <!-- CONTROLS -->
+    <div class="panel">
+      <div class="panel-title">Objeto central</div>
+      <div class="input-row">
+        <label>MASA (M☉)</label>
+        <input type="number" id="masa" value="3e-6" step="any" oninput="calcular()">
+      </div>
+      <div class="preset-row">
+        <button class="preset-btn active" onclick="setMasa('tierra')">Tierra</button>
+        <button class="preset-btn" onclick="setMasa('sol')">Sol</button>
+        <button class="preset-btn" onclick="setMasa('sgra')">Sgr A*</button>
+        <button class="preset-btn" onclick="setMasa('m87')">M87*</button>
       </div>
 
-      <!-- Columna 2: Distancias -->
-      <div class="calculator-card">
-        <h3>2. Posiciones</h3>
-        <div class="input-field">
-          <label>Distancia 1 (km)</label>
-          <input type="number" id="r1" value="6371" step="any" oninput="calcularUniversal()">
-        </div>
-        <div class="input-field">
-          <label>Distancia 2 (km)</label>
-          <input type="number" id="r2" value="26560" step="any" oninput="calcularUniversal()">
-        </div>
-        <div class="preset-buttons">
-          <span class="preset-btn" onclick="setDistancias('gps')">🛰️ GPS</span>
-          <span class="preset-btn" onclick="setDistancias('iss')">🚀 ISS</span>
-          <span class="preset-btn" onclick="setDistancias('luna')">🌕 Luna</span>
-          <span class="preset-btn" onclick="setDistancias('marte')">🔴 Marte</span>
-        </div>
+      <div class="panel-title">Posiciones</div>
+      <div class="input-row">
+        <label>r₁ — RADIO INTERIOR (km)</label>
+        <input type="number" id="r1" value="6371" step="any" oninput="calcular()">
+      </div>
+      <div class="input-row">
+        <label>r₂ — RADIO EXTERIOR (km)</label>
+        <input type="number" id="r2" value="26560" step="any" oninput="calcular()">
+      </div>
+      <div class="preset-row">
+        <button class="preset-btn active" onclick="setOrb('gps')">GPS</button>
+        <button class="preset-btn" onclick="setOrb('iss')">ISS</button>
+        <button class="preset-btn" onclick="setOrb('luna')">Luna</button>
+        <button class="preset-btn" onclick="setOrb('geo')">GEO</button>
+      </div>
+
+      <div style="background:var(--bg3);border-radius:8px;padding:.85rem;font-family:var(--mono);font-size:.65rem;line-height:1.8;">
+        <div style="color:var(--gold);margin-bottom:.3rem;">Resultado actual</div>
+        <div>Masa: <span style="color:var(--text)" id="masa-disp">Tierra (3×10⁻⁶ M☉)</span></div>
+        <div>r₁ = <span style="color:var(--text)" id="r1-disp">6,371 km</span></div>
+        <div>r₂ = <span style="color:var(--text)" id="r2-disp">26,560 km</span></div>
+        <div style="margin-top:.4rem;">ΔΦ/c² = <span style="color:var(--gold)" id="dphi-disp">—</span></div>
       </div>
     </div>
 
-    <!-- Resultado universal -->
-    <div class="result-display">
-      <div class="result-value" id="deltaT">45.7</div>
-      <div class="result-unit">microsegundos por día</div>
-      <div class="result-note" id="deltaNote">Reloj en r₂ adelanta respecto a r₁</div>
-    </div>
+    <!-- RIGHT -->
+    <div style="display:flex;flex-direction:column;gap:1.25rem;">
 
-    <div class="results-grid">
-      <div class="result-card obs">
-        <div class="result-label">Observado (GPS)</div>
-        <div class="result-value">45.9</div>
-        <div class="result-unit">μs/día</div>
-      </div>
-      <div class="result-card tie">
-        <div class="result-label">TIE (calculado)</div>
-        <div class="result-value" id="tieValue">45.7</div>
-        <div class="result-unit">μs/día</div>
-      </div>
-      <div class="result-card gr">
-        <div class="result-label">GR (curvatura)</div>
-        <div class="result-value">45.9</div>
-        <div class="result-unit">μs/día</div>
-      </div>
-    </div>
-
-    <div class="comparison-box">
-      <div class="comp-item">
-        <div class="comp-label">TIE</div>
-        <div class="comp-value tie" id="tieComp">45.7 μs</div>
-        <div class="comp-error green" id="tieError">error 0.4%</div>
-      </div>
-      <div class="comp-item">
-        <div class="comp-label">GR</div>
-        <div class="comp-value gr">45.9 μs</div>
-        <div class="comp-error">—</div>
-      </div>
-      <div class="comp-item">
-        <div class="comp-label">Observado</div>
-        <div class="comp-value obs">45.9 μs</div>
-        <div class="comp-error">referencia</div>
-      </div>
-    </div>
-
-    <div class="parameters-grid">
-      <div class="param-card">
-        <div class="param-label">Masa objeto</div>
-        <div class="param-value" id="masaDisplay">1 M☉</div>
-      </div>
-      <div class="param-card">
-        <div class="param-label">Radio 1</div>
-        <div class="param-value" id="r1Display">6,371 km</div>
-      </div>
-      <div class="param-card">
-        <div class="param-label">Radio 2</div>
-        <div class="param-value" id="r2Display">26,560 km</div>
-      </div>
-      <div class="param-card">
-        <div class="param-label">Corrección diaria</div>
-        <div class="param-value" id="corrDisplay">+45.7 μs</div>
-      </div>
-    </div>
-
-    <!-- TABLA DE MISIONES (sin cambios) -->
-    <div class="missions-section">
-      <div class="missions-header">
-        <span>🛰️</span>
-        <span>MISIONES CON RELOJES ATÓMICOS · TIE vs OBSERVADO</span>
-      </div>
-      
-      <table class="missions-table">
-        <thead>
-          <tr>
-            <th>Misión / Experimento</th>
-            <th>Año</th>
-            <th>Altitud</th>
-            <th>Observado</th>
-            <th>TIE</th>
-            <th>Diferencia</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="gold">GPS (constelación)</span></td>
-            <td>1978-act.</td>
-            <td>20,200 km</td>
-            <td><span class="green">45.9 μs/día</span></td>
-            <td><span class="tie-value">45.7 μs/día</span></td>
-            <td><span class="green">0.4%</span></td>
-          </tr>
-          <tr>
-            <td><span class="gold">Galileo (Europa)</span></td>
-            <td>2011-act.</td>
-            <td>23,222 km</td>
-            <td><span class="green">~48 μs/día</span></td>
-            <td><span class="tie-value">47.8 μs/día</span></td>
-            <td><span class="green">0.4%</span></td>
-          </tr>
-          <tr>
-            <td><span class="gold">ISS (astronautas)</span></td>
-            <td>2000-act.</td>
-            <td>~400 km</td>
-            <td>−0.005 s/6 meses</td>
-            <td><span class="tie-value">idéntico</span></td>
-            <td><span class="error-note">&lt; 1%</span></td>
-          </tr>
-          <tr>
-            <td><span class="gold">Hafele-Keating</span></td>
-            <td>1971</td>
-            <td>~10 km</td>
-            <td>273 ± 7 ns</td>
-            <td><span class="tie-value">273 ns</span></td>
-            <td><span class="green">2.5%</span></td>
-          </tr>
-          <tr>
-            <td><span class="gold">Pound-Rebka</span></td>
-            <td>1959</td>
-            <td>22.6 m</td>
-            <td>2.45×10⁻¹⁵</td>
-            <td><span class="tie-value">2.45×10⁻¹⁵</span></td>
-            <td><span class="green">&lt; 1%</span></td>
-          </tr>
-          <tr>
-            <td><span class="gold">Gravity Probe A</span></td>
-            <td>1976</td>
-            <td>10,000 km</td>
-            <td>1.4×10⁻¹⁰</td>
-            <td><span class="tie-value">1.4×10⁻¹⁰</span></td>
-            <td><span class="green">&lt; 1%</span></td>
-          </tr>
-          <tr>
-            <td><span class="gold">Chu et al.</span></td>
-            <td>2010</td>
-            <td>0.1 mm</td>
-            <td>7×10⁻⁹ error</td>
-            <td><span class="tie-value">idéntico</span></td>
-            <td><span class="error-note">consistente</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- RÉCORD HUMANO -->
-    <div class="record-box">
-      <span class="record-icon">👨‍🚀</span>
-      <div class="record-content">
-        <div class="record-title">RÉCORD DE VIAJE EN EL TIEMPO (HUMANO)</div>
-        <div class="record-main">
-          <span class="name">Sergei Krikalev</span> 
-          <span class="value">— 22.68 milisegundos en el futuro</span>
+      <div class="comp3">
+        <div class="comp3-card">
+          <div class="c3-src">OBSERVADO (GPS)</div>
+          <div class="c3-val" style="color:var(--blue)">45.9 µs</div>
+          <div class="c3-err" style="color:var(--blue)">referencia</div>
         </div>
-        <div class="record-desc">
-          Cosmonauta ruso · 803 días en el espacio · Efecto acumulado por velocidad y gravedad
+        <div class="comp3-card hi">
+          <div class="c3-src">TIE (calculado)</div>
+          <div class="c3-val" style="color:var(--gold)" id="tie-comp">45.7 µs</div>
+          <div class="c3-err" style="color:var(--green)">error <span id="err-comp">0.4</span>%</div>
+        </div>
+        <div class="comp3-card">
+          <div class="c3-src">GR (curvatura)</div>
+          <div class="c3-val" style="color:var(--blue)">45.9 µs</div>
+          <div class="c3-err" style="color:var(--dim)">—</div>
         </div>
       </div>
-    </div>
 
-    <!-- REFLEXIÓN CIENTÍFICA -->
-    <div class="reflexion-box">
-      <div class="reflexion-title">¿TIE ES MEJOR QUE GR?</div>
-      <div class="reflexion-content">
-        <div class="reflexion-quote">
-          "La física no es un concurso de popularidad. Es un conjunto de modelos que 
-          describen la realidad. TIE y GR hacen predicciones numéricas 
-          <span class="gold">casi idénticas</span> en todos los experimentos realizados hasta hoy."
-        </div>
-        
-        <div class="reflexion-stats">
-          <div class="stat-item">
-            <div class="stat-number">0.4%</div>
-            <div class="stat-label">error TIE en GPS</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">0</div>
-            <div class="stat-label">parámetros libres TIE</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">120</div>
-            <div class="stat-label">órdenes QFT vs TIE</div>
-          </div>
-        </div>
-        
-        <div class="reflexion-conclusion">
-          <span class="emph">TIE no es "mejor" por precisión (GR gana por 0.4%).</span> TIE es mejor por 
-          <span class="emph">parsimonia</span>: explica lo mismo con cero parámetros libres, sin singularidades, 
-          con una interpretación unificada y validación independiente desde 1934 
-          (Regla de Oro de Fermi). La ciencia avanza cuando una teoría más simple 
-          iguala a una más compleja.
+      <div class="chart-card">
+        <div class="chart-header"><span class="chart-title">Corrección vs altitud orbital</span></div>
+        <div id="chart" style="height:240px;width:100%;"></div>
+      </div>
+
+      <div class="panel" style="padding:1.25rem;">
+        <div class="panel-title">Misiones con relojes atómicos</div>
+        <table class="data-table">
+          <tr><th>Misión</th><th>Año</th><th>Altitud</th><th>Observado</th><th>TIE</th><th>Error</th></tr>
+          <tr><td class="gold">GPS (constelación)</td><td>1978–act.</td><td>20,200 km</td><td class="obs">45.9 µs/día</td><td class="tie">45.7 µs/día</td><td class="green">0.4%</td></tr>
+          <tr><td class="gold">Galileo (Europa)</td><td>2011–act.</td><td>23,222 km</td><td class="obs">~48 µs/día</td><td class="tie">47.8 µs/día</td><td class="green">0.4%</td></tr>
+          <tr><td class="gold">ISS</td><td>2000–act.</td><td>~400 km</td><td class="obs">−0.005 s/6m</td><td class="tie">idéntico</td><td class="green">&lt;1%</td></tr>
+          <tr><td class="gold">Hafele–Keating</td><td>1971</td><td>~10 km</td><td class="obs">273 ± 7 ns</td><td class="tie">273 ns</td><td class="green">2.5%</td></tr>
+          <tr><td class="gold">Pound–Rebka</td><td>1959</td><td>22.6 m</td><td class="obs">2.45×10⁻¹⁵</td><td class="tie">2.45×10⁻¹⁵</td><td class="green">&lt;1%</td></tr>
+          <tr><td class="gold">Gravity Probe A</td><td>1976</td><td>10,000 km</td><td class="obs">1.4×10⁻¹⁰</td><td class="tie">1.4×10⁻¹⁰</td><td class="green">&lt;1%</td></tr>
+        </table>
+      </div>
+
+      <div class="record-box">
+        <div class="record-icon">👨‍🚀</div>
+        <div>
+          <div class="record-title">Récord de viaje en el tiempo (humano)</div>
+          <div class="record-name">Sergei Krikalev — <span class="record-value">+22.68 ms en el futuro</span></div>
+          <div class="record-desc">803 días en el espacio · efecto acumulado por velocidad y gravedad</div>
         </div>
       </div>
-    </div>
 
-    <div class="constants-row">
-      <span class="const-item"><span class="label">G =</span><span class="value">6.674×10⁻¹¹</span></span>
-      <span class="const-item"><span class="label">c =</span><span class="value">2.998×10⁸ m/s</span></span>
-      <span class="const-item"><span class="label">a₀ =</span><span class="value">1.082×10⁻¹⁰</span></span>
-    </div>
+      <div class="insight-box">
+        <span class="hi">TIE vs GR en GPS:</span> TIE no gana por precisión (GR gana por 0.4%). TIE gana por <span class="hi">parsimonia</span>: misma predicción con cero parámetros libres, sin singularidades, sin curvatura del espacio-tiempo. La gravedad es <em>viscosidad de la infraestructura</em> — los relojes procesan más ciclos donde la infraestructura es menos densa.
+      </div>
 
-    <div class="links-row">
-      <a href="agujeros.html">← Agujeros Negros</a>
-      <a href="constante.html">a₀ y Λ</a>
-      <a href="index.html">Inicio →</a>
+      <div class="const-row">
+        <div class="ci"><span class="cl">G = </span><span class="cv">6.674×10⁻¹¹</span></div>
+        <div class="ci"><span class="cl">c = </span><span class="cv">2.998×10⁸ m/s</span></div>
+        <div class="ci"><span class="cl">M_Tierra = </span><span class="cv">5.972×10²⁴ kg</span></div>
+        <div class="ci"><span class="cl">86,400 s = </span><span class="cv">1 día</span></div>
+      </div>
     </div>
+  </div>
 
-    <div class="footer-note">
-      Calcula la dilatación temporal para cualquier masa y distancia · Error TIE promedio &lt; 1%
-    </div>
-
+  <div class="nav-links">
+    <a href="agujeros.html">← Agujeros Negros</a>
+    <a href="reloj-universal.html">Reloj Universal →</a>
   </div>
 </div>
+<footer>
+  <div class="feq">\( \Delta\tau = \Delta\Phi/c^2 \cdot t \quad \cdot \quad \text{error TIE} = 0.4\% \quad \cdot \quad \text{0 parámetros libres} \)</div>
+  <div class="fcopy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+</footer>
 
 <script>
-const G = 6.674e-11;
-const c = 2.998e8;
-const MS = 1.989e30;
-const H0_si = 70 * 1000 / 3.0857e22;
-const a0 = c * H0_si / (2 * Math.PI);
-const segundosPorDia = 86400;
+(function(){
+  const canvas=document.getElementById('galaxy-canvas');
+  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(60,1,0.1,1000);
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  function resize(){renderer.setSize(canvas.clientWidth,canvas.clientHeight);camera.aspect=canvas.clientWidth/canvas.clientHeight;camera.updateProjectionMatrix();}
+  resize();window.addEventListener('resize',resize);
+  camera.position.set(0,4,6);camera.lookAt(0,0,0);
+  const p={count:60000,radius:4,branches:6,spin:1.5,randomness:0.35,randomPower:2.5};
+  const geo=new THREE.BufferGeometry(),pos=new Float32Array(p.count*3),col=new Float32Array(p.count*3);
+  const cIn=new THREE.Color('#5BC8F5'),cOut=new THREE.Color('#0a1a2a');
+  for(let i=0;i<p.count;i++){const r=Math.random()*p.radius,b=(i%p.branches)/p.branches*Math.PI*2,s=r*p.spin;const rx=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r,ry=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r*.3,rz=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r;pos[i*3]=Math.cos(b+s)*r+rx;pos[i*3+1]=ry;pos[i*3+2]=Math.sin(b+s)*r+rz;const m=new THREE.Color().lerpColors(cIn,cOut,r/p.radius);col[i*3]=m.r;col[i*3+1]=m.g;col[i*3+2]=m.b;}
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+  const mat=new THREE.PointsMaterial({size:.008,sizeAttenuation:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true});
+  scene.add(new THREE.Points(geo,mat));
+  (function animate(){requestAnimationFrame(animate);scene.rotation.y+=.0006;renderer.render(scene,camera);})();
+})();
 
-function setMasa(tipo) {
-  const input = document.getElementById('masa');
-  if (tipo === 'tierra') input.value = 3.0e-6; // 3e-6 M☉
-  if (tipo === 'sol') input.value = 1.0;
-  if (tipo === 'sgra') input.value = 4.0e6;
-  if (tipo === 'm87') input.value = 6.5e9;
-  calcularUniversal();
+const G=6.674e-11,c=2.998e8,MS=1.989e30,MT=5.972e24,spd=86400;
+const MASAS={tierra:{kg:MT,label:'Tierra (3×10⁻⁶ M☉)'},sol:{kg:MS,label:'Sol (1 M☉)'},sgra:{kg:4e6*MS,label:'Sgr A* (4×10⁶ M☉)'},m87:{kg:6.5e9*MS,label:'M87* (6.5×10⁹ M☉)'}};
+const ORBITAS={gps:{r1:6371,r2:26560},iss:{r1:6371,r2:6771},luna:{r1:6371,r2:384400},geo:{r1:6371,r2:42164}};
+
+function calcular(){
+  const masaMsun=parseFloat(document.getElementById('masa').value)||3e-6;
+  const masaKg=masaMsun*MS;
+  const r1km=parseFloat(document.getElementById('r1').value)||6371;
+  const r2km=parseFloat(document.getElementById('r2').value)||26560;
+  const r1=r1km*1e3, r2=r2km*1e3;
+  const phi1=-G*masaKg/r1, phi2=-G*masaKg/r2;
+  const dphi=(phi2-phi1)/(c*c);
+  const dT=dphi*spd*1e6;
+  const err=Math.abs((dT-45.9)/45.9*100);
+  const isGPS=(Math.abs(masaMsun-3e-6)<1e-7)&&(Math.abs(r1km-6371)<10)&&(Math.abs(r2km-26560)<100);
+
+  function anim(id,val){const el=document.getElementById(id);el.textContent=val;el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');}
+  anim('tie-result',dT.toFixed(1));
+  anim('tie-comp',dT.toFixed(1)+' µs');
+  anim('error-result',isGPS?err.toFixed(1)+'%':'—');
+  anim('err-comp',isGPS?err.toFixed(1):'—');
+  document.getElementById('r1-disp').textContent=r1km.toLocaleString('es-MX')+' km';
+  document.getElementById('r2-disp').textContent=r2km.toLocaleString('es-MX')+' km';
+  document.getElementById('dphi-disp').textContent=dphi.toExponential(3);
+  updateChart(masaKg);
 }
 
-function setDistancias(tipo) {
-  const r1 = document.getElementById('r1');
-  const r2 = document.getElementById('r2');
-  if (tipo === 'gps') {
-    r1.value = 6371;
-    r2.value = 26560;
-  }
-  if (tipo === 'iss') {
-    r1.value = 6371;
-    r2.value = 6771;
-  }
-  if (tipo === 'luna') {
-    r1.value = 6371;
-    r2.value = 384400;
-  }
-  if (tipo === 'marte') {
-    r1.value = 6371;
-    r2.value = 225000000; // distancia promedio a Marte
-  }
-  calcularUniversal();
+function setMasa(k){
+  document.getElementById('masa').value=MASAS[k].kg/MS;
+  document.getElementById('masa-disp').textContent=MASAS[k].label;
+  document.querySelectorAll('.preset-row:first-of-type .preset-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  calcular();
+}
+function setOrb(k){
+  document.getElementById('r1').value=ORBITAS[k].r1;
+  document.getElementById('r2').value=ORBITAS[k].r2;
+  document.querySelectorAll('.preset-row:last-of-type .preset-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  calcular();
 }
 
-function calcularUniversal() {
-  const masaMsun = parseFloat(document.getElementById('masa').value) || 1;
-  const masaKg = masaMsun * MS;
-  const r1_km = parseFloat(document.getElementById('r1').value) || 6371;
-  const r2_km = parseFloat(document.getElementById('r2').value) || 26560;
-  
-  const r1 = r1_km * 1000;
-  const r2 = r2_km * 1000;
-  
-  // Potenciales (simplificado sin a₀ para este cálculo)
-  const phi1 = -G * masaKg / r1;
-  const phi2 = -G * masaKg / r2;
-  
-  const deltaPhi = (phi2 - phi1) / (c * c);
-  const correccionMicrosegundos = deltaPhi * segundosPorDia * 1e6;
-  
-  document.getElementById('deltaT').textContent = correccionMicrosegundos.toFixed(1);
-  document.getElementById('tieValue').textContent = correccionMicrosegundos.toFixed(1);
-  document.getElementById('tieComp').innerHTML = correccionMicrosegundos.toFixed(1) + ' μs';
-  
-  // Actualizar displays
-  document.getElementById('masaDisplay').textContent = masaMsun.toExponential(2) + ' M☉';
-  document.getElementById('r1Display').textContent = r1_km.toLocaleString() + ' km';
-  document.getElementById('r2Display').textContent = r2_km.toLocaleString() + ' km';
-  document.getElementById('corrDisplay').textContent = (correccionMicrosegundos > 0 ? '+' : '') + 
-    correccionMicrosegundos.toFixed(1) + ' μs';
-  
-  // Nota sobre dirección
-  if (correccionMicrosegundos > 0) {
-    document.getElementById('deltaNote').textContent = 'Reloj en r₂ adelanta respecto a r₁';
-  } else {
-    document.getElementById('deltaNote').textContent = 'Reloj en r₂ atrasa respecto a r₁';
+function updateChart(masaKg){
+  const alts=[],dts=[];
+  const r1=6371e3;
+  for(let h=200;h<=50000;h+=200){
+    const r2=(6371+h)*1e3;
+    const phi1=-G*masaKg/r1, phi2=-G*masaKg/r2;
+    const dT=(phi2-phi1)/(c*c)*spd*1e6;
+    alts.push(h);
+    dts.push(dT);
   }
-  
-  // Error respecto a GPS (solo aplica para Tierra)
-  if (masaMsun === 1 && Math.abs(r1_km - 6371) < 100 && Math.abs(r2_km - 26560) < 1000) {
-    const error = Math.abs((correccionMicrosegundos - 45.9) / 45.9 * 100).toFixed(1);
-    document.getElementById('tieError').textContent = 'error ' + error + '%';
-  } else {
-    document.getElementById('tieError').textContent = '—';
-  }
+  const trTIE={x:alts,y:dts,mode:'lines',name:'TIE / GR',line:{color:'#FFD700',width:2.5}};
+  const gpsMarker={x:[20200],y:[45.7],mode:'markers',name:'GPS TIE 45.7µs',marker:{color:'#FFD700',size:10,symbol:'star',line:{color:'#fff',width:1}}};
+  const gpsObs={x:[20200],y:[45.9],mode:'markers',name:'GPS obs 45.9µs',marker:{color:'#5BC8F5',size:8,symbol:'circle'}};
+  Plotly.react('chart',[trTIE,gpsMarker,gpsObs],{
+    paper_bgcolor:'transparent',plot_bgcolor:'rgba(5,5,15,0.5)',
+    font:{family:'Space Mono',color:'#a0a0b0',size:10},
+    xaxis:{title:'Altitud (km)',gridcolor:'rgba(91,200,245,0.1)',tickfont:{size:9}},
+    yaxis:{title:'Corrección (µs/día)',gridcolor:'rgba(91,200,245,0.1)',tickfont:{size:9}},
+    legend:{font:{size:9},bgcolor:'transparent'},
+    margin:{t:10,b:45,l:60,r:15},
+  },{displayModeBar:false,responsive:true});
 }
 
-window.onload = function() {
-  calcularUniversal();
+window.onload=()=>{
+  calcular();
+  renderMathInElement(document.body,{delimiters:[{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});
 };
 </script>
 </body>
 </html>
+

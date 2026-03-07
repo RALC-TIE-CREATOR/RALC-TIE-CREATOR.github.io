@@ -403,6 +403,7 @@ footer {
   letter-spacing: 2px;
 }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
@@ -410,7 +411,11 @@ footer {
 
 <nav>
   <a href="index.html" class="nav-logo">TIE / R@LC</a>
-  <a href="index.html" class="nav-back">← VOLVER AL INICIO</a>
+  <div style="display:flex;gap:.5rem;">
+    <a href="papers.html" style="font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:var(--gold);">ES</a>
+    <a href="papers-en.html" style="font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:var(--dim);border:1px solid var(--border);">EN</a>
+  </div>
+  <a href="labs.html" class="nav-back">← LABORATORIO</a>
 </nav>
 
 <div class="page">
@@ -500,22 +505,6 @@ footer {
     </div>
   </div>
 
-  <!-- MÉTRICAS -->
-  <div class="metrics-grid">
-    <div class="metric-card">
-      <div class="metric-value">12</div>
-      <div class="metric-label">CITAS</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-value">347</div>
-      <div class="metric-label">DESCARGAS</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-value">23</div>
-      <div class="metric-label">FORKS GITHUB</div>
-    </div>
-  </div>
-
   <!-- CÓMO CITAR -->
   <h2 style="font-size:1.8rem; margin:3rem 0 1rem;">📝 CÓMO CITAR</h2>
   <div class="cite-box">
@@ -534,7 +523,6 @@ footer {
   <div class="footer-copy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 // ===== GALAXIA 3D (código completo) =====
 const canvas = document.getElementById('galaxy-canvas');
@@ -633,3 +621,4 @@ window.addEventListener('resize', () => {
 </script>
 </body>
 </html>
+

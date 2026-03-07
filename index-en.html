@@ -336,6 +336,21 @@ nav {
   color: var(--gold);
 }
 
+.action-card.purple {
+  border-color: rgba(155, 89, 182, 0.3);
+  box-shadow: 0 0 20px rgba(155, 89, 182, 0.2);
+}
+
+.action-card.purple:hover {
+  border-color: var(--purple);
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(155, 89, 182, 0.3);
+}
+
+.action-card.purple .action-tag { color: var(--purple); }
+.action-card.purple .action-title { color: var(--purple); }
+.action-card.purple .action-link { color: var(--purple); }
+
 .action-card.github .action-title {
   color: var(--blue);
 }
@@ -431,6 +446,17 @@ nav {
   box-shadow: 0 0 40px rgba(155, 89, 182, 0.3);
 }
 
+.info-card.gh {
+  border-color: rgba(91, 200, 245, 0.3);
+  box-shadow: 0 0 20px rgba(91, 200, 245, 0.2);
+}
+
+.info-card.gh:hover {
+  border-color: var(--blue);
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(91, 200, 245, 0.3);
+}
+
 .info-card::before {
   content: '';
   position: absolute;
@@ -510,9 +536,14 @@ nav {
   color: var(--purple);
 }
 
+.info-card.gh .info-tag { color: var(--blue); }
+.info-card.gh .info-title { color: var(--blue); }
+.info-card.gh .info-link { color: var(--blue); }
+
 .info-card.papers:hover .info-link,
 .info-card.predictions:hover .info-link,
-.info-card.theory:hover .info-link {
+.info-card.theory:hover .info-link,
+.info-card.gh:hover .info-link {
   transform: translateX(10px);
   color: #fff;
 }
@@ -562,10 +593,11 @@ footer {
 <nav>
   <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
   
-  <div class="lang-selector">
-    <a href="index.html" class="lang-link inactive">ES</a>
-    <a href="index-en.html" class="lang-link active">EN</a>
+  <div style="display:flex;gap:.4rem;">
+    <a href="index.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">ES</a>
+    <a href="index-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">EN</a>
   </div>
+
 </nav>
 
 <section class="hero">
@@ -595,25 +627,25 @@ footer {
   </div>
 
   <div class="hero-actions">
-    <a href="lab-en.html" class="action-card lab">
+    <a href="theory-en.html" class="action-card purple">
+      <span class="action-tag">FOUNDATIONS</span>
+      <div class="action-title">TIE Theory</div>
+      <div class="action-desc">4 postulates · The T² Scalpel · Constants · 10 reinterpreted formulas.</div>
+      <span class="action-link">→ EXPLORE</span>
+    </a>
+    
+    <a href="labs-en.html" class="action-card lab">
       <span class="action-tag">LABORATORY</span>
       <div class="action-title">Enter the Lab</div>
       <div class="action-desc">10 interactive tools to verify TIE yourself.</div>
       <span class="action-link">→ ACCESS</span>
-    </a>
-    
-    <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" class="action-card github">
-      <span class="action-tag">OPEN SOURCE</span>
-      <div class="action-title">GitHub</div>
-      <div class="action-desc">All source code, papers, and documentation. Reproducible and free.</div>
-      <span class="action-link">↗ REPOSITORY</span>
     </a>
   </div>
 
   <div class="hero-cards">
     <a href="papers-en.html" class="info-card papers">
       <span class="info-tag">PUBLICATIONS</span>
-      <div class="info-title">Papers & Code</div>
+      <div class="info-title">Papers</div>
       <div class="info-desc">Zenodo DOI · Complete treatise · All open and verifiable.</div>
       <span class="info-link">→ ACCESS</span>
     </a>
@@ -625,11 +657,11 @@ footer {
       <span class="info-link">→ SEE STATUS</span>
     </a>
 
-    <a href="theory-en.html" class="info-card theory">
-      <span class="info-tag">FOUNDATIONS</span>
-      <div class="info-title">TIE Theory</div>
-      <div class="info-desc">4 postulates · The T² Scalpel · Constants · Reinterpreted formulas.</div>
-      <span class="info-link">→ EXPLORE</span>
+    <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" class="info-card gh">
+      <span class="info-tag">OPEN SOURCE</span>
+      <div class="info-title">GitHub</div>
+      <div class="info-desc">All source code, papers, and documentation. Reproducible and free.</div>
+      <span class="info-link">↗ REPOSITORY</span>
     </a>
   </div>
 </section>

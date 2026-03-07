@@ -144,9 +144,9 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
 </nav>
 
 <div class="strip">
-  <span class="s-tag">H-14 · TIE AI CHAT</span>
-  <span class="s-title">CHAT <span>TIE</span></span>
-  <span class="s-badge">⚡ GEMINI 2.5 FLASH-LITE · FREE</span>
+  <span class="s-tag">H-14 · AXON</span>
+  <span class="s-title">AGENTE <span>AXON</span></span>
+  <span class="s-badge">⚡ GEMINI 2.5 FLASH · FREE</span>
 </div>
 
 <!-- API KEY SCREEN -->
@@ -178,7 +178,7 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
     </div>
   </div>
 
-  <div class="status-bar" id="status-bar">Gemini 2.5 Flash-Lite · TIE v11.8 en contexto · listo</div>
+  <div class="status-bar" id="status-bar">AXON · TIE v11.8 en contexto · listo</div>
 
   <div class="input-area">
     <div class="input-row">
@@ -252,12 +252,12 @@ const T = {
     s3: 'Pégala aquí abajo ↓',
     btnTxt: 'CONECTAR →',
     akHint: 'Free tier · ~250 conversaciones/día · Sin costo',
-    wh: 'Pregúntame sobre <span>TIE</span>',
+    wh: 'Soy <span>AXON</span> — pregúntame sobre TIE',
     wp: 'Tengo el tratado completo en contexto. Pregunta sobre derivaciones, fórmulas, predicciones, y comparaciones con el modelo estándar.',
     placeholder: 'Pregunta sobre TIE...',
     footerTxt: 'Enter para enviar · Shift+Enter para nueva línea',
     btnClear: 'LIMPIAR',
-    statusReady: 'Gemini 2.5 Flash-Lite · TIE v11.8 en contexto · listo',
+    statusReady: 'AXON · TIE v11.8 en contexto · listo',
     statusThink: '⏳ Pensando...',
     statusOk: id => `✓ Respuesta en ${id}ms`,
     statusErr: 'Error — revisa la consola (F12)',
@@ -271,7 +271,7 @@ const T = {
       '¿Por qué 2π es fundamental en TIE?',
       '¿Qué predicciones pueden falsificar TIE?',
     ],
-    sysPre: `Eres el asistente oficial de la Teoría de la Infraestructura Espacial (TIE), desarrollada por Rubén Lecona (R@LC), investigador independiente de México.
+    sysPre: `Eres AXON, el agente de inteligencia artificial de la Teoría de la Infraestructura Espacial (TIE), desarrollada por Rubén Lecona (R@LC), investigador independiente de México.
 
 PRINCIPIOS CLAVE:
 • a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²
@@ -299,12 +299,12 @@ TRATADO COMPLETO TIE v11.8:
     s3: 'Paste it below ↓',
     btnTxt: 'CONNECT →',
     akHint: 'Free tier · ~250 conversations/day · No cost',
-    wh: 'Ask me about <span>TIE</span>',
+    wh: 'I am <span>AXON</span> — ask me about TIE',
     wp: 'I have the complete treatise in context. Ask about derivations, formulas, predictions, and comparisons with the standard model.',
     placeholder: 'Ask about TIE...',
     footerTxt: 'Enter to send · Shift+Enter for new line',
     btnClear: 'CLEAR',
-    statusReady: 'Gemini 2.5 Flash-Lite · TIE v11.8 in context · ready',
+    statusReady: 'AXON · TIE v11.8 in context · ready',
     statusThink: '⏳ Thinking...',
     statusOk: id => `✓ Response in ${id}ms`,
     statusErr: 'Error — check console (F12)',
@@ -318,7 +318,7 @@ TRATADO COMPLETO TIE v11.8:
       'Why is 2π fundamental in TIE?',
       'What predictions can falsify TIE?',
     ],
-    sysPre: `You are the official assistant for the Theory of Spatial Infrastructure (TIE), developed by Rubén Lecona (R@LC), independent researcher from Mexico.
+    sysPre: `You are AXON, the AI agent for the Theory of Spatial Infrastructure (TIE), developed by Rubén Lecona (R@LC), independent researcher from Mexico.
 
 KEY PRINCIPLES:
 • a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²
@@ -467,7 +467,7 @@ async function send() {
     };
 
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -561,7 +561,7 @@ function addBubble(role, text, loading=false) {
   div.className = `msg ${role==='user'?'user':'bot'}`;
   const av = document.createElement('div');
   av.className = 'avatar';
-  av.textContent = role==='user' ? 'TÚ' : 'TIE';
+  av.textContent = role==='user' ? 'TÚ' : 'AXN';
   const bub = document.createElement('div');
   bub.className = 'bubble';
   if (loading) {

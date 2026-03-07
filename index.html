@@ -303,6 +303,16 @@ nav {
   box-shadow: 0 0 40px rgba(91, 200, 245, 0.3);
 }
 
+.action-card.purple {
+  border-color: rgba(155, 89, 182, 0.3);
+  box-shadow: 0 0 20px rgba(155, 89, 182, 0.2);
+}
+.action-card.purple:hover {
+  border-color: var(--purple);
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(155, 89, 182, 0.3);
+}
+
 .action-card::before {
   content: '';
   position: absolute;
@@ -332,6 +342,10 @@ nav {
   color: var(--blue);
 }
 
+.action-card.purple .action-tag {
+  color: var(--purple);
+}
+
 .action-title {
   font-size: 1.6rem;
   font-weight: 700;
@@ -344,6 +358,10 @@ nav {
 
 .action-card.github .action-title {
   color: var(--blue);
+}
+
+.action-card.purple .action-title {
+  color: var(--purple);
 }
 
 .action-desc {
@@ -370,8 +388,13 @@ nav {
   color: var(--blue);
 }
 
+.action-card.purple .action-link {
+  color: var(--purple);
+}
+
 .action-card.lab:hover .action-link,
-.action-card.github:hover .action-link {
+.action-card.github:hover .action-link,
+.action-card.purple:hover .action-link {
   transform: translateX(10px);
   color: #fff;
 }
@@ -516,9 +539,22 @@ nav {
   color: var(--purple);
 }
 
+.info-card.gh {
+  border-color: rgba(91, 200, 245, 0.3);
+  box-shadow: 0 0 20px rgba(91, 200, 245, 0.2);
+}
+.info-card.gh:hover {
+  border-color: var(--blue);
+  box-shadow: 0 0 40px rgba(91, 200, 245, 0.3);
+}
+.info-card.gh .info-tag { color: var(--blue); }
+.info-card.gh .info-title { color: var(--blue); }
+.info-card.gh .info-link { color: var(--blue); }
+
 .info-card.papers:hover .info-link,
 .info-card.predictions:hover .info-link,
-.info-card.theory:hover .info-link {
+.info-card.theory:hover .info-link,
+.info-card.gh:hover .info-link {
   transform: translateX(10px);
   color: #fff;
 }
@@ -570,9 +606,9 @@ footer {
   <a href="index.html" class="nav-logo">TIE / R@LC</a>
   
   <!-- SELECTOR DE IDIOMA -->
-  <div style="display:flex;gap:.4rem;align-items:center;">
-    <a href="index.html" style="text-decoration:none;font-size:1.5rem;line-height:1;padding:.15rem .3rem;border-radius:5px;border:2px solid #FFD700;background:rgba(255,215,0,0.12);">🇪🇸</a>
-    <a href="index-en.html" style="text-decoration:none;font-size:1.5rem;line-height:1;padding:.15rem .3rem;border-radius:5px;border:2px solid transparent;opacity:0.5;transition:opacity .2s;">🇬🇧</a>
+  <div style="display:flex;gap:.4rem;">
+    <a href="index.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">ES</a>
+    <a href="index-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">EN</a>
   </div>
   
 
@@ -611,7 +647,7 @@ footer {
 
   <!-- BOTONES PRINCIPALES COMO CUADROS -->
   <div class="hero-actions">
-    <a href="teoria.html" class="action-card github">
+    <a href="teoria.html" class="action-card purple">
       <span class="action-tag">FUNDAMENTOS</span>
       <div class="action-title">La Teoría TIE</div>
       <div class="action-desc">4 postulados · El Bisturí T² · Constantes · 10 fórmulas reinterpretadas.</div>
@@ -630,7 +666,7 @@ footer {
   <div class="hero-cards">
     <a href="papers.html" class="info-card papers">
       <span class="info-tag">PUBLICACIONES</span>
-      <div class="info-title">Papers y Código</div>
+      <div class="info-title">Papers</div>
       <div class="info-desc">Zenodo DOI · Tratado completo · Todo abierto y verificable.</div>
       <span class="info-link">→ ACCEDER</span>
     </a>
@@ -642,7 +678,7 @@ footer {
       <span class="info-link">→ VER ESTADO</span>
     </a>
 
-    <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" class="info-card theory">
+    <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" class="info-card gh">
       <span class="info-tag">CÓDIGO ABIERTO</span>
       <div class="info-title">GitHub</div>
       <div class="info-desc">Todo el código fuente, papers y documentación. Reproducible y libre.</div>

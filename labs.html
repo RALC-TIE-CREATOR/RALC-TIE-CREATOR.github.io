@@ -51,7 +51,7 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .falsif-banner:hover .fb-arrow{transform:translateX(5px);}
 
 /* TOOLS GRID */
-.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:1.25rem;margin-bottom:2.5rem;}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem;margin-bottom:2.5rem;}
 
 /* TOOL CARD */
 .tool-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-decoration:none;color:inherit;transition:all .25s;display:flex;flex-direction:column;gap:.75rem;backdrop-filter:blur(8px);position:relative;overflow:hidden;}
@@ -126,17 +126,6 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="stat"><div class="stat-n" style="color:var(--green)">8/11</div><div class="stat-l">PREDICCIONES ✓</div></div>
     <div class="stat"><div class="stat-n" style="color:var(--blue)">0</div><div class="stat-l">PARÁMETROS LIBRES</div></div>
   </div>
-
-  <!-- FALSABILIDAD BANNER -->
-  <a href="falsabilidad.html" class="falsif-banner">
-    <div class="fb-icon">⚠️</div>
-    <div class="fb-body">
-      <div class="fb-tag">Criterio de Popper · Ciencia falsable</div>
-      <div class="fb-title">Cómo probar que TIE está mal</div>
-      <div class="fb-sub">4 criterios de falsificación cuantitativos · 8 predicciones confirmadas · 3 pendientes de ngEHT/LISA/Euclid · Changelog científico</div>
-    </div>
-    <div class="fb-arrow">→ VER</div>
-  </a>
 
   <!-- MASA Y GALAXIAS -->
   <div class="section-label" style="color:var(--gold)">⚛ Masa · Galaxias · Constantes</div>
@@ -267,6 +256,17 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     </a>
 
   </div>
+
+  <!-- FALSABILIDAD BANNER -->
+  <a href="falsabilidad.html" class="falsif-banner">
+    <div class="fb-icon">⚠️</div>
+    <div class="fb-body">
+      <div class="fb-tag">Criterio de Popper · Ciencia falsable</div>
+      <div class="fb-title">Cómo probar que TIE está mal</div>
+      <div class="fb-sub">4 criterios de falsificación cuantitativos · 8 predicciones confirmadas · 3 pendientes de ngEHT/LISA/Euclid · Changelog científico</div>
+    </div>
+    <div class="fb-arrow">→ VER</div>
+  </a>
 
   <!-- PRÓXIMAMENTE -->
   <div class="section-label" style="color:var(--dim)">⏳ Próximamente — Fase 4</div>

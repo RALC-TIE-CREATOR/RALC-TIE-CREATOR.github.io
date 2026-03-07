@@ -360,7 +360,7 @@ function setLang(l) {
   document.getElementById('s1').innerHTML = t.s1;
   document.getElementById('s2').textContent = t.s2;
   document.getElementById('s3').textContent = t.s3;
-  document.getElementById('btn-txt').textContent = t.btnTxt;
+  const btnTxtEl = document.getElementById('btn-txt'); if(btnTxtEl) btnTxtEl.textContent = t.btnTxt;
   document.getElementById('ak-hint').textContent = t.akHint;
   const wh = document.getElementById('wh'); if(wh) wh.innerHTML = t.wh;
   const wp = document.getElementById('wp'); if(wp) wp.textContent = t.wp;
@@ -397,13 +397,9 @@ function connect() {
     setTimeout(()=>document.getElementById('key-inp').style.borderColor='',1500);
     return;
   }
-  // Visual feedback
-  const btn = document.querySelector('.btn-connect');
-  btn.textContent = '⏳ Conectando...';
-  btn.disabled = true;
   apiKey = k;
   sessionStorage.setItem('tie_chat_key', k);
-  setTimeout(showChat, 300);
+  showChat();
 }
 function showChat() {
   document.getElementById('api-screen').style.display = 'none';

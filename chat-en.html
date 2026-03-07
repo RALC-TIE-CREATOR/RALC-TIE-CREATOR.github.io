@@ -392,14 +392,18 @@ function toggleEye() {
 }
 function connect() {
   const k = document.getElementById('key-inp').value.trim();
-  if (!k || !k.startsWith('AIza')) {
+  if (!k || k.length < 10) {
     document.getElementById('key-inp').style.borderColor = 'var(--red)';
     setTimeout(()=>document.getElementById('key-inp').style.borderColor='',1500);
     return;
   }
+  // Visual feedback
+  const btn = document.querySelector('.btn-connect');
+  btn.textContent = '⏳ Conectando...';
+  btn.disabled = true;
   apiKey = k;
   sessionStorage.setItem('tie_chat_key', k);
-  showChat();
+  setTimeout(showChat, 300);
 }
 function showChat() {
   document.getElementById('api-screen').style.display = 'none';
@@ -620,7 +624,7 @@ function clearChat() {
 // INIT
 // ═══════════════════════════════════════════
 window.onload = () => {
-  if (apiKey && apiKey.startsWith('AIza')) showChat();
+  if (apiKey && apiKey.length > 10) showChat();
   setLang('en');
 };
 </script>

@@ -569,27 +569,16 @@ footer {
 <nav>
   <a href="index.html" class="nav-logo">TIE / R@LC</a>
   
-  <!-- SELECTOR DE IDIOMA - BANDERAS COMO EMOJIS -->
-  <div style="display:flex; gap:1.5rem; align-items:center; margin:0 2rem;">
-    <!-- Bandera activa (ES) - dorada con borde -->
-    <a href="index.html" style="font-size:2.2rem !important; line-height:1 !important; text-decoration:none !important; color:#FFD700 !important; border-bottom:2px solid #FFD700 !important;">🇪🇸</a>
-    
-    <span style="color:#a0a0b0; font-size:2rem;">|</span>
-    
-    <!-- Bandera inactiva (EN) - gris claro -->
-    <a href="index-en.html" style="font-size:2.2rem !important; line-height:1 !important; text-decoration:none !important; color:#a0a0b0 !important; opacity:0.7 !important; transition:0.3s !important;">🇬🇧</a>
+  <!-- SELECTOR DE IDIOMA -->
+  <div style="display:flex;gap:.5rem;">
+    <a href="index.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">ES</a>
+    <a href="index-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.15);">EN</a>
   </div>
   
 
 </nav>
 
-<style>
-/* Hover para la bandera inactiva */
-nav a[href="index-en.html"]:hover {
-  color: #FFD700 !important;
-  opacity: 1 !important;
-}
-</style>
+
 
 <section class="hero">
   <!-- TÍTULO PRINCIPAL -->
@@ -622,22 +611,22 @@ nav a[href="index-en.html"]:hover {
 
   <!-- BOTONES PRINCIPALES COMO CUADROS -->
   <div class="hero-actions">
-    <a href="labs.html" class="action-card lab">
+    <a href="teoria.html" class="action-card lab">
+      <span class="action-tag">FUNDAMENTOS</span>
+      <div class="action-title">La Teoría TIE</div>
+      <div class="action-desc">4 postulados · El Bisturí T² · Constantes · 10 fórmulas reinterpretadas.</div>
+      <span class="action-link">→ EXPLORAR</span>
+    </a>
+    
+    <a href="labs.html" class="action-card github">
       <span class="action-tag">LABORATORIO</span>
       <div class="action-title">Entrar al Laboratorio</div>
       <div class="action-desc">10 herramientas interactivas para verificar TIE por ti mismo.</div>
       <span class="action-link">→ ACCEDER</span>
     </a>
-    
-    <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" class="action-card github">
-      <span class="action-tag">CÓDIGO ABIERTO</span>
-      <div class="action-title">GitHub</div>
-      <div class="action-desc">Todo el código fuente, papers y documentación. Reproducible y libre.</div>
-      <span class="action-link">↗ REPOSITORIO</span>
-    </a>
   </div>
 
-  <!-- 5 CUADROS INFERIORES -->
+  <!-- 3 CUADROS INFERIORES -->
   <div class="hero-cards">
     <a href="papers.html" class="info-card papers">
       <span class="info-tag">PUBLICACIONES</span>
@@ -653,11 +642,11 @@ nav a[href="index-en.html"]:hover {
       <span class="info-link">→ VER ESTADO</span>
     </a>
 
-    <a href="teoria.html" class="info-card theory">
-      <span class="info-tag">FUNDAMENTOS</span>
-      <div class="info-title">La Teoría TIE</div>
-      <div class="info-desc">4 postulados · El Bisturí T² · Constantes · Fórmulas reinterpretadas.</div>
-      <span class="info-link">→ EXPLORAR</span>
+    <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" class="info-card theory">
+      <span class="info-tag">CÓDIGO ABIERTO</span>
+      <div class="info-title">GitHub</div>
+      <div class="info-desc">Todo el código fuente, papers y documentación. Reproducible y libre.</div>
+      <span class="info-link">↗ REPOSITORIO</span>
     </a>
   </div>
 </section>
@@ -795,4 +784,3 @@ setInterval(rotatePhrase, 4000);
 </script>
 </body>
 </html>
-

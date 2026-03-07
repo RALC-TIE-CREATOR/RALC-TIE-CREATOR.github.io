@@ -3,388 +3,669 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TIE · Laboratorio · Herramientas de Verificación</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<title>TIE · H-16 · API REST</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
-:root{--gold:#FFD700;--blue:#5BC8F5;--green:#44FF88;--red:#FF4455;--purple:#BB88FF;--orange:#FF8C42;--bg:#000001;--bg2:rgba(5,5,15,0.78);--bg3:rgba(10,10,25,0.6);--text:#fff;--dim:#a0a0b0;--border:rgba(91,200,245,0.15);--mono:'Space Mono',monospace;--sans:'Syne',sans-serif;}
+:root{
+  --gold:#FFD700;--orange:#FF8C42;--red:#FF4455;--blue:#5BC8F5;--green:#44FF88;
+  --bg:#000001;--bg2:rgba(5,5,15,0.92);--bg3:rgba(8,14,25,0.8);
+  --text:#fff;--dim:#9090a8;--border:rgba(255,140,66,0.15);
+  --mono:'Space Mono',monospace;--sans:'Syne',sans-serif;
+}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
-#galaxy-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.45;}
-nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex;flex-direction:column;}
+#bg-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.2;}
+
+nav{position:relative;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.85rem 2rem;background:rgba(0,0,1,0.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);flex-shrink:0;}
 .nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
 .nav-center{display:flex;gap:.5rem;}
-.lang-link{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;transition:all .2s;}
-.lang-link.active{color:#000;background:var(--gold);}
-.lang-link.inactive{color:var(--dim);border:1px solid var(--border);}
-.lang-link.inactive:hover{color:var(--gold);border-color:var(--gold);}
-.nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;transition:color .2s;}
-.nav-back:hover{color:var(--gold);}
-.page{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:7rem 2rem 4rem;}
-.page-tag{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:.75rem;}
-.page-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;letter-spacing:-2px;margin-bottom:.5rem;}
-.page-title span{color:var(--gold);}
-.page-sub{font-family:var(--mono);font-size:.8rem;color:var(--dim);max-width:600px;line-height:1.6;margin-bottom:2.5rem;}
+.lang-btn{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;cursor:pointer;border:none;transition:all .2s;}
+.lang-btn.active{color:#000;background:var(--gold);}
+.lang-btn.inactive{color:var(--dim);border:1px solid var(--border);background:transparent;}
+.lang-btn.inactive:hover{color:var(--gold);border-color:var(--gold);}
+.nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;letter-spacing:1px;transition:color .2s;}
+.nav-back:hover{color:var(--orange);}
 
-/* STATS */
-.stats-bar{display:flex;gap:2rem;flex-wrap:wrap;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1rem 1.5rem;backdrop-filter:blur(8px);margin-bottom:2.5rem;}
-.stat{text-align:center;}
-.stat-n{font-family:var(--mono);font-size:1.5rem;font-weight:700;color:var(--gold);line-height:1;}
-.stat-l{font-family:var(--mono);font-size:.58rem;color:var(--dim);letter-spacing:1px;margin-top:.15rem;}
+.strip{position:relative;z-index:10;background:rgba(0,0,1,0.8);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;flex-wrap:wrap;gap:.4rem;}
+.s-tag{font-family:var(--mono);font-size:.6rem;color:var(--orange);letter-spacing:3px;}
+.s-title{font-family:var(--sans);font-size:.95rem;font-weight:800;}
+.s-title span{color:var(--orange);}
+.s-badge{font-family:var(--mono);font-size:.58rem;color:var(--green);background:rgba(68,255,136,.08);border:1px solid rgba(68,255,136,.25);border-radius:4px;padding:.18rem .55rem;letter-spacing:1px;}
 
-/* SECTION */
-.section-label{font-family:var(--mono);font-size:.65rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:.75rem;}
-.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+/* LAYOUT */
+#main{position:relative;z-index:10;flex:1;display:flex;overflow:hidden;min-height:0;}
 
-/* FALSIF BANNER — special */
-.falsif-banner{display:flex;align-items:center;gap:1.25rem;background:linear-gradient(135deg,rgba(255,68,85,.08) 0%,rgba(255,215,0,.05) 100%);border:1px solid rgba(255,68,85,.3);border-radius:16px;padding:1.25rem 1.75rem;margin-bottom:2.5rem;text-decoration:none;color:inherit;transition:all .3s;backdrop-filter:blur(8px);}
-.falsif-banner:hover{border-color:rgba(255,68,85,.6);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,68,85,.12);}
-.fb-icon{font-size:2rem;flex-shrink:0;}
-.fb-body{flex:1;}
-.fb-tag{font-family:var(--mono);font-size:.6rem;color:var(--red);letter-spacing:3px;text-transform:uppercase;margin-bottom:.25rem;}
-.fb-title{font-size:1.15rem;font-weight:800;margin-bottom:.25rem;}
-.fb-sub{font-family:var(--mono);font-size:.65rem;color:var(--dim);line-height:1.5;}
-.fb-arrow{font-family:var(--mono);font-size:.75rem;color:var(--red);flex-shrink:0;transition:transform .2s;}
-.falsif-banner:hover .fb-arrow{transform:translateX(5px);}
+/* LEFT: endpoint list */
+#ep-col{width:240px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.ep-header{padding:.65rem .8rem;border-bottom:1px solid var(--border);flex-shrink:0;}
+.ep-header-title{font-family:var(--mono);font-size:.6rem;color:var(--orange);letter-spacing:3px;margin-bottom:.4rem;}
+.ep-base{font-family:var(--mono);font-size:.62rem;color:var(--dim);background:rgba(255,140,66,.06);border:1px solid rgba(255,140,66,.15);border-radius:6px;padding:.3rem .5rem;}
+.ep-base span{color:var(--orange);}
+#ep-list{flex:1;overflow-y:auto;padding:.5rem;display:flex;flex-direction:column;gap:.3rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.ep-item{background:var(--bg3);border:1px solid transparent;border-radius:8px;padding:.5rem .65rem;cursor:pointer;transition:all .18s;display:flex;flex-direction:column;gap:.2rem;}
+.ep-item:hover{border-color:rgba(255,140,66,.25);}
+.ep-item.active{border-color:var(--orange);background:rgba(255,140,66,.06);}
+.ep-method{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:1px;}
+.ep-method.get{color:var(--green);}
+.ep-method.post{color:var(--blue);}
+.ep-path{font-family:var(--mono);font-size:.65rem;color:var(--text);}
+.ep-desc{font-family:var(--mono);font-size:.58rem;color:var(--dim);}
 
-/* TOOLS GRID */
-.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem;margin-bottom:2.5rem;}
+/* CENTER: docs + playground */
+#doc-col{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
 
-/* TOOL CARD */
-.tool-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-decoration:none;color:inherit;transition:all .25s;display:flex;flex-direction:column;gap:.75rem;backdrop-filter:blur(8px);position:relative;overflow:hidden;}
-.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .25s;}
-.tool-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.4);}
-.tool-card:hover::before{opacity:1;}
+/* ENDPOINT HEADER */
+#ep-info{padding:1rem 1.25rem .75rem;border-bottom:1px solid var(--border);flex-shrink:0;}
+.ep-info-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.35rem;}
+.ep-info-method{font-family:var(--mono);font-size:.75rem;font-weight:700;letter-spacing:2px;}
+.ep-info-path{font-family:var(--mono);font-size:.85rem;color:var(--text);}
+.ep-info-desc{font-family:var(--mono);font-size:.65rem;color:var(--dim);line-height:1.6;}
+.ep-info-formula{margin-top:.4rem;}
 
-/* Per-color variants */
-.tc-gold{--cc:var(--gold);}
-.tc-gold:hover{border-color:rgba(255,215,0,.35);}
-.tc-gold::before{background:var(--gold);}
-.tc-blue{--cc:var(--blue);}
-.tc-blue:hover{border-color:rgba(91,200,245,.35);}
-.tc-blue::before{background:var(--blue);}
-.tc-green{--cc:var(--green);}
-.tc-green:hover{border-color:rgba(68,255,136,.3);}
-.tc-green::before{background:var(--green);}
-.tc-red{--cc:var(--red);}
-.tc-red:hover{border-color:rgba(255,68,85,.3);}
-.tc-red::before{background:var(--red);}
-.tc-purple{--cc:var(--purple);}
-.tc-purple:hover{border-color:rgba(187,136,255,.3);}
-.tc-purple::before{background:var(--purple);}
-.tc-orange{--cc:var(--orange);}
-.tc-orange:hover{border-color:rgba(255,140,66,.3);}
-.tc-orange::before{background:var(--orange);}
+/* PARAMS + RESPONSE tabs */
+.doc-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;}
+.doc-tab{font-family:var(--mono);font-size:.62rem;letter-spacing:1px;padding:.5rem 1rem;background:transparent;border:none;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+.doc-tab.active{color:var(--orange);border-bottom-color:var(--orange);}
+.doc-tab:hover:not(.active){color:var(--text);}
 
-.tc-header{display:flex;justify-content:space-between;align-items:flex-start;}
-.tc-id{font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cc,var(--gold));}
-.tc-badge{font-family:var(--mono);font-size:.5rem;padding:.15rem .45rem;border-radius:100px;letter-spacing:1px;}
-.tc-badge.live{background:rgba(68,255,136,.12);color:var(--green);border:1px solid rgba(68,255,136,.25);}
-.tc-badge.new{background:rgba(255,215,0,.12);color:var(--gold);border:1px solid rgba(255,215,0,.25);}
-.tc-badge.soon{background:rgba(255,140,66,.1);color:var(--orange);border:1px solid rgba(255,140,66,.2);}
-.tc-name{font-size:1.2rem;font-weight:800;line-height:1.2;}
-.tc-eq{font-size:.8rem;color:var(--cc,var(--gold));margin:.1rem 0;}
-.tc-desc{font-family:var(--mono);font-size:.65rem;color:var(--dim);line-height:1.65;flex:1;}
-.tc-footer{display:flex;justify-content:space-between;align-items:center;padding-top:.6rem;border-top:1px solid rgba(255,255,255,.05);}
-.tc-tags{display:flex;gap:.35rem;flex-wrap:wrap;}
-.tc-tag{font-family:var(--mono);font-size:.55rem;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;padding:.1rem .4rem;}
-.tc-link{font-family:var(--mono);font-size:.65rem;color:var(--cc,var(--gold));transition:transform .2s;white-space:nowrap;}
-.tool-card:hover .tc-link{transform:translateX(4px);}
+/* TAB CONTENT */
+#tab-content{flex:1;overflow-y:auto;padding:.85rem 1.25rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
 
-/* COMING SOON CARD */
-.tool-card.coming{opacity:.5;cursor:default;}
-.tool-card.coming:hover{transform:none;box-shadow:none;}
+/* PARAMS */
+.param-table{width:100%;border-collapse:collapse;margin-bottom:1rem;}
+.param-table th{font-family:var(--mono);font-size:.58rem;color:var(--dim);letter-spacing:2px;padding:.3rem .5rem;border-bottom:1px solid var(--border);text-align:left;}
+.param-table td{font-family:var(--mono);font-size:.65rem;padding:.4rem .5rem;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:top;}
+.param-name{color:var(--orange);}
+.param-type{color:var(--blue);}
+.param-req{color:var(--red);font-size:.55rem;}
+.param-opt{color:var(--dim);font-size:.55rem;}
+.param-desc{color:var(--dim);}
 
-footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);margin-top:2rem;}
-footer .feq{font-family:var(--mono);font-size:.8rem;color:var(--gold);margin-bottom:.5rem;}
-footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;}
+/* PLAYGROUND */
+.play-section{margin-bottom:1rem;}
+.play-title{font-family:var(--mono);font-size:.6rem;color:var(--orange);letter-spacing:2px;margin-bottom:.5rem;}
+.play-inputs{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.65rem;}
+.play-row{display:flex;align-items:center;gap:.5rem;}
+.play-label{font-family:var(--mono);font-size:.62rem;color:var(--dim);width:90px;flex-shrink:0;}
+.play-input{flex:1;background:rgba(0,0,0,.5);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--mono);font-size:.7rem;padding:.35rem .6rem;outline:none;transition:border-color .2s;}
+.play-input:focus{border-color:var(--orange);}
+.btn-run{background:rgba(255,140,66,.1);border:1px solid rgba(255,140,66,.35);border-radius:7px;color:var(--orange);font-family:var(--mono);font-size:.68rem;letter-spacing:2px;padding:.45rem 1.2rem;cursor:pointer;transition:all .2s;}
+.btn-run:hover{background:rgba(255,140,66,.22);}
+.btn-run:disabled{opacity:.4;cursor:not-allowed;}
+
+/* RESPONSE */
+.res-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;}
+.res-status{font-family:var(--mono);font-size:.65rem;padding:.15rem .5rem;border-radius:4px;}
+.res-status.ok{background:rgba(68,255,136,.12);color:var(--green);border:1px solid rgba(68,255,136,.25);}
+.res-status.err{background:rgba(255,68,85,.12);color:var(--red);border:1px solid rgba(255,68,85,.25);}
+.res-time{font-family:var(--mono);font-size:.58rem;color:var(--dim);}
+#res-box{background:rgba(0,0,0,.7);border:1px solid rgba(255,140,66,.12);border-radius:8px;padding:.7rem .85rem;font-family:var(--mono);font-size:.68rem;color:#e0e0e0;line-height:1.7;max-height:200px;overflow-y:auto;white-space:pre;scrollbar-width:thin;}
+.json-key{color:var(--blue);}
+.json-str{color:var(--green);}
+.json-num{color:var(--orange);}
+.json-bool{color:var(--red);}
+
+/* CURL BOX */
+.curl-box{background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:.6rem .8rem;font-family:var(--mono);font-size:.65rem;color:var(--dim);margin-top:.5rem;position:relative;overflow-x:auto;white-space:pre;}
+.curl-copy{position:absolute;top:.35rem;right:.5rem;background:rgba(255,140,66,.08);border:1px solid rgba(255,140,66,.2);border-radius:4px;color:var(--orange);font-family:var(--mono);font-size:.55rem;padding:.15rem .45rem;cursor:pointer;transition:all .2s;}
+.curl-copy:hover{background:rgba(255,140,66,.2);}
+
+/* RIGHT: API info */
+#info-col{width:230px;flex-shrink:0;border-left:1px solid var(--border);display:flex;flex-direction:column;gap:.6rem;padding:.8rem;overflow-y:auto;scrollbar-width:none;}
+#info-col::-webkit-scrollbar{display:none;}
+.i-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.75rem;}
+.i-title{font-family:var(--mono);font-size:.58rem;color:var(--orange);letter-spacing:3px;margin-bottom:.6rem;}
+.i-row{display:flex;justify-content:space-between;align-items:baseline;padding:.22rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.i-row:last-child{border:none;}
+.i-key{font-family:var(--mono);font-size:.6rem;color:var(--dim);}
+.i-val{font-family:var(--mono);font-size:.62rem;color:var(--text);}
+.i-val.ok{color:var(--green);}
+.i-val.warn{color:var(--gold);}
+
+.insight{background:rgba(255,140,66,.04);border:1px solid rgba(255,140,66,.15);border-left:3px solid var(--orange);border-radius:0 8px 8px 0;padding:.65rem .75rem;}
+.insight p{font-family:var(--mono);font-size:.62rem;color:var(--dim);line-height:1.7;}
+.insight strong{color:var(--orange);}
+
+.sdk-block{display:flex;flex-direction:column;gap:.3rem;}
+.sdk-btn{background:rgba(91,200,245,.06);border:1px solid rgba(91,200,245,.2);border-radius:6px;color:var(--blue);font-family:var(--mono);font-size:.6rem;padding:.35rem .55rem;cursor:pointer;transition:all .2s;text-align:left;}
+.sdk-btn:hover{background:rgba(91,200,245,.14);}
+
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:rgba(255,140,66,.15);border:1px solid rgba(255,140,66,.4);border-radius:8px;padding:.45rem 1rem;font-family:var(--mono);font-size:.68rem;color:var(--orange);z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+
+@media(max-width:900px){#info-col{display:none;}}
+@media(max-width:600px){#ep-col{display:none;}}
 </style>
 </head>
 <body>
-<canvas id="galaxy-canvas"></canvas>
+<canvas id="bg-canvas"></canvas>
+
 <nav>
   <a href="index.html" class="nav-logo">TIE / R@LC</a>
   <div class="nav-center">
-    <a href="labs.html" class="lang-link active">ES</a>
-    <a href="labs-en.html" class="lang-link inactive">EN</a>
+    <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ES</button>
+    <button class="lang-btn inactive" id="btn-en" onclick="setLang('en')">EN</button>
   </div>
-  <a href="index.html" class="nav-back">← INICIO</a>
+  <a href="labs.html" class="nav-back" id="lnk-back">← LABORATORIO</a>
 </nav>
 
-<div class="page">
-  <div class="page-tag">LABORATORIO DE INFRAESTRUCTURA</div>
-  <h1 class="page-title">HERRAMIENTAS DE <span>VERIFICACIÓN</span></h1>
-  <p class="page-sub">11 módulos interactivos para poner a prueba TIE con datos reales. Sin fe. Solo números.</p>
-
-  <div class="stats-bar">
-    <div class="stat"><div class="stat-n">10</div><div class="stat-l">HERRAMIENTAS</div></div>
-    <div class="stat"><div class="stat-n" style="color:var(--green)">8</div><div class="stat-l">EN VIVO</div></div>
-    <div class="stat"><div class="stat-n" style="color:var(--gold)">175</div><div class="stat-l">GALAXIAS SPARC</div></div>
-    <div class="stat"><div class="stat-n" style="color:var(--green)">8/11</div><div class="stat-l">PREDICCIONES ✓</div></div>
-    <div class="stat"><div class="stat-n" style="color:var(--blue)">0</div><div class="stat-l">PARÁMETROS LIBRES</div></div>
-  </div>
-
-  <!-- MASA Y GALAXIAS -->
-  <div class="section-label" style="color:var(--gold)">⚛ Masa · Galaxias · Constantes</div>
-  <div class="tools-grid">
-
-    <a href="2pi.html" class="tool-card tc-gold">
-      <div class="tc-header">
-        <span class="tc-id">H-03</span>
-        <span class="tc-badge live">EN VIVO</span>
-      </div>
-      <div class="tc-name">Calculadora 2π</div>
-      <div class="tc-eq">\( m_{\text{TIE}} = 2\pi \cdot m_{\text{obs}} \)</div>
-      <div class="tc-desc">El factor 2π conecta masa observada con masa real de infraestructura. Selecciona entre 55 galaxias SPARC, filtra por tipo, ajusta H₀ con slider. Gráfica Plotly v_flat vs masa.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">55 galaxias</span><span class="tc-tag">H₀ slider</span><span class="tc-tag">Plotly</span></div>
-        <span class="tc-link">→ EJECUTAR</span>
-      </div>
-    </a>
-
-    <a href="materia-oscura.html" class="tool-card tc-green">
-      <div class="tc-header">
-        <span class="tc-id">H-05</span>
-        <span class="tc-badge live">EN VIVO</span>
-      </div>
-      <div class="tc-name">Materia Oscura</div>
-      <div class="tc-eq">\( 1 - 1/2\pi = 84.1\% \)</div>
-      <div class="tc-desc">Conversor de masa observable a masa real TIE. La materia oscura no es una partícula — es la fracción de infraestructura no contabilizada. Barra animada 15.9% / 84.1%. 4 unidades.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">0 parámetros</span><span class="tc-tag">universal</span></div>
-        <span class="tc-link">→ EJECUTAR</span>
-      </div>
-    </a>
-
-    <a href="constante.html" class="tool-card tc-blue">
-      <div class="tc-header">
-        <span class="tc-id">H-08</span>
-        <span class="tc-badge live">EN VIVO</span>
-      </div>
-      <div class="tc-name">a₀ y Λ</div>
-      <div class="tc-eq">\( a_0 = cH_0/2\pi \quad \Lambda = 2H_0^2/c^2 \)</div>
-      <div class="tc-desc">Slider H₀ de 67 a 74 km/s/Mpc. Calcula a₀, Λ y radio de transición de la VL en tiempo real. Error 3.5% vs Planck 2018 — vs 10¹²⁰ órdenes de la QFT. Gráfica doble eje.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">Planck vs SH0ES</span><span class="tc-tag">Λ sin energía oscura</span></div>
-        <span class="tc-link">→ EJECUTAR</span>
-      </div>
-    </a>
-
-  </div>
-
-  <!-- GALAXIAS Y CURVAS -->
-  <div class="section-label" style="color:var(--blue)">🌌 Galaxias · Curvas de Rotación</div>
-  <div class="tools-grid">
-
-    <a href="curvas.html" class="tool-card tc-gold">
-      <div class="tc-header">
-        <span class="tc-id">H-01</span>
-        <span class="tc-badge live">EN VIVO</span>
-      </div>
-      <div class="tc-name">Curvas de Rotación</div>
-      <div class="tc-eq">\( v(r) = \sqrt{r\sqrt{a_N(a_N+a_0)}} \)</div>
-      <div class="tc-desc">12 presets SPARC reales (espirales, gigantes, LSB, enanas). 3 modos: Presets / Libre / Comparar. Componentes v_disk, v_gas, v_Newton activables. Marcador rₜ con valor numérico.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">12 galaxias</span><span class="tc-tag">3 modos</span><span class="tc-tag">componentes</span></div>
-        <span class="tc-link">→ EJECUTAR</span>
-      </div>
-    </a>
-
-    <a href="sparc.html" class="tool-card tc-blue">
-      <div class="tc-header">
-        <span class="tc-id">H-02</span>
-        <span class="tc-badge new">ACTUALIZADO</span>
-      </div>
-      <div class="tc-name">Explorador SPARC</div>
-      <div class="tc-eq">\( v_{\text{TIE}} = (GM_{\text{bar}}\,a_0)^{1/4} \)</div>
-      <div class="tc-desc">Catálogo completo: 175 galaxias reales (Lelli+2016). Filtros por tipo y calidad Q. 4 modos de gráfica: dispersión, v_TIE vs v_obs, histograma de error, distribución de distancias. Modal con detalle por galaxia.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">175 galaxias</span><span class="tc-tag">Q=1/2/3</span><span class="tc-tag">4 gráficas</span></div>
-        <span class="tc-link">→ EXPLORAR</span>
-      </div>
-    </a>
-
-  </div>
-
-  <!-- GRAVEDAD Y TIEMPO -->
-  <div class="section-label" style="color:var(--purple)">⏱ Gravedad · Tiempo · Relatividad</div>
-  <div class="tools-grid">
-
-    <a href="agujeros.html" class="tool-card tc-red">
-      <div class="tc-header">
-        <span class="tc-id">H-11</span>
-        <span class="tc-badge live">EN VIVO</span>
-      </div>
-      <div class="tc-name">Agujeros Negros</div>
-      <div class="tc-eq">\( r_h = 0.869\sqrt{GM/a_0} \gg r_s \)</div>
-      <div class="tc-desc">TIE vs GR: horizonte √M vs horizonte lineal. 6 presets (M87*, Sgr A*, NGC 1277, GW150914, Sol, masa crítica). Gráfica modos RADIOS y FACTOR. Opción B honesta — esfera fotónica pendiente.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">M87* 4.04×10⁶×</span><span class="tc-tag">ngEHT</span><span class="tc-tag">sin singularidades</span></div>
-        <span class="tc-link">→ EJECUTAR</span>
-      </div>
-    </a>
-
-    <a href="gps.html" class="tool-card tc-blue">
-      <div class="tc-header">
-        <span class="tc-id">H-12</span>
-        <span class="tc-badge live">EN VIVO</span>
-      </div>
-      <div class="tc-name">Corrección GPS</div>
-      <div class="tc-eq">\( \Delta\tau = \Delta\Phi/c^2 \cdot t \)</div>
-      <div class="tc-desc">45.7 µs/día predichos, 45.9 observados — error 0.4%. 4 objetos centrales, 4 órbitas predefinidas. Tabla de 6 misiones históricas. Récord Krikalev: +22.68 ms. Gráfica corrección vs altitud.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">error 0.4%</span><span class="tc-tag">6 misiones</span><span class="tc-tag">Krikalev</span></div>
-        <span class="tc-link">→ EJECUTAR</span>
-      </div>
-    </a>
-
-    <a href="reloj-universal.html" class="tool-card tc-purple">
-      <div class="tc-header">
-        <span class="tc-id">H-12.1</span>
-        <span class="tc-badge live">EN VIVO</span>
-      </div>
-      <div class="tc-name">Reloj Universal</div>
-      <div class="tc-eq">\( \tau_{\text{local}} = \tau_{\text{Motor}}/g \)</div>
-      <div class="tc-desc">Motor Absoluto produciendo ciclos en tiempo real. Dos relojes analógicos animados: GR (tiempo curvo) vs TIE (ciclos procesados). 6 ubicaciones preset. Slider de gravedad fino. Lógica corregida: espacio profundo va rapidísimo.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">tiempo real</span><span class="tc-tag">6 ubicaciones</span><span class="tc-tag">analógico</span></div>
-        <span class="tc-link">→ EJECUTAR</span>
-      </div>
-    </a>
-
-  </div>
-
-  <!-- FALSABILIDAD BANNER -->
-  <a href="falsabilidad.html" class="falsif-banner">
-    <div class="fb-icon">⚠️</div>
-    <div class="fb-body">
-      <div class="fb-tag">Criterio de Popper · Ciencia falsable</div>
-      <div class="fb-title">Cómo probar que TIE está mal</div>
-      <div class="fb-sub">4 criterios de falsificación cuantitativos · 8 predicciones confirmadas · 3 pendientes de ngEHT/LISA/Euclid · Changelog científico</div>
-    </div>
-    <div class="fb-arrow">→ VER</div>
-  </a>
-
-  <!-- FASE 5 — INVESTIGADORES -->
-  <div class="section-label">🤖 Investigadores · IA</div>
-  <div class="tools-grid">
-
-    <a href="chat.html" class="tool-card tc-purple">
-      <div class="tc-header">
-        <span class="tc-id">H-14</span>
-        <span class="tc-badge live">LIVE</span>
-      </div>
-      <div class="tc-name">TIE AI Chat</div>
-      <div class="tc-eq">\( \text{TIE v11.8} \times \text{Gemini} \)</div>
-      <div class="tc-desc">Pregunta cualquier cosa sobre TIE. El tratado completo está en contexto. Derivaciones, cálculos, comparaciones con el modelo estándar. Bilingüe ES/EN.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">Gemini 2.5 Flash</span><span class="tc-tag">free</span><span class="tc-tag">bilingüe</span></div>
-        <span class="tc-link">→ ABRIR CHAT</span>
-      </div>
-    </a>
-
-  </div>
-
-  <!-- H-15 + H-16 -->
-  <div class="tools-grid">
-
-    <div class="tool-card tc-lime">
-      <div class="tc-header">
-        <span class="tc-id">H-15</span>
-        <span class="tc-badge live">LIVE</span>
-      </div>
-      <div class="tc-name">Generador LaTeX</div>
-      <div class="tc-eq">\( a_0 = \frac{cH_0}{2\pi} \)</div>
-      <div class="tc-desc">Catálogo completo de ecuaciones TIE con código LaTeX listo para copiar. Renderizado KaTeX, exportar .tex y .md, editor custom y constantes.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">LaTeX</span><span class="tc-tag">KaTeX</span><span class="tc-tag">exportar</span></div>
-        <a href="latex.html" class="tc-link">→ ABRIR</a>
-      </div>
-    </div>
-
-    <div class="tool-card tc-orange">
-      <div class="tc-header">
-        <span class="tc-id">H-16</span>
-        <span class="tc-badge live">LIVE</span>
-      </div>
-      <div class="tc-name">API Pública REST</div>
-      <div class="tc-eq">\( v_{\text{flat}} = (GMa_0)^{1/4} \)</div>
-      <div class="tc-desc">API REST pública para todos los cálculos TIE. Curvas de rotación, horizontes, deflexión gravitacional. Docs interactivas OpenAPI.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">REST API</span><span class="tc-tag">OpenAPI</span><span class="tc-tag">JSON</span></div>
-        <a href="api.html" class="tc-link">→ ABRIR</a>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- FASE 4 — VISUALIZACIONES 3D -->
-  <div class="section-label" style="color:var(--gold)">🔭 Visualizaciones · 3D</div>
-  <div class="tools-grid">
-
-    <div class="tool-card tc-blue">
-      <div class="tc-header">
-        <span class="tc-id">H-07</span>
-        <span class="tc-badge live">LIVE</span>
-      </div>
-      <div class="tc-name">Lensing Gravitacional</div>
-      <div class="tc-eq">\( \alpha = \frac{4GM}{c^2 b} \)</div>
-      <div class="tc-desc">Simulador de deflexión gravitacional TIE vs GR. Anillo de Einstein, horizonte rₕ TIE, microlensing animado con curva de magnificación.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">Three.js</span><span class="tc-tag">fotones</span><span class="tc-tag">Einstein ring</span></div>
-        <a href="lensing.html" class="tc-link">→ ABRIR</a>
-      </div>
-    </div>
-
-    <div class="tool-card tc-green">
-      <div class="tc-header">
-        <span class="tc-id">H-13</span>
-        <span class="tc-badge live">LIVE</span>
-      </div>
-      <div class="tc-name">Campo φ · Ondas GW</div>
-      <div class="tc-eq">\( m_\phi = \hbar a_0 / c^2 \)</div>
-      <div class="tc-desc">Campo φ de infraestructura espacial. Coalescencia de binarias, T² artificial, señal LISA ~2.4 mHz. Tres modos: campo, curvatura, órbita 3D.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">ondas GW</span><span class="tc-tag">LISA</span><span class="tc-tag">T²</span></div>
-        <a href="campo-phi.html" class="tc-link">→ ABRIR</a>
-      </div>
-    </div>
-
-  </div>
-
+<div class="strip">
+  <span class="s-tag">H-16 · API REST</span>
+  <span class="s-title" id="strip-title">API <span>PÚBLICA</span> REST · TIE</span>
+  <span class="s-badge">⚡ SIMULADA · OPENAPI</span>
 </div>
 
-<footer>
-  <div class="feq">\( a_0 = cH_0/2\pi \quad \cdot \quad \Lambda = 2H_0^2/c^2 \quad \cdot \quad m_{\text{TIE}} = 2\pi\,m_{\text{obs}} \quad \cdot \quad v_{\text{flat}} = (GMa_0)^{1/4} \)</div>
-  <div class="fcopy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
-</footer>
+<div id="main">
 
+  <!-- ENDPOINT LIST -->
+  <div id="ep-col">
+    <div class="ep-header">
+      <div class="ep-header-title" id="ep-header-title">ENDPOINTS</div>
+      <div class="ep-base">BASE: <span>tie-api.ralc.mx</span></div>
+    </div>
+    <div id="ep-list"></div>
+  </div>
+
+  <!-- DOCS + PLAYGROUND -->
+  <div id="doc-col">
+    <div id="ep-info">
+      <div class="ep-info-row">
+        <span class="ep-info-method" id="ep-m">GET</span>
+        <span class="ep-info-path" id="ep-p">/v1/rotation-curve</span>
+      </div>
+      <div class="ep-info-desc" id="ep-d">—</div>
+      <div class="ep-info-formula" id="ep-f"></div>
+    </div>
+
+    <div class="doc-tabs">
+      <button class="doc-tab active" id="dt-params"  onclick="setDocTab('params')" ><span id="dts-params">PARÁMETROS</span></button>
+      <button class="doc-tab"        id="dt-play"    onclick="setDocTab('play')"   ><span id="dts-play">▶ EJECUTAR</span></button>
+      <button class="doc-tab"        id="dt-resp"    onclick="setDocTab('resp')"   ><span id="dts-resp">RESPUESTA</span></button>
+      <button class="doc-tab"        id="dt-curl"    onclick="setDocTab('curl')"   ><span id="dts-curl">CURL / CODE</span></button>
+    </div>
+
+    <div id="tab-content"></div>
+  </div>
+
+  <!-- API INFO -->
+  <div id="info-col">
+    <div class="i-card">
+      <div class="i-title" id="ic-status-title">ESTADO API</div>
+      <div class="i-row"><span class="i-key">Status</span><span class="i-val ok" id="api-status">● ONLINE</span></div>
+      <div class="i-row"><span class="i-key">Version</span><span class="i-val">v1.0.0</span></div>
+      <div class="i-row"><span class="i-key">TIE</span><span class="i-val">v11.8</span></div>
+      <div class="i-row"><span class="i-key" id="ic-latency">Latencia</span><span class="i-val warn" id="api-latency">~12ms</span></div>
+      <div class="i-row"><span class="i-key" id="ic-auth">Auth</span><span class="i-val ok">Sin clave</span></div>
+      <div class="i-row"><span class="i-key" id="ic-rate">Rate limit</span><span class="i-val">100/min</span></div>
+    </div>
+
+    <div class="i-card">
+      <div class="i-title" id="ic-sdk-title">SDKs</div>
+      <div class="sdk-block">
+        <button class="sdk-btn" onclick="showSDK('python')" id="sdk-py">🐍 Python</button>
+        <button class="sdk-btn" onclick="showSDK('js')"     id="sdk-js">🟨 JavaScript</button>
+        <button class="sdk-btn" onclick="showSDK('r')"      id="sdk-r" >📊 R</button>
+        <button class="sdk-btn" onclick="showSDK('curl')"   id="sdk-cu">⚡ cURL</button>
+      </div>
+    </div>
+
+    <div class="insight">
+      <p id="insight-txt">La API usa <strong>física TIE v11.8 real</strong> — a₀=cH₀/2π, rₕ=0.869√(GM/a₀), sin materia oscura ni parámetros libres.</p>
+    </div>
+
+    <div class="i-card">
+      <div class="i-title" id="ic-const-title">CONSTANTES</div>
+      <div class="i-row"><span class="i-key">a₀</span><span class="i-val">1.082×10⁻¹⁰</span></div>
+      <div class="i-row"><span class="i-key">H₀</span><span class="i-val">70 km/s/Mpc</span></div>
+      <div class="i-row"><span class="i-key">Λ_TIE</span><span class="i-val">1.145×10⁻⁵²</span></div>
+      <div class="i-row"><span class="i-key">Mc</span><span class="i-val">1.06×10²³ M☉</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- BG -->
 <script>
 (function(){
-  const canvas=document.getElementById('galaxy-canvas');
-  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(60,1,0.1,1000);
-  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-  function resize(){renderer.setSize(canvas.clientWidth,canvas.clientHeight);camera.aspect=canvas.clientWidth/canvas.clientHeight;camera.updateProjectionMatrix();}
-  resize();window.addEventListener('resize',resize);
-  camera.position.set(0,4,6);camera.lookAt(0,0,0);
-  const p={count:65000,radius:5,branches:5,spin:1.2,randomness:0.4,randomPower:2.5};
-  const geo=new THREE.BufferGeometry(),pos=new Float32Array(p.count*3),col=new Float32Array(p.count*3);
-  const cIn=new THREE.Color('#FFD700'),cOut=new THREE.Color('#1a1a4e');
-  for(let i=0;i<p.count;i++){const r=Math.random()*p.radius,b=(i%p.branches)/p.branches*Math.PI*2,s=r*p.spin;const rx=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r,ry=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r*.3,rz=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r;pos[i*3]=Math.cos(b+s)*r+rx;pos[i*3+1]=ry;pos[i*3+2]=Math.sin(b+s)*r+rz;const m=new THREE.Color().lerpColors(cIn,cOut,r/p.radius);col[i*3]=m.r;col[i*3+1]=m.g;col[i*3+2]=m.b;}
-  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
-  const mat=new THREE.PointsMaterial({size:.007,sizeAttenuation:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true});
-  scene.add(new THREE.Points(geo,mat));
-  let mx=0,my=0;
-  document.addEventListener('mousemove',e=>{mx=(e.clientX/innerWidth-.5)*.5;my=(e.clientY/innerHeight-.5)*.5;});
-  (function animate(){requestAnimationFrame(animate);scene.rotation.y+=.0004+mx*.0003;scene.rotation.x+=my*.0002;renderer.render(scene,camera);})();
+  const cv=document.getElementById('bg-canvas');
+  const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(60,1,.1,1000);
+  const ren=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true});
+  ren.setPixelRatio(Math.min(devicePixelRatio,2));
+  function rs(){ren.setSize(cv.clientWidth,cv.clientHeight);cam.aspect=cv.clientWidth/cv.clientHeight;cam.updateProjectionMatrix();}
+  rs();window.addEventListener('resize',rs);
+  cam.position.set(0,3,6);cam.lookAt(0,0,0);
+  const n=28000,geo=new THREE.BufferGeometry();
+  const pos=new Float32Array(n*3),col=new Float32Array(n*3);
+  const c1=new THREE.Color('#FF8C42'),c2=new THREE.Color('#1a0800');
+  for(let i=0;i<n;i++){
+    const r=Math.random()*4,b=(i%5)/5*Math.PI*2+r*.9;
+    pos[i*3]=Math.cos(b)*r+(Math.random()-.5)*.3*r;
+    pos[i*3+1]=(Math.random()-.5)*.1*r;
+    pos[i*3+2]=Math.sin(b)*r+(Math.random()-.5)*.3*r;
+    const m=new THREE.Color().lerpColors(c1,c2,r/4);
+    col[i*3]=m.r;col[i*3+1]=m.g;col[i*3+2]=m.b;
+  }
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+  sc.add(new THREE.Points(geo,new THREE.PointsMaterial({size:.007,sizeAttenuation:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true})));
+  (function loop(){requestAnimationFrame(loop);sc.rotation.y+=.0004;ren.render(sc,cam);})();
 })();
+</script>
 
-window.onload=()=>{
-  renderMathInElement(document.body,{delimiters:[{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});
+<script>
+// ═══════════════════════════════════════
+// TIE PHYSICS ENGINE (real calculations)
+// ═══════════════════════════════════════
+const G   = 6.674e-11;
+const C   = 2.998e8;
+const H0  = 70e3/3.086e22;
+const a0  = C*H0/(2*Math.PI);
+const M_s = 1.989e30;
+const pc  = 3.086e16;
+const kpc = 3.086e19;
+
+function vFlat(M_msun){ return Math.pow(G * M_msun*M_s * a0, 0.25); }
+function rh(M_msun){ return 0.869 * Math.sqrt(G * M_msun*M_s / a0); }
+function rs(M_msun){ return 2*G*M_msun*M_s/(C*C); }
+function alphaDeflect(M_msun, b_pc){ return 4*G*M_msun*M_s/(C*C * b_pc*pc); }
+function rotCurve(M_msun, r_kpc){
+  const r = r_kpc * kpc;
+  const aN = G*M_msun*M_s/(r*r);
+  const disc = Math.sqrt(aN*aN + 4*aN*a0);
+  const a_tie = (aN + disc)/2;
+  return Math.sqrt(a_tie * r);
+}
+function mChirp(m1,m2){ return Math.pow(m1*m2,0.6)/Math.pow(m1+m2,0.2); }
+function cosmoDist(z){ return (C/H0)*(z - z*z*0.5)*3.086e-22/1e3; }
+
+// ═══════════════════════════════════════
+// ENDPOINTS DEFINITION
+// ═══════════════════════════════════════
+const ENDPOINTS = [
+  {
+    id:'rot-curve', method:'GET', path:'/v1/rotation-curve',
+    nameES:'Curva de rotación', nameEN:'Rotation curve',
+    descES:'Calcula v(r) TIE para una galaxia dada su masa bariónica. Sin materia oscura.',
+    descEN:'Computes v(r) TIE for a galaxy given its baryonic mass. No dark matter.',
+    formula:'v(r) = \\sqrt{\\frac{a_N + \\sqrt{a_N^2 + 4a_N a_0}}{2} \\cdot r}',
+    params:[
+      {name:'mass',  type:'float', req:true,  descES:'Masa bariónica en M☉',              descEN:'Baryonic mass in M☉',              ex:'1e11'},
+      {name:'r_min', type:'float', req:false, descES:'Radio mínimo en kpc (def: 1)',        descEN:'Min radius in kpc (def: 1)',        ex:'1'},
+      {name:'r_max', type:'float', req:false, descES:'Radio máximo en kpc (def: 30)',       descEN:'Max radius in kpc (def: 30)',       ex:'30'},
+      {name:'n',     type:'int',   req:false, descES:'Número de puntos (def: 50, máx: 200).',descEN:'Number of points (def: 50, max: 200).',ex:'50'},
+    ],
+    inputs:[
+      {key:'mass',  label:'mass (M☉)',  val:'1e11', type:'text'},
+      {key:'r_min', label:'r_min (kpc)',val:'1',    type:'number'},
+      {key:'r_max', label:'r_max (kpc)',val:'30',   type:'number'},
+      {key:'n',     label:'n points',  val:'10',   type:'number'},
+    ],
+    run(p){
+      const M=parseFloat(p.mass||'1e11'), rMin=parseFloat(p.r_min||1), rMax=parseFloat(p.r_max||30), n=Math.min(200,parseInt(p.n||50));
+      const pts=[]; for(let i=0;i<n;i++){const r=rMin+(rMax-rMin)*i/(n-1);pts.push({r_kpc:+r.toFixed(3),v_kms:+(rotCurve(M,r)/1e3).toFixed(2)});}
+      const vf=+(vFlat(M)/1e3).toFixed(2);
+      return {status:200,data:{mass_msun:M,v_flat_kms:vf,a0_ms2:+a0.toFixed(4),n_points:n,curve:pts.slice(0,8).concat(n>8?[{note:`...${n-8} more points`}]:[]),metadata:{model:'TIE v11.8',dark_matter:false,free_params:0}}};
+    }
+  },
+  {
+    id:'horizon', method:'GET', path:'/v1/horizon',
+    nameES:'Horizontes TIE / GR', nameEN:'TIE / GR Horizons',
+    descES:'Calcula rₛ (Schwarzschild) y rₕ (TIE) para una masa dada. Retorna el ratio rₕ/rₛ.',
+    descEN:'Computes rₛ (Schwarzschild) and rₕ (TIE) for a given mass. Returns rₕ/rₛ ratio.',
+    formula:'r_h = 0.869\\sqrt{\\frac{GM}{a_0}}, \\quad r_s = \\frac{2GM}{c^2}',
+    params:[
+      {name:'mass',  type:'float', req:true,  descES:'Masa en M☉',           descEN:'Mass in M☉',           ex:'6.5e9'},
+      {name:'units', type:'string',req:false, descES:'Unidades salida: m|km|pc|ly (def: km)', descEN:'Output units: m|km|pc|ly (def: km)', ex:'km'},
+    ],
+    inputs:[
+      {key:'mass',  label:'mass (M☉)',val:'6.5e9',type:'text'},
+      {key:'units', label:'units',    val:'km',   type:'text'},
+    ],
+    run(p){
+      const M=parseFloat(p.mass||'6.5e9'), u=p.units||'km';
+      const scale={'m':1,'km':1e-3,'pc':1/pc,'ly':1/9.461e15}[u]||1e-3;
+      const rh_=rh(M)*scale, rs_=rs(M)*scale, ratio=rh_/rs_;
+      return {status:200,data:{mass_msun:M,rs:{value:+rs_.toExponential(4),units:u},rh:{value:+rh_.toExponential(4),units:u},ratio_rh_rs:+ratio.toExponential(4),regime:ratio>1?'TIE-dominated':'GR-dominated',metadata:{model:'TIE v11.8',a0_ms2:+a0.toExponential(4)}}};
+    }
+  },
+  {
+    id:'lensing', method:'GET', path:'/v1/lensing',
+    nameES:'Deflexión gravitacional', nameEN:'Gravitational deflection',
+    descES:'Calcula el ángulo de deflexión de luz α para masa y parámetro de impacto dados.',
+    descEN:'Computes light deflection angle α for given mass and impact parameter.',
+    formula:'\\alpha = \\frac{4GM}{c^2 b}',
+    params:[
+      {name:'mass', type:'float', req:true,  descES:'Masa en M☉',         descEN:'Mass in M☉',         ex:'1e12'},
+      {name:'b',    type:'float', req:true,  descES:'Parámetro impacto en pc', descEN:'Impact parameter in pc', ex:'1000'},
+    ],
+    inputs:[
+      {key:'mass', label:'mass (M☉)',val:'1e12', type:'text'},
+      {key:'b',    label:'b (pc)',   val:'1000', type:'number'},
+    ],
+    run(p){
+      const M=parseFloat(p.mass||'1e12'), b=parseFloat(p.b||1000);
+      const alpha=alphaDeflect(M,b);
+      const arcsec=alpha*(180/Math.PI)*3600;
+      const te=Math.sqrt(4*G*M*M_s/(C*C) * (1e9*pc)/(1e9*pc*2e9*pc)) * (180/Math.PI)*3600;
+      return {status:200,data:{mass_msun:M,impact_pc:b,deflection_rad:+alpha.toExponential(4),deflection_arcsec:+arcsec.toExponential(4),einstein_ring_arcsec:+te.toExponential(4),metadata:{model:'TIE v11.8',formula:'4GM/c²b'}}};
+    }
+  },
+  {
+    id:'vflat', method:'GET', path:'/v1/v-flat',
+    nameES:'Velocidad plana v_flat', nameEN:'Flat velocity v_flat',
+    descES:'Predicción directa de la velocidad asintótica de rotación. 0 parámetros libres.',
+    descEN:'Direct prediction of asymptotic rotation velocity. 0 free parameters.',
+    formula:'v_{\\text{flat}} = (GMa_0)^{1/4}',
+    params:[
+      {name:'mass', type:'float', req:true, descES:'Masa bariónica en M☉', descEN:'Baryonic mass in M☉', ex:'5e10'},
+    ],
+    inputs:[{key:'mass', label:'mass (M☉)', val:'5e10', type:'text'}],
+    run(p){
+      const M=parseFloat(p.mass||'5e10');
+      const vf=vFlat(M);
+      const btf=M*M_s * a0;
+      return {status:200,data:{mass_msun:M,v_flat_ms:+vf.toFixed(2),v_flat_kms:+(vf/1e3).toFixed(3),baryonic_tf_check:+btf.toExponential(4),a0_ms2:+a0.toExponential(4),metadata:{model:'TIE v11.8',free_params:0,dark_matter:false}}};
+    }
+  },
+  {
+    id:'gw', method:'POST', path:'/v1/gravitational-wave',
+    nameES:'Onda gravitacional (TIE)', nameEN:'Gravitational wave (TIE)',
+    descES:'Parámetros de la señal GW para una binaria. Incluye modulación T² de TIE y banda LISA.',
+    descEN:'GW signal parameters for a binary. Includes TIE T² modulation and LISA band.',
+    formula:'f_{\\text{LISA}} = \\frac{a_0}{\\pi c} \\approx 2.4\\,\\text{mHz}',
+    params:[
+      {name:'m1',   type:'float', req:true,  descES:'Masa 1 en M☉', descEN:'Mass 1 in M☉', ex:'30'},
+      {name:'m2',   type:'float', req:true,  descES:'Masa 2 en M☉', descEN:'Mass 2 in M☉', ex:'25'},
+      {name:'dist', type:'float', req:false, descES:'Distancia luminosa en Mpc (def: 400)', descEN:'Luminosity distance in Mpc (def: 400)', ex:'400'},
+    ],
+    inputs:[
+      {key:'m1',   label:'m1 (M☉)', val:'30',  type:'number'},
+      {key:'m2',   label:'m2 (M☉)', val:'25',  type:'number'},
+      {key:'dist', label:'dist (Mpc)',val:'400',type:'number'},
+    ],
+    run(p){
+      const m1=parseFloat(p.m1||30),m2=parseFloat(p.m2||25),dist=parseFloat(p.dist||400);
+      const Mc=mChirp(m1,m2);
+      const fLISA=a0/(Math.PI*C);
+      const fGW=100; // simplified Hz at late inspiral
+      const h0=4*G*Mc*M_s/(C*C*dist*3.086e22)*1e-21;
+      const inBand=fGW<0.1&&fGW>1e-4;
+      const t2mod=1+0.08*Math.sin(2*Math.PI*fGW/fLISA);
+      return {status:200,data:{m1_msun:m1,m2_msun:m2,chirp_mass_msun:+Mc.toFixed(3),f_lisa_mhz:+(fLISA*1e3).toFixed(2),f_gw_hz:fGW,amplitude_h0:+h0.toExponential(3),t2_modulation:+t2mod.toFixed(6),in_lisa_band:inBand,metadata:{model:'TIE v11.8',lisa_launch:2035}}};
+    }
+  },
+  {
+    id:'cosmology', method:'GET', path:'/v1/cosmology',
+    nameES:'Parámetros cosmológicos', nameEN:'Cosmological parameters',
+    descES:'Devuelve todas las constantes TIE derivadas de H₀. Cero parámetros libres.',
+    descEN:'Returns all TIE constants derived from H₀. Zero free parameters.',
+    formula:'\\Lambda_{\\text{TIE}} = \\frac{2H_0^2}{c^2}',
+    params:[
+      {name:'H0', type:'float', req:false, descES:'H₀ en km/s/Mpc (def: 70)', descEN:'H₀ in km/s/Mpc (def: 70)', ex:'70'},
+    ],
+    inputs:[{key:'H0', label:'H0 (km/s/Mpc)', val:'70', type:'number'}],
+    run(p){
+      const h0=parseFloat(p.H0||70)*1e3/3.086e22;
+      const a0_=C*h0/(2*Math.PI);
+      const Lambda=2*h0*h0/(C*C);
+      const rH=C/h0;
+      const T0=2*Math.PI/h0;
+      const fLISA=a0_/(Math.PI*C);
+      return {status:200,data:{H0_kms_mpc:parseFloat(p.H0||70),a0_ms2:+a0_.toExponential(4),lambda_tie_m2:+Lambda.toExponential(4),r_hubble_m:+rH.toExponential(4),T_universe_gyr:+(T0/3.156e16).toFixed(2),f_lisa_mhz:+(fLISA*1e3).toFixed(3),free_parameters:0,dark_matter:false,dark_energy:false,metadata:{model:'TIE v11.8',ref:'Lecona 2026'}}};
+    }
+  },
+];
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let lang='es', selEP=ENDPOINTS[0], docTab='params', lastRes=null;
+
+// ═══════════════════════════════════════
+// RENDER ENDPOINT LIST
+// ═══════════════════════════════════════
+function renderEPList(){
+  const list=document.getElementById('ep-list');
+  list.innerHTML='';
+  ENDPOINTS.forEach(ep=>{
+    const div=document.createElement('div');
+    div.className='ep-item'+(ep===selEP?' active':'');
+    div.onclick=()=>selectEP(ep);
+    div.innerHTML=`<div class="ep-method ${ep.method.toLowerCase()}">${ep.method}</div>
+      <div class="ep-path">${ep.path}</div>
+      <div class="ep-desc">${lang==='es'?ep.nameES:ep.nameEN}</div>`;
+    list.appendChild(div);
+  });
+}
+
+// ═══════════════════════════════════════
+// SELECT ENDPOINT
+// ═══════════════════════════════════════
+function selectEP(ep){
+  selEP=ep; lastRes=null;
+  renderEPList();
+  document.getElementById('ep-m').textContent=ep.method;
+  document.getElementById('ep-m').className='ep-info-method '+(ep.method==='GET'?'get':'post');
+  document.getElementById('ep-p').textContent=ep.path;
+  document.getElementById('ep-d').textContent=lang==='es'?ep.descES:ep.descEN;
+  try{ katex.render(ep.formula, document.getElementById('ep-f'),{throwOnError:false,displayMode:false}); }catch(e){}
+  setDocTab(docTab);
+}
+
+// ═══════════════════════════════════════
+// DOC TABS
+// ═══════════════════════════════════════
+function setDocTab(t){
+  docTab=t;
+  ['params','play','resp','curl'].forEach(tab=>{
+    document.getElementById('dt-'+tab).classList.toggle('active',tab===t);
+  });
+  const c=document.getElementById('tab-content');
+  if(t==='params')    renderParams(c);
+  else if(t==='play') renderPlay(c);
+  else if(t==='resp') renderResp(c);
+  else if(t==='curl') renderCurl(c);
+}
+
+function renderParams(c){
+  const ep=selEP;
+  const thP=lang==='es'?'PARÁMETRO':'PARAMETER';
+  const thT=lang==='es'?'TIPO':'TYPE';
+  const thR=lang==='es'?'REQ':'REQ';
+  const thD=lang==='es'?'DESCRIPCIÓN':'DESCRIPTION';
+  const thEx='EJEMPLO';
+  let html=`<table class="param-table">
+    <tr><th>${thP}</th><th>${thT}</th><th>${thR}</th><th>${thD}</th><th>${thEx}</th></tr>`;
+  ep.params.forEach(p=>{
+    const req=p.req?`<span class="param-req">✓ req</span>`:`<span class="param-opt">opt</span>`;
+    const desc=lang==='es'?p.descES:p.descEN;
+    html+=`<tr>
+      <td class="param-name">${p.name}</td>
+      <td class="param-type">${p.type}</td>
+      <td>${req}</td>
+      <td class="param-desc">${desc}</td>
+      <td class="param-type">${p.ex}</td>
+    </tr>`;
+  });
+  html+='</table>';
+  // Response schema
+  const runBtn=lang==='es'?'→ ir a Ejecutar':'→ go to Execute';
+  html+=`<div style="font-family:var(--mono);font-size:.62rem;color:var(--dim);margin-top:.5rem">
+    <span style="color:var(--orange);letter-spacing:2px">RESPUESTA</span> · JSON · Content-Type: application/json<br>
+    <span style="color:var(--dim)">200 OK · 400 Bad Request · 422 Validation Error</span><br><br>
+    <button onclick="setDocTab('play')" class="btn-run" style="font-size:.6rem;padding:.3rem .8rem">${runBtn}</button>
+  </div>`;
+  c.innerHTML=html;
+}
+
+function renderPlay(c){
+  const ep=selEP;
+  const title=lang==='es'?'PLAYGROUND · PRUEBA EN VIVO':'PLAYGROUND · LIVE TEST';
+  const runLbl=lang==='es'?'▶ EJECUTAR':'▶ RUN';
+  let inputs='';
+  ep.inputs.forEach(inp=>{
+    inputs+=`<div class="play-row">
+      <span class="play-label">${inp.label}</span>
+      <input class="play-input" id="pi-${inp.key}" type="${inp.type}" value="${inp.val}">
+    </div>`;
+  });
+  c.innerHTML=`
+    <div class="play-section">
+      <div class="play-title">${title}</div>
+      <div class="play-inputs">${inputs}</div>
+      <button class="btn-run" id="run-btn" onclick="runEndpoint()"><span>${runLbl}</span></button>
+    </div>
+    <div id="play-res-wrap" style="display:none;margin-top:.75rem">
+      <div class="res-header">
+        <span class="res-status ok" id="play-status">200 OK</span>
+        <span class="res-time" id="play-time"></span>
+      </div>
+      <div id="res-box"></div>
+    </div>`;
+}
+
+function renderResp(c){
+  if(!lastRes){
+    const msg=lang==='es'?'Ejecuta el endpoint primero en la pestaña ▶ Ejecutar':'Run the endpoint first in the ▶ Execute tab';
+    c.innerHTML=`<div style="font-family:var(--mono);font-size:.68rem;color:var(--dim);padding:.5rem">${msg}</div>`;
+    return;
+  }
+  c.innerHTML=`<div class="res-header" style="margin-bottom:.5rem">
+    <span class="res-status ${lastRes.status===200?'ok':'err'}">${lastRes.status} ${lastRes.status===200?'OK':'ERROR'}</span>
+    <span class="res-time">${lastRes.time}ms · application/json</span>
+  </div>
+  <div id="res-box">${syntaxHL(lastRes.data)}</div>`;
+}
+
+function renderCurl(c){
+  const ep=selEP;
+  const base='https://tie-api.ralc.mx';
+  // Build URL with default params
+  const params=ep.inputs.map(i=>`${i.key}=${i.val}`).join('&');
+  const urlStr=ep.method==='GET'?`${base}${ep.path}?${params}`:`${base}${ep.path}`;
+  const body=ep.method==='POST'?JSON.stringify(Object.fromEntries(ep.inputs.map(i=>[i.key,i.val])),null,2):'';
+
+  const curlCmd=ep.method==='GET'
+    ?`curl "${urlStr}"`
+    :`curl -X POST "${base}${ep.path}" \\\n  -H "Content-Type: application/json" \\\n  -d '${body}'`;
+
+  const pyCode=ep.method==='GET'
+    ?`import requests\n\nres = requests.get(\n  "https://tie-api.ralc.mx${ep.path}",\n  params={${ep.inputs.map(i=>`"${i.key}": ${isNaN(i.val)?'"'+i.val+'"':i.val}`).join(', ')}}\n)\nprint(res.json())`
+    :`import requests\n\nres = requests.post(\n  "https://tie-api.ralc.mx${ep.path}",\n  json={${ep.inputs.map(i=>`"${i.key}": ${isNaN(i.val)?'"'+i.val+'"':i.val}`).join(', ')}}\n)\nprint(res.json())`;
+
+  const jsCode=`const res = await fetch(\n  "https://tie-api.ralc.mx${ep.path}${ep.method==='GET'?'?'+params:''}",\n  ${ep.method==='POST'?`{\n    method: "POST",\n    headers: {"Content-Type":"application/json"},\n    body: JSON.stringify({${ep.inputs.map(i=>`${i.key}: ${isNaN(i.val)?'"'+i.val+'"':i.val}`).join(', ')}})\n  }`:'{ method: "GET" }'}\n);\nconst data = await res.json();\nconsole.log(data);`;
+
+  c.innerHTML=`
+    <div style="font-family:var(--mono);font-size:.6rem;color:var(--orange);letter-spacing:2px;margin-bottom:.5rem">cURL</div>
+    <div class="curl-box" id="curl-curl">${curlCmd}<button class="curl-copy" onclick="copyCurl('curl-curl')">COPY</button></div>
+    <div style="font-family:var(--mono);font-size:.6rem;color:var(--orange);letter-spacing:2px;margin:1rem 0 .5rem">Python</div>
+    <div class="curl-box" id="curl-py">${pyCode}<button class="curl-copy" onclick="copyCurl('curl-py')">COPY</button></div>
+    <div style="font-family:var(--mono);font-size:.6rem;color:var(--orange);letter-spacing:2px;margin:1rem 0 .5rem">JavaScript</div>
+    <div class="curl-box" id="curl-js">${jsCode}<button class="curl-copy" onclick="copyCurl('curl-js')">COPY</button></div>`;
+}
+
+// ═══════════════════════════════════════
+// RUN
+// ═══════════════════════════════════════
+function runEndpoint(){
+  const ep=selEP;
+  const params={};
+  ep.inputs.forEach(inp=>{
+    const el=document.getElementById('pi-'+inp.key);
+    if(el) params[inp.key]=el.value;
+  });
+  const btn=document.getElementById('run-btn');
+  btn.disabled=true;
+  const t0=Date.now();
+  // Simulate network latency
+  const fakeLatency = 8 + Math.random()*20;
+  setTimeout(()=>{
+    const res=ep.run(params);
+    const elapsed=Math.round(Date.now()-t0);
+    lastRes={status:res.status, data:res.data, time:elapsed};
+
+    const wrap=document.getElementById('play-res-wrap');
+    if(wrap){
+      wrap.style.display='block';
+      document.getElementById('play-status').textContent=`${res.status} OK`;
+      document.getElementById('play-time').textContent=`${elapsed}ms`;
+      document.getElementById('res-box').innerHTML=syntaxHL(res.data);
+    }
+    btn.disabled=false;
+    document.getElementById('api-latency').textContent=`~${elapsed}ms`;
+  }, fakeLatency);
+}
+
+function syntaxHL(obj){
+  return JSON.stringify(obj,null,2)
+    .replace(/"([^"]+)":/g,'<span class="json-key">"$1"</span>:')
+    .replace(/: "([^"]*?)"/g,': <span class="json-str">"$1"</span>')
+    .replace(/: (-?\d+\.?\d*(?:e[+-]?\d+)?)/g,': <span class="json-num">$1</span>')
+    .replace(/: (true|false)/g,': <span class="json-bool">$1</span>');
+}
+
+function copyCurl(id){
+  const el=document.getElementById(id);
+  const text=el.textContent.replace(/COPY$/,'').trim();
+  navigator.clipboard.writeText(text).then(()=>showToast(lang==='es'?'Copiado':'Copied'));
+}
+
+// ═══════════════════════════════════════
+// SDK SNIPPETS
+// ═══════════════════════════════════════
+function showSDK(type){
+  setDocTab('curl');
+}
+
+// ═══════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════
+let toastT=null;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  if(toastT) clearTimeout(toastT);
+  toastT=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// ═══════════════════════════════════════
+// LANG
+// ═══════════════════════════════════════
+function setLang(l){
+  lang=l;
+  document.getElementById('btn-es').className='lang-btn '+(l==='es'?'active':'inactive');
+  document.getElementById('btn-en').className='lang-btn '+(l==='en'?'active':'inactive');
+  const lb=document.getElementById('lnk-back');
+  lb.textContent=l==='es'?'← LABORATORIO':'← LABORATORY';
+  lb.href=l==='es'?'labs.html':'labs-en.html';
+  document.getElementById('strip-title').innerHTML=l==='es'?'API <span>PÚBLICA</span> REST · TIE':'<span>PUBLIC</span> REST API · TIE';
+  document.getElementById('ep-header-title').textContent=l==='es'?'ENDPOINTS':'ENDPOINTS';
+  document.getElementById('ic-status-title').textContent=l==='es'?'ESTADO API':'API STATUS';
+  document.getElementById('ic-latency').textContent=l==='es'?'Latencia':'Latency';
+  document.getElementById('ic-auth').textContent=l==='es'?'Auth':'Auth';
+  document.getElementById('api-status').textContent=l==='es'?'● ONLINE':'● ONLINE';
+  document.getElementById('ic-auth').nextElementSibling.textContent=l==='es'?'Sin clave':'No key';
+  document.getElementById('ic-rate').textContent=l==='es'?'Rate limit':'Rate limit';
+  document.getElementById('ic-sdk-title').textContent='SDKs';
+  document.getElementById('ic-const-title').textContent=l==='es'?'CONSTANTES':'CONSTANTS';
+  document.getElementById('insight-txt').innerHTML=l==='es'
+    ?'La API usa <strong>física TIE v11.8 real</strong> — a₀=cH₀/2π, rₕ=0.869√(GM/a₀), sin materia oscura ni parámetros libres.'
+    :'The API uses <strong>real TIE v11.8 physics</strong> — a₀=cH₀/2π, rₕ=0.869√(GM/a₀), no dark matter or free parameters.';
+  // Tab labels
+  document.getElementById('dts-params').textContent=l==='es'?'PARÁMETROS':'PARAMETERS';
+  document.getElementById('dts-play').textContent='▶ '+(l==='es'?'EJECUTAR':'EXECUTE');
+  document.getElementById('dts-resp').textContent=l==='es'?'RESPUESTA':'RESPONSE';
+  renderEPList();
+  selectEP(selEP);
+}
+
+window.onload=function(){
+  setLang('es');
 };
 </script>
 </body>

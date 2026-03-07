@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIE · Rotation Curves · No Dark Matter</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{--gold:#FFD700;--blue:#5BC8F5;--green:#44FF88;--red:#FF4455;--bg:#000001;--bg2:rgba(5,5,15,0.80);--bg3:rgba(10,10,25,0.6);--text:#fff;--dim:#a0a0b0;--border:rgba(91,200,245,0.15);--mono:'Space Mono',monospace;--sans:'Syne',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+#galaxy-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.4;}
+
+nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
+.nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
+.nav-center{display:flex;gap:.5rem;}
+.lang-link{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;transition:all .2s;}
+.lang-link.active{color:#000;background:var(--gold);}
+.lang-link.inactive{color:var(--dim);border:1px solid var(--border);}
+.lang-link.inactive:hover{color:var(--gold);border-color:var(--gold);}
+.nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-back:hover{color:var(--gold);}
+
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:7rem 2rem 4rem;}
+.page-tag{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:.75rem;}
+.page-title{font-size:clamp(2rem,5vw,3.2rem);font-weight:900;letter-spacing:-2px;margin-bottom:.5rem;}
+.page-title span{color:var(--gold);}
+.page-sub{font-family:var(--mono);font-size:.8rem;color:var(--dim);max-width:660px;line-height:1.7;margin-bottom:2rem;}
+
+.hero-eq{background:var(--bg2);border:1px solid rgba(255,215,0,.3);border-radius:16px;padding:1.25rem 2rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;backdrop-filter:blur(8px);}
+.hero-eq-badge{font-family:var(--mono);font-size:.6rem;color:var(--green);background:rgba(68,255,136,.08);border:1px solid rgba(68,255,136,.25);border-radius:6px;padding:.35rem .8rem;letter-spacing:2px;white-space:nowrap;}
+
+.tool-grid{display:grid;grid-template-columns:300px 1fr;gap:1.5rem;align-items:start;}
+@media(max-width:800px){.tool-grid{grid-template-columns:1fr;}}
+
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.25rem;backdrop-filter:blur(8px);}
+.panel-title{font-family:var(--mono);font-size:.65rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;padding-bottom:.5rem;border-bottom:1px solid var(--border);margin-bottom:1rem;}
+
+.mode-tabs{display:flex;gap:.4rem;margin-bottom:1rem;}
+.mode-tab{flex:1;text-align:center;font-family:var(--mono);font-size:.6rem;letter-spacing:1px;padding:.35rem;border-radius:6px;cursor:pointer;border:1px solid var(--border);color:var(--dim);transition:all .2s;}
+.mode-tab:hover{border-color:var(--gold);color:var(--gold);}
+.mode-tab.active{background:rgba(255,215,0,.1);border-color:var(--gold);color:var(--gold);}
+
+.preset-section-title{font-family:var(--mono);font-size:.55rem;color:var(--dim);letter-spacing:3px;text-transform:uppercase;margin:.8rem 0 .4rem;}
+.preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;margin-bottom:.25rem;}
+.preset-btn{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.5rem .65rem;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:.15rem;}
+.preset-btn:hover{border-color:var(--gold);}
+.preset-btn.active{background:rgba(255,215,0,.08);border-color:var(--gold);}
+.pb-name{font-family:var(--mono);font-size:.65rem;font-weight:700;color:var(--text);}
+.pb-meta{font-family:var(--mono);font-size:.52rem;color:var(--dim);}
+.pb-type{font-family:var(--mono);font-size:.52rem;border-radius:3px;padding:.1rem .3rem;display:inline-block;margin-top:.1rem;}
+.pb-type.Espiral, .pb-type.Spiral{background:rgba(255,215,0,.1);color:var(--gold);}
+.pb-type.Gigante, .pb-type.Giant{background:rgba(91,200,245,.1);color:var(--blue);}
+.pb-type.LSB{background:rgba(68,255,136,.1);color:var(--green);}
+.pb-type.Enana, .pb-type.Dwarf{background:rgba(255,68,85,.1);color:var(--red);}
+
+.input-row{margin-bottom:.75rem;}
+.input-row label{display:block;font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:1px;margin-bottom:.3rem;}
+.inp{background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:.85rem;padding:.35rem .6rem;width:100%;outline:none;transition:border-color .2s;}
+.inp:focus{border-color:var(--gold);}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;background:linear-gradient(90deg,var(--gold) var(--pct,35%),rgba(91,200,245,0.15) var(--pct,35%));border-radius:3px;outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--gold);cursor:pointer;}
+
+.comp-toggles{display:flex;flex-direction:column;gap:.5rem;margin-top:.25rem;}
+.comp-toggle{display:flex;align-items:center;gap:.5rem;cursor:pointer;padding:.3rem 0;}
+.comp-toggle input{display:none;}
+.toggle-dot{width:28px;height:16px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;position:relative;transition:all .2s;flex-shrink:0;}
+.comp-toggle input:checked + .toggle-dot{background:rgba(255,215,0,.2);border-color:var(--gold);}
+.toggle-dot::after{content:'';position:absolute;top:2px;left:2px;width:10px;height:10px;border-radius:50%;background:var(--dim);transition:all .2s;}
+.comp-toggle input:checked + .toggle-dot::after{left:14px;background:var(--gold);}
+.toggle-lbl{font-family:var(--mono);font-size:.6rem;color:var(--dim);}
+
+.results-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;}
+@media(max-width:600px){.results-grid{grid-template-columns:1fr 1fr;}}
+.result-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.75rem .85rem;text-align:center;backdrop-filter:blur(8px);}
+.result-card.hi{border-color:rgba(255,215,0,.3);}
+.rc-label{font-family:var(--mono);font-size:.55rem;color:var(--dim);text-transform:uppercase;margin-bottom:.25rem;}
+.rc-value{font-family:var(--mono);font-size:1.25rem;font-weight:700;color:var(--gold);line-height:1.1;}
+.rc-unit{font-family:var(--mono);font-size:.55rem;color:var(--dim);margin-top:.1rem;}
+@keyframes flash{0%{color:var(--green);}100%{color:var(--gold);}}.flash{animation:flash .4s ease-out;}
+
+.chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.25rem;backdrop-filter:blur(8px);}
+.chart-header{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem;}
+.chart-title{font-family:var(--mono);font-size:.65rem;color:var(--gold);font-weight:700;letter-spacing:2px;}
+.galaxy-info{font-family:var(--mono);font-size:.58rem;color:var(--dim);}
+
+.compare-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.25rem;backdrop-filter:blur(8px);}
+.compare-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.65rem;}
+.compare-table th{color:var(--dim);font-weight:400;text-align:left;padding:.4rem .6rem;border-bottom:1px solid var(--border);}
+.compare-table td{padding:.4rem .6rem;border-bottom:1px solid rgba(91,200,245,.07);}
+.compare-table .gold{color:var(--gold);font-weight:700;}
+.compare-table .blue{color:var(--blue);}
+.compare-table .highlight td{background:rgba(255,215,0,.04);}
+
+.insight-box{background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:1rem 1.25rem;font-size:.82rem;line-height:1.7;margin-bottom:1.25rem;}
+.insight-box .hi{color:var(--gold);font-weight:700;}
+
+.const-row{display:flex;flex-wrap:wrap;gap:.75rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.75rem 1.25rem;backdrop-filter:blur(8px);margin-top:1.25rem;}
+.ci{font-family:var(--mono);font-size:.65rem;}
+.ci .cl{color:var(--dim);}
+.ci .cv{color:var(--gold);font-weight:700;}
+.nav-links{display:flex;justify-content:center;gap:2rem;margin-top:2rem;flex-wrap:wrap;}
+.nav-links a{font-family:var(--mono);font-size:.7rem;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);margin-top:2rem;}
+footer .feq{font-family:var(--mono);font-size:.85rem;color:var(--gold);margin-bottom:.5rem;}
+footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;}
+</style>
+</head>
+<body>
+<canvas id="galaxy-canvas"></canvas>
+<nav>
+  <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
+  <div class="nav-center">
+    <a href="curvas.html" class="lang-link inactive">ES</a>
+    <a href="rotation-curves-en.html" class="lang-link active">EN</a>
+  </div>
+  <a href="lab-en.html" class="nav-back">← LABORATORY</a>
+</nav>
+
+<div class="page">
+  <div class="page-tag">ROTATION CURVES · NO DARK MATTER · NO FREE PARAMETERS</div>
+  <h1 class="page-title">ROTATION <span>CURVES</span></h1>
+  <p class="page-sub">TIE predicts the flat curve from the visible baryonic mass. No free parameters. 12 galaxies from the SPARC catalogue.</p>
+
+  <div class="hero-eq">
+    <div>\( v_{\text{TIE}}(r) = \sqrt{r \cdot a_{\text{TIE}}} \qquad a_{\text{TIE}} = \sqrt{a_N(a_N + a_0)} \qquad a_N = \frac{GM(r)}{r^2} \)</div>
+    <div class="hero-eq-badge">✓ SPARC 175 GALAXIES</div>
+  </div>
+
+  <div class="tool-grid">
+    <!-- LEFT PANEL -->
+    <div class="panel">
+      <div class="panel-title">Galaxy</div>
+      <div class="mode-tabs">
+        <div class="mode-tab active" id="tab-preset" onclick="setMode('preset')">PRESETS</div>
+        <div class="mode-tab" id="tab-free" onclick="setMode('free')">FREE</div>
+        <div class="mode-tab" id="tab-compare" onclick="setMode('compare')">COMPARE</div>
+      </div>
+
+      <!-- PRESET MODE -->
+      <div id="panel-preset">
+        <div class="preset-section-title">SPIRALS</div>
+        <div class="preset-grid">
+          <div class="preset-btn active" onclick="loadPreset('ngc3198',this)">
+            <span class="pb-name">NGC 3198</span>
+            <span class="pb-meta">SPARC reference</span>
+            <span class="pb-type Spiral">Spiral</span>
+          </div>
+          <div class="preset-btn" onclick="loadPreset('ngc2403',this)">
+            <span class="pb-name">NGC 2403</span>
+            <span class="pb-meta">late spiral</span>
+            <span class="pb-type Spiral">Spiral</span>
+          </div>
+          <div class="preset-btn" onclick="loadPreset('ngc6503',this)">
+            <span class="pb-name">NGC 6503</span>
+            <span class="pb-meta">isolated spiral</span>
+            <span class="pb-type Spiral">Spiral</span>
+          </div>
+          <div class="preset-btn" onclick="loadPreset('ngc7331',this)">
+            <span class="pb-name">NGC 7331</span>
+            <span class="pb-meta">MW analogue</span>
+            <span class="pb-type Spiral">Spiral</span>
+          </div>
+        </div>
+        <div class="preset-section-title">GIANTS</div>
+        <div class="preset-grid">
+          <div class="preset-btn" onclick="loadPreset('ugc2885',this)">
+            <span class="pb-name">UGC 2885</span>
+            <span class="pb-meta">largest known</span>
+            <span class="pb-type Giant">Giant</span>
+          </div>
+          <div class="preset-btn" onclick="loadPreset('ngc5907',this)">
+            <span class="pb-name">NGC 5907</span>
+            <span class="pb-meta">razor galaxy</span>
+            <span class="pb-type Giant">Giant</span>
+          </div>
+        </div>
+        <div class="preset-section-title">LSB · LOW SURFACE BRIGHTNESS</div>
+        <div class="preset-grid">
+          <div class="preset-btn" onclick="loadPreset('ugc128',this)">
+            <span class="pb-name">UGC 128</span>
+            <span class="pb-meta">classic LSB</span>
+            <span class="pb-type LSB">LSB</span>
+          </div>
+          <div class="preset-btn" onclick="loadPreset('f5683',this)">
+            <span class="pb-name">F568-3</span>
+            <span class="pb-meta">extreme LSB</span>
+            <span class="pb-type LSB">LSB</span>
+          </div>
+          <div class="preset-btn" onclick="loadPreset('f5631',this)">
+            <span class="pb-name">F563-1</span>
+            <span class="pb-meta">LSB prototype</span>
+            <span class="pb-type LSB">LSB</span>
+          </div>
+        </div>
+        <div class="preset-section-title">DWARFS · GAS-DOMINATED</div>
+        <div class="preset-grid">
+          <div class="preset-btn" onclick="loadPreset('ddo154',this)">
+            <span class="pb-name">DDO 154</span>
+            <span class="pb-meta">~100% HI gas</span>
+            <span class="pb-type Dwarf">Dwarf</span>
+          </div>
+          <div class="preset-btn" onclick="loadPreset('wlm',this)">
+            <span class="pb-name">WLM</span>
+            <span class="pb-meta">irregular dwarf</span>
+            <span class="pb-type Dwarf">Dwarf</span>
+          </div>
+          <div class="preset-btn" onclick="loadPreset('ddo168',this)">
+            <span class="pb-name">DDO 168</span>
+            <span class="pb-meta">nearby dwarf</span>
+            <span class="pb-type Dwarf">Dwarf</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FREE MODE -->
+      <div id="panel-free" style="display:none;">
+        <div class="input-row">
+          <label>STELLAR MASS (×10¹⁰ M☉)</label>
+          <input class="inp" type="number" id="free-mstar" value="2.20" step="0.01" oninput="calculate()">
+        </div>
+        <div class="input-row">
+          <label>HI GAS MASS (×10⁹ M☉)</label>
+          <input class="inp" type="number" id="free-mgas" value="8.5" step="0.1" oninput="calculate()">
+        </div>
+        <div class="input-row">
+          <label>SCALE RADIUS R_d (kpc)</label>
+          <input class="inp" type="number" id="free-rd" value="3.52" step="0.1" oninput="calculate()">
+        </div>
+        <div class="input-row">
+          <label>MAX RADIUS: <span id="rmax-val">40</span> kpc</label>
+          <input type="range" id="free-rmax" min="5" max="100" value="40" step="1" oninput="calculate()" style="--pct:35%">
+        </div>
+      </div>
+
+      <!-- COMPARE MODE HINT -->
+      <div id="panel-compare" style="display:none;">
+        <p style="font-family:var(--mono);font-size:.65rem;color:var(--dim);line-height:1.7;">
+          Compare mode: shows the 4 TIE curves for representative galaxies of each morphological type. The flat curve appears in all types — predicted by TIE with zero free parameters.
+        </p>
+      </div>
+
+      <!-- COMPONENT TOGGLES -->
+      <div id="comp-section">
+        <div class="panel-title" style="margin-top:1.1rem;">Visible components</div>
+        <div class="comp-toggles">
+          <label class="comp-toggle toggle-tie">
+            <input type="checkbox" id="show-tie" checked onchange="calculate()">
+            <div class="toggle-dot"></div>
+            <span class="toggle-lbl" style="color:var(--gold)">v_TIE — full curve</span>
+          </label>
+          <label class="comp-toggle toggle-newton">
+            <input type="checkbox" id="show-newton" checked onchange="calculate()">
+            <div class="toggle-dot"></div>
+            <span class="toggle-lbl">v_Newton (without a₀)</span>
+          </label>
+          <label class="comp-toggle toggle-disk">
+            <input type="checkbox" id="show-disk" onchange="calculate()">
+            <div class="toggle-dot"></div>
+            <span class="toggle-lbl" style="color:var(--blue)">v_disk — stellar</span>
+          </label>
+          <label class="comp-toggle toggle-gas">
+            <input type="checkbox" id="show-gas" onchange="calculate()">
+            <div class="toggle-dot"></div>
+            <span class="toggle-lbl" style="color:var(--green)">v_gas — HI</span>
+          </label>
+          <label class="comp-toggle toggle-rt">
+            <input type="checkbox" id="show-rt" checked onchange="calculate()">
+            <div class="toggle-dot"></div>
+            <span class="toggle-lbl" style="color:var(--red)">rₜ — transition radius</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div style="display:flex;flex-direction:column;gap:1.25rem;">
+
+      <!-- RESULT CARDS -->
+      <div class="results-grid">
+        <div class="result-card hi">
+          <div class="rc-label">v_flat TIE</div>
+          <div class="rc-value flash" id="r-vflat">—</div>
+          <div class="rc-unit">km/s</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-label">v Newton <span id="r-vnewton-lbl">(r=rₜ)</span></div>
+          <div class="rc-value" id="r-vnewton">—</div>
+          <div class="rc-unit">km/s</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-label">rₜ — Transition</div>
+          <div class="rc-value" id="r-rt">—</div>
+          <div class="rc-unit">kpc</div>
+        </div>
+        <div class="result-card">
+          <div class="rc-label">M_total</div>
+          <div class="rc-value" id="r-mtot">—</div>
+          <div class="rc-unit">×10¹⁰ M☉</div>
+        </div>
+      </div>
+
+      <!-- CHART -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <span class="chart-title" id="chart-title-txt">NGC 3198 · Spiral · 13.8 Mpc</span>
+          <span class="galaxy-info" id="galaxy-info">M★=2.20×10¹⁰ · Mgas=8.5×10⁹ M☉</span>
+        </div>
+        <div id="rot-chart" style="height:340px;width:100%;"></div>
+        <div style="font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-top:.75rem;padding:.65rem .9rem;background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.12);border-radius:8px;line-height:1.7;" id="chart-note">
+          <span style="color:var(--gold);font-weight:700;">●</span> <span style="color:var(--gold)">v_TIE</span> — TIE prediction, zero free parameters &nbsp;·&nbsp;
+          <span style="color:rgba(255,255,255,.5)">- -</span> <span>v_Newton</span> — falls as 1/√r without a₀ &nbsp;·&nbsp;
+          <span style="color:rgba(255,68,85,.7)">⋯</span> <span style="color:var(--red)">rₜ</span> — radius where a_N = a₀ &nbsp;·&nbsp;
+          <span style="color:#FF6B8A">●</span> <span style="color:#FF6B8A">obs.</span> — real SPARC data
+        </div>
+      </div>
+
+      <!-- COMPARE TABLE -->
+      <div class="compare-card" id="compare-table-card" style="display:none;">
+        <div class="panel-title">TIE comparison — 4 morphological types</div>
+        <table class="compare-table" id="compare-table">
+          <tr><th>Galaxy</th><th>Type</th><th>M★</th><th>Mgas</th><th>v_flat TIE</th><th>rₜ</th></tr>
+        </table>
+      </div>
+
+      <!-- INSIGHT -->
+      <div class="insight-box">
+        <span class="hi">Why does the curve flatten?</span> In pure Newtonian (without a₀), velocity falls as 1/√r beyond the visible mass — the dashed white curve. TIE modifies the acceleration: \( a_{\text{TIE}} = \sqrt{a_N(a_N+a_0)} \). For r ≫ rₜ, the a₀ term dominates and velocity becomes constant: <span class="hi">v_flat = (GMa₀)^(1/4)</span>. No dark matter. No free parameters.
+      </div>
+
+      <div class="const-row">
+        <div class="ci"><span class="cl">a₀ = </span><span class="cv">1.082×10⁻¹⁰ m/s²</span></div>
+        <div class="ci"><span class="cl">H₀ = </span><span class="cv">70 km/s/Mpc</span></div>
+        <div class="ci"><span class="cl">G = </span><span class="cv">6.674×10⁻¹¹</span></div>
+        <div class="ci"><span class="cl">M☉ = </span><span class="cv">1.989×10³⁰ kg</span></div>
+        <div class="ci"><span class="cl">kpc = </span><span class="cv">3.086×10¹⁹ m</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-links">
+    <a href="sparc-en.html">← SPARC Catalogue</a>
+    <a href="dark-matter-en.html">Dark Matter →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="feq">\( v_{\text{TIE}}(r) = \sqrt{r\sqrt{a_N(a_N+a_0)}} \quad \cdot \quad v_{\text{flat}} = (GMa_0)^{1/4} \quad \cdot \quad \text{no dark matter} \)</div>
+  <div class="fcopy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
+</footer>
+
+<script>
+(function(){
+  const canvas=document.getElementById('galaxy-canvas');
+  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(60,1,0.1,1000);
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  function resize(){renderer.setSize(canvas.clientWidth,canvas.clientHeight);camera.aspect=canvas.clientWidth/canvas.clientHeight;camera.updateProjectionMatrix();}
+  resize();window.addEventListener('resize',resize);
+  camera.position.set(0,4,6);camera.lookAt(0,0,0);
+  const p={count:60000,radius:4,branches:5,spin:1.2,randomness:0.4,randomPower:2.5};
+  const geo=new THREE.BufferGeometry(),pos=new Float32Array(p.count*3),col=new Float32Array(p.count*3);
+  const cIn=new THREE.Color('#FFD700'),cOut=new THREE.Color('#1a1a4e');
+  for(let i=0;i<p.count;i++){const r=Math.random()*p.radius,b=(i%p.branches)/p.branches*Math.PI*2,s=r*p.spin;const rx=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r,ry=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r*.3,rz=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r;pos[i*3]=Math.cos(b+s)*r+rx;pos[i*3+1]=ry;pos[i*3+2]=Math.sin(b+s)*r+rz;const m=new THREE.Color().lerpColors(cIn,cOut,r/p.radius);col[i*3]=m.r;col[i*3+1]=m.g;col[i*3+2]=m.b;}
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+  const mat=new THREE.PointsMaterial({size:.008,sizeAttenuation:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true});
+  scene.add(new THREE.Points(geo,mat));
+  (function animate(){requestAnimationFrame(animate);scene.rotation.y+=.0007;renderer.render(scene,camera);})();
+})();
+
+const G=6.674e-11, MS=1.989e30, c=2.998e8;
+const H0si=70*1000/3.0857e22, a0=c*H0si/(2*Math.PI);
+const kpc=3.0857e19, km=1e3;
+
+function mEnc(r_kpc,mstar_1e10,mgas_1e9,rd){
+  const rg=rd*2.5,xd=r_kpc/rd,xg=r_kpc/rg;
+  const Md=mstar_1e10*1e10*MS*(1-Math.exp(-xd)*(1+xd));
+  const Mg=mgas_1e9*1e9*MS*(1-Math.exp(-xg)*(1+xg+0.5*xg*xg));
+  return Math.max(Md+Mg,1e20);
+}
+function mDisk(r_kpc,mstar_1e10,rd){const xd=r_kpc/rd;return mstar_1e10*1e10*MS*(1-Math.exp(-xd)*(1+xd));}
+function mGas(r_kpc,mgas_1e9,rd){const rg=rd*2.5,xg=r_kpc/rg;return mgas_1e9*1e9*MS*(1-Math.exp(-xg)*(1+xg+0.5*xg*xg));}
+
+function vTIE(r_kpc,mstar,mgas,rd){
+  const r=r_kpc*kpc,M=mEnc(r_kpc,mstar,mgas,rd),aN=G*M/(r*r);
+  return Math.sqrt(r*Math.sqrt(aN*(aN+a0)))/km;
+}
+function vNewton(r_kpc,mstar,mgas,rd){
+  const r=r_kpc*kpc,M=mEnc(r_kpc,mstar,mgas,rd);
+  return Math.sqrt(G*M/r)/km;
+}
+function vDisk(r_kpc,mstar,rd){const r=r_kpc*kpc,M=mDisk(r_kpc,mstar,rd);return Math.sqrt(G*Math.max(M,1e20)/r)/km;}
+function vGas(r_kpc,mgas,rd){const r=r_kpc*kpc,M=mGas(r_kpc,mgas,rd);return Math.sqrt(G*Math.max(M,1e20)/r)/km;}
+function vFlat(mstar,mgas){const Mtot=(mstar*1e10+mgas*1e9)*MS;return Math.pow(G*Mtot*a0,0.25)/km;}
+function rt(mstar,mgas){const Mtot=(mstar*1e10+mgas*1e9)*MS;return Math.sqrt(G*Mtot/a0)/kpc;}
+
+const OBS={
+  ngc3198:[[0.5,70],[1.2,110],[2.0,138],[3.1,148],[4.5,150],[6.0,151],[8.0,152],[10.0,150],[13.0,149],[16.0,150],[20.0,149],[25.0,148],[30.0,148],[35.0,147]],
+  ngc2403:[[0.3,50],[0.8,82],[1.5,108],[2.5,122],[3.5,128],[5.0,131],[7.0,133],[9.0,131],[11.0,132],[14.0,130],[17.0,128],[20.0,129]],
+  ngc6503:[[0.3,45],[0.7,70],[1.2,90],[1.8,102],[2.5,110],[3.5,114],[5.0,115],[7.0,116],[9.0,116],[11.0,115],[13.0,115],[15.0,114]],
+  ngc7331:[[0.8,120],[1.5,165],[2.5,200],[3.5,218],[5.0,230],[7.0,238],[9.0,242],[12.0,240],[15.0,238],[20.0,235],[25.0,232],[30.0,230]],
+  ugc2885:[[3.0,150],[6.0,210],[10.0,255],[15.0,275],[20.0,285],[28.0,293],[36.0,298],[45.0,300],[55.0,300],[65.0,299],[72.0,298]],
+  ngc5907:[[1.5,100],[3.0,150],[5.0,185],[7.0,200],[10.0,210],[13.0,215],[17.0,217],[22.0,218],[28.0,218],[35.0,217],[42.0,215]],
+  ugc128: [[2.0,55],[5.0,82],[9.0,103],[13.0,115],[17.0,122],[22.0,127],[27.0,129],[33.0,130],[40.0,130],[48.0,129],[55.0,128]],
+  f5683:  [[2.0,45],[4.5,68],[7.0,85],[10.0,98],[14.0,108],[18.0,112],[22.0,114],[28.0,115],[33.0,114],[40.0,113]],
+  f5631:  [[1.5,38],[3.5,56],[6.0,72],[9.0,83],[12.0,90],[16.0,96],[20.0,99],[25.0,100],[30.0,100],[35.0,99]],
+  ddo154: [[0.2,12],[0.5,22],[0.8,30],[1.2,37],[1.6,42],[2.1,46],[2.6,49],[3.1,51],[3.7,52],[4.3,52],[5.0,51],[5.8,50]],
+  wlm:    [[0.2,15],[0.5,24],[0.8,31],[1.1,35],[1.5,37],[1.9,38],[2.3,39],[2.7,38],[3.2,37]],
+  ddo168: [[0.2,14],[0.5,24],[0.8,32],[1.1,38],[1.5,43],[1.9,47],[2.4,50],[2.9,52],[3.4,53],[3.9,53],[4.5,52]],
+};
+
+const PRESETS={
+  ngc3198:{name:'NGC 3198',type:'Spiral', dist:13.8,mstar:2.20,  mgas:8.5,  rd:3.52,rmax:40},
+  ngc2403:{name:'NGC 2403',type:'Spiral', dist:3.2, mstar:0.82,  mgas:12.0, rd:1.75,rmax:30},
+  ngc6503:{name:'NGC 6503',type:'Spiral', dist:5.3, mstar:0.79,  mgas:3.8,  rd:1.73,rmax:25},
+  ngc7331:{name:'NGC 7331',type:'Spiral', dist:14.7,mstar:6.33,  mgas:9.4,  rd:3.20,rmax:35},
+  ugc2885:{name:'UGC 2885',type:'Giant',  dist:80.4,mstar:17.5,  mgas:82.0, rd:12.0,rmax:80},
+  ngc5907:{name:'NGC 5907',type:'Giant',  dist:16.3,mstar:8.20,  mgas:13.0, rd:5.40,rmax:50},
+  ugc128: {name:'UGC 128', type:'LSB',    dist:64.6,mstar:0.55,  mgas:18.0, rd:8.80,rmax:60},
+  f5683:  {name:'F568-3',  type:'LSB',    dist:77.0,mstar:0.31,  mgas:9.8,  rd:4.60,rmax:50},
+  f5631:  {name:'F563-1',  type:'LSB',    dist:48.9,mstar:0.095, mgas:1.903,rd:3.20,rmax:40},
+  ddo154: {name:'DDO 154', type:'Dwarf',  dist:4.3, mstar:0.0028,mgas:0.71, rd:0.45,rmax:8},
+  wlm:    {name:'WLM',     type:'Dwarf',  dist:1.0, mstar:0.0038,mgas:0.38, rd:0.52,rmax:6},
+  ddo168: {name:'DDO 168', type:'Dwarf',  dist:4.25,mstar:0.0096,mgas:0.191,rd:0.58,rmax:8},
+};
+
+let currentMode='preset', currentPreset='ngc3198';
+
+function setMode(m){
+  currentMode=m;
+  ['preset','free','compare'].forEach(t=>{
+    document.getElementById('tab-'+t).classList.toggle('active',t===m);
+    document.getElementById('panel-'+t).style.display=t===m?'block':'none';
+  });
+  document.getElementById('comp-section').style.display=m==='compare'?'none':'block';
+  document.getElementById('compare-table-card').style.display=m==='compare'?'block':'none';
+  if(m==='preset') loadPreset(currentPreset,null);
+  else if(m==='free') calculate();
+  else if(m==='compare') renderCompare();
+}
+
+function loadPreset(id,btn){
+  currentPreset=id;
+  document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  else document.querySelector(`[onclick="loadPreset('${id}',this)"]`)?.classList.add('active');
+  const p=PRESETS[id];
+  document.getElementById('free-mstar').value=p.mstar;
+  document.getElementById('free-mgas').value=p.mgas;
+  document.getElementById('free-rd').value=p.rd;
+  document.getElementById('free-rmax').value=p.rmax;
+  document.getElementById('free-rmax').style.setProperty('--pct',((p.rmax-5)/95*100)+'%');
+  document.getElementById('rmax-val').textContent=p.rmax;
+  calculate(p);
+}
+
+function calculate(preset){
+  const mstar=parseFloat(document.getElementById('free-mstar').value)||0;
+  const mgas=parseFloat(document.getElementById('free-mgas').value)||0;
+  const rd=parseFloat(document.getElementById('free-rd').value)||1;
+  const rmax=parseFloat(document.getElementById('free-rmax').value)||40;
+
+  const p=(currentMode==='free')
+    ?{name:'Custom',type:'Free',dist:0}
+    :(preset||PRESETS[currentPreset]||{name:'Custom',type:'—',dist:0});
+
+  document.getElementById('chart-title-txt').textContent=
+    p.name+(p.type&&p.type!=='—'?' · '+p.type:'')+(p.dist?' · '+p.dist+' Mpc':'');
+  document.getElementById('galaxy-info').textContent=
+    `M★=${mstar.toFixed(3)}×10¹⁰ · Mgas=${mgas.toFixed(2)}×10⁹ M☉`;
+
+  const vf=vFlat(mstar,mgas),rtv=rt(mstar,mgas),Mtot=(mstar+mgas/10);
+  const r_newton=rtv>0?Math.min(rtv,rmax*.8):rmax*.4;
+  const vN_rt=vNewton(r_newton,mstar,mgas,rd);
+  const lbl=rtv>0?`(r=rₜ=${rtv.toFixed(1)}kpc)`:`(r=${r_newton.toFixed(1)}kpc)`;
+  document.getElementById('r-vnewton-lbl').textContent=lbl;
+
+  function anim(id,v){const el=document.getElementById(id);el.textContent=v;el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');}
+  anim('r-vflat',vf.toFixed(0));
+  anim('r-vnewton',vN_rt.toFixed(0));
+  anim('r-rt',rtv.toFixed(1));
+  anim('r-mtot',Mtot.toFixed(3));
+
+  const N=250,step=rmax/N;
+  const r=[],vT=[],vNw=[],vD=[],vG=[];
+  for(let ri=0.05;ri<=rmax;ri+=step){r.push(ri);vT.push(vTIE(ri,mstar,mgas,rd));vNw.push(vNewton(ri,mstar,mgas,rd));vD.push(vDisk(ri,mstar,rd));vG.push(vGas(ri,mgas,rd));}
+
+  const showTIE=document.getElementById('show-tie').checked;
+  const showNewton=document.getElementById('show-newton').checked;
+  const showDisk=document.getElementById('show-disk').checked;
+  const showGas=document.getElementById('show-gas').checked;
+  const showRt=document.getElementById('show-rt').checked;
+
+  const traces=[];
+  if(currentMode==='preset'){
+    const obsData=OBS[currentPreset];
+    if(obsData) traces.push({x:obsData.map(d=>d[0]),y:obsData.map(d=>d[1]),mode:'markers',name:'v<sub>obs</sub> (SPARC)',marker:{color:'#FF6B8A',size:6,symbol:'circle',line:{color:'rgba(255,107,138,0.4)',width:1}},hovertemplate:'r=%{x:.1f} kpc<br>v=%{y:.0f} km/s<extra>Observed</extra>'});
+  }
+  if(showTIE)    traces.push({x:r,y:vT, mode:'lines',name:'v<sub>TIE</sub>',    line:{color:'#FFD700',width:3}});
+  if(showNewton) traces.push({x:r,y:vNw,mode:'lines',name:'v<sub>Newton</sub>',  line:{color:'rgba(255,255,255,0.4)',width:1.5,dash:'dash'}});
+  if(showDisk)   traces.push({x:r,y:vD, mode:'lines',name:'v<sub>disk</sub>',    line:{color:'#5BC8F5',width:1.5,dash:'dot'}});
+  if(showGas)    traces.push({x:r,y:vG, mode:'lines',name:'v<sub>HI gas</sub>',  line:{color:'#44FF88',width:1.5,dash:'dot'}});
+  if(showTIE)    traces.push({x:r,y:Array(r.length).fill(vf),mode:'lines',name:'v<sub>flat</sub>',line:{color:'rgba(255,215,0,0.3)',width:1,dash:'dot'},showlegend:false});
+
+  const shapes=[];
+  if(showRt&&rtv>0&&rtv<=rmax) shapes.push({type:'line',x0:rtv,x1:rtv,y0:0,y1:vf*1.2,line:{color:'rgba(255,68,85,0.5)',width:1.5,dash:'dot'}});
+
+  const layout={
+    paper_bgcolor:'transparent',plot_bgcolor:'rgba(5,5,15,0.5)',
+    font:{family:'Space Mono',color:'#a0a0b0',size:10},
+    xaxis:{title:'Radius (kpc)',gridcolor:'rgba(91,200,245,0.08)',tickfont:{size:9},range:[0,rmax]},
+    yaxis:{title:'Velocity (km/s)',gridcolor:'rgba(91,200,245,0.08)',tickfont:{size:9},rangemode:'tozero'},
+    legend:{font:{size:9},bgcolor:'transparent',orientation:'h',y:-0.18},
+    margin:{t:10,b:65,l:55,r:15},
+    shapes,
+    annotations:showRt&&rtv>0&&rtv<=rmax?[{x:rtv,y:vf*1.1,text:'rₜ='+rtv.toFixed(1)+'kpc',showarrow:false,font:{color:'#FF4455',size:9},xanchor:'left'}]:[]
+  };
+  Plotly.react('rot-chart',traces,layout,{displayModeBar:false,responsive:true});
+}
+
+function renderCompare(){
+  const compareSet=[
+    {id:'ngc3198',color:'#FFD700'},
+    {id:'ugc2885',color:'#5BC8F5'},
+    {id:'ugc128', color:'#44FF88'},
+    {id:'ddo154', color:'#BB88FF'},
+  ];
+  const traces=[],tableRows=[],rmax_global=80,N=300,step=rmax_global/N,r=[];
+  for(let ri=0.05;ri<=rmax_global;ri+=step) r.push(ri);
+  compareSet.forEach(({id,color})=>{
+    const p=PRESETS[id];
+    const vT=r.map(ri=>vTIE(ri,p.mstar,p.mgas,p.rd));
+    traces.push({x:r,y:vT,mode:'lines',name:p.name+' ('+p.type+')',line:{color,width:2.5}});
+    const vf=vFlat(p.mstar,p.mgas),rtv=rt(p.mstar,p.mgas),Mtot=(p.mstar+p.mgas/10);
+    tableRows.push(`<tr class="highlight"><td class="gold">${p.name}</td><td>${p.type}</td><td>${p.mstar.toFixed(3)}</td><td>${p.mgas.toFixed(2)}</td><td class="gold">${vf.toFixed(0)} km/s</td><td>${rtv.toFixed(1)} kpc</td></tr>`);
+  });
+  const layout={
+    paper_bgcolor:'transparent',plot_bgcolor:'rgba(5,5,15,0.5)',
+    font:{family:'Space Mono',color:'#a0a0b0',size:10},
+    xaxis:{title:'Radius (kpc)',gridcolor:'rgba(91,200,245,0.08)',tickfont:{size:9}},
+    yaxis:{title:'Velocity (km/s)',gridcolor:'rgba(91,200,245,0.08)',tickfont:{size:9},rangemode:'tozero'},
+    legend:{font:{size:9},bgcolor:'transparent',orientation:'h',y:-0.18},
+    margin:{t:10,b:65,l:55,r:15},
+  };
+  Plotly.react('rot-chart',traces,layout,{displayModeBar:false,responsive:true});
+  document.getElementById('chart-title-txt').textContent='Comparison · 4 morphological types';
+  document.getElementById('galaxy-info').textContent='All predicted by TIE with zero free parameters';
+  document.getElementById('compare-table').innerHTML='<tr><th>Galaxy</th><th>Type</th><th>M★ (10¹⁰)</th><th>Mgas (10⁹)</th><th>v_flat TIE</th><th>rₜ</th></tr>'+tableRows.join('');
+}
+
+document.getElementById('free-rmax').addEventListener('input',function(){
+  document.getElementById('rmax-val').textContent=this.value;
+  const pct=((this.value-5)/95*100);
+  this.style.setProperty('--pct',pct+'%');
+  calculate();
+});
+
+window.onload=()=>{
+  loadPreset('ngc3198',document.querySelector('.preset-btn'));
+  renderMathInElement(document.body,{delimiters:[{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});
+};
+</script>
+</body>
+</html>

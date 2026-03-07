@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIE · H-15 · Generador LaTeX</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{
+  --gold:#FFD700;--lime:#aaff00;--red:#FF4455;--orange:#FF8C42;--blue:#5BC8F5;
+  --bg:#000001;--bg2:rgba(5,5,15,0.92);--bg3:rgba(8,14,25,0.75);
+  --text:#fff;--dim:#9090a8;--border:rgba(170,255,0,0.13);
+  --mono:'Space Mono',monospace;--sans:'Syne',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex;flex-direction:column;}
+#bg-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.2;}
+
+nav{position:relative;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.85rem 2rem;background:rgba(0,0,1,0.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);flex-shrink:0;}
+.nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
+.nav-center{display:flex;gap:.5rem;}
+.lang-btn{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;cursor:pointer;border:none;transition:all .2s;}
+.lang-btn.active{color:#000;background:var(--gold);}
+.lang-btn.inactive{color:var(--dim);border:1px solid var(--border);background:transparent;}
+.lang-btn.inactive:hover{color:var(--gold);border-color:var(--gold);}
+.nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;letter-spacing:1px;transition:color .2s;}
+.nav-back:hover{color:var(--lime);}
+
+.strip{position:relative;z-index:10;background:rgba(0,0,1,0.8);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;flex-wrap:wrap;gap:.4rem;}
+.s-tag{font-family:var(--mono);font-size:.6rem;color:var(--lime);letter-spacing:3px;}
+.s-title{font-family:var(--sans);font-size:.95rem;font-weight:800;letter-spacing:-.5px;}
+.s-title span{color:var(--lime);}
+.s-badge{font-family:var(--mono);font-size:.58rem;color:var(--orange);background:rgba(255,140,66,.08);border:1px solid rgba(255,140,66,.25);border-radius:4px;padding:.18rem .55rem;letter-spacing:1px;}
+
+/* LAYOUT */
+#main{position:relative;z-index:10;flex:1;display:flex;overflow:hidden;min-height:0;}
+
+/* LEFT: equation catalog */
+#catalog-col{width:260px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid var(--border);overflow:hidden;}
+#cat-search-wrap{padding:.7rem .8rem;border-bottom:1px solid var(--border);flex-shrink:0;}
+#cat-search{width:100%;background:rgba(10,14,25,.8);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:.7rem;padding:.5rem .75rem;outline:none;transition:border-color .2s;}
+#cat-search:focus{border-color:var(--lime);}
+#cat-search::placeholder{color:var(--dim);}
+#cat-filters{display:flex;gap:.3rem;padding:.5rem .8rem;border-bottom:1px solid var(--border);flex-wrap:wrap;flex-shrink:0;}
+.cat-filter{font-family:var(--mono);font-size:.58rem;letter-spacing:1px;padding:.2rem .5rem;border-radius:12px;cursor:pointer;border:1px solid var(--border);color:var(--dim);background:transparent;transition:all .2s;}
+.cat-filter.active{background:rgba(170,255,0,.12);border-color:var(--lime);color:var(--lime);}
+.cat-filter:hover:not(.active){color:var(--text);}
+#eq-list{flex:1;overflow-y:auto;padding:.5rem .5rem;display:flex;flex-direction:column;gap:.3rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+
+.eq-item{background:var(--bg3);border:1px solid transparent;border-radius:8px;padding:.55rem .7rem;cursor:pointer;transition:all .18s;}
+.eq-item:hover{border-color:rgba(170,255,0,.2);background:rgba(170,255,0,.04);}
+.eq-item.selected{border-color:var(--lime);background:rgba(170,255,0,.08);}
+.eq-item-name{font-family:var(--sans);font-size:.72rem;font-weight:700;color:var(--text);margin-bottom:.25rem;}
+.eq-item-cat{font-family:var(--mono);font-size:.55rem;color:var(--dim);letter-spacing:1px;margin-bottom:.3rem;}
+.eq-item-preview{overflow:hidden;}
+.eq-item-preview .katex{font-size:.75em;}
+
+/* CENTER: preview + code */
+#preview-col{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+
+#preview-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;gap:1.5rem;min-height:0;}
+.preview-card{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:2rem 2.5rem;width:100%;max-width:560px;text-align:center;}
+.preview-card .katex-display{margin:0;}
+.preview-card .katex{font-size:1.6em;}
+.preview-name{font-family:var(--sans);font-size:1rem;font-weight:800;margin-bottom:.35rem;color:var(--gold);}
+.preview-desc{font-family:var(--mono);font-size:.65rem;color:var(--dim);line-height:1.7;max-width:460px;margin:0 auto .25rem;}
+.preview-context{font-family:var(--mono);font-size:.62rem;color:rgba(170,255,0,.7);margin-top:.3rem;}
+
+/* TABS */
+.code-tabs{display:flex;border-top:1px solid var(--border);flex-shrink:0;}
+.code-tab{flex:1;font-family:var(--mono);font-size:.62rem;letter-spacing:1px;padding:.5rem;background:transparent;border:none;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+.code-tab.active{color:var(--lime);border-bottom-color:var(--lime);}
+.code-tab:hover:not(.active){color:var(--text);}
+
+/* CODE BOX */
+#code-area{flex-shrink:0;padding:.75rem;background:rgba(0,0,1,.6);border-top:1px solid var(--border);}
+.code-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;}
+.code-label{font-family:var(--mono);font-size:.58rem;color:var(--dim);letter-spacing:2px;}
+.code-actions{display:flex;gap:.4rem;}
+.btn-copy{background:rgba(170,255,0,.08);border:1px solid rgba(170,255,0,.25);border-radius:6px;color:var(--lime);font-family:var(--mono);font-size:.6rem;letter-spacing:1px;padding:.25rem .65rem;cursor:pointer;transition:all .2s;}
+.btn-copy:hover{background:rgba(170,255,0,.18);}
+.btn-copy.copied{color:#000;background:var(--lime);border-color:var(--lime);}
+#code-box{background:rgba(0,0,0,.7);border:1px solid rgba(170,255,0,.1);border-radius:8px;padding:.65rem .85rem;font-family:var(--mono);font-size:.72rem;color:rgba(170,255,0,.9);line-height:1.6;word-break:break-all;max-height:90px;overflow-y:auto;white-space:pre-wrap;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+
+/* RIGHT: custom + export */
+#right-col{width:250px;flex-shrink:0;display:flex;flex-direction:column;gap:.6rem;padding:.8rem;overflow-y:auto;border-left:1px solid var(--border);scrollbar-width:none;}
+#right-col::-webkit-scrollbar{display:none;}
+
+.r-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.75rem;}
+.r-title{font-family:var(--mono);font-size:.58rem;color:var(--lime);letter-spacing:3px;margin-bottom:.6rem;}
+
+/* CUSTOM EDITOR */
+#custom-input{width:100%;background:rgba(0,0,0,.6);border:1px solid var(--border);border-radius:7px;color:var(--lime);font-family:var(--mono);font-size:.7rem;padding:.5rem .65rem;resize:none;height:70px;outline:none;transition:border-color .2s;scrollbar-width:none;}
+#custom-input:focus{border-color:var(--lime);}
+#custom-preview{background:rgba(0,0,0,.4);border:1px solid rgba(170,255,0,.08);border-radius:7px;padding:.6rem;min-height:42px;text-align:center;margin:.4rem 0;}
+.btn-insert{width:100%;background:rgba(170,255,0,.08);border:1px solid rgba(170,255,0,.2);border-radius:6px;color:var(--lime);font-family:var(--mono);font-size:.62rem;letter-spacing:1px;padding:.4rem;cursor:pointer;transition:all .2s;margin-top:.3rem;}
+.btn-insert:hover{background:rgba(170,255,0,.18);}
+
+/* EXPORT BLOCK */
+.export-btns{display:flex;flex-direction:column;gap:.35rem;}
+.export-btn{background:rgba(255,140,66,.06);border:1px solid rgba(255,140,66,.2);border-radius:6px;color:var(--orange);font-family:var(--mono);font-size:.62rem;letter-spacing:1px;padding:.4rem .6rem;cursor:pointer;transition:all .2s;text-align:left;}
+.export-btn:hover{background:rgba(255,140,66,.15);}
+
+/* CONSTANTS CHEATSHEET */
+.const-grid{display:flex;flex-direction:column;gap:.3rem;}
+.const-row{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(255,255,255,.04);padding-bottom:.25rem;}
+.const-row:last-child{border:none;padding:0;}
+.const-key{font-family:var(--mono);font-size:.6rem;color:var(--dim);}
+.const-val{font-family:var(--mono);font-size:.6rem;color:var(--gold);cursor:pointer;transition:color .2s;}
+.const-val:hover{color:var(--lime);}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:rgba(170,255,0,.15);border:1px solid rgba(170,255,0,.4);border-radius:8px;padding:.45rem 1rem;font-family:var(--mono);font-size:.68rem;color:var(--lime);z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+
+@media(max-width:900px){
+  #catalog-col{width:200px;}
+  #right-col{display:none;}
+}
+@media(max-width:600px){
+  #catalog-col{display:none;}
+  #preview-col{flex:1;}
+}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+
+<nav>
+  <a href="index.html" class="nav-logo">TIE / R@LC</a>
+  <div class="nav-center">
+    <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ES</button>
+    <button class="lang-btn inactive" id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+  <a href="labs.html" class="nav-back" id="lnk-back">← LABORATORIO</a>
+</nav>
+
+<div class="strip">
+  <span class="s-tag">H-15 · GENERADOR LATEX</span>
+  <span class="s-title" id="strip-title">GENERADOR <span>LaTeX</span></span>
+  <span class="s-badge" id="strip-badge">TIE v11.8 · KATEX</span>
+</div>
+
+<div id="main">
+
+  <!-- CATALOG -->
+  <div id="catalog-col">
+    <div id="cat-search-wrap">
+      <input type="text" id="cat-search" placeholder="Buscar ecuación..." oninput="filterEqs()">
+    </div>
+    <div id="cat-filters"></div>
+    <div id="eq-list"></div>
+  </div>
+
+  <!-- PREVIEW + CODE -->
+  <div id="preview-col">
+    <div id="preview-area">
+      <div>
+        <div class="preview-name" id="prev-name">—</div>
+        <div class="preview-desc" id="prev-desc">Selecciona una ecuación del catálogo</div>
+        <div class="preview-context" id="prev-ctx"></div>
+      </div>
+      <div class="preview-card" id="prev-render"></div>
+    </div>
+
+    <div class="code-tabs">
+      <button class="code-tab active" id="tab-inline"   onclick="setTab('inline')"  ><span id="tab-il-lbl">INLINE \( \)</span></button>
+      <button class="code-tab"        id="tab-display"  onclick="setTab('display')" ><span id="tab-dl-lbl">DISPLAY \[ \]</span></button>
+      <button class="code-tab"        id="tab-equation" onclick="setTab('equation')"><span id="tab-eq-lbl">EQUATION ENV</span></button>
+      <button class="code-tab"        id="tab-align"    onclick="setTab('align')"   ><span id="tab-al-lbl">ALIGN ENV</span></button>
+    </div>
+
+    <div id="code-area">
+      <div class="code-header">
+        <span class="code-label" id="code-label">CÓDIGO LATEX</span>
+        <div class="code-actions">
+          <button class="btn-copy" id="btn-copy" onclick="copyCode()"><span id="btn-copy-lbl">COPIAR</span></button>
+          <button class="btn-copy" onclick="copyAll()" id="btn-copyall" style="background:rgba(91,200,245,.08);border-color:rgba(91,200,245,.25);color:var(--blue)"><span id="btn-copyall-lbl">COPIAR TODO</span></button>
+        </div>
+      </div>
+      <div id="code-box">— Selecciona una ecuación —</div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div id="right-col">
+
+    <!-- CUSTOM -->
+    <div class="r-card">
+      <div class="r-title" id="r-custom-title">ECUACIÓN CUSTOM</div>
+      <textarea id="custom-input" placeholder="\frac{a_0}{2\pi} = \frac{cH_0}{4\pi^2}" oninput="previewCustom()"></textarea>
+      <div id="custom-preview"></div>
+      <button class="btn-insert" onclick="insertCustom()" id="btn-insert">↑ AGREGAR AL CÓDIGO</button>
+    </div>
+
+    <!-- EXPORT -->
+    <div class="r-card">
+      <div class="r-title" id="r-export-title">EXPORTAR</div>
+      <div class="export-btns">
+        <button class="export-btn" onclick="exportTex()" id="btn-export-tex">📄 DESCARGAR .tex</button>
+        <button class="export-btn" onclick="exportMd()"  id="btn-export-md" >📝 DESCARGAR .md</button>
+        <button class="export-btn" onclick="copyAll()"   id="btn-export-copy" style="color:var(--lime);border-color:rgba(170,255,0,.2);background:rgba(170,255,0,.05)">📋 COPIAR SELECCIÓN</button>
+      </div>
+    </div>
+
+    <!-- CONSTANTS -->
+    <div class="r-card">
+      <div class="r-title" id="r-const-title">CONSTANTES TIE</div>
+      <div class="const-grid" id="const-grid"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- BG -->
+<script>
+(function(){
+  const cv=document.getElementById('bg-canvas');
+  const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(60,1,.1,1000);
+  const ren=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true});
+  ren.setPixelRatio(Math.min(devicePixelRatio,2));
+  function rs(){ren.setSize(cv.clientWidth,cv.clientHeight);cam.aspect=cv.clientWidth/cv.clientHeight;cam.updateProjectionMatrix();}
+  rs();window.addEventListener('resize',rs);
+  cam.position.set(0,3,6);cam.lookAt(0,0,0);
+  const n=30000,geo=new THREE.BufferGeometry();
+  const pos=new Float32Array(n*3),col=new Float32Array(n*3);
+  const c1=new THREE.Color('#aaff00'),c2=new THREE.Color('#0a1400');
+  for(let i=0;i<n;i++){
+    const r=Math.random()*4,b=(i%5)/5*Math.PI*2+r*.9;
+    pos[i*3]=Math.cos(b)*r+(Math.random()-.5)*.3*r;
+    pos[i*3+1]=(Math.random()-.5)*.12*r;
+    pos[i*3+2]=Math.sin(b)*r+(Math.random()-.5)*.3*r;
+    const m=new THREE.Color().lerpColors(c1,c2,r/4);
+    col[i*3]=m.r;col[i*3+1]=m.g;col[i*3+2]=m.b;
+  }
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+  sc.add(new THREE.Points(geo,new THREE.PointsMaterial({size:.007,sizeAttenuation:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true})));
+  (function loop(){requestAnimationFrame(loop);sc.rotation.y+=.0004;ren.render(sc,cam);})();
+})();
+</script>
+
+<!-- MAIN LOGIC -->
+<script>
+// ══════════════════════════════════════════
+// EQUATION DATABASE
+// ══════════════════════════════════════════
+const EQUATIONS = [
+  // FUNDAMENTAL
+  {id:'a0-def',    cat:'fundamental', nameES:'Aceleración de Milgrom',    nameEN:'Milgrom Acceleration',
+   latex: 'a_0 = \\frac{cH_0}{2\\pi} = 1.082 \\times 10^{-10}\\,\\text{m/s}^2',
+   descES:'Constante fundamental de TIE. Emerge de la frecuencia de rotación del universo.',
+   descEN:'Fundamental TIE constant. Emerges from the universe\'s rotation frequency.',
+   ctxES:'H₀=70 km/s/Mpc · c=2.998×10⁸ m/s',ctxEN:'H₀=70 km/s/Mpc · c=2.998×10⁸ m/s'},
+  {id:'a0-val',    cat:'fundamental', nameES:'a₀ derivada del universo',  nameEN:'a₀ from universe',
+   latex: 'a_0 = \\frac{cH_0}{2\\pi}',
+   descES:'Forma compacta. a₀ no es parámetro libre: se deriva de H₀.',
+   descEN:'Compact form. a₀ is not a free parameter: derived from H₀.',
+   ctxES:'0 parámetros libres',ctxEN:'0 free parameters'},
+  {id:'lambda-tie',cat:'fundamental', nameES:'Constante cosmológica TIE', nameEN:'TIE Cosmological Constant',
+   latex: '\\Lambda_{\\text{TIE}} = \\frac{2H_0^2}{c^2} = 1.145 \\times 10^{-52}\\,\\text{m}^{-2}',
+   descES:'Constante cosmológica derivada en TIE sin energía oscura.',
+   descEN:'Cosmological constant derived in TIE without dark energy.',
+   ctxES:'Sin energía oscura',ctxEN:'No dark energy'},
+  {id:'phi-field',cat:'fundamental', nameES:'Campo φ de infraestructura', nameEN:'φ Infrastructure field',
+   latex: '\\phi(r) = -\\frac{GM}{r}\\left(1 + \\frac{a_0 r}{2c^2}\\right)',
+   descES:'Potencial gravitacional TIE con corrección de infraestructura espacial.',
+   descEN:'TIE gravitational potential with spatial infrastructure correction.',
+   ctxES:'r ≫ rₛ régimen TIE',ctxEN:'r ≫ rₛ TIE regime'},
+
+  // ROTATION CURVES
+  {id:'vflat',     cat:'rotacion', nameES:'Velocidad plana (MOND/TIE)',  nameEN:'Flat velocity (MOND/TIE)',
+   latex: 'v_{\\text{flat}} = (GMa_0)^{1/4}',
+   descES:'Predicción central de TIE: velocidad de rotación plana sin materia oscura.',
+   descEN:'Central TIE prediction: flat rotation velocity without dark matter.',
+   ctxES:'0 parámetros libres · sin DM',ctxEN:'0 free parameters · no DM'},
+  {id:'vflat-full',cat:'rotacion', nameES:'Velocidad plana expandida',   nameEN:'Flat velocity expanded',
+   latex: 'v_{\\text{flat}} = \\left(\\frac{GMcH_0}{2\\pi}\\right)^{1/4}',
+   descES:'Forma expandida sustituyendo a₀ = cH₀/2π.',
+   descEN:'Expanded form substituting a₀ = cH₀/2π.',
+   ctxES:'Solo constantes universales',ctxEN:'Universal constants only'},
+  {id:'sparc',     cat:'rotacion', nameES:'Ajuste SPARC (Baryonic TF)',  nameEN:'SPARC fit (Baryonic TF)',
+   latex: 'M_b = \\frac{v_f^4}{Ga_0}',
+   descES:'Relación de Tully-Fisher bariónica. TIE predice sin parámetros libres.',
+   descEN:'Baryonic Tully-Fisher relation. TIE predicts with no free parameters.',
+   ctxES:'175 galaxias SPARC · σ=0.07 dex',ctxEN:'175 SPARC galaxies · σ=0.07 dex'},
+  {id:'accel-tie', cat:'rotacion', nameES:'Aceleración TIE interpolada',  nameEN:'TIE interpolated acceleration',
+   latex: 'a = \\frac{a_N}{2}\\left(1 + \\sqrt{1 + \\frac{4a_0}{a_N}}\\right)',
+   descES:'Función de interpolación TIE entre régimen newtoniano y plano.',
+   descEN:'TIE interpolation function between Newtonian and flat regime.',
+   ctxES:'aₙ = aceleración newtoniana',ctxEN:'aₙ = Newtonian acceleration'},
+
+  // BLACK HOLES
+  {id:'rh-tie',    cat:'agujeros', nameES:'Horizonte TIE rₕ',            nameEN:'TIE horizon rₕ',
+   latex: 'r_h = 0.869\\,\\sqrt{\\frac{GM}{a_0}}',
+   descES:'Radio del horizonte efectivo en TIE. Difiere de rₛ por factor ~√(c²/a₀·r).',
+   descEN:'TIE effective horizon radius. Differs from rₛ by factor ~√(c²/a₀·r).',
+   ctxES:'rₕ ≫ rₛ para M ≫ Mc',ctxEN:'rₕ ≫ rₛ for M ≫ Mc'},
+  {id:'rs-gr',     cat:'agujeros', nameES:'Radio de Schwarzschild (GR)',  nameEN:'Schwarzschild radius (GR)',
+   latex: 'r_s = \\frac{2GM}{c^2}',
+   descES:'Radio de Schwarzschild estándar en Relatividad General.',
+   descEN:'Standard Schwarzschild radius in General Relativity.',
+   ctxES:'Para comparación con rₕ TIE',ctxEN:'For comparison with TIE rₕ'},
+  {id:'rh-rs',     cat:'agujeros', nameES:'Relación rₕ/rₛ',              nameEN:'Ratio rₕ/rₛ',
+   latex: '\\frac{r_h}{r_s} = \\frac{0.869}{2}\\sqrt{\\frac{c^2}{Ga_0 M}} \\cdot M',
+   descES:'Razón entre los horizontes TIE y GR. Para M87*: rₕ/rₛ ≈ 4×10⁶.',
+   descEN:'Ratio between TIE and GR horizons. For M87*: rₕ/rₛ ≈ 4×10⁶.',
+   ctxES:'M87*: rₕ = 4.04×10⁶ rₛ',ctxEN:'M87*: rₕ = 4.04×10⁶ rₛ'},
+  {id:'mc-crit',   cat:'agujeros', nameES:'Masa crítica TIE Mc',         nameEN:'TIE critical mass Mc',
+   latex: 'M_c = \\frac{c^2}{G}\\sqrt{\\frac{c^2}{a_0 G}} \\approx 1.06\\times 10^{23}\\,M_\\odot',
+   descES:'Masa crítica donde rₕ = rₛ. Por encima: rₕ domina sobre rₛ.',
+   descEN:'Critical mass where rₕ = rₛ. Above: rₕ dominates over rₛ.',
+   ctxES:'Mc ≈ 1.06×10²³ M☉',ctxEN:'Mc ≈ 1.06×10²³ M☉'},
+
+  // LENSING
+  {id:'alpha-gr',  cat:'lensing', nameES:'Deflexión gravitacional (GR)',  nameEN:'Gravitational deflection (GR)',
+   latex: '\\alpha_{\\text{GR}} = \\frac{4GM}{c^2 b}',
+   descES:'Ángulo de deflexión de luz en Relatividad General. Factor 2× sobre Newton.',
+   descEN:'Light deflection angle in General Relativity. 2× over Newton.',
+   ctxES:'b = parámetro de impacto',ctxEN:'b = impact parameter'},
+  {id:'theta-e',   cat:'lensing', nameES:'Radio anillo de Einstein',       nameEN:'Einstein ring radius',
+   latex: '\\theta_E = \\sqrt{\\frac{4GM}{c^2}\\frac{D_{LS}}{D_L D_S}}',
+   descES:'Radio angular del anillo de Einstein para lente puntual.',
+   descEN:'Angular radius of Einstein ring for point lens.',
+   ctxES:'D_LS, D_L, D_S: distancias angulares',ctxEN:'D_LS, D_L, D_S: angular distances'},
+  {id:'magnif',    cat:'lensing', nameES:'Magnificación de microlensing',  nameEN:'Microlensing magnification',
+   latex: '\\mu = \\frac{u^2+2}{u\\sqrt{u^2+4}}, \\quad u = \\frac{\\beta}{\\theta_E}',
+   descES:'Magnificación total del lensing gravitacional en función del parámetro u.',
+   descEN:'Total gravitational lensing magnification as function of parameter u.',
+   ctxES:'β: posición de la fuente',ctxEN:'β: source position'},
+
+  // GRAVITATIONAL WAVES
+  {id:'mchirp',    cat:'gw', nameES:'Masa chirp',                         nameEN:'Chirp mass',
+   latex: '\\mathcal{M}_c = \\frac{(M_1 M_2)^{3/5}}{(M_1+M_2)^{1/5}}',
+   descES:'Masa chirp de una binaria. Determina la evolución de la frecuencia GW.',
+   descEN:'Binary chirp mass. Determines the evolution of GW frequency.',
+   ctxES:'Observable por LIGO/LISA',ctxEN:'Observable by LIGO/LISA'},
+  {id:'fgw',       cat:'gw', nameES:'Frecuencia GW inspiral',              nameEN:'Inspiral GW frequency',
+   latex: 'f_{\\text{GW}} = \\frac{1}{\\pi}\\left(\\frac{5}{256\\,\\tau}\\right)^{3/8}\\left(\\frac{G\\mathcal{M}_c}{c^3}\\right)^{-5/8}',
+   descES:'Frecuencia de la onda gravitacional durante la fase de inspiral.',
+   descEN:'Gravitational wave frequency during the inspiral phase.',
+   ctxES:'τ: tiempo hasta la coalescencia',ctxEN:'τ: time to coalescence'},
+  {id:'t2-mod',    cat:'gw', nameES:'Modulación T² artificial (TIE)',      nameEN:'Artificial T² modulation (TIE)',
+   latex: 'h_{\\text{TIE}}(t) = h_0\\left(1 + \\epsilon\\,\\sin\\!\\left(2\\pi\\frac{f}{f_{\\text{LISA}}}\\right)\\right)\\cos(\\Phi(t))',
+   descES:'Predicción TIE: la señal LISA lleva la huella del T² artificial a ~2.4 mHz.',
+   descEN:'TIE prediction: LISA signal carries artificial T² fingerprint at ~2.4 mHz.',
+   ctxES:'f_LISA ≈ 2.4 mHz · señal observable',ctxEN:'f_LISA ≈ 2.4 mHz · observable signal'},
+  {id:'lisa-freq', cat:'gw', nameES:'Frecuencia central LISA (TIE)',        nameEN:'LISA central frequency (TIE)',
+   latex: 'f_{\\text{LISA}} = \\frac{a_0}{\\pi c} \\approx 2.4\\,\\text{mHz}',
+   descES:'TIE predice la frecuencia de máxima sensibilidad de LISA a partir de a₀.',
+   descEN:'TIE predicts the LISA peak sensitivity frequency from a₀.',
+   ctxES:'Predicción verificable · LISA 2035',ctxEN:'Verifiable prediction · LISA 2035'},
+
+  // COSMOLOGY
+  {id:'hubble',    cat:'cosmologia', nameES:'Relación de Hubble',           nameEN:'Hubble relation',
+   latex: 'v = H_0\\,d, \\quad H_0 = 70\\,\\text{km/s/Mpc}',
+   descES:'Ley de Hubble. TIE usa H₀=70 km/s/Mpc como valor de referencia.',
+   descEN:'Hubble law. TIE uses H₀=70 km/s/Mpc as reference value.',
+   ctxES:'Base de a₀ en TIE',ctxEN:'Basis of a₀ in TIE'},
+  {id:'rh-uni',    cat:'cosmologia', nameES:'Radio de Hubble',              nameEN:'Hubble radius',
+   latex: 'r_H = \\frac{c}{H_0} \\approx 1.28\\times 10^{26}\\,\\text{m}',
+   descES:'Radio del universo observable. Define la escala cosmológica de TIE.',
+   descEN:'Observable universe radius. Defines TIE cosmological scale.',
+   ctxES:'≈ 4.14 Gpc',ctxEN:'≈ 4.14 Gpc'},
+  {id:'2pi',       cat:'cosmologia', nameES:'Factor 2π fundamental',        nameEN:'Fundamental 2π factor',
+   latex: 'a_0 = \\frac{cH_0}{2\\pi} \\implies \\omega_0 = H_0 = \\frac{2\\pi}{T_{\\text{universo}}}',
+   descES:'El 2π no es arbitrario: conecta la aceleración con la frecuencia angular del universo.',
+   descEN:'The 2π is not arbitrary: connects acceleration with the universe\'s angular frequency.',
+   ctxES:'T_universo ≈ 13.8 Gyr × 2π',ctxEN:'T_universe ≈ 13.8 Gyr × 2π'},
+  {id:'rho-vac',   cat:'cosmologia', nameES:'Densidad de vacío TIE',        nameEN:'TIE vacuum density',
+   latex: '\\rho_{\\Lambda} = \\frac{\\Lambda_{\\text{TIE}} c^2}{8\\pi G} = \\frac{H_0^2}{4\\pi^2 G}',
+   descES:'Densidad de energía del vacío en TIE, derivada de Λ_TIE.',
+   descEN:'Vacuum energy density in TIE, derived from Λ_TIE.',
+   ctxES:'Sin constante cosmológica libre',ctxEN:'No free cosmological constant'},
+
+  // GPS
+  {id:'gps-tie',   cat:'gps', nameES:'Corrección TIE al GPS',              nameEN:'TIE GPS correction',
+   latex: '\\Delta\\tau_{\\text{TIE}} = \\frac{a_0\\,r}{2c^2}\\,\\Delta t',
+   descES:'Corrección de TIE al desfase acumulativo del GPS. Efecto de la infraestructura φ.',
+   descEN:'TIE correction to GPS cumulative phase shift. Effect of φ infrastructure.',
+   ctxES:'r ≈ 26,560 km (órbita GPS)',ctxEN:'r ≈ 26,560 km (GPS orbit)'},
+  {id:'reloj-uni', cat:'gps', nameES:'Reloj universal TIE',                nameEN:'TIE universal clock',
+   latex: 'T_0 = \\frac{2\\pi}{H_0} = \\frac{1}{f_0}, \\quad f_0 = \\frac{H_0}{2\\pi}',
+   descES:'Período fundamental del universo en TIE. Base del reloj universal.',
+   descEN:'Fundamental period of the universe in TIE. Basis of the universal clock.',
+   ctxES:'T₀ ≈ 87.9 Gyr',ctxEN:'T₀ ≈ 87.9 Gyr'},
+];
+
+const CATS = ['todos','fundamental','rotacion','agujeros','lensing','gw','cosmologia','gps'];
+const CAT_LABELS_ES = {todos:'TODOS',fundamental:'FUNDAMENTAL',rotacion:'ROTACIÓN',agujeros:'AG. NEGROS',lensing:'LENSING',gw:'ONDAS GW',cosmologia:'COSMOLOGÍA',gps:'GPS/RELOJES'};
+const CAT_LABELS_EN = {todos:'ALL',fundamental:'FUNDAMENTAL',rotacion:'ROTATION',agujeros:'BLACK HOLES',lensing:'LENSING',gw:'GW WAVES',cosmologia:'COSMOLOGY',gps:'GPS/CLOCKS'};
+
+const CONSTANTS = [
+  {key:'a₀',      val:'1.082×10⁻¹⁰ m/s²', latex:'a_0 = 1.082\\times10^{-10}\\,\\text{m/s}^2'},
+  {key:'H₀',      val:'70 km/s/Mpc',        latex:'H_0 = 70\\,\\text{km/s/Mpc}'},
+  {key:'Λ_TIE',   val:'1.145×10⁻⁵² m⁻²',   latex:'\\Lambda = 1.145\\times10^{-52}\\,\\text{m}^{-2}'},
+  {key:'Mc',      val:'1.06×10²³ M☉',       latex:'M_c = 1.06\\times10^{23}\\,M_\\odot'},
+  {key:'f_LISA',  val:'2.4 mHz',             latex:'f_{\\text{LISA}} = 2.4\\,\\text{mHz}'},
+  {key:'rₕ M87*', val:'7.76×10¹⁶ km',       latex:'r_h(\\text{M87*}) = 7.76\\times10^{16}\\,\\text{km}'},
+];
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let lang      = 'es';
+let activeCat = 'todos';
+let searchQ   = '';
+let selEq     = null;
+let tabMode   = 'inline';
+let codeLines = [];
+
+// ══════════════════════════════════════════
+// RENDER CATALOG
+// ══════════════════════════════════════════
+function renderFilters(){
+  const wrap = document.getElementById('cat-filters');
+  wrap.innerHTML = '';
+  CATS.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-filter' + (c===activeCat?' active':'');
+    btn.textContent = lang==='es' ? CAT_LABELS_ES[c] : CAT_LABELS_EN[c];
+    btn.onclick = () => { activeCat=c; renderFilters(); renderList(); };
+    wrap.appendChild(btn);
+  });
+}
+
+function renderList(){
+  const list = document.getElementById('eq-list');
+  list.innerHTML = '';
+  const q = searchQ.toLowerCase();
+  EQUATIONS.filter(eq => {
+    const matchCat  = activeCat==='todos' || eq.cat===activeCat;
+    const nameKey   = lang==='es' ? eq.nameES : eq.nameEN;
+    const matchSrch = !q || nameKey.toLowerCase().includes(q) || eq.latex.toLowerCase().includes(q) || eq.cat.includes(q);
+    return matchCat && matchSrch;
+  }).forEach(eq => {
+    const div = document.createElement('div');
+    div.className = 'eq-item' + (selEq===eq.id?' selected':'');
+    div.onclick = () => selectEq(eq.id);
+    const catLbl = lang==='es' ? CAT_LABELS_ES[eq.cat] : CAT_LABELS_EN[eq.cat];
+    div.innerHTML = `
+      <div class="eq-item-name">${lang==='es'?eq.nameES:eq.nameEN}</div>
+      <div class="eq-item-cat">${catLbl}</div>
+      <div class="eq-item-preview" id="prev-mini-${eq.id}"></div>`;
+    list.appendChild(div);
+    // Render mini KaTeX
+    try{
+      katex.render(eq.latex, div.querySelector('.eq-item-preview'), {throwOnError:false,displayMode:false});
+    }catch(e){}
+  });
+}
+
+function filterEqs(){
+  searchQ = document.getElementById('cat-search').value;
+  renderList();
+}
+
+// ══════════════════════════════════════════
+// SELECT EQUATION
+// ══════════════════════════════════════════
+function selectEq(id){
+  selEq = id;
+  const eq = EQUATIONS.find(e=>e.id===id);
+  if(!eq) return;
+  renderList();
+
+  document.getElementById('prev-name').textContent = lang==='es' ? eq.nameES : eq.nameEN;
+  document.getElementById('prev-desc').textContent = lang==='es' ? eq.descES : eq.descEN;
+  document.getElementById('prev-ctx').textContent  = lang==='es' ? eq.ctxES  : eq.ctxEN;
+
+  const render = document.getElementById('prev-render');
+  try{
+    katex.render(eq.latex, render, {throwOnError:false, displayMode:true});
+  }catch(e){ render.textContent = eq.latex; }
+
+  updateCodeBox(eq);
+}
+
+// ══════════════════════════════════════════
+// CODE BOX
+// ══════════════════════════════════════════
+function setTab(mode){
+  tabMode = mode;
+  ['inline','display','equation','align'].forEach(t=>{
+    document.getElementById('tab-'+t).classList.toggle('active',t===mode);
+  });
+  const eq = EQUATIONS.find(e=>e.id===selEq);
+  if(eq) updateCodeBox(eq);
+}
+
+function updateCodeBox(eq){
+  let code = '';
+  if(tabMode==='inline'){
+    code = `\\(${eq.latex}\\)`;
+  } else if(tabMode==='display'){
+    code = `\\[${eq.latex}\\]`;
+  } else if(tabMode==='equation'){
+    const label = eq.id.replace('-','_');
+    code = `\\begin{equation}\n  ${eq.latex}\n  \\label{eq:${label}}\n\\end{equation}`;
+  } else {
+    code = `\\begin{align}\n  ${eq.latex}\n\\end{align}`;
+  }
+  document.getElementById('code-box').textContent = code;
+}
+
+function copyCode(){
+  const text = document.getElementById('code-box').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = document.getElementById('btn-copy');
+    btn.classList.add('copied');
+    btn.querySelector('span').textContent = lang==='es'?'¡COPIADO!':'COPIED!';
+    setTimeout(()=>{btn.classList.remove('copied');btn.querySelector('span').textContent=lang==='es'?'COPIAR':'COPY';},1500);
+    showToast(lang==='es'?'LaTeX copiado al portapapeles':'LaTeX copied to clipboard');
+  });
+}
+
+function copyAll(){
+  const eqs = EQUATIONS.filter(eq => activeCat==='todos' || eq.cat===activeCat);
+  const lines = eqs.map(eq=>{
+    const nm = lang==='es'?eq.nameES:eq.nameEN;
+    return `% ${nm}\n\\[${eq.latex}\\]`;
+  }).join('\n\n');
+  navigator.clipboard.writeText(lines).then(()=>{
+    showToast(lang==='es'?`${eqs.length} ecuaciones copiadas`:`${eqs.length} equations copied`);
+  });
+}
+
+// ══════════════════════════════════════════
+// CUSTOM EDITOR
+// ══════════════════════════════════════════
+function previewCustom(){
+  const val = document.getElementById('custom-input').value.trim();
+  const prev = document.getElementById('custom-preview');
+  if(!val){ prev.innerHTML=''; return; }
+  try{
+    katex.render(val, prev, {throwOnError:false, displayMode:true});
+  }catch(e){ prev.textContent=val; }
+}
+
+function insertCustom(){
+  const val = document.getElementById('custom-input').value.trim();
+  if(!val) return;
+  const box = document.getElementById('code-box');
+  const curr = box.textContent==='— Selecciona una ecuación —' ? '' : box.textContent;
+  box.textContent = curr + (curr?'\n\n':'') + `\\[${val}\\]`;
+  showToast(lang==='es'?'Ecuación insertada':'Equation inserted');
+}
+
+// ══════════════════════════════════════════
+// EXPORT
+// ══════════════════════════════════════════
+function exportTex(){
+  const eqs = activeCat==='todos' ? EQUATIONS : EQUATIONS.filter(e=>e.cat===activeCat);
+  const lines = [
+    '% TIE - Teoría de la Infraestructura Espacial',
+    '% R@LC · Rubén Lecona · México 2026',
+    '% Generado por el Laboratorio TIE H-15',
+    '',
+    '\\documentclass{article}',
+    '\\usepackage{amsmath,amssymb}',
+    '',
+    '\\begin{document}',
+    '',
+    ...eqs.map(eq=>{
+      const nm = lang==='es'?eq.nameES:eq.nameEN;
+      const ds = lang==='es'?eq.descES:eq.descEN;
+      return `% ${nm}\n% ${ds}\n\\begin{equation}\n  ${eq.latex}\n  \\label{eq:${eq.id}}\n\\end{equation}\n`;
+    }),
+    '\\end{document}',
+  ].join('\n');
+  download('tie-equations.tex', lines, 'text/plain');
+  showToast(lang==='es'?'Archivo .tex descargado':'.tex file downloaded');
+}
+
+function exportMd(){
+  const eqs = activeCat==='todos' ? EQUATIONS : EQUATIONS.filter(e=>e.cat===activeCat);
+  const lines = [
+    '# TIE — Ecuaciones LaTeX',
+    '**Teoría de la Infraestructura Espacial · R@LC · 2026**',
+    '',
+    ...eqs.map(eq=>{
+      const nm = lang==='es'?eq.nameES:eq.nameEN;
+      const ds = lang==='es'?eq.descES:eq.descEN;
+      return `## ${nm}\n\n${ds}\n\n$$${eq.latex}$$\n`;
+    }),
+  ].join('\n');
+  download('tie-equations.md', lines, 'text/markdown');
+  showToast(lang==='es'?'Archivo .md descargado':'.md file downloaded');
+}
+
+function download(filename, text, type){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text],{type}));
+  a.download = filename; a.click();
+}
+
+// ══════════════════════════════════════════
+// CONSTANTS PANEL
+// ══════════════════════════════════════════
+function renderConstants(){
+  const grid = document.getElementById('const-grid');
+  grid.innerHTML = '';
+  CONSTANTS.forEach(c=>{
+    const row = document.createElement('div');
+    row.className = 'const-row';
+    row.innerHTML = `<span class="const-key">${c.key}</span><span class="const-val" title="click para copiar LaTeX" onclick="copyConstant('${c.latex.replace(/'/g,'&#39;')}')">${c.val}</span>`;
+    grid.appendChild(row);
+  });
+}
+
+function copyConstant(latex){
+  navigator.clipboard.writeText(`\\(${latex}\\)`).then(()=>{
+    showToast(lang==='es'?'Constante copiada':'Constant copied');
+  });
+}
+
+// ══════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════
+let toastT = null;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  if(toastT) clearTimeout(toastT);
+  toastT = setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// ══════════════════════════════════════════
+// LANG
+// ══════════════════════════════════════════
+function setLang(l){
+  lang = l;
+  document.getElementById('btn-es').className='lang-btn '+(l==='es'?'active':'inactive');
+  document.getElementById('btn-en').className='lang-btn '+(l==='en'?'active':'inactive');
+  const lb=document.getElementById('lnk-back');
+  lb.textContent = l==='es'?'← LABORATORIO':'← LABORATORY';
+  lb.href = l==='es'?'labs.html':'labs-en.html';
+  document.getElementById('strip-title').innerHTML = l==='es'?'GENERADOR <span>LaTeX</span>':'<span>LaTeX</span> GENERATOR';
+  document.getElementById('strip-badge').textContent = 'TIE v11.8 · KATEX';
+  document.getElementById('cat-search').placeholder = l==='es'?'Buscar ecuación...':'Search equation...';
+  document.getElementById('r-custom-title').textContent = l==='es'?'ECUACIÓN CUSTOM':'CUSTOM EQUATION';
+  document.getElementById('r-export-title').textContent = l==='es'?'EXPORTAR':'EXPORT';
+  document.getElementById('r-const-title').textContent  = l==='es'?'CONSTANTES TIE':'TIE CONSTANTS';
+  document.getElementById('btn-insert').textContent = l==='es'?'↑ AGREGAR AL CÓDIGO':'↑ ADD TO CODE';
+  document.getElementById('btn-export-tex').textContent = l==='es'?'📄 DESCARGAR .tex':'📄 DOWNLOAD .tex';
+  document.getElementById('btn-export-md').textContent  = l==='es'?'📝 DESCARGAR .md':'📝 DOWNLOAD .md';
+  document.getElementById('btn-export-copy').textContent= l==='es'?'📋 COPIAR SELECCIÓN':'📋 COPY SELECTION';
+  document.getElementById('btn-copy').querySelector('span').textContent    = l==='es'?'COPIAR':'COPY';
+  document.getElementById('btn-copyall').querySelector('span').textContent = l==='es'?'COPIAR TODO':'COPY ALL';
+  document.getElementById('code-label').textContent = l==='es'?'CÓDIGO LATEX':'LATEX CODE';
+  document.getElementById('custom-input').placeholder = l==='es'?'\\frac{a_0}{2\\pi} = \\frac{cH_0}{4\\pi^2}':'\\frac{v_{flat}^4}{G} = M \\cdot a_0';
+  renderFilters();
+  renderList();
+  renderConstants();
+  if(selEq) selectEq(selEq);
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+window.onload = function(){
+  setLang('en');
+  selectEq('a0-def');
+};
+</script>
+</body>
+</html>

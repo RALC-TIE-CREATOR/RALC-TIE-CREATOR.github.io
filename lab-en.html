@@ -88,12 +88,6 @@ nav {
   font-weight: 700;
 }
 
-.lang-selector {
-  display: flex;
-  gap: 0.8rem;
-  align-items: center;
-}
-
 .lang-link {
   font-family: var(--mono);
   text-decoration: none;
@@ -102,22 +96,23 @@ nav {
 }
 
 .lang-link.active {
-  color: var(--gold);
+  color: #000;
+  background: var(--gold);
   font-weight: 700;
-  border-bottom: 2px solid var(--gold);
-  padding-bottom: 2px;
+  border-radius: 4px;
+  padding: .25rem .6rem;
 }
 
 .lang-link.inactive {
   color: var(--dim);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: .25rem .6rem;
 }
 
 .lang-link.inactive:hover {
   color: var(--gold);
-}
-
-.lang-divider {
-  color: var(--dim);
+  border-color: var(--gold);
 }
 
 .nav-back {
@@ -321,12 +316,11 @@ footer {
   <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
   
   <div class="lang-selector">
-    <a href="../labs.html" class="lang-link inactive">ES</a>
-    <span class="lang-divider">/</span>
+    <a href="labs.html" class="lang-link inactive">ES</a>
     <a href="lab-en.html" class="lang-link active">EN</a>
   </div>
   
-  <a href="index-en.html" class="nav-back">← BACK TO HOME</a>
+  <a href="index-en.html" class="nav-back">← HOME</a>
 </nav>
 
 <div class="page">
@@ -336,7 +330,7 @@ footer {
 
   <div class="tools-grid">
     <!-- H-01 Rotation Curves -->
-    <a href="curvas.html" class="tool-card" data-color="gold">
+    <a href="rotation-curves-en.html" class="tool-card" data-color="gold">
       <span class="tool-id">H-01 · LIVE</span>
       <div class="tool-name">Rotation Curves</div>
       <div class="tool-desc">
@@ -352,7 +346,7 @@ footer {
     </a>
 
     <!-- H-02 SPARC Explorer -->
-    <a href="sparc.html" class="tool-card" data-color="blue">
+    <a href="sparc-en.html" class="tool-card" data-color="blue">
       <span class="tool-id">H-02 · LIVE</span>
       <div class="tool-name">SPARC Explorer</div>
       <div class="tool-desc">
@@ -400,7 +394,7 @@ footer {
     </a>
 
     <!-- H-05 Dark Matter Converter -->
-    <a href="materia-oscura.html" class="tool-card" data-color="green">
+    <a href="dark-matter-en.html" class="tool-card" data-color="green">
       <span class="tool-id">H-05 · LIVE</span>
       <div class="tool-name">Dark Matter Converter</div>
       <div class="tool-desc">
@@ -417,7 +411,7 @@ footer {
     </a>
 
     <!-- H-08 a₀ and Lambda -->
-    <a href="constante.html" class="tool-card" data-color="blue">
+    <a href="constant-en.html" class="tool-card" data-color="blue">
       <span class="tool-id">H-08 · LIVE</span>
       <div class="tool-name">a₀ and Lambda</div>
       <div class="tool-desc">
@@ -434,7 +428,7 @@ footer {
     </a>
 
     <!-- H-11 Black Holes -->
-    <a href="agujeros.html" class="tool-card" data-color="red">
+    <a href="black-holes-en.html" class="tool-card" data-color="red">
       <span class="tool-id">H-11 · LIVE</span>
       <div class="tool-name">Black Holes</div>
       <div class="tool-desc">
@@ -451,7 +445,7 @@ footer {
     </a>
 
     <!-- H-12 GPS Correction -->
-    <a href="gps.html" class="tool-card" data-color="blue">
+    <a href="gps-en.html" class="tool-card" data-color="blue">
       <span class="tool-id">H-12 · LIVE</span>
       <div class="tool-name">GPS Correction</div>
       <div class="tool-desc">
@@ -482,7 +476,7 @@ footer {
     </a>
 
     <!-- H-12.2 Universal Clock -->
-    <a href="reloj-universal.html" class="tool-card" data-color="purple">
+    <a href="universal-clock-en.html" class="tool-card" data-color="purple">
       <span class="tool-id">H-12.2 · LIVE</span>
       <div class="tool-name">Universal Clock</div>
       <div class="tool-desc">

@@ -96,22 +96,23 @@ nav {
 }
 
 .lang-link.active {
-  color: var(--gold);
+  color: #000;
+  background: var(--gold);
   font-weight: 700;
-  border-bottom: 2px solid var(--gold);
-  padding-bottom: 2px;
+  border-radius: 4px;
+  padding: .25rem .6rem;
 }
 
 .lang-link.inactive {
   color: var(--dim);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: .25rem .6rem;
 }
 
 .lang-link.inactive:hover {
   color: var(--gold);
-}
-
-.lang-divider {
-  color: var(--dim);
+  border-color: var(--gold);
 }
 
 .nav-back {
@@ -442,12 +443,11 @@ footer {
   <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
   
   <div class="lang-selector">
-    <a href="../papers.html" class="lang-link inactive">ES</a>
-    <span class="lang-divider">/</span>
+    <a href="papers.html" class="lang-link inactive">ES</a>
     <a href="papers-en.html" class="lang-link active">EN</a>
   </div>
   
-  <a href="index-en.html" class="nav-back">← BACK TO HOME</a>
+  <a href="index-en.html" class="nav-back">← HOME</a>
 </nav>
 
 <div class="page">
@@ -502,7 +502,7 @@ footer {
       <div class="paper-desc">Python + numpy + matplotlib. Reproduces all paper graphs in 30 seconds.</div>
       <div class="paper-links">
         <a href="https://github.com/RALC-TIE-CREATOR/TIE-rotation-curves" target="_blank" class="paper-link">🔗 GitHub</a>
-        <a href="#" class="paper-link">📁 Forks: 23</a>
+        <a href="https://github.com/RALC-TIE-CREATOR/TIE-rotation-curves" target="_blank" class="paper-link">📁 View repo</a>
       </div>
     </div>
   </div>
@@ -536,19 +536,12 @@ footer {
     </div>
   </div>
 
-  <!-- METRICS -->
-  <div class="metrics-grid">
-    <div class="metric-card">
-      <div class="metric-value">12</div>
-      <div class="metric-label">CITATIONS</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-value">347</div>
-      <div class="metric-label">DOWNLOADS</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-value">23</div>
-      <div class="metric-label">GITHUB FORKS</div>
+  <!-- OPEN SCIENCE STATEMENT -->
+  <div style="background:rgba(68,255,136,0.05);border:1px solid rgba(68,255,136,0.2);border-radius:12px;padding:1.5rem 2rem;margin:2rem 0;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+    <div style="font-size:2rem;">🔓</div>
+    <div>
+      <div style="font-family:var(--mono);font-size:.7rem;color:var(--green);letter-spacing:2px;margin-bottom:.3rem;">OPEN SCIENCE</div>
+      <div style="font-size:.9rem;color:var(--dim);line-height:1.6;">All data, code and derivations are publicly available. Zenodo DOI guarantees permanent archiving. Reproducible from first principles with zero proprietary dependencies.</div>
     </div>
   </div>
 

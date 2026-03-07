@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIE · SPARC 175 · Galaxy Explorer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<style>
+:root{--gold:#FFD700;--blue:#5BC8F5;--green:#44FF88;--red:#FF4455;--bg:#000001;--bg2:rgba(5,5,15,0.78);--bg3:rgba(10,10,25,0.6);--text:#fff;--dim:#a0a0b0;--border:rgba(91,200,245,0.15);--mono:'Space Mono',monospace;--sans:'Syne',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+#galaxy-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.35;}
+nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
+.nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
+.nav-center{display:flex;gap:.5rem;}
+.lang-link{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;transition:all .2s;}
+.lang-link.active{color:#000;background:var(--gold);}
+.lang-link.inactive{color:var(--dim);border:1px solid var(--border);}
+.lang-link.inactive:hover{color:var(--gold);border-color:var(--gold);}
+.nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-back:hover{color:var(--gold);}
+.page{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:7rem 2rem 4rem;}
+.page-tag{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:.75rem;}
+.page-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;letter-spacing:-2px;margin-bottom:.5rem;}
+.page-title span{color:var(--gold);}
+.page-sub{font-family:var(--mono);font-size:.8rem;color:var(--dim);max-width:600px;line-height:1.6;margin-bottom:2rem;}
+
+/* STATS BAR */
+.stats-bar{display:flex;gap:1.5rem;flex-wrap:wrap;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1rem 1.5rem;backdrop-filter:blur(8px);margin-bottom:1.5rem;}
+.stat-item{text-align:center;}
+.stat-val{font-family:var(--mono);font-size:1.5rem;font-weight:700;color:var(--gold);line-height:1;}
+.stat-lbl{font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:1px;margin-top:.2rem;}
+
+/* CHART */
+.chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.25rem;backdrop-filter:blur(8px);margin-bottom:1.5rem;}
+.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;}
+.chart-title{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
+.chart-mode-btns{display:flex;gap:.4rem;flex-wrap:wrap;}
+.cmb{font-family:var(--mono);font-size:.6rem;padding:.25rem .6rem;border-radius:4px;border:1px solid var(--border);color:var(--dim);cursor:pointer;background:transparent;transition:all .2s;}
+.cmb.active{background:var(--gold);color:#000;border-color:var(--gold);font-weight:700;}
+
+/* CONTROLS */
+.controls-row{display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end;margin-bottom:1rem;}
+.search-wrap{flex:1;min-width:200px;}
+.search-wrap label{font-family:var(--mono);font-size:.65rem;color:var(--dim);display:block;margin-bottom:.3rem;}
+.search-input{width:100%;background:rgba(10,10,25,0.7);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:.8rem;padding:.5rem .75rem;outline:none;transition:border-color .2s;}
+.search-input:focus{border-color:var(--gold);}
+.filter-wrap{display:flex;flex-direction:column;gap:.3rem;}
+.filter-wrap label{font-family:var(--mono);font-size:.65rem;color:var(--dim);}
+.filter-pills{display:flex;gap:.4rem;flex-wrap:wrap;}
+.pill{font-family:var(--mono);font-size:.6rem;padding:.25rem .7rem;border-radius:100px;border:1px solid var(--border);color:var(--dim);cursor:pointer;transition:all .2s;background:transparent;}
+.pill:hover{border-color:var(--gold);color:var(--gold);}
+.pill.active{background:var(--gold);color:#000;border-color:var(--gold);font-weight:700;}
+.quality-wrap{display:flex;flex-direction:column;gap:.3rem;}
+.quality-wrap label{font-family:var(--mono);font-size:.65rem;color:var(--dim);}
+.qpills{display:flex;gap:.4rem;}
+.qpill{font-family:var(--mono);font-size:.6rem;padding:.25rem .6rem;border-radius:4px;border:1px solid var(--border);color:var(--dim);cursor:pointer;transition:all .2s;background:transparent;}
+.qpill.active{color:#000;font-weight:700;}
+.qpill[data-q="1"].active{background:var(--green);border-color:var(--green);}
+.qpill[data-q="2"].active{background:var(--gold);border-color:var(--gold);}
+.qpill[data-q="3"].active{background:var(--red);border-color:var(--red);}
+.qpill[data-q="all"].active{background:var(--blue);border-color:var(--blue);}
+
+/* COUNT */
+.count-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;font-family:var(--mono);font-size:.7rem;}
+.count-num{color:var(--gold);font-weight:700;}
+.count-total{color:var(--dim);}
+
+/* GRID */
+.galaxy-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.65rem;max-height:400px;overflow-y:auto;padding-right:.5rem;}
+.galaxy-grid::-webkit-scrollbar{width:4px;}
+.galaxy-grid::-webkit-scrollbar-track{background:transparent;}
+.galaxy-grid::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.galaxy-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.75rem;cursor:pointer;transition:all .2s;}
+.galaxy-card:hover{border-color:var(--gold);background:rgba(255,215,0,.05);transform:translateY(-1px);}
+.galaxy-card.selected{border-color:var(--gold);background:rgba(255,215,0,.08);}
+.gc-name{font-family:var(--mono);font-size:.8rem;font-weight:700;color:var(--text);margin-bottom:.2rem;}
+.gc-type{font-family:var(--mono);font-size:.58rem;margin-bottom:.4rem;}
+.gc-type.Spiral{color:var(--blue);}
+.gc-type.LSB{color:var(--green);}
+.gc-type.Dwarf{color:#dd88ff;}
+.gc-type.Giant{color:var(--gold);}
+.gc-type.Irregular{color:var(--red);}
+.gc-stats{font-family:var(--mono);font-size:.58rem;color:var(--dim);display:flex;flex-direction:column;gap:.1rem;}
+.gc-vflat{color:var(--gold);font-weight:700;}
+.gc-err{font-size:.55rem;}
+.gc-q{display:inline-block;font-family:var(--mono);font-size:.5rem;padding:.1rem .3rem;border-radius:3px;margin-top:.2rem;}
+.gc-q.q1{background:rgba(68,255,136,.15);color:var(--green);}
+.gc-q.q2{background:rgba(255,215,0,.12);color:var(--gold);}
+.gc-q.q3{background:rgba(255,68,85,.12);color:var(--red);}
+
+/* MODAL */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem;}
+.modal-overlay.open{display:flex;}
+.modal{background:#050510;border:1px solid rgba(255,215,0,.3);border-radius:20px;padding:2rem;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;position:relative;}
+.modal-close{position:absolute;top:1rem;right:1rem;background:transparent;border:1px solid var(--border);color:var(--dim);font-family:var(--mono);font-size:.7rem;padding:.3rem .6rem;border-radius:4px;cursor:pointer;transition:all .2s;}
+.modal-close:hover{border-color:var(--red);color:var(--red);}
+.modal-name{font-family:var(--mono);font-size:1.5rem;font-weight:700;color:var(--gold);margin-bottom:.25rem;}
+.modal-type{font-family:var(--mono);font-size:.7rem;color:var(--dim);margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border);}
+.modal-desc{font-size:.85rem;color:var(--dim);line-height:1.6;margin-bottom:1.25rem;}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.25rem;}
+.modal-field{background:rgba(10,10,25,.6);border:1px solid var(--border);border-radius:8px;padding:.6rem .8rem;}
+.mf-label{font-family:var(--mono);font-size:.58rem;color:var(--dim);letter-spacing:1px;margin-bottom:.2rem;}
+.mf-value{font-family:var(--mono);font-size:1rem;font-weight:700;color:var(--gold);}
+.mf-unit{font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-top:.1rem;}
+.err-box{background:rgba(68,255,136,.06);border:1px solid rgba(68,255,136,.2);border-radius:10px;padding:.75rem 1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.err-box .label{font-family:var(--mono);font-size:.65rem;color:var(--dim);}
+.err-box .value{font-family:var(--mono);font-size:1.1rem;font-weight:700;color:var(--green);}
+.err-bar-track{width:100%;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;margin-top:.5rem;}
+.err-bar-fill{height:100%;border-radius:3px;transition:width .5s;}
+
+.const-row{display:flex;flex-wrap:wrap;gap:.75rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.75rem 1.25rem;backdrop-filter:blur(8px);margin-top:1.25rem;}
+.ci{font-family:var(--mono);font-size:.65rem;}
+.ci .cl{color:var(--dim);}
+.ci .cv{color:var(--gold);font-weight:700;}
+.nav-links{display:flex;justify-content:center;gap:2rem;margin-top:2rem;flex-wrap:wrap;}
+.nav-links a{font-family:var(--mono);font-size:.7rem;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);margin-top:2rem;}
+footer .feq{font-family:var(--mono);font-size:.8rem;color:var(--gold);margin-bottom:.5rem;}
+footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;}
+</style>
+</head>
+<body>
+<canvas id="galaxy-canvas"></canvas>
+<nav>
+  <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
+  <div class="nav-center">
+    <a href="sparc.html" class="lang-link inactive">ES</a>
+    <a href="sparc-en.html" class="lang-link active">EN</a>
+  </div>
+  <a href="lab-en.html" class="nav-back">← LABORATORY</a>
+</nav>
+
+<div class="page">
+  <div class="page-tag">SPARC CATALOGUE · LELLI, MCGAUGH &amp; SCHOMBERT 2016</div>
+  <h1 class="page-title">SPARC <span>EXPLORER</span></h1>
+  <p class="page-sub">175 real galaxies with observational data and TIE prediction calculated from first principles. Every point verifies \( v_{\text{flat}} \propto (GM a_0)^{1/4} \).</p>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat-item"><div class="stat-val">175</div><div class="stat-lbl">TOTAL GALAXIES</div></div>
+    <div class="stat-item"><div class="stat-val" style="color:var(--blue)">59</div><div class="stat-lbl">SPIRALS</div></div>
+    <div class="stat-item"><div class="stat-val" style="color:var(--gold)">22</div><div class="stat-lbl">GIANTS</div></div>
+    <div class="stat-item"><div class="stat-val" style="color:var(--green)">33</div><div class="stat-lbl">LSB</div></div>
+    <div class="stat-item"><div class="stat-val" style="color:#dd88ff">61</div><div class="stat-lbl">DWARFS</div></div>
+    <div class="stat-item"><div class="stat-val" style="color:var(--green)">87</div><div class="stat-lbl">WITH v_flat Q=1</div></div>
+    <div class="stat-item"><div class="stat-val" id="avg-err">—</div><div class="stat-lbl">AVG TIE ERROR</div></div>
+  </div>
+
+  <!-- CHART -->
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title" id="chart-title-text">v_obs vs Masa bariónica · TIE vs observado</span>
+      <div class="chart-mode-btns">
+        <button class="cmb active" onclick="setMode('scatter')" id="btn-scatter">SCATTER</button>
+        <button class="cmb" onclick="setMode('vtie')" id="btn-vtie">v_TIE vs v_obs</button>
+        <button class="cmb" onclick="setMode('err')" id="btn-err">ERROR HISTOGRAM</button>
+        <button class="cmb" onclick="setMode('dist')" id="btn-dist">DISTANCES</button>
+      </div>
+    </div>
+    <div id="chart" style="height:320px;width:100%;"></div>
+    <div id="chart-note" style="font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-top:.6rem;padding:.6rem .9rem;background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.1);border-radius:8px;line-height:1.8;"></div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls-row">
+    <div class="search-wrap">
+      <label>SEARCH</label>
+      <input class="search-input" type="text" id="search" placeholder="NGC, UGC, DDO, F5..." oninput="render()">
+    </div>
+    <div class="filter-wrap">
+      <label>MORPHOLOGICAL TYPE</label>
+      <div class="filter-pills">
+        <span class="pill active" data-type="all" onclick="setType('all',this)">All</span>
+        <span class="pill" data-type="Spiral" onclick="setType('Spiral',this)" style="color:var(--blue)">Spiral</span>
+        <span class="pill" data-type="Giant" onclick="setType('Giant',this)" style="color:var(--gold)">Giant</span>
+        <span class="pill" data-type="LSB" onclick="setType('LSB',this)" style="color:var(--green)">LSB</span>
+        <span class="pill" data-type="Dwarf" onclick="setType('Dwarf',this)" style="color:#dd88ff">Dwarf</span>
+        <span class="pill" data-type="Irregular" onclick="setType('Irregular',this)" style="color:var(--red)">Irregular</span>
+      </div>
+    </div>
+    <div class="quality-wrap">
+      <label>QUALITY</label>
+      <div class="qpills">
+        <span class="qpill active" data-q="all" onclick="setQ('all',this)">Todas</span>
+        <span class="qpill" data-q="1" onclick="setQ('1',this)">Q=1 High</span>
+        <span class="qpill" data-q="2" onclick="setQ('2',this)">Q=2 Medium</span>
+        <span class="qpill" data-q="3" onclick="setQ('3',this)">Q=3 Low</span>
+      </div>
+    </div>
+    <div class="quality-wrap">
+      <label>v_flat MEASURED</label>
+      <div class="qpills">
+        <span class="qpill active" data-vf="all" onclick="setVf('all',this)">Todas</span>
+        <span class="qpill" data-vf="yes" onclick="setVf('yes',this)" style="border-color:rgba(68,255,136,.3);color:var(--green)">With v_obs</span>
+        <span class="qpill" data-vf="no"  onclick="setVf('no',this)"  style="border-color:rgba(160,160,176,.2)">Without v_obs</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="count-bar">
+    <span class="count-num" id="count-display">175 galaxias</span>
+    <span class="count-total">Click a galaxy to see details</span>
+  </div>
+
+  <div class="galaxy-grid" id="galaxy-grid"></div>
+
+  <div class="const-row">
+    <div class="ci"><span class="cl">a₀ = </span><span class="cv">1.082×10⁻¹⁰ m/s²</span></div>
+    <div class="ci"><span class="cl">M/L = </span><span class="cv">0.5</span></div>
+    <div class="ci"><span class="cl">H₀ = </span><span class="cv">70 km/s/Mpc</span></div>
+    <div class="ci"><span class="cl">G = </span><span class="cv">6.674×10⁻¹¹ m³/kg·s²</span></div>
+    <div class="ci"><span class="cl">Ref. </span><span class="cv">Lelli, McGaugh & Schombert 2016</span></div>
+  </div>
+
+  <div class="nav-links">
+    <a href="2pi.html">← Calculadora 2π</a>
+    <a href="rotation-curves-en.html">Curvas de rotación →</a>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal" id="modal-content">
+    <button class="modal-close" onclick="closeModal()">✕ CLOSE</button>
+    <div class="modal-name" id="m-name">—</div>
+    <div class="modal-type" id="m-type">—</div>
+    <div class="modal-desc" id="m-desc">—</div>
+    <div class="modal-grid">
+      <div class="modal-field"><div class="mf-label">DISTANCE</div><div class="mf-value" id="m-dist">—</div><div class="mf-unit">Mpc</div></div>
+      <div class="modal-field"><div class="mf-label">INCLINATION</div><div class="mf-value" id="m-inc">—</div><div class="mf-unit">degrees</div></div>
+      <div class="modal-field"><div class="mf-label">STELLAR MASS</div><div class="mf-value" id="m-mdisk">—</div><div class="mf-unit">×10¹⁰ M☉</div></div>
+      <div class="modal-field"><div class="mf-label">HI GAS MASS</div><div class="mf-value" id="m-mgas">—</div><div class="mf-unit">×10⁹ M☉</div></div>
+      <div class="modal-field"><div class="mf-label">DISK RADIUS</div><div class="mf-value" id="m-rdisk">—</div><div class="mf-unit">kpc</div></div>
+      <div class="modal-field"><div class="mf-label">CALIDAD</div><div class="mf-value" id="m-q">—</div><div class="mf-unit">Q (1=high)</div></div>
+    </div>
+    <div class="err-box">
+      <div>
+        <div class="label">v_obs</div>
+        <div style="font-family:var(--mono);font-size:1.3rem;font-weight:700;color:var(--blue)" id="m-vobs">—</div>
+        <div class="label">km/s</div>
+      </div>
+      <div style="text-align:center">
+        <div class="label">v_TIE</div>
+        <div style="font-family:var(--mono);font-size:1.3rem;font-weight:700;color:var(--gold)" id="m-vtie">—</div>
+        <div class="label">km/s</div>
+      </div>
+      <div style="text-align:right">
+        <div class="label">Error TIE</div>
+        <div class="value" id="m-err">—</div>
+        <div class="label">%</div>
+      </div>
+    </div>
+    <div class="err-bar-track"><div class="err-bar-fill" id="m-err-bar" style="width:0%;background:var(--green)"></div></div>
+    <div id="m-curvas-link" style="display:none;margin-top:1rem;">
+      <a id="m-curvas-btn" href="rotation-curves-en.html" style="display:inline-block;font-family:var(--mono);font-size:.65rem;color:#000;background:var(--gold);border-radius:6px;padding:.4rem .9rem;text-decoration:none;font-weight:700;transition:opacity .2s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">→ View full rotation curve</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="feq">\( v_{\text{flat}} = (G M_{\text{bar}} \cdot a_0)^{1/4} \quad \cdot \quad a_0 = cH_0/2\pi \quad \cdot \quad 175 \text{ galaxias} \)</div>
+  <div class="fcopy">R@LC 2026 · SPARC · LELLI, MCGAUGH & SCHOMBERT 2016</div>
+</footer>
+
+<script>
+// THREE.JS BACKGROUND
+(function(){
+  const canvas=document.getElementById('galaxy-canvas');
+  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(60,1,0.1,1000);
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  function resize(){renderer.setSize(canvas.clientWidth,canvas.clientHeight);camera.aspect=canvas.clientWidth/canvas.clientHeight;camera.updateProjectionMatrix();}
+  resize();window.addEventListener('resize',resize);
+  camera.position.set(0,4,6);camera.lookAt(0,0,0);
+  const p={count:65000,radius:5,branches:6,spin:1.0,randomness:0.35,randomPower:2.8};
+  const geo=new THREE.BufferGeometry(),pos=new Float32Array(p.count*3),col=new Float32Array(p.count*3);
+  const cIn=new THREE.Color('#FFD700'),cOut=new THREE.Color('#0a0a2a');
+  for(let i=0;i<p.count;i++){const r=Math.random()*p.radius,b=(i%p.branches)/p.branches*Math.PI*2,s=r*p.spin;const rx=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r,ry=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r*.3,rz=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r;pos[i*3]=Math.cos(b+s)*r+rx;pos[i*3+1]=ry;pos[i*3+2]=Math.sin(b+s)*r+rz;const m=new THREE.Color().lerpColors(cIn,cOut,r/p.radius);col[i*3]=m.r;col[i*3+1]=m.g;col[i*3+2]=m.b;}
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+  const mat=new THREE.PointsMaterial({size:.007,sizeAttenuation:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true});
+  scene.add(new THREE.Points(geo,mat));
+  (function animate(){requestAnimationFrame(animate);scene.rotation.y+=.0005;renderer.render(scene,camera);})();
+})();
+
+// ===== SPARC DATA =====
+const SPARC = [
+  {name:"CamB",type:"Dwarf",T:10,dist:3.4,inc:65.0,Mdisk:0.0037,Mgas:0.012,Rdisk:0.47,vflat:0.0,v_tie:29.0,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=3.36 Mpc"},
+  {name:"D512-2",type:"Dwarf",T:10,dist:15.2,inc:56.0,Mdisk:0.0163,Mgas:0.081,Rdisk:1.24,vflat:0.0,v_tie:43.2,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=15.2 Mpc"},
+  {name:"D564-8",type:"Dwarf",T:10,dist:8.8,inc:63.0,Mdisk:0.0016,Mgas:0.029,Rdisk:0.61,vflat:0.0,v_tie:28.4,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=8.79 Mpc"},
+  {name:"D631-7",type:"Dwarf",T:10,dist:7.7,inc:59.0,Mdisk:0.0098,Mgas:0.29,Rdisk:0.7,vflat:57.7,v_tie:48.6,err:15.8,Q:1,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=7.72 Mpc"},
+  {name:"DDO064",type:"Dwarf",T:10,dist:6.8,inc:60.0,Mdisk:0.0078,Mgas:0.211,Rdisk:0.69,vflat:46.1,v_tie:45.2,err:2.0,Q:1,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=6.8 Mpc"},
+  {name:"DDO154",type:"Dwarf",T:10,dist:4.0,inc:64.0,Mdisk:0.0027,Mgas:0.275,Rdisk:0.37,vflat:47.0,v_tie:45.6,err:2.9,Q:2,desc:"Enana irregular \u00b7 masa casi 100% en gas HI"},
+  {name:"DDO161",type:"Dwarf",T:10,dist:7.5,inc:70.0,Mdisk:0.0274,Mgas:1.378,Rdisk:1.22,vflat:66.3,v_tie:69.8,err:5.3,Q:1,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=7.5 Mpc"},
+  {name:"DDO168",type:"Dwarf",T:10,dist:4.2,inc:63.0,Mdisk:0.0095,Mgas:0.413,Rdisk:1.02,vflat:53.4,v_tie:52.0,err:2.6,Q:2,desc:"Galaxia enana irregular \u00b7 gas dominante"},
+  {name:"DDO170",type:"Dwarf",T:10,dist:15.4,inc:66.0,Mdisk:0.0272,Mgas:0.735,Rdisk:1.95,vflat:60.0,v_tie:61.7,err:2.8,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=15.4 Mpc"},
+  {name:"ESO079-G014",type:"Spiral",T:4,dist:28.7,inc:79.0,Mdisk:2.5866,Mgas:3.14,Rdisk:5.08,vflat:175.0,v_tie:142.9,err:18.4,Q:1,desc:"Galaxia espiral \u00b7 T=4 \u00b7 D=28.7 Mpc"},
+  {name:"ESO116-G012",type:"Spiral",T:7,dist:13.0,inc:74.0,Mdisk:0.2146,Mgas:1.083,Rdisk:1.51,vflat:109.1,v_tie:82.5,err:24.4,Q:1,desc:"Galaxia espiral \u00b7 T=7 \u00b7 D=13.0 Mpc"},
+  {name:"ESO444-G084",type:"Dwarf",T:10,dist:4.8,inc:32.0,Mdisk:0.0035,Mgas:0.135,Rdisk:0.46,vflat:0.0,v_tie:39.6,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=4.83 Mpc"},
+  {name:"ESO563-G021",type:"Giant",T:4,dist:60.8,inc:83.0,Mdisk:15.5589,Mgas:24.298,Rdisk:5.45,vflat:314.6,v_tie:225.5,err:28.3,Q:1,desc:"Espiral masiva \u00b7 muy inclinada \u00b7 curva extendida"},
+  {name:"F561-1",type:"Dwarf",T:9,dist:66.4,inc:24.0,Mdisk:0.2039,Mgas:1.622,Rdisk:2.79,vflat:50.0,v_tie:85.2,err:70.3,Q:3,desc:"Galaxia enana \u00b7 T=9 \u00b7 D=66.4 Mpc"},
+  {name:"F563-1",type:"LSB",T:9,dist:48.9,inc:25.0,Mdisk:0.0951,Mgas:3.2,Rdisk:3.52,vflat:109.9,v_tie:87.9,err:20.0,Q:1,desc:"Galaxia LSB prototipo \u00b7 baja densidad superficial"},
+  {name:"F563-V1",type:"Dwarf",T:10,dist:54.0,inc:60.0,Mdisk:0.077,Mgas:0.61,Rdisk:3.79,vflat:0.0,v_tie:66.7,err:0,Q:3,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=54.0 Mpc"},
+  {name:"F563-V2",type:"LSB",T:10,dist:59.7,inc:29.0,Mdisk:0.1493,Mgas:2.169,Rdisk:2.43,vflat:116.6,v_tie:85.2,err:27.0,Q:1,desc:"Galaxia lsb \u00b7 T=10 \u00b7 D=59.7 Mpc"},
+  {name:"F565-V2",type:"Dwarf",T:10,dist:51.8,inc:60.0,Mdisk:0.028,Mgas:0.699,Rdisk:2.17,vflat:0.0,v_tie:61.2,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=51.8 Mpc"},
+  {name:"F567-2",type:"Dwarf",T:9,dist:79.0,inc:20.0,Mdisk:0.1067,Mgas:2.449,Rdisk:3.08,vflat:0.0,v_tie:84.3,err:0,Q:3,desc:"Galaxia enana \u00b7 T=9 \u00b7 D=79.0 Mpc"},
+  {name:"F568-1",type:"Dwarf",T:5,dist:90.7,inc:26.0,Mdisk:0.3126,Mgas:4.498,Rdisk:5.18,vflat:0.0,v_tie:102.3,err:0,Q:1,desc:"Galaxia enana \u00b7 T=5 \u00b7 D=90.7 Mpc"},
+  {name:"F568-3",type:"Dwarf",T:7,dist:82.4,inc:40.0,Mdisk:0.4173,Mgas:3.195,Rdisk:4.99,vflat:0.0,v_tie:101.4,err:0,Q:1,desc:"Galaxia enana \u00b7 T=7 \u00b7 D=82.4 Mpc"},
+  {name:"F568-V1",type:"LSB",T:7,dist:80.6,inc:40.0,Mdisk:0.1913,Mgas:2.491,Rdisk:2.85,vflat:112.3,v_tie:89.2,err:20.6,Q:1,desc:"Galaxia lsb \u00b7 T=7 \u00b7 D=80.6 Mpc"},
+  {name:"F571-8",type:"LSB",T:5,dist:53.3,inc:85.0,Mdisk:0.5082,Mgas:1.782,Rdisk:3.56,vflat:139.7,v_tie:99.7,err:28.7,Q:1,desc:"Galaxia lsb \u00b7 T=5 \u00b7 D=53.3 Mpc"},
+  {name:"F571-V1",type:"LSB",T:7,dist:80.1,inc:30.0,Mdisk:0.0925,Mgas:1.217,Rdisk:2.47,vflat:83.6,v_tie:74.5,err:10.9,Q:2,desc:"Galaxia lsb \u00b7 T=7 \u00b7 D=80.1 Mpc"},
+  {name:"F574-1",type:"LSB",T:7,dist:96.8,inc:65.0,Mdisk:0.3268,Mgas:3.524,Rdisk:4.46,vflat:97.8,v_tie:99.4,err:1.6,Q:1,desc:"Galaxia lsb \u00b7 T=7 \u00b7 D=96.8 Mpc"},
+  {name:"F574-2",type:"Dwarf",T:9,dist:89.1,inc:30.0,Mdisk:0.1438,Mgas:1.701,Rdisk:3.76,vflat:0.0,v_tie:82.0,err:0,Q:3,desc:"Galaxia enana \u00b7 T=9 \u00b7 D=89.1 Mpc"},
+  {name:"F579-V1",type:"LSB",T:5,dist:89.5,inc:26.0,Mdisk:0.5924,Mgas:2.245,Rdisk:3.37,vflat:112.1,v_tie:104.1,err:7.1,Q:1,desc:"Galaxia lsb \u00b7 T=5 \u00b7 D=89.5 Mpc"},
+  {name:"F583-1",type:"LSB",T:9,dist:35.4,inc:63.0,Mdisk:0.0493,Mgas:2.126,Rdisk:2.36,vflat:85.8,v_tie:78.3,err:8.7,Q:1,desc:"Galaxia lsb \u00b7 T=9 \u00b7 D=35.4 Mpc"},
+  {name:"F583-4",type:"Dwarf",T:5,dist:53.3,inc:55.0,Mdisk:0.0858,Mgas:0.641,Rdisk:1.93,vflat:0.0,v_tie:68.1,err:0,Q:1,desc:"Galaxia enana \u00b7 T=5 \u00b7 D=53.3 Mpc"},
+  {name:"IC2574",type:"LSB",T:9,dist:3.9,inc:75.0,Mdisk:0.0508,Mgas:1.036,Rdisk:2.78,vflat:66.4,v_tie:68.6,err:3.4,Q:2,desc:"Galaxia lsb \u00b7 T=9 \u00b7 D=3.91 Mpc"},
+  {name:"IC4202",type:"Giant",T:4,dist:100.4,inc:90.0,Mdisk:8.9874,Mgas:12.326,Rdisk:4.78,vflat:242.6,v_tie:195.8,err:19.3,Q:1,desc:"Galaxia gigante \u00b7 T=4 \u00b7 D=100.4 Mpc"},
+  {name:"KK98-251",type:"Dwarf",T:10,dist:6.8,inc:59.0,Mdisk:0.0043,Mgas:0.115,Rdisk:1.34,vflat:33.7,v_tie:38.8,err:15.1,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=6.8 Mpc"},
+  {name:"NGC0024",type:"Spiral",T:5,dist:7.3,inc:64.0,Mdisk:0.1944,Mgas:0.676,Rdisk:1.34,vflat:106.3,v_tie:78.3,err:26.3,Q:1,desc:"Galaxia espiral \u00b7 T=5 \u00b7 D=7.3 Mpc"},
+  {name:"NGC0055",type:"LSB",T:9,dist:2.1,inc:77.0,Mdisk:0.2314,Mgas:1.565,Rdisk:6.11,vflat:85.6,v_tie:86.4,err:0.9,Q:2,desc:"Galaxia lsb \u00b7 T=9 \u00b7 D=2.11 Mpc"},
+  {name:"NGC0100",type:"Spiral",T:6,dist:13.5,inc:89.0,Mdisk:0.1616,Mgas:1.99,Rdisk:1.66,vflat:88.1,v_tie:84.8,err:3.7,Q:1,desc:"Galaxia espiral \u00b7 T=6 \u00b7 D=13.5 Mpc"},
+  {name:"NGC0247",type:"Spiral",T:7,dist:3.7,inc:74.0,Mdisk:0.3666,Mgas:1.746,Rdisk:3.74,vflat:104.9,v_tie:93.9,err:10.5,Q:2,desc:"Galaxia espiral \u00b7 T=7 \u00b7 D=3.7 Mpc"},
+  {name:"NGC0289",type:"Spiral",T:4,dist:20.8,inc:46.0,Mdisk:3.6033,Mgas:27.469,Rdisk:6.74,vflat:163.0,v_tie:173.8,err:6.6,Q:2,desc:"Galaxia espiral \u00b7 T=4 \u00b7 D=20.8 Mpc"},
+  {name:"NGC0300",type:"Spiral",T:7,dist:2.1,inc:42.0,Mdisk:0.1461,Mgas:0.936,Rdisk:1.75,vflat:93.3,v_tie:76.6,err:17.9,Q:2,desc:"Galaxia espiral \u00b7 T=7 \u00b7 D=2.08 Mpc"},
+  {name:"NGC0801",type:"Giant",T:5,dist:80.7,inc:80.0,Mdisk:15.6285,Mgas:23.201,Rdisk:8.72,vflat:220.1,v_tie:225.4,err:2.4,Q:1,desc:"Galaxia gigante \u00b7 T=5 \u00b7 D=80.7 Mpc"},
+  {name:"NGC0891",type:"Spiral",T:3,dist:9.9,inc:90.0,Mdisk:6.917,Mgas:4.462,Rdisk:2.55,vflat:216.1,v_tie:180.4,err:16.5,Q:1,desc:"Galaxia espiral \u00b7 T=3 \u00b7 D=9.91 Mpc"},
+  {name:"NGC1003",type:"Spiral",T:6,dist:11.4,inc:67.0,Mdisk:0.341,Mgas:5.88,Rdisk:1.61,vflat:109.8,v_tie:107.5,err:2.1,Q:1,desc:"Galaxia espiral \u00b7 T=6 \u00b7 D=11.4 Mpc"},
+  {name:"NGC1090",type:"Spiral",T:4,dist:37.0,inc:64.0,Mdisk:3.6023,Mgas:8.783,Rdisk:3.53,vflat:164.4,v_tie:159.3,err:3.1,Q:1,desc:"Galaxia espiral \u00b7 T=4 \u00b7 D=37.0 Mpc"},
+  {name:"NGC1705",type:"LSB",T:11,dist:5.7,inc:80.0,Mdisk:0.0267,Mgas:0.139,Rdisk:0.39,vflat:71.9,v_tie:49.1,err:31.7,Q:3,desc:"Galaxia lsb \u00b7 T=11 \u00b7 D=5.73 Mpc"},
+  {name:"NGC2366",type:"Dwarf",T:10,dist:3.3,inc:68.0,Mdisk:0.0118,Mgas:0.647,Rdisk:0.65,vflat:50.2,v_tie:57.6,err:14.7,Q:3,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=3.27 Mpc"},
+  {name:"NGC2403",type:"Spiral",T:6,dist:3.2,inc:63.0,Mdisk:0.502,Mgas:3.199,Rdisk:1.39,vflat:131.2,v_tie:104.2,err:20.5,Q:1,desc:"Espiral tard\u00eda cercana \u00b7 primera en mostrar curva plana"},
+  {name:"NGC2683",type:"Spiral",T:3,dist:9.8,inc:80.0,Mdisk:4.0208,Mgas:1.406,Rdisk:2.18,vflat:154.0,v_tie:156.4,err:1.5,Q:2,desc:"Galaxia espiral \u00b7 T=3 \u00b7 D=9.81 Mpc"},
+  {name:"NGC2841",type:"Giant",T:3,dist:14.1,inc:76.0,Mdisk:9.4061,Mgas:9.775,Rdisk:3.64,vflat:284.8,v_tie:196.5,err:31.0,Q:1,desc:"Espiral masiva \u00b7 perfil de rotaci\u00f3n bien definido"},
+  {name:"NGC2903",type:"Spiral",T:4,dist:6.6,inc:66.0,Mdisk:4.0931,Mgas:2.552,Rdisk:2.33,vflat:184.6,v_tie:158.1,err:14.4,Q:1,desc:"Galaxia espiral \u00b7 T=4 \u00b7 D=6.6 Mpc"},
+  {name:"NGC2915",type:"LSB",T:11,dist:4.1,inc:56.0,Mdisk:0.0321,Mgas:0.508,Rdisk:0.55,vflat:83.5,v_tie:58.7,err:29.7,Q:2,desc:"Galaxia lsb \u00b7 T=11 \u00b7 D=4.06 Mpc"},
+  {name:"NGC2955",type:"Dwarf",T:3,dist:97.9,inc:56.0,Mdisk:15.9711,Mgas:28.949,Rdisk:18.76,vflat:0.0,v_tie:228.2,err:0,Q:1,desc:"Galaxia enana \u00b7 T=3 \u00b7 D=97.9 Mpc"},
+  {name:"NGC2976",type:"Spiral",T:5,dist:3.6,inc:61.0,Mdisk:0.1686,Mgas:0.172,Rdisk:1.01,vflat:85.4,v_tie:71.9,err:15.8,Q:2,desc:"Enana peculiar \u00b7 sat\u00e9lite de M81"},
+  {name:"NGC2998",type:"Giant",T:5,dist:68.1,inc:58.0,Mdisk:7.5451,Mgas:23.451,Rdisk:6.2,vflat:209.9,v_tie:194.2,err:7.5,Q:1,desc:"Galaxia gigante \u00b7 T=5 \u00b7 D=68.1 Mpc"},
+  {name:"NGC3109",type:"Dwarf",T:9,dist:1.3,inc:70.0,Mdisk:0.0097,Mgas:0.477,Rdisk:1.56,vflat:66.2,v_tie:53.6,err:19.0,Q:1,desc:"Galaxia enana \u00b7 T=9 \u00b7 D=1.33 Mpc"},
+  {name:"NGC3198",type:"Spiral",T:5,dist:13.8,inc:73.0,Mdisk:1.914,Mgas:10.869,Rdisk:3.14,vflat:150.1,v_tie:144.1,err:4.0,Q:1,desc:"Galaxia espiral de referencia SPARC \u00b7 curva de rotaci\u00f3n cl\u00e1sica"},
+  {name:"NGC3521",type:"Spiral",T:4,dist:7.7,inc:75.0,Mdisk:4.2418,Mgas:4.154,Rdisk:2.4,vflat:213.7,v_tie:160.8,err:24.7,Q:1,desc:"Espiral floculenta \u00b7 asim\u00e9trica"},
+  {name:"NGC3726",type:"Spiral",T:5,dist:18.0,inc:53.0,Mdisk:3.5117,Mgas:6.473,Rdisk:3.4,vflat:168.0,v_tie:156.4,err:6.9,Q:2,desc:"Galaxia espiral \u00b7 T=5 \u00b7 D=18.0 Mpc"},
+  {name:"NGC3741",type:"Dwarf",T:10,dist:3.2,inc:70.0,Mdisk:0.0014,Mgas:0.182,Rdisk:0.2,vflat:50.1,v_tie:41.0,err:18.2,Q:1,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=3.21 Mpc"},
+  {name:"NGC3769",type:"Spiral",T:3,dist:18.0,inc:70.0,Mdisk:0.9339,Mgas:5.529,Rdisk:3.38,vflat:118.6,v_tie:120.9,err:1.9,Q:2,desc:"Galaxia espiral \u00b7 T=3 \u00b7 D=18.0 Mpc"},
+  {name:"NGC3877",type:"Spiral",T:5,dist:18.0,inc:76.0,Mdisk:3.6267,Mgas:1.483,Rdisk:2.53,vflat:168.4,v_tie:152.6,err:9.4,Q:2,desc:"Galaxia espiral \u00b7 T=5 \u00b7 D=18.0 Mpc"},
+  {name:"NGC3893",type:"Spiral",T:5,dist:18.0,inc:49.0,Mdisk:2.9263,Mgas:5.799,Rdisk:2.38,vflat:174.0,v_tie:149.8,err:13.9,Q:1,desc:"Galaxia espiral \u00b7 T=5 \u00b7 D=18.0 Mpc"},
+  {name:"NGC3917",type:"Spiral",T:6,dist:18.0,inc:79.0,Mdisk:1.0983,Mgas:1.888,Rdisk:2.63,vflat:135.9,v_tie:116.6,err:14.2,Q:1,desc:"Galaxia espiral \u00b7 T=6 \u00b7 D=18.0 Mpc"},
+  {name:"NGC3949",type:"Spiral",T:4,dist:18.0,inc:55.0,Mdisk:1.9034,Mgas:3.371,Rdisk:3.59,vflat:163.0,v_tie:133.9,err:17.8,Q:2,desc:"Galaxia espiral \u00b7 T=4 \u00b7 D=18.0 Mpc"},
+  {name:"NGC3953",type:"Giant",T:4,dist:18.0,inc:62.0,Mdisk:7.065,Mgas:2.832,Rdisk:4.89,vflat:220.8,v_tie:180.3,err:18.4,Q:1,desc:"Galaxia gigante \u00b7 T=4 \u00b7 D=18.0 Mpc"},
+  {name:"NGC3972",type:"Spiral",T:4,dist:18.0,inc:77.0,Mdisk:0.7177,Mgas:1.214,Rdisk:2.18,vflat:132.7,v_tie:104.8,err:21.0,Q:1,desc:"Galaxia espiral \u00b7 T=4 \u00b7 D=18.0 Mpc"},
+  {name:"NGC3992",type:"Giant",T:4,dist:23.7,inc:56.0,Mdisk:11.3466,Mgas:16.599,Rdisk:4.96,vflat:241.0,v_tie:207.9,err:13.7,Q:1,desc:"Galaxia gigante \u00b7 T=4 \u00b7 D=23.7 Mpc"},
+  {name:"NGC4010",type:"Spiral",T:7,dist:18.0,inc:89.0,Mdisk:0.8597,Mgas:2.832,Rdisk:2.81,vflat:125.8,v_tie:113.2,err:10.0,Q:2,desc:"Galaxia espiral \u00b7 T=7 \u00b7 D=18.0 Mpc"},
+  {name:"NGC4013",type:"Spiral",T:3,dist:18.0,inc:89.0,Mdisk:3.9547,Mgas:2.967,Rdisk:3.53,vflat:172.9,v_tie:157.2,err:9.1,Q:2,desc:"Galaxia espiral \u00b7 T=3 \u00b7 D=18.0 Mpc"},
+  {name:"NGC4051",type:"Spiral",T:4,dist:18.0,inc:49.0,Mdisk:4.7634,Mgas:2.697,Rdisk:4.65,vflat:157.0,v_tie:164.0,err:4.5,Q:2,desc:"Galaxia espiral \u00b7 T=4 \u00b7 D=18.0 Mpc"},
+  {name:"NGC4068",type:"Dwarf",T:10,dist:4.4,inc:44.0,Mdisk:0.0118,Mgas:0.154,Rdisk:0.59,vflat:0.0,v_tie:44.5,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=4.37 Mpc"},
+  {name:"NGC4085",type:"Spiral",T:5,dist:18.0,inc:82.0,Mdisk:1.0862,Mgas:1.349,Rdisk:1.65,vflat:131.5,v_tie:115.1,err:12.5,Q:2,desc:"Galaxia espiral \u00b7 T=5 \u00b7 D=18.0 Mpc"},
+  {name:"NGC4088",type:"Spiral",T:4,dist:18.0,inc:69.0,Mdisk:5.3643,Mgas:8.226,Rdisk:2.58,vflat:171.7,v_tie:172.7,err:0.6,Q:1,desc:"Galaxia espiral \u00b7 T=4 \u00b7 D=18.0 Mpc"},
+  {name:"NGC4100",type:"Spiral",T:4,dist:18.0,inc:73.0,Mdisk:2.9697,Mgas:3.102,Rdisk:2.15,vflat:158.2,v_tie:147.3,err:6.9,Q:1,desc:"Galaxia espiral \u00b7 T=4 \u00b7 D=18.0 Mpc"},
+  {name:"NGC4138",type:"Spiral",T:0,dist:18.0,inc:53.0,Mdisk:2.2055,Mgas:1.483,Rdisk:1.51,vflat:147.3,v_tie:135.6,err:7.9,Q:2,desc:"Galaxia espiral \u00b7 T=0 \u00b7 D=18.0 Mpc"},
+  {name:"NGC4157",type:"Spiral",T:3,dist:18.0,inc:82.0,Mdisk:5.281,Mgas:8.226,Rdisk:2.32,vflat:184.7,v_tie:172.1,err:6.8,Q:1,desc:"Galaxia espiral \u00b7 T=3 \u00b7 D=18.0 Mpc"},
+  {name:"NGC4183",type:"Spiral",T:6,dist:18.0,inc:82.0,Mdisk:0.5419,Mgas:3.506,Rdisk:2.79,vflat:110.6,v_tie:106.4,err:3.8,Q:1,desc:"Galaxia espiral \u00b7 T=6 \u00b7 D=18.0 Mpc"},
+  {name:"NGC4214",type:"LSB",T:10,dist:2.9,inc:15.0,Mdisk:0.0571,Mgas:0.486,Rdisk:0.51,vflat:80.1,v_tie:62.4,err:22.1,Q:2,desc:"Galaxia lsb \u00b7 T=10 \u00b7 D=2.87 Mpc"},
+  {name:"NGC4217",type:"Spiral",T:3,dist:18.0,inc:86.0,Mdisk:4.265,Mgas:2.562,Rdisk:2.94,vflat:181.3,v_tie:159.6,err:11.9,Q:1,desc:"Galaxia espiral \u00b7 T=3 \u00b7 D=18.0 Mpc"},
+  {name:"NGC4389",type:"Dwarf",T:4,dist:18.0,inc:50.0,Mdisk:1.0664,Mgas:0.539,Rdisk:2.79,vflat:0.0,v_tie:112.6,err:0,Q:3,desc:"Galaxia enana \u00b7 T=4 \u00b7 D=18.0 Mpc"},
+  {name:"NGC4559",type:"Spiral",T:6,dist:9.0,inc:67.0,Mdisk:0.9688,Mgas:5.811,Rdisk:2.1,vflat:121.2,v_tie:122.2,err:0.8,Q:1,desc:"Espiral tard\u00eda \u00b7 grupo de Coma-I"},
+  {name:"NGC5005",type:"Giant",T:4,dist:16.9,inc:68.0,Mdisk:8.936,Mgas:1.28,Rdisk:9.45,vflat:262.2,v_tie:190.0,err:27.5,Q:1,desc:"Galaxia gigante \u00b7 T=4 \u00b7 D=16.9 Mpc"},
+  {name:"NGC5033",type:"Spiral",T:5,dist:15.7,inc:66.0,Mdisk:5.5255,Mgas:11.314,Rdisk:5.16,vflat:194.2,v_tie:175.9,err:9.4,Q:1,desc:"Galaxia espiral \u00b7 T=5 \u00b7 D=15.7 Mpc"},
+  {name:"NGC5055",type:"Giant",T:4,dist:9.9,inc:55.0,Mdisk:7.6461,Mgas:11.722,Rdisk:3.2,vflat:179.0,v_tie:188.7,err:5.4,Q:1,desc:"Espiral con brazos difusos \u00b7 Galaxia Girasol"},
+  {name:"NGC5371",type:"Giant",T:4,dist:39.7,inc:53.0,Mdisk:17.0196,Mgas:11.18,Rdisk:7.44,vflat:209.5,v_tie:225.9,err:7.8,Q:1,desc:"Galaxia gigante \u00b7 T=4 \u00b7 D=39.7 Mpc"},
+  {name:"NGC5585",type:"Spiral",T:7,dist:7.1,inc:51.0,Mdisk:0.1472,Mgas:1.683,Rdisk:1.53,vflat:90.3,v_tie:82.1,err:9.1,Q:1,desc:"Galaxia espiral \u00b7 T=7 \u00b7 D=7.06 Mpc"},
+  {name:"NGC5907",type:"Giant",T:5,dist:17.3,inc:88.0,Mdisk:8.7713,Mgas:21.025,Rdisk:5.34,vflat:215.0,v_tie:198.8,err:7.5,Q:1,desc:"Galaxia navaja \u00b7 vista de filo \u00b7 muy extendida"},
+  {name:"NGC5985",type:"Giant",T:3,dist:39.7,inc:60.0,Mdisk:10.4364,Mgas:11.586,Rdisk:7.01,vflat:293.6,v_tie:202.0,err:31.2,Q:1,desc:"Galaxia gigante \u00b7 T=3 \u00b7 D=39.7 Mpc"},
+  {name:"NGC6015",type:"Spiral",T:6,dist:17.0,inc:60.0,Mdisk:1.6064,Mgas:5.834,Rdisk:2.3,vflat:154.1,v_tie:133.2,err:13.6,Q:2,desc:"Galaxia espiral \u00b7 T=6 \u00b7 D=17.0 Mpc"},
+  {name:"NGC6195",type:"Giant",T:3,dist:127.8,inc:62.0,Mdisk:19.5538,Mgas:20.907,Rdisk:13.94,vflat:251.7,v_tie:236.2,err:6.2,Q:1,desc:"Galaxia gigante \u00b7 T=3 \u00b7 D=127.8 Mpc"},
+  {name:"NGC6503",type:"Spiral",T:6,dist:6.3,inc:74.0,Mdisk:0.6422,Mgas:1.744,Rdisk:2.16,vflat:116.3,v_tie:104.1,err:10.5,Q:1,desc:"Espiral aislada \u00b7 campo de baja densidad"},
+  {name:"NGC6674",type:"Giant",T:3,dist:51.2,inc:54.0,Mdisk:10.7327,Mgas:32.165,Rdisk:6.04,vflat:241.3,v_tie:211.6,err:12.3,Q:1,desc:"Galaxia gigante \u00b7 T=3 \u00b7 D=51.2 Mpc"},
+  {name:"NGC6789",type:"Dwarf",T:11,dist:3.5,inc:43.0,Mdisk:0.005,Mgas:0.017,Rdisk:0.31,vflat:0.0,v_tie:31.3,err:0,Q:2,desc:"Galaxia enana \u00b7 T=11 \u00b7 D=3.52 Mpc"},
+  {name:"NGC6946",type:"Spiral",T:6,dist:5.5,inc:38.0,Mdisk:3.3087,Mgas:5.67,Rdisk:2.44,vflat:158.9,v_tie:153.6,err:3.3,Q:1,desc:"Galaxia espiral \u00b7 T=6 \u00b7 D=5.52 Mpc"},
+  {name:"NGC7331",type:"Giant",T:3,dist:14.7,inc:75.0,Mdisk:12.5315,Mgas:11.067,Rdisk:5.02,vflat:239.0,v_tie:210.4,err:12.0,Q:1,desc:"An\u00e1logo de la V\u00eda L\u00e1ctea \u00b7 grupo de galaxias"},
+  {name:"NGC7793",type:"Dwarf",T:7,dist:3.6,inc:47.0,Mdisk:0.3525,Mgas:0.861,Rdisk:1.21,vflat:0.0,v_tie:89.1,err:0,Q:1,desc:"Espiral tard\u00eda \u00b7 grupo del escultor"},
+  {name:"NGC7814",type:"Spiral",T:2,dist:14.4,inc:90.0,Mdisk:3.7264,Mgas:1.07,Rdisk:2.54,vflat:218.9,v_tie:153.2,err:30.0,Q:1,desc:"Espiral edge-on \u00b7 an\u00e1loga a la VL \u00b7 distancia precisa"},
+  {name:"PGC51017",type:"Dwarf",T:11,dist:13.6,inc:66.0,Mdisk:0.0077,Mgas:0.201,Rdisk:0.53,vflat:18.6,v_tie:44.7,err:140.5,Q:3,desc:"Galaxia enana \u00b7 T=11 \u00b7 D=13.6 Mpc"},
+  {name:"UGC00128",type:"LSB",T:8,dist:64.5,inc:57.0,Mdisk:0.601,Mgas:7.431,Rdisk:5.95,vflat:129.3,v_tie:117.9,err:8.8,Q:1,desc:"Galaxia lsb \u00b7 T=8 \u00b7 D=64.5 Mpc"},
+  {name:"UGC00191",type:"Dwarf",T:9,dist:17.1,inc:45.0,Mdisk:0.1002,Mgas:1.343,Rdisk:1.58,vflat:0.0,v_tie:76.2,err:0,Q:1,desc:"Galaxia enana \u00b7 T=9 \u00b7 D=17.1 Mpc"},
+  {name:"UGC00634",type:"Dwarf",T:9,dist:30.9,inc:37.0,Mdisk:0.1494,Mgas:3.663,Rdisk:2.45,vflat:0.0,v_tie:92.8,err:0,Q:2,desc:"Galaxia enana \u00b7 T=9 \u00b7 D=30.9 Mpc"},
+  {name:"UGC00731",type:"LSB",T:10,dist:12.5,inc:57.0,Mdisk:0.0162,Mgas:1.807,Rdisk:2.3,vflat:73.3,v_tie:72.9,err:0.5,Q:1,desc:"Galaxia lsb \u00b7 T=10 \u00b7 D=12.5 Mpc"},
+  {name:"UGC00891",type:"Dwarf",T:9,dist:10.2,inc:60.0,Mdisk:0.0187,Mgas:0.428,Rdisk:1.43,vflat:0.0,v_tie:54.5,err:0,Q:2,desc:"Galaxia enana \u00b7 T=9 \u00b7 D=10.2 Mpc"},
+  {name:"UGC01230",type:"LSB",T:9,dist:53.7,inc:22.0,Mdisk:0.381,Mgas:6.43,Rdisk:4.34,vflat:103.7,v_tie:110.1,err:6.2,Q:1,desc:"Galaxia lsb \u00b7 T=9 \u00b7 D=53.7 Mpc"},
+  {name:"UGC01281",type:"Dwarf",T:8,dist:5.3,inc:90.0,Mdisk:0.0176,Mgas:0.294,Rdisk:1.63,vflat:55.2,v_tie:51.0,err:7.6,Q:1,desc:"Galaxia enana \u00b7 T=8 \u00b7 D=5.27 Mpc"},
+  {name:"UGC02023",type:"Dwarf",T:10,dist:10.4,inc:19.0,Mdisk:0.0654,Mgas:0.477,Rdisk:1.55,vflat:0.0,v_tie:63.5,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=10.4 Mpc"},
+  {name:"UGC02259",type:"LSB",T:8,dist:10.5,inc:41.0,Mdisk:0.0863,Mgas:0.494,Rdisk:1.62,vflat:86.2,v_tie:66.4,err:22.9,Q:2,desc:"Galaxia lsb \u00b7 T=8 \u00b7 D=10.5 Mpc"},
+  {name:"UGC02455",type:"Dwarf",T:10,dist:6.9,inc:51.0,Mdisk:0.1825,Mgas:0.803,Rdisk:0.99,vflat:0.0,v_tie:78.4,err:0,Q:3,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=6.92 Mpc"},
+  {name:"UGC02487",type:"Giant",T:0,dist:69.1,inc:36.0,Mdisk:24.4977,Mgas:17.963,Rdisk:7.89,vflat:332.0,v_tie:247.9,err:25.3,Q:1,desc:"Galaxia gigante \u00b7 T=0 \u00b7 D=69.1 Mpc"},
+  {name:"UGC02885",type:"Giant",T:5,dist:80.6,inc:64.0,Mdisk:20.1762,Mgas:40.075,Rdisk:11.4,vflat:289.5,v_tie:242.8,err:16.1,Q:1,desc:"Galaxia gigante \u00b7 T=5 \u00b7 D=80.6 Mpc"},
+  {name:"UGC02916",type:"Spiral",T:2,dist:65.4,inc:50.0,Mdisk:6.2077,Mgas:23.273,Rdisk:6.15,vflat:182.7,v_tie:187.1,err:2.4,Q:2,desc:"Galaxia espiral \u00b7 T=2 \u00b7 D=65.4 Mpc"},
+  {name:"UGC02953",type:"Giant",T:2,dist:16.5,inc:50.0,Mdisk:12.9759,Mgas:7.678,Rdisk:3.55,vflat:264.9,v_tie:210.8,err:20.4,Q:2,desc:"Galaxia gigante \u00b7 T=2 \u00b7 D=16.5 Mpc"},
+  {name:"UGC03205",type:"Spiral",T:2,dist:50.0,inc:67.0,Mdisk:5.6821,Mgas:9.677,Rdisk:3.19,vflat:219.6,v_tie:175.8,err:19.9,Q:1,desc:"Galaxia espiral \u00b7 T=2 \u00b7 D=50.0 Mpc"},
+  {name:"UGC03546",type:"Spiral",T:1,dist:28.7,inc:55.0,Mdisk:5.0668,Mgas:2.675,Rdisk:3.79,vflat:196.9,v_tie:166.4,err:15.5,Q:1,desc:"Galaxia espiral \u00b7 T=1 \u00b7 D=28.7 Mpc"},
+  {name:"UGC03580",type:"Spiral",T:1,dist:20.7,inc:63.0,Mdisk:0.6633,Mgas:4.37,Rdisk:2.43,vflat:126.2,v_tie:112.1,err:11.1,Q:2,desc:"Galaxia espiral \u00b7 T=1 \u00b7 D=20.7 Mpc"},
+  {name:"UGC04278",type:"Spiral",T:7,dist:9.5,inc:90.0,Mdisk:0.0653,Mgas:1.116,Rdisk:2.21,vflat:91.4,v_tie:71.0,err:22.3,Q:1,desc:"Galaxia espiral \u00b7 T=7 \u00b7 D=9.51 Mpc"},
+  {name:"UGC04305",type:"Dwarf",T:10,dist:3.5,inc:40.0,Mdisk:0.0368,Mgas:0.69,Rdisk:1.16,vflat:34.5,v_tie:62.4,err:81.0,Q:3,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=3.45 Mpc"},
+  {name:"UGC04325",type:"LSB",T:9,dist:9.6,inc:41.0,Mdisk:0.1013,Mgas:0.678,Rdisk:1.86,vflat:90.9,v_tie:70.2,err:22.8,Q:1,desc:"Galaxia lsb \u00b7 T=9 \u00b7 D=9.6 Mpc"},
+  {name:"UGC04483",type:"Dwarf",T:10,dist:3.3,inc:58.0,Mdisk:0.0006,Mgas:0.032,Rdisk:0.18,vflat:0.0,v_tie:27.3,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=3.34 Mpc"},
+  {name:"UGC04499",type:"LSB",T:8,dist:12.5,inc:50.0,Mdisk:0.0776,Mgas:1.1,Rdisk:1.73,vflat:72.8,v_tie:72.1,err:1.0,Q:1,desc:"Galaxia lsb \u00b7 T=8 \u00b7 D=12.5 Mpc"},
+  {name:"UGC05005",type:"LSB",T:10,dist:53.7,inc:41.0,Mdisk:0.205,Mgas:3.093,Rdisk:3.2,vflat:98.9,v_tie:92.7,err:6.3,Q:1,desc:"Galaxia lsb \u00b7 T=10 \u00b7 D=53.7 Mpc"},
+  {name:"UGC05253",type:"Giant",T:2,dist:22.9,inc:37.0,Mdisk:8.5791,Mgas:16.396,Rdisk:8.07,vflat:213.7,v_tie:195.8,err:8.4,Q:2,desc:"Galaxia gigante \u00b7 T=2 \u00b7 D=22.9 Mpc"},
+  {name:"UGC05414",type:"Dwarf",T:10,dist:9.4,inc:55.0,Mdisk:0.0561,Mgas:0.574,Rdisk:1.47,vflat:0.0,v_tie:63.6,err:0,Q:1,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=9.4 Mpc"},
+  {name:"UGC05716",type:"LSB",T:9,dist:21.3,inc:54.0,Mdisk:0.0294,Mgas:1.094,Rdisk:1.14,vflat:73.1,v_tie:66.8,err:8.6,Q:2,desc:"Galaxia lsb \u00b7 T=9 \u00b7 D=21.3 Mpc"},
+  {name:"UGC05721",type:"Spiral",T:7,dist:6.2,inc:61.0,Mdisk:0.0266,Mgas:0.562,Rdisk:0.38,vflat:79.7,v_tie:58.7,err:26.3,Q:1,desc:"Galaxia espiral \u00b7 T=7 \u00b7 D=6.18 Mpc"},
+  {name:"UGC05750",type:"Dwarf",T:8,dist:58.7,inc:64.0,Mdisk:0.1668,Mgas:1.099,Rdisk:3.46,vflat:0.0,v_tie:79.4,err:0,Q:1,desc:"Galaxia enana \u00b7 T=8 \u00b7 D=58.7 Mpc"},
+  {name:"UGC05764",type:"Dwarf",T:10,dist:7.5,inc:60.0,Mdisk:0.0043,Mgas:0.163,Rdisk:1.17,vflat:0.0,v_tie:41.5,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=7.47 Mpc"},
+  {name:"UGC05829",type:"Dwarf",T:10,dist:8.6,inc:34.0,Mdisk:0.0282,Mgas:1.023,Rdisk:1.99,vflat:0.0,v_tie:65.8,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=8.64 Mpc"},
+  {name:"UGC05918",type:"Dwarf",T:10,dist:7.7,inc:46.0,Mdisk:0.0117,Mgas:0.297,Rdisk:1.66,vflat:0.0,v_tie:49.4,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=7.66 Mpc"},
+  {name:"UGC05986",type:"LSB",T:9,dist:8.6,inc:90.0,Mdisk:0.2348,Mgas:2.667,Rdisk:1.67,vflat:113.0,v_tie:92.1,err:18.5,Q:2,desc:"Galaxia lsb \u00b7 T=9 \u00b7 D=8.63 Mpc"},
+  {name:"UGC05999",type:"Dwarf",T:10,dist:47.7,inc:22.0,Mdisk:0.1692,Mgas:2.022,Rdisk:3.22,vflat:0.0,v_tie:85.5,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=47.7 Mpc"},
+  {name:"UGC06399",type:"LSB",T:9,dist:18.0,inc:75.0,Mdisk:0.1148,Mgas:0.674,Rdisk:2.05,vflat:85.0,v_tie:71.5,err:15.8,Q:1,desc:"Galaxia lsb \u00b7 T=9 \u00b7 D=18.0 Mpc"},
+  {name:"UGC06446",type:"Spiral",T:7,dist:12.0,inc:51.0,Mdisk:0.0494,Mgas:1.379,Rdisk:1.49,vflat:82.2,v_tie:72.0,err:12.4,Q:1,desc:"Galaxia espiral \u00b7 T=7 \u00b7 D=12.0 Mpc"},
+  {name:"UGC06614",type:"Spiral",T:1,dist:88.7,inc:36.0,Mdisk:6.2175,Mgas:21.888,Rdisk:5.1,vflat:199.8,v_tie:186.4,err:6.7,Q:1,desc:"Galaxia espiral \u00b7 T=1 \u00b7 D=88.7 Mpc"},
+  {name:"UGC06628",type:"Dwarf",T:9,dist:15.1,inc:20.0,Mdisk:0.187,Mgas:1.5,Rdisk:2.82,vflat:41.8,v_tie:83.4,err:99.6,Q:2,desc:"Galaxia enana \u00b7 T=9 \u00b7 D=15.1 Mpc"},
+  {name:"UGC06667",type:"Spiral",T:6,dist:18.0,inc:89.0,Mdisk:0.0698,Mgas:0.809,Rdisk:5.15,vflat:83.8,v_tie:68.2,err:18.6,Q:1,desc:"Galaxia espiral \u00b7 T=6 \u00b7 D=18.0 Mpc"},
+  {name:"UGC06786",type:"Spiral",T:0,dist:29.3,inc:64.0,Mdisk:3.6704,Mgas:5.03,Rdisk:3.6,vflat:219.4,v_tie:156.5,err:28.7,Q:1,desc:"Galaxia espiral \u00b7 T=0 \u00b7 D=29.3 Mpc"},
+  {name:"UGC06787",type:"Spiral",T:2,dist:21.3,inc:66.0,Mdisk:4.9128,Mgas:5.03,Rdisk:5.37,vflat:248.1,v_tie:167.0,err:32.7,Q:2,desc:"Galaxia espiral \u00b7 T=2 \u00b7 D=21.3 Mpc"},
+  {name:"UGC06818",type:"LSB",T:9,dist:18.0,inc:75.0,Mdisk:0.0794,Mgas:1.079,Rdisk:1.39,vflat:71.2,v_tie:72.0,err:1.2,Q:2,desc:"Galaxia lsb \u00b7 T=9 \u00b7 D=18.0 Mpc"},
+  {name:"UGC06917",type:"LSB",T:9,dist:18.0,inc:56.0,Mdisk:0.3416,Mgas:2.023,Rdisk:2.76,vflat:108.7,v_tie:94.0,err:13.5,Q:1,desc:"Galaxia lsb \u00b7 T=9 \u00b7 D=18.0 Mpc"},
+  {name:"UGC06923",type:"LSB",T:10,dist:18.0,inc:65.0,Mdisk:0.1445,Mgas:0.809,Rdisk:1.44,vflat:79.6,v_tie:75.4,err:5.2,Q:2,desc:"Galaxia lsb \u00b7 T=10 \u00b7 D=18.0 Mpc"},
+  {name:"UGC06930",type:"Spiral",T:7,dist:18.0,inc:32.0,Mdisk:0.4466,Mgas:3.237,Rdisk:3.94,vflat:107.2,v_tie:102.6,err:4.3,Q:1,desc:"Galaxia espiral \u00b7 T=7 \u00b7 D=18.0 Mpc"},
+  {name:"UGC06973",type:"Spiral",T:2,dist:18.0,inc:71.0,Mdisk:2.6935,Mgas:1.753,Rdisk:1.07,vflat:174.2,v_tie:142.5,err:18.2,Q:3,desc:"Galaxia espiral \u00b7 T=2 \u00b7 D=18.0 Mpc"},
+  {name:"UGC06983",type:"Spiral",T:6,dist:18.0,inc:49.0,Mdisk:0.2649,Mgas:2.967,Rdisk:3.21,vflat:109.0,v_tie:94.8,err:13.0,Q:1,desc:"Galaxia espiral \u00b7 T=6 \u00b7 D=18.0 Mpc"},
+  {name:"UGC07089",type:"Dwarf",T:8,dist:18.0,inc:80.0,Mdisk:0.1792,Mgas:1.214,Rdisk:2.26,vflat:0.0,v_tie:81.1,err:0,Q:2,desc:"Galaxia enana \u00b7 T=8 \u00b7 D=18.0 Mpc"},
+  {name:"UGC07125",type:"LSB",T:9,dist:19.8,inc:90.0,Mdisk:0.1356,Mgas:4.629,Rdisk:3.38,vflat:65.2,v_tie:96.3,err:47.7,Q:1,desc:"Galaxia lsb \u00b7 T=9 \u00b7 D=19.8 Mpc"},
+  {name:"UGC07151",type:"Spiral",T:6,dist:6.9,inc:90.0,Mdisk:0.1142,Mgas:0.616,Rdisk:1.25,vflat:73.5,v_tie:70.9,err:3.5,Q:1,desc:"Galaxia espiral \u00b7 T=6 \u00b7 D=6.87 Mpc"},
+  {name:"UGC07232",type:"Dwarf",T:10,dist:2.8,inc:59.0,Mdisk:0.0057,Mgas:0.046,Rdisk:0.29,vflat:0.0,v_tie:34.8,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=2.83 Mpc"},
+  {name:"UGC07261",type:"LSB",T:8,dist:13.1,inc:30.0,Mdisk:0.0876,Mgas:1.388,Rdisk:1.2,vflat:74.7,v_tie:75.5,err:1.1,Q:2,desc:"Galaxia lsb \u00b7 T=8 \u00b7 D=13.1 Mpc"},
+  {name:"UGC07323",type:"Dwarf",T:8,dist:8.0,inc:47.0,Mdisk:0.2054,Mgas:0.722,Rdisk:2.26,vflat:0.0,v_tie:79.5,err:0,Q:1,desc:"Galaxia enana \u00b7 T=8 \u00b7 D=8.0 Mpc"},
+  {name:"UGC07399",type:"LSB",T:8,dist:8.4,inc:55.0,Mdisk:0.0578,Mgas:0.745,Rdisk:1.64,vflat:103.0,v_tie:66.0,err:35.9,Q:1,desc:"Galaxia lsb \u00b7 T=8 \u00b7 D=8.43 Mpc"},
+  {name:"UGC07524",type:"LSB",T:9,dist:4.7,inc:46.0,Mdisk:0.1218,Mgas:1.779,Rdisk:3.46,vflat:79.5,v_tie:81.0,err:1.9,Q:1,desc:"Galaxia lsb \u00b7 T=9 \u00b7 D=4.74 Mpc"},
+  {name:"UGC07559",type:"Dwarf",T:10,dist:5.0,inc:61.0,Mdisk:0.0054,Mgas:0.169,Rdisk:0.58,vflat:0.0,v_tie:42.3,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=4.97 Mpc"},
+  {name:"UGC07577",type:"Dwarf",T:10,dist:2.6,inc:63.0,Mdisk:0.0022,Mgas:0.044,Rdisk:0.9,vflat:0.0,v_tie:31.3,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=2.59 Mpc"},
+  {name:"UGC07603",type:"Dwarf",T:7,dist:4.7,inc:78.0,Mdisk:0.0188,Mgas:0.258,Rdisk:0.53,vflat:61.6,v_tie:50.3,err:18.3,Q:1,desc:"Galaxia enana \u00b7 T=7 \u00b7 D=4.7 Mpc"},
+  {name:"UGC07608",type:"Dwarf",T:10,dist:8.2,inc:25.0,Mdisk:0.0132,Mgas:0.535,Rdisk:1.5,vflat:0.0,v_tie:55.6,err:0,Q:1,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=8.21 Mpc"},
+  {name:"UGC07690",type:"Dwarf",T:10,dist:8.1,inc:41.0,Mdisk:0.0429,Mgas:0.39,Rdisk:0.57,vflat:57.4,v_tie:58.6,err:2.0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=8.11 Mpc"},
+  {name:"UGC07866",type:"Dwarf",T:10,dist:4.6,inc:44.0,Mdisk:0.0062,Mgas:0.118,Rdisk:0.61,vflat:0.0,v_tie:40.1,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=4.57 Mpc"},
+  {name:"UGC08286",type:"Spiral",T:6,dist:6.5,inc:90.0,Mdisk:0.0628,Mgas:0.642,Rdisk:1.05,vflat:82.4,v_tie:65.4,err:20.7,Q:1,desc:"Galaxia espiral \u00b7 T=6 \u00b7 D=6.5 Mpc"},
+  {name:"UGC08490",type:"LSB",T:9,dist:4.7,inc:50.0,Mdisk:0.0508,Mgas:0.72,Rdisk:0.67,vflat:78.6,v_tie:64.8,err:17.5,Q:1,desc:"Galaxia lsb \u00b7 T=9 \u00b7 D=4.65 Mpc"},
+  {name:"UGC08550",type:"Dwarf",T:7,dist:6.7,inc:90.0,Mdisk:0.0144,Mgas:0.288,Rdisk:0.45,vflat:56.9,v_tie:49.9,err:12.3,Q:1,desc:"Galaxia enana \u00b7 T=7 \u00b7 D=6.7 Mpc"},
+  {name:"UGC08699",type:"Spiral",T:2,dist:39.3,inc:73.0,Mdisk:2.5151,Mgas:3.738,Rdisk:3.09,vflat:182.4,v_tie:142.7,err:21.7,Q:2,desc:"Galaxia espiral \u00b7 T=2 \u00b7 D=39.3 Mpc"},
+  {name:"UGC08837",type:"Dwarf",T:10,dist:7.2,inc:80.0,Mdisk:0.025,Mgas:0.32,Rdisk:1.72,vflat:0.0,v_tie:53.5,err:0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=7.21 Mpc"},
+  {name:"UGC09037",type:"Spiral",T:6,dist:83.6,inc:65.0,Mdisk:3.4307,Mgas:19.078,Rdisk:4.28,vflat:152.3,v_tie:166.4,err:9.3,Q:2,desc:"Galaxia espiral \u00b7 T=6 \u00b7 D=83.6 Mpc"},
+  {name:"UGC09133",type:"Giant",T:2,dist:57.1,inc:53.0,Mdisk:14.1463,Mgas:33.428,Rdisk:6.97,vflat:226.8,v_tie:223.9,err:1.3,Q:1,desc:"Galaxia gigante \u00b7 T=2 \u00b7 D=57.1 Mpc"},
+  {name:"UGC09992",type:"Dwarf",T:10,dist:10.7,inc:30.0,Mdisk:0.0168,Mgas:0.318,Rdisk:1.04,vflat:33.6,v_tie:51.4,err:53.0,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=10.7 Mpc"},
+  {name:"UGC10310",type:"LSB",T:9,dist:15.2,inc:34.0,Mdisk:0.0871,Mgas:1.196,Rdisk:1.8,vflat:71.4,v_tie:73.8,err:3.4,Q:1,desc:"Galaxia lsb \u00b7 T=9 \u00b7 D=15.2 Mpc"},
+  {name:"UGC11455",type:"Giant",T:6,dist:78.6,inc:90.0,Mdisk:18.7161,Mgas:13.335,Rdisk:5.93,vflat:269.4,v_tie:231.7,err:14.0,Q:1,desc:"Galaxia gigante \u00b7 T=6 \u00b7 D=78.6 Mpc"},
+  {name:"UGC11557",type:"Dwarf",T:8,dist:24.2,inc:30.0,Mdisk:0.6051,Mgas:2.605,Rdisk:2.75,vflat:0.0,v_tie:105.6,err:0,Q:2,desc:"Galaxia enana \u00b7 T=8 \u00b7 D=24.2 Mpc"},
+  {name:"UGC11820",type:"Dwarf",T:9,dist:18.1,inc:45.0,Mdisk:0.0485,Mgas:1.977,Rdisk:2.08,vflat:0.0,v_tie:77.1,err:0,Q:1,desc:"Galaxia enana \u00b7 T=9 \u00b7 D=18.1 Mpc"},
+  {name:"UGC11914",type:"Giant",T:2,dist:16.9,inc:31.0,Mdisk:7.5014,Mgas:0.888,Rdisk:2.44,vflat:288.1,v_tie:181.7,err:36.9,Q:1,desc:"Galaxia gigante \u00b7 T=2 \u00b7 D=16.9 Mpc"},
+  {name:"UGC12506",type:"Spiral",T:6,dist:100.6,inc:86.0,Mdisk:6.9786,Mgas:35.556,Rdisk:7.38,vflat:234.0,v_tie:197.2,err:15.7,Q:2,desc:"Galaxia espiral \u00b7 T=6 \u00b7 D=100.6 Mpc"},
+  {name:"UGC12632",type:"LSB",T:9,dist:9.8,inc:46.0,Mdisk:0.065,Mgas:1.744,Rdisk:2.42,vflat:71.7,v_tie:76.6,err:6.8,Q:1,desc:"Galaxia lsb \u00b7 T=9 \u00b7 D=9.77 Mpc"},
+  {name:"UGC12732",type:"Dwarf",T:9,dist:13.2,inc:39.0,Mdisk:0.0834,Mgas:3.66,Rdisk:1.98,vflat:0.0,v_tie:89.6,err:0,Q:1,desc:"Galaxia enana \u00b7 T=9 \u00b7 D=13.2 Mpc"},
+  {name:"UGCA281",type:"Dwarf",T:11,dist:5.7,inc:67.0,Mdisk:0.0097,Mgas:0.062,Rdisk:1.72,vflat:0.0,v_tie:38.9,err:0,Q:3,desc:"Galaxia enana \u00b7 T=11 \u00b7 D=5.68 Mpc"},
+  {name:"UGCA442",type:"Dwarf",T:9,dist:4.3,inc:64.0,Mdisk:0.007,Mgas:0.263,Rdisk:1.18,vflat:56.4,v_tie:46.8,err:17.1,Q:1,desc:"Galaxia enana \u00b7 T=9 \u00b7 D=4.35 Mpc"},
+  {name:"UGCA444",type:"Dwarf",T:10,dist:1.0,inc:78.0,Mdisk:0.0006,Mgas:0.067,Rdisk:0.83,vflat:37.0,v_tie:32.0,err:13.5,Q:2,desc:"Galaxia enana \u00b7 T=10 \u00b7 D=0.98 Mpc"},
+];
+
+// ===== STATE =====
+let currentType='all', currentQ='all', currentVf='all', currentSearch='', chartMode='scatter', selectedName=null;
+
+const TYPE_COLOR={Spiral:'#5BC8F5',Giant:'#FFD700',LSB:'#44FF88',Dwarf:'#dd88ff',Irregular:'#FF4455'};
+
+// Galaxias disponibles en curvas.html como presets
+const CURVAS_PRESETS = new Set(['NGC3198','NGC2403','NGC6503','NGC7331','UGC2885','NGC5907','UGC128','F568-3','F563-1','DDO154','WLM','DDO168']);
+function toCurvasKey(name){ return name.replace(/\s/g,'').toUpperCase(); }
+
+// Descripciones enriquecidas para galaxias conocidas
+const EXTRA_DESC = {
+  'NGC3198':   'Classic reference for the dark matter problem. Flat curve to 30 kpc with stellar mass only in the inner 10 kpc.',
+  'NGC2403':   'Late spiral in the M81 group. One of the first to show an unambiguous flat rotation curve (Begeman 1989).',
+  'NGC6503':   'Isolated spiral in the Local Void. Low-density environment — clean curve without external perturbations.',
+  'NGC7331':   'Milky Way analogue at 14.7 Mpc. Dominant stellar mass in the interior, extended gas at the outskirts.',
+  'NGC2841':   'Massive spiral with high flat velocity (280 km/s). Strong evidence of baryonic deficit in Newtonian models.',
+  'NGC5055':   'Sunflower Galaxy. Flocculent spiral with diffuse arms — rotation curve well traced to 45 kpc.',
+  'NGC4736':   'Compact spiral with inner stellar ring. High central density, TIE regime transition visible at ~3 kpc.',
+  'UGC2885':   'The largest known spiral galaxy in the local universe. v_flat=300 km/s. Disk of 240 kpc diameter.',
+  'NGC5907':   'Razor galaxy — seen completely edge-on. Dust lane visible. Flat curve at 218 km/s to 42 kpc.',
+  'UGC128':    'LSB prototype. Low central surface brightness: disk nearly transparent in optical. HI gas dominates baryonic mass.',
+  'DDO154':    'Irregular dwarf with ~99% baryonic mass in HI gas. Extreme TIE test: no stellar disk, only gas.',
+  'DDO168':    'Nearby irregular dwarf (4.2 Mpc). Good TIE agreement: err=2.6%. Gas distributed in extended disk.',
+  'IC2574':    'Irregular dwarf in the M81 group. Disturbed morphology — irregular rotation curve but measurable v_flat.',
+  'NGC300':    'Spiral in the Sculptor group. Very nearby (2.1 Mpc). Extended and well-sampled rotation curve.',
+  'NGC7793':   'Late spiral in the Sculptor group. v_flat=100 km/s. Moderate baryonic mass, good TIE prediction.',
+  'ESO563-G021':'Massive spiral highly inclined (83°). Important geometric correction. Curve extended to 55 kpc.',
+  'NGC1003':   'Isolated late spiral. TIE error 2.1% — one of the best predictions in the catalogue.',
+  'NGC3741':   'LSB dwarf with HI gas disk 8× larger than the stellar disk. Extreme gas-dominated mass case.',
+};
+
+function filtered(){
+  return SPARC.filter(g=>{
+    if(currentType!=='all' && g.type!==currentType) return false;
+    if(currentQ!=='all' && String(g.Q)!==currentQ) return false;
+    if(currentVf==='yes' && g.vflat<=0) return false;
+    if(currentVf==='no'  && g.vflat>0)  return false;
+    if(currentSearch && !g.name.toLowerCase().includes(currentSearch.toLowerCase())) return false;
+    return true;
+  });
+}
+
+function setType(t,el){
+  currentType=t;
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+function setQ(q,el){
+  currentQ=q;
+  document.querySelectorAll('.qpill[data-q]').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+function setVf(v,el){
+  currentVf=v;
+  document.querySelectorAll('.qpill[data-vf]').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+function setMode(m){
+  chartMode=m;
+  document.querySelectorAll('.cmb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('btn-'+m).classList.add('active');
+  updateChart();
+}
+
+// Notas explicativas por modo
+const CHART_NOTES = {
+  scatter: '<span style="color:var(--gold)">Baryonic Tully-Fisher relation</span> · Each point is a galaxy. The gold line is the TIE prediction <em>v=(GMa₀)¼</em> with no free parameters. Log-log axes — a straight line indicates a power law. The scatter reflects measurement errors and M/L variations.',
+  vtie:    '<span style="color:var(--gold)">Prediction vs observation</span> · X axis = observed velocity, Y axis = TIE prediction. The dotted 1:1 line is the perfect prediction. Points <em>above</em> the line → TIE overestimates. Points <em>below</em> → underestimates. Most should be close to the diagonal.',
+  err:     '<span style="color:var(--gold)">Error distribution</span> · <span style="color:var(--green)">Green</span> = error &lt;10% (excellent), <span style="color:var(--gold)">Gold</span> = 10–25% (good), <span style="color:var(--red)">Red</span> = &gt;25% (outlier). Outliers are usually galaxies with poorly estimated M/L or Q=3 quality curves.',
+  dist:    '<span style="color:var(--gold)">Distance distribution</span> · Shows the reach of the SPARC catalogue. LSBs and giants tend to be farther away (need greater distance to be included). Dwarfs concentrate in the local volume &lt;15 Mpc.',
+};
+
+function render(){
+  const data=filtered();
+  document.getElementById('count-display').textContent=data.length+' galaxies';
+  // Error promedio correcto: solo Q=1 con vflat medida
+  const q1=SPARC.filter(g=>g.Q===1&&g.vflat>0);
+  const avgErr=q1.length?( q1.reduce((s,g)=>s+g.err,0)/q1.length ).toFixed(1)+'%':'—';
+  document.getElementById('avg-err').textContent=avgErr;
+
+  const grid=document.getElementById('galaxy-grid');
+  grid.innerHTML=data.map(g=>{
+    const sel=g.name===selectedName?'selected':'';
+    const errColor=g.err<10?'var(--green)':g.err<25?'var(--gold)':'var(--red)';
+    const vDisplay=g.vflat>0?g.vflat.toFixed(1)+' km/s':'—';
+    const noV = g.vflat<=0 ? ' style="opacity:.6"' : '';
+    return `<div class="galaxy-card ${sel}"${noV} onclick="selectGalaxy('${g.name}')">
+      <div class="gc-name">${g.name}${g.vflat<=0?' <span style="font-size:.5rem;color:var(--dim);font-family:var(--mono)">sin v</span>':''}</div>
+      <div class="gc-type ${g.type}">${g.type} · ${g.dist} Mpc</div>
+      <div class="gc-stats">
+        <span>M★: ${g.Mdisk.toFixed(3)}×10¹⁰ M☉</span>
+        <span>Mgas: ${g.Mgas.toFixed(2)}×10⁹ M☉</span>
+        <span class="gc-vflat">v_obs: ${vDisplay}</span>
+        ${g.vflat>0?`<span class="gc-err" style="color:${errColor}">v_TIE: ${g.v_tie.toFixed(1)} · err ${g.err.toFixed(1)}%</span>`:'<span class="gc-err" style="color:var(--dim)">v_flat no medida</span>'}
+      </div>
+      <span class="gc-q q${g.Q}">Q=${g.Q}</span>
+    </div>`;
+  }).join('');
+  updateChart();
+}
+
+function selectGalaxy(name){
+  selectedName=name;
+  const g=SPARC.find(x=>x.name===name);
+  if(!g) return;
+  render();
+  document.getElementById('m-name').textContent=g.name;
+  document.getElementById('m-type').textContent=g.type+' · T='+g.T+' · D='+g.dist+' Mpc · Q='+g.Q;
+  // Descripción enriquecida
+  const richDesc = EXTRA_DESC[g.name] || g.desc;
+  document.getElementById('m-desc').textContent=richDesc;
+  document.getElementById('m-dist').textContent=g.dist;
+  document.getElementById('m-inc').textContent=g.inc+'°';
+  document.getElementById('m-mdisk').textContent=g.Mdisk.toFixed(4);
+  document.getElementById('m-mgas').textContent=g.Mgas.toFixed(3);
+  document.getElementById('m-rdisk').textContent=g.Rdisk.toFixed(2);
+  document.getElementById('m-q').textContent=g.Q;
+  document.getElementById('m-vobs').textContent=g.vflat>0?g.vflat.toFixed(1):'—';
+  document.getElementById('m-vtie').textContent=g.v_tie.toFixed(1);
+  document.getElementById('m-err').textContent=g.vflat>0?g.err.toFixed(1):'—';
+  const errW=Math.min(g.err*2,100);
+  const errBg=g.err<10?'var(--green)':g.err<25?'var(--gold)':'var(--red)';
+  document.getElementById('m-err-bar').style.width=errW+'%';
+  document.getElementById('m-err-bar').style.background=errBg;
+  // Link a curvas.html si es preset disponible
+  const key = toCurvasKey(g.name);
+  const hasCurva = CURVAS_PRESETS.has(key) || [...CURVAS_PRESETS].some(p=>p===key);
+  const linkDiv = document.getElementById('m-curvas-link');
+  linkDiv.style.display = hasCurva ? 'block' : 'none';
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(e){
+  if(!e || e.target===document.getElementById('modal')){
+    document.getElementById('modal').classList.remove('open');
+  }
+}
+
+function updateChart(){
+  const data=filtered();
+  // Actualizar nota explicativa
+  document.getElementById('chart-note').innerHTML = CHART_NOTES[chartMode] || '';
+
+  const plotLayout={
+    paper_bgcolor:'transparent',plot_bgcolor:'rgba(5,5,15,0.5)',
+    font:{family:'Space Mono',color:'#a0a0b0',size:10},
+    legend:{font:{size:9},bgcolor:'transparent',orientation:'h',y:-0.15},
+    margin:{t:10,b:55,l:60,r:15},
+    xaxis:{gridcolor:'rgba(91,200,245,0.1)',tickfont:{size:9}},
+    yaxis:{gridcolor:'rgba(91,200,245,0.1)',tickfont:{size:9}},
+  };
+
+  if(chartMode==='scatter'){
+    // v_obs vs Mtotal (log-log)
+    const byType={};
+    data.filter(g=>g.vflat>0).forEach(g=>{
+      if(!byType[g.type]) byType[g.type]=[];
+      byType[g.type].push(g);
+    });
+    const traces=Object.entries(byType).map(([type,gs])=>({
+      x:gs.map(g=>(g.Mdisk*1e10+g.Mgas*1e9)),
+      y:gs.map(g=>g.vflat),
+      mode:'markers',name:type,
+      marker:{color:TYPE_COLOR[type]||'#fff',size:6,opacity:0.75},
+      text:gs.map(g=>g.name),hovertemplate:'%{text}<br>M=%{x:.2e} M☉<br>v=%{y} km/s<extra></extra>'
+    }));
+    // TIE prediction line
+    const masses=[];
+    for(let e=6;e<=12.5;e+=0.1) masses.push(Math.pow(10,e));
+    const G=6.674e-11,c=2.998e8,MS=1.989e30,H0si=70*1e3/3.0857e22,a0=c*H0si/(2*Math.PI);
+    const vTIE=masses.map(m=>(G*m*MS*a0)**0.25/1e3);
+    traces.push({x:masses,y:vTIE,mode:'lines',name:'TIE v=(GMa₀)¼',line:{color:'#FFD700',width:2,dash:'dash'},hoverinfo:'skip'});
+    Plotly.react('chart',traces,{...plotLayout,xaxis:{...plotLayout.xaxis,type:'log',title:'Baryonic mass (M☉)'},yaxis:{...plotLayout.yaxis,type:'log',title:'v_flat (km/s)'}},{displayModeBar:false,responsive:true});
+    document.getElementById('chart-title-text').textContent='v_obs vs Baryonic mass · TIE vs observed';
+  }
+
+  else if(chartMode==='vtie'){
+    // v_TIE vs v_obs (idealmente línea 1:1)
+    const gs=data.filter(g=>g.vflat>0);
+    const byType={};
+    gs.forEach(g=>{if(!byType[g.type]) byType[g.type]=[];byType[g.type].push(g);});
+    const traces=Object.entries(byType).map(([type,arr])=>({
+      x:arr.map(g=>g.vflat),y:arr.map(g=>g.v_tie),
+      mode:'markers',name:type,
+      marker:{color:TYPE_COLOR[type]||'#fff',size:6,opacity:0.75},
+      text:arr.map(g=>g.name+' err='+g.err+'%'),hovertemplate:'%{text}<extra></extra>'
+    }));
+    const vmax=Math.max(...gs.map(g=>Math.max(g.vflat,g.v_tie)))*1.05;
+    traces.push({x:[0,vmax],y:[0,vmax],mode:'lines',name:'1:1 ideal',line:{color:'rgba(255,255,255,0.3)',width:1.5,dash:'dot'},hoverinfo:'skip'});
+    Plotly.react('chart',traces,{...plotLayout,xaxis:{...plotLayout.xaxis,title:'v_obs (km/s)',range:[0,vmax]},yaxis:{...plotLayout.yaxis,title:'v_TIE (km/s)',range:[0,vmax]}},{displayModeBar:false,responsive:true});
+    document.getElementById('chart-title-text').textContent='v_TIE vs v_obs · 1:1 line = perfect prediction';
+  }
+
+  else if(chartMode==='err'){
+    // Histograma de errores
+    const gs=data.filter(g=>g.vflat>0&&g.Q<=2);
+    const errs=gs.map(g=>g.err);
+    const bins=[];
+    for(let i=0;i<=80;i+=5) bins.push(i);
+    const counts=new Array(bins.length-1).fill(0);
+    errs.forEach(e=>{const bi=Math.min(Math.floor(e/5),counts.length-1);counts[bi]++;});
+    const colors=bins.slice(0,-1).map(b=>b<10?'#44FF88':b<25?'#FFD700':'#FF4455');
+    Plotly.react('chart',[{x:bins.slice(0,-1).map((b,i)=>b+2.5),y:counts,type:'bar',marker:{color:colors},name:'Galaxias',hovertemplate:'Error %{x}%: %{y} galaxies<extra></extra>'}],{...plotLayout,xaxis:{...plotLayout.xaxis,title:'TIE error (%)'},yaxis:{...plotLayout.yaxis,title:'# galaxies'},bargap:0.05},{displayModeBar:false,responsive:true});
+    document.getElementById('chart-title-text').textContent='TIE error histogram · green <10% · gold <25% · red >25%';
+  }
+
+  else if(chartMode==='dist'){
+    // Distribución de distancias por tipo
+    const byType={};
+    data.forEach(g=>{if(!byType[g.type]) byType[g.type]=[];byType[g.type].push(g.dist);});
+    const traces=Object.entries(byType).map(([type,dists])=>({
+      x:dists,type:'histogram',name:type,opacity:0.65,
+      marker:{color:TYPE_COLOR[type]||'#fff'},nbinsx:20,
+      hovertemplate:type+' %{x} Mpc<extra></extra>'
+    }));
+    Plotly.react('chart',traces,{...plotLayout,barmode:'overlay',xaxis:{...plotLayout.xaxis,title:'Distance (Mpc)'},yaxis:{...plotLayout.yaxis,title:'# galaxies'}},{displayModeBar:false,responsive:true});
+    document.getElementById('chart-title-text').textContent='Distance distribution by morphological type';
+  }
+}
+
+document.getElementById('search').addEventListener('input', e=>{currentSearch=e.target.value; render();});
+
+window.onload=()=>{
+  render();
+  renderMathInElement(document.body,{delimiters:[{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});
+};
+</script>
+</body>
+</html>

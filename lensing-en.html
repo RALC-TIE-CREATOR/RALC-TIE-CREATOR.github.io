@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIE · H-07 · Lente Gravitacional</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{
+  --gold:#FFD700;--cyan:#00d4ff;--green:#44FF88;--red:#FF4455;--orange:#FF8C42;
+  --bg:#000001;--bg2:rgba(5,5,15,0.92);--bg3:rgba(8,18,28,0.75);
+  --text:#fff;--dim:#9090a8;--border:rgba(0,212,255,0.15);
+  --mono:'Space Mono',monospace;--sans:'Syne',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex;flex-direction:column;}
+#bg-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.28;}
+
+/* NAV */
+nav{position:relative;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.85rem 2rem;background:rgba(0,0,1,0.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);flex-shrink:0;}
+.nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
+.nav-center{display:flex;gap:.5rem;align-items:center;}
+.lang-btn{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;cursor:pointer;border:none;transition:all .2s;}
+.lang-btn.active{color:#000;background:var(--gold);}
+.lang-btn.inactive{color:var(--dim);border:1px solid var(--border);background:transparent;}
+.lang-btn.inactive:hover{color:var(--gold);border-color:var(--gold);}
+.nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;letter-spacing:1px;transition:color .2s;}
+.nav-back:hover{color:var(--cyan);}
+
+/* STRIP */
+.strip{position:relative;z-index:10;background:rgba(0,0,1,0.8);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;flex-wrap:wrap;gap:.4rem;}
+.s-tag{font-family:var(--mono);font-size:.6rem;color:var(--cyan);letter-spacing:3px;}
+.s-title{font-family:var(--sans);font-size:.95rem;font-weight:800;letter-spacing:-.5px;}
+.s-title span{color:var(--cyan);}
+.s-badge{font-family:var(--mono);font-size:.58rem;color:var(--orange);background:rgba(255,140,66,.08);border:1px solid rgba(255,140,66,.25);border-radius:4px;padding:.18rem .55rem;letter-spacing:1px;}
+
+/* MAIN */
+#main{position:relative;z-index:10;flex:1;display:flex;overflow:hidden;min-height:0;}
+
+/* VIS COLUMN */
+#vis-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem;min-width:0;position:relative;}
+#canvas-wrap{position:relative;display:inline-block;}
+#lens-canvas{display:block;border-radius:12px;border:1px solid rgba(0,212,255,0.2);box-shadow:0 0 40px rgba(0,212,255,0.08);cursor:crosshair;}
+#canvas-labels{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+.c-label{position:absolute;font-family:var(--mono);font-size:.58rem;color:var(--cyan);letter-spacing:1px;opacity:0.7;white-space:nowrap;}
+
+/* MICROLENSING CHART */
+#mlchart-wrap{width:100%;max-width:480px;margin-top:.6rem;background:rgba(0,0,1,0.5);border:1px solid var(--border);border-radius:8px;padding:.5rem .75rem;display:none;}
+#mlchart-title{font-family:var(--mono);font-size:.6rem;color:var(--cyan);letter-spacing:2px;margin-bottom:.3rem;}
+#mlchart{display:block;width:100%;height:60px;}
+
+/* CONTROLS COLUMN */
+#ctrl-col{width:300px;flex-shrink:0;display:flex;flex-direction:column;gap:.7rem;padding:1rem 1rem 1rem .5rem;overflow-y:auto;scrollbar-width:none;}
+#ctrl-col::-webkit-scrollbar{display:none;}
+
+.card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:.85rem;}
+.card-title{font-family:var(--mono);font-size:.6rem;color:var(--cyan);letter-spacing:3px;margin-bottom:.65rem;}
+
+/* PRESETS */
+.presets{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;}
+.preset-btn{background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.2);border-radius:6px;color:var(--dim);font-family:var(--mono);font-size:.6rem;letter-spacing:1px;padding:.4rem .5rem;cursor:pointer;transition:all .2s;text-align:center;}
+.preset-btn:hover,.preset-btn.active{background:rgba(0,212,255,.12);border-color:var(--cyan);color:var(--cyan);}
+
+/* SLIDER */
+.slider-row{display:flex;flex-direction:column;gap:.35rem;}
+.slider-label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.62rem;color:var(--dim);}
+.slider-label span{color:var(--text);}
+input[type=range]{width:100%;appearance:none;height:4px;background:rgba(0,212,255,.15);border-radius:2px;outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;border-radius:50%;background:var(--cyan);cursor:pointer;box-shadow:0 0 6px rgba(0,212,255,.6);}
+
+/* VALUES */
+.val-grid{display:flex;flex-direction:column;gap:.4rem;}
+.val-row{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(255,255,255,.05);padding-bottom:.35rem;}
+.val-row:last-child{border:none;padding:0;}
+.val-key{font-family:var(--mono);font-size:.62rem;color:var(--dim);}
+.val-num{font-family:var(--mono);font-size:.7rem;color:var(--text);}
+.val-num.highlight{color:var(--cyan);}
+.val-num.gold{color:var(--gold);}
+.val-num.orange{color:var(--orange);}
+
+/* TOGGLES */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:.2rem 0;}
+.toggle-label{font-family:var(--mono);font-size:.62rem;color:var(--dim);}
+.toggle{position:relative;width:36px;height:18px;cursor:pointer;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-track{position:absolute;inset:0;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.25);border-radius:9px;transition:all .2s;}
+.toggle input:checked + .toggle-track{background:rgba(0,212,255,.25);border-color:var(--cyan);}
+.toggle-thumb{position:absolute;top:2px;left:2px;width:12px;height:12px;background:var(--dim);border-radius:50%;transition:all .2s;}
+.toggle input:checked ~ .toggle-thumb,.toggle input:checked + .toggle-track + .toggle-thumb{background:var(--cyan);left:20px;}
+
+/* Trick for toggle thumb positioning */
+.tog-wrap{position:relative;width:36px;height:18px;}
+.tog-wrap input{position:absolute;opacity:0;width:100%;height:100%;cursor:pointer;z-index:2;}
+.tog-track{position:absolute;inset:0;background:rgba(255,255,255,.05);border:1px solid rgba(0,212,255,.2);border-radius:9px;transition:all .25s;}
+.tog-knob{position:absolute;top:2px;left:2px;width:12px;height:12px;background:var(--dim);border-radius:50%;transition:all .25s;}
+.tog-wrap input:checked ~ .tog-track{background:rgba(0,212,255,.2);border-color:var(--cyan);}
+.tog-wrap input:checked ~ .tog-knob{left:20px;background:var(--cyan);}
+
+/* INSIGHT BOX */
+.insight{background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.15);border-left:3px solid var(--cyan);border-radius:0 8px 8px 0;padding:.65rem .75rem;}
+.insight p{font-family:var(--mono);font-size:.62rem;color:var(--dim);line-height:1.7;}
+.insight strong{color:var(--cyan);}
+
+/* ANIMATE BTN */
+.btn-anim{width:100%;background:rgba(255,140,66,.08);border:1px solid rgba(255,140,66,.3);border-radius:8px;color:var(--orange);font-family:var(--mono);font-size:.68rem;letter-spacing:2px;padding:.55rem;cursor:pointer;transition:all .2s;}
+.btn-anim:hover{background:rgba(255,140,66,.16);border-color:var(--orange);}
+.btn-anim.running{color:var(--red);border-color:var(--red);background:rgba(255,68,85,.08);}
+
+@media(max-width:700px){
+  #main{flex-direction:column;}
+  #ctrl-col{width:100%;flex-direction:row;flex-wrap:wrap;padding:.75rem;gap:.5rem;}
+  .card{flex:1;min-width:140px;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<nav>
+  <a href="index.html" class="nav-logo">TIE / R@LC</a>
+  <div class="nav-center">
+    <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ES</button>
+    <button class="lang-btn inactive" id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+  <a href="labs.html" class="nav-back" id="lnk-back">← LABORATORIO</a>
+</nav>
+
+<div class="strip">
+  <span class="s-tag">H-07 · LENTE GRAVITACIONAL</span>
+  <span class="s-title" id="strip-title">LENSING <span>GRAVITACIONAL</span></span>
+  <span class="s-badge" id="strip-badge">TRES.JS · TIEMPO REAL</span>
+</div>
+
+<div id="main">
+  <!-- VISUALIZATION -->
+  <div id="vis-col">
+    <div id="canvas-wrap">
+      <canvas id="lens-canvas" width="480" height="480"></canvas>
+      <div id="canvas-labels"></div>
+    </div>
+    <div id="mlchart-wrap">
+      <div id="mlchart-title">CURVA DE MICROLENSING · MAGNIFICACIÓN</div>
+      <canvas id="mlchart"></canvas>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div id="ctrl-col">
+
+    <!-- PRESETS -->
+    <div class="card">
+      <div class="card-title" id="lbl-preset">TIPO DE OBJETO</div>
+      <div class="presets">
+        <button class="preset-btn" id="p0" onclick="applyPreset(0)"><span id="p0t">⭐ ESTRELLA</span></button>
+        <button class="preset-btn active" id="p1" onclick="applyPreset(1)"><span id="p1t">⚫ AG. NEGRO</span></button>
+        <button class="preset-btn" id="p2" onclick="applyPreset(2)"><span id="p2t">🌀 GALAXIA</span></button>
+        <button class="preset-btn" id="p3" onclick="applyPreset(3)"><span id="p3t">🔮 CÚMULO</span></button>
+      </div>
+    </div>
+
+    <!-- MASS SLIDER -->
+    <div class="card">
+      <div class="card-title" id="lbl-masa">MASA DEL OBJETO</div>
+      <div class="slider-row">
+        <div class="slider-label"><span id="lbl-log">log₁₀(M/M☉)</span><span id="mass-display">10</span></div>
+        <input type="range" id="mass-slider" min="0" max="15" step="0.05" value="10" oninput="onMassSlider()">
+        <div class="slider-label"><span id="lbl-mlo">1 M☉</span><span id="lbl-mhi">10¹⁵ M☉</span></div>
+      </div>
+    </div>
+
+    <!-- COMPUTED VALUES -->
+    <div class="card">
+      <div class="card-title" id="lbl-vals">PARÁMETROS CALCULADOS</div>
+      <div class="val-grid">
+        <div class="val-row">
+          <span class="val-key">M</span>
+          <span class="val-num highlight" id="v-mass">—</span>
+        </div>
+        <div class="val-row">
+          <span class="val-key" id="k-rs">rₛ (Schwarzschild)</span>
+          <span class="val-num" id="v-rs">—</span>
+        </div>
+        <div class="val-row">
+          <span class="val-key" id="k-rh">rₕ (TIE)</span>
+          <span class="val-num gold" id="v-rh">—</span>
+        </div>
+        <div class="val-row">
+          <span class="val-key" id="k-ratio">rₕ / rₛ</span>
+          <span class="val-num orange" id="v-ratio">—</span>
+        </div>
+        <div class="val-row">
+          <span class="val-key">θ_E (Einstein)</span>
+          <span class="val-num highlight" id="v-te">—</span>
+        </div>
+        <div class="val-row">
+          <span class="val-key" id="k-alpha">α máx deflexión</span>
+          <span class="val-num" id="v-alpha">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOGGLES -->
+    <div class="card">
+      <div class="card-title" id="lbl-vis">VISUALIZACIÓN</div>
+      <div style="display:flex;flex-direction:column;gap:.55rem;">
+        <div class="toggle-row">
+          <span class="toggle-label" id="tog-rays-lbl">Mostrar rayos de luz</span>
+          <div class="tog-wrap">
+            <input type="checkbox" id="tog-rays" onchange="redraw()">
+            <div class="tog-track"></div>
+            <div class="tog-knob"></div>
+          </div>
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-label" id="tog-ring-lbl">Anillo de Einstein</span>
+          <div class="tog-wrap">
+            <input type="checkbox" id="tog-ring" checked onchange="redraw()">
+            <div class="tog-track"></div>
+            <div class="tog-knob"></div>
+          </div>
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-label" id="tog-rh-lbl">Mostrar rₕ TIE</span>
+          <div class="tog-wrap">
+            <input type="checkbox" id="tog-rh" checked onchange="redraw()">
+            <div class="tog-track"></div>
+            <div class="tog-knob"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANIMATE -->
+    <button class="btn-anim" id="btn-anim" onclick="toggleAnim()">▶ ANIMAR MICROLENSING</button>
+
+    <!-- INSIGHT -->
+    <div class="insight">
+      <p id="insight-txt">En TIE, para masas galácticas <strong>rₕ ≫ rₛ</strong> — el horizonte efectivo es mucho mayor que en GR. Esto explica el lensing observado <strong>sin materia oscura ni parámetros libres</strong>.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- THREE.JS BACKGROUND -->
+<script>
+(function(){
+  const c=document.getElementById('bg-canvas');
+  const s=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(60,1,.1,1000);
+  const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});
+  r.setPixelRatio(Math.min(devicePixelRatio,2));
+  function rs(){r.setSize(c.clientWidth,c.clientHeight);cam.aspect=c.clientWidth/c.clientHeight;cam.updateProjectionMatrix();}
+  rs(); window.addEventListener('resize',rs);
+  cam.position.set(0,3,6); cam.lookAt(0,0,0);
+  const n=40000,geo=new THREE.BufferGeometry();
+  const pos=new Float32Array(n*3),col=new Float32Array(n*3);
+  const cI=new THREE.Color('#00d4ff'),cO=new THREE.Color('#001830');
+  for(let i=0;i<n;i++){
+    const rad=Math.random()*4,b=(i%6)/6*Math.PI*2,sp=rad*1.1;
+    const rx=(Math.random()-.5)*.3*rad,ry=(Math.random()-.5)*.1*rad,rz=(Math.random()-.5)*.3*rad;
+    pos[i*3]=Math.cos(b+sp)*rad+rx; pos[i*3+1]=ry; pos[i*3+2]=Math.sin(b+sp)*rad+rz;
+    const m=new THREE.Color().lerpColors(cI,cO,rad/4);
+    col[i*3]=m.r; col[i*3+1]=m.g; col[i*3+2]=m.b;
+  }
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+  const mat=new THREE.PointsMaterial({size:.008,sizeAttenuation:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true});
+  s.add(new THREE.Points(geo,mat));
+  (function loop(){requestAnimationFrame(loop);s.rotation.y+=.0004;r.render(s,cam);})();
+})();
+</script>
+
+<!-- LENSING SIMULATION -->
+<script>
+// ════════════════════════════════════════════
+// CONSTANTS
+// ════════════════════════════════════════════
+const G  = 6.674e-11;   // m³ kg⁻¹ s⁻²
+const c  = 2.998e8;     // m/s
+const H0 = 70e3/3.086e22; // s⁻¹
+const a0 = c*H0/(2*Math.PI); // 1.082e-10 m/s²
+const M_sun = 1.989e30; // kg
+const pc = 3.086e16;    // m (1 parsec)
+const AU = 1.496e11;    // m
+
+// ════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════
+let logM = 10;   // log10(M/M_sun)
+let animRunning = false;
+let animT = 0;
+let animRAF = null;
+let mlHistory = [];
+let lang = 'es';
+
+const PRESETS = [
+  {logM:0,   nameES:'Estrella',     nameEN:'Star'},
+  {logM:7,   nameES:'Ag. Negro',    nameEN:'Black Hole'},
+  {logM:11,  nameES:'Galaxia',      nameEN:'Galaxy'},
+  {logM:14,  nameES:'Cúmulo',       nameEN:'Cluster'},
+];
+
+// Background stars (fixed positions in source plane)
+const N_STARS = 220;
+const stars = [];
+const CX = 240, CY = 240, R = 235;
+(function initStars(){
+  for(let i=0;i<N_STARS;i++){
+    // Random position in source plane (in pixels, relative to center)
+    const ang = Math.random()*Math.PI*2;
+    const r   = 30 + Math.random()*(R-30);
+    const bx  = Math.cos(ang)*r;
+    const by  = Math.sin(ang)*r;
+    const br  = 0.4+Math.random()*0.6; // brightness 0-1
+    const sz  = 0.8+Math.random()*1.4; // size in px
+    const hue = Math.random()<0.7 ? 210+Math.random()*40 : 30+Math.random()*20; // blue-white or warm
+    stars.push({bx,by,br,sz,hue});
+  }
+})();
+
+// ════════════════════════════════════════════
+// PHYSICS
+// ════════════════════════════════════════════
+function getMass(){ return Math.pow(10, logM) * M_sun; }
+
+function getRs(M){ return 2*G*M/(c*c); } // Schwarzschild radius [m]
+
+function getRh(M){ return 0.869 * Math.sqrt(G*M/a0); } // TIE horizon [m]
+
+// Einstein ring radius in angular units [rad], assuming D_L = 1 Gpc, D_S = 2 Gpc
+function getThetaE_rad(M){
+  const D_L = 1e9 * pc; // 1 Gpc
+  const D_S = 2e9 * pc; // 2 Gpc
+  const D_LS = D_S - D_L;
+  return Math.sqrt(4*G*M/(c*c) * D_LS/(D_L*D_S));
+}
+
+// Einstein ring in pixels for display (visual scale)
+function getThetaE_px(){
+  const t = (logM) / 15; // 0..1
+  return 15 + 165 * Math.pow(t, 0.6);
+}
+
+// Max deflection angle [arcsec] at r = Einstein ring
+function getAlpha_arcsec(M){
+  const tE = getThetaE_rad(M);
+  return tE * 2 * (180/Math.PI) * 3600; // rad -> arcsec
+}
+
+// Lens equation: for source at β (px from center),
+// image positions at θ+ and |θ-|
+function lensImages(bx, by, tE){
+  const beta = Math.sqrt(bx*bx + by*by);
+  if(beta < 0.01) return null;
+  const ang = Math.atan2(by, bx);
+  const disc = Math.sqrt(beta*beta + 4*tE*tE);
+  const t_plus  = (beta + disc) / 2;
+  const t_minus = Math.abs((beta - disc) / 2);
+  // Magnifications
+  const u = beta / tE;
+  const mu_total = (u*u+2)/(u*Math.sqrt(u*u+4));
+  return {
+    plus:  {x: CX + Math.cos(ang)*t_plus,  y: CY + Math.sin(ang)*t_plus,  mu: mu_total*0.6},
+    minus: {x: CX - Math.cos(ang)*t_minus, y: CY - Math.sin(ang)*t_minus, mu: mu_total*0.4},
+    mu_total
+  };
+}
+
+// ════════════════════════════════════════════
+// DRAW
+// ════════════════════════════════════════════
+const lc  = document.getElementById('lens-canvas');
+const ctx = lc.getContext('2d');
+
+function drawStar(x, y, sz, br, hue, glow){
+  if(x<0||x>480||y<0||y>480) return;
+  const alpha = Math.min(1, br);
+  if(glow){
+    const g = ctx.createRadialGradient(x,y,0,x,y,sz*6);
+    g.addColorStop(0,`hsla(${hue},100%,95%,${alpha})`);
+    g.addColorStop(0.3,`hsla(${hue},80%,70%,${alpha*0.5})`);
+    g.addColorStop(1,`hsla(${hue},60%,50%,0)`);
+    ctx.fillStyle=g;
+    ctx.beginPath(); ctx.arc(x,y,sz*6,0,Math.PI*2); ctx.fill();
+  }
+  ctx.fillStyle=`hsla(${hue},80%,95%,${alpha})`;
+  ctx.beginPath(); ctx.arc(x,y,sz,0,Math.PI*2); ctx.fill();
+}
+
+function redraw(mlStar=null){
+  ctx.clearRect(0,0,480,480);
+  const tE = getThetaE_px();
+  const showRays = document.getElementById('tog-rays').checked;
+  const showRing = document.getElementById('tog-ring').checked;
+  const showRh   = document.getElementById('tog-rh').checked;
+
+  // Background gradient
+  const bg = ctx.createRadialGradient(CX,CY,0,CX,CY,240);
+  bg.addColorStop(0,'rgba(0,5,20,1)');
+  bg.addColorStop(1,'rgba(0,0,2,1)');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,480,480);
+
+  // Draw lensed stars
+  for(const st of stars){
+    const imgs = lensImages(st.bx, st.by, tE);
+    if(!imgs) continue;
+    const glow = imgs.mu_total > 3;
+    const s_plus  = Math.min(4, st.sz * (1 + imgs.plus.mu*0.3));
+    const s_minus = Math.min(3, st.sz * (1 + imgs.minus.mu*0.2));
+    const b_plus  = Math.min(1.2, st.br * (1 + imgs.mu_total*0.15));
+    const b_minus = Math.min(0.9, st.br * 0.5);
+    drawStar(imgs.plus.x,  imgs.plus.y,  s_plus,  b_plus,  st.hue, glow);
+    drawStar(imgs.minus.x, imgs.minus.y, s_minus, b_minus, st.hue, false);
+
+    // Light rays
+    if(showRays && Math.random()<0.12){
+      ctx.beginPath();
+      ctx.moveTo(CX+st.bx, CY+st.by);
+      ctx.quadraticCurveTo(CX, CY, imgs.plus.x, imgs.plus.y);
+      ctx.strokeStyle='rgba(0,212,255,0.06)'; ctx.lineWidth=0.8; ctx.stroke();
+    }
+  }
+
+  // Microlensing animated source star
+  if(mlStar){
+    const imgs = lensImages(mlStar.bx, mlStar.by, tE);
+    if(imgs){
+      const mu = imgs.mu_total;
+      drawStar(imgs.plus.x,  imgs.plus.y,  2+mu*0.4, Math.min(1.5,0.8+mu*0.1), 55, true);
+      drawStar(imgs.minus.x, imgs.minus.y, 1.5,       0.6,                       55, false);
+      // Show source position (faint)
+      drawStar(CX+mlStar.bx, CY+mlStar.by, 1.5, 0.2, 55, false);
+    }
+  }
+
+  // Einstein ring
+  if(showRing){
+    const grad = ctx.createRadialGradient(CX,CY,tE-2,CX,CY,tE+2);
+    grad.addColorStop(0,'rgba(0,212,255,0)');
+    grad.addColorStop(0.5,'rgba(0,212,255,0.35)');
+    grad.addColorStop(1,'rgba(0,212,255,0)');
+    ctx.strokeStyle=grad; ctx.lineWidth=3;
+    ctx.beginPath(); ctx.arc(CX,CY,tE,0,Math.PI*2); ctx.stroke();
+    // Dashed thin ring
+    ctx.setLineDash([4,8]); ctx.lineWidth=0.8;
+    ctx.strokeStyle='rgba(0,212,255,0.18)';
+    ctx.beginPath(); ctx.arc(CX,CY,tE,0,Math.PI*2); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // TIE horizon rh
+  if(showRh){
+    const M = getMass();
+    const rs_m = getRs(M);
+    const rh_m = getRh(M);
+    // Scale: tE pixels corresponds to einstein ring scale
+    // Visual rh relative to rs
+    const rs_px = Math.max(2, tE * 0.08 * (logM/15));
+    const ratio = rh_m / rs_m;
+    const rh_px = Math.min(tE*0.85, rs_px * Math.min(ratio, 40));
+
+    if(rh_px > rs_px + 1){
+      ctx.beginPath(); ctx.arc(CX,CY,rh_px,0,Math.PI*2);
+      ctx.setLineDash([3,6]); ctx.lineWidth=1;
+      ctx.strokeStyle='rgba(255,215,0,0.4)'; ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    // Schwarzschild
+    if(rs_px > 1){
+      ctx.beginPath(); ctx.arc(CX,CY,rs_px,0,Math.PI*2);
+      ctx.strokeStyle='rgba(255,68,85,0.5)'; ctx.lineWidth=1; ctx.stroke();
+    }
+  }
+
+  // Central lens object
+  const lensR = Math.max(6, tE*0.05);
+  const lensGlow = ctx.createRadialGradient(CX,CY,0,CX,CY,lensR*5);
+  lensGlow.addColorStop(0,'rgba(255,180,60,0.25)');
+  lensGlow.addColorStop(0.4,'rgba(255,120,30,0.08)');
+  lensGlow.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=lensGlow; ctx.beginPath(); ctx.arc(CX,CY,lensR*5,0,Math.PI*2); ctx.fill();
+
+  const dark = ctx.createRadialGradient(CX,CY,0,CX,CY,lensR);
+  dark.addColorStop(0,'rgba(0,0,0,1)');
+  dark.addColorStop(0.7,'rgba(5,2,0,1)');
+  dark.addColorStop(1,'rgba(20,8,0,0.8)');
+  ctx.fillStyle=dark; ctx.beginPath(); ctx.arc(CX,CY,lensR,0,Math.PI*2); ctx.fill();
+
+  // Canvas labels
+  updateLabels(tE);
+}
+
+function updateLabels(tE){
+  const wrap = document.getElementById('canvas-labels');
+  wrap.innerHTML='';
+  const W=480,H=480;
+  const addLabel=(txt,x,y)=>{
+    const d=document.createElement('div');
+    d.className='c-label'; d.textContent=txt;
+    d.style.left=x+'px'; d.style.top=y+'px';
+    wrap.appendChild(d);
+  };
+  if(document.getElementById('tog-ring').checked){
+    addLabel('θ_E',CX+tE+4, CY-8);
+  }
+  if(document.getElementById('tog-rh').checked && logM>4){
+    addLabel('rₕ TIE',CX+4, CY-32);
+    addLabel('rₛ GR',CX+4, CY+18);
+  }
+}
+
+// ════════════════════════════════════════════
+// VALUES PANEL
+// ════════════════════════════════════════════
+function formatSI(v, unit){
+  if(v >= 1e15) return (v/1e15).toFixed(2)+' P'+unit;
+  if(v >= 1e12) return (v/1e12).toFixed(2)+' T'+unit;
+  if(v >= 1e9)  return (v/1e9).toFixed(2)+' G'+unit;
+  if(v >= 1e6)  return (v/1e6).toFixed(2)+' M'+unit;
+  if(v >= 1e3)  return (v/1e3).toFixed(2)+' k'+unit;
+  if(v >= 1)    return v.toFixed(2)+' '+unit;
+  if(v >= 1e-3) return (v*1e3).toFixed(2)+' m'+unit;
+  return v.toExponential(2)+' '+unit;
+}
+
+function updateValues(){
+  const M = getMass();
+  const rs = getRs(M);
+  const rh = getRh(M);
+  const tE_rad = getThetaE_rad(M);
+  const alpha  = getAlpha_arcsec(M);
+  const ratio  = rh/rs;
+
+  // Mass display
+  const Msol = M/M_sun;
+  let massStr;
+  if(Msol>=1e12)      massStr=(Msol/1e12).toExponential(1)+' × 10¹² M☉';
+  else if(Msol>=1e9)  massStr=(Msol/1e9).toExponential(1)+' × 10⁹ M☉';
+  else if(Msol>=1e6)  massStr=(Msol/1e6).toFixed(1)+' × 10⁶ M☉';
+  else if(Msol>=1e3)  massStr=Msol.toExponential(1)+' M☉';
+  else                massStr=Msol.toFixed(2)+' M☉';
+
+  document.getElementById('v-mass').textContent  = massStr;
+  document.getElementById('v-rs').textContent    = formatSI(rs,'m');
+  document.getElementById('v-rh').textContent    = formatSI(rh,'m');
+  document.getElementById('v-ratio').textContent = ratio >= 1000 ? ratio.toExponential(1) : ratio.toFixed(1);
+  document.getElementById('v-te').textContent    = tE_rad < 1e-3
+    ? (tE_rad*1e6).toFixed(2)+' μrad'
+    : (tE_rad*1e3).toFixed(3)+' mrad';
+  document.getElementById('v-alpha').textContent = alpha >= 1
+    ? alpha.toFixed(2)+'" '
+    : (alpha*1000).toFixed(2)+' mas';
+
+  document.getElementById('mass-display').textContent = logM.toFixed(1);
+}
+
+// ════════════════════════════════════════════
+// MICROLENSING ANIMATION
+// ════════════════════════════════════════════
+function toggleAnim(){
+  animRunning = !animRunning;
+  const btn = document.getElementById('btn-anim');
+  const chartWrap = document.getElementById('mlchart-wrap');
+  const T = lang === 'es';
+  if(animRunning){
+    btn.textContent = T ? '■ DETENER ANIMACIÓN' : '■ STOP ANIMATION';
+    btn.classList.add('running');
+    chartWrap.style.display = 'block';
+    mlHistory = [];
+    animT = 0;
+    runAnim();
+  } else {
+    btn.textContent = T ? '▶ ANIMAR MICROLENSING' : '▶ ANIMATE MICROLENSING';
+    btn.classList.remove('running');
+    chartWrap.style.display = 'none';
+    if(animRAF) cancelAnimationFrame(animRAF);
+    redraw();
+  }
+}
+
+function runAnim(){
+  if(!animRunning) return;
+  animT += 0.008;
+  const tE = getThetaE_px();
+  // Source moves horizontally through the Einstein ring
+  const bx = Math.cos(animT) * tE * 2.5 - tE * 0.5;
+  const by = Math.sin(animT*0.3) * tE * 0.4;
+  const mlStar = {bx, by};
+
+  redraw(mlStar);
+
+  // Record magnification for chart
+  const imgs = lensImages(bx, by, tE);
+  const mu = imgs ? imgs.mu_total : 1;
+  mlHistory.push(mu);
+  if(mlHistory.length > 200) mlHistory.shift();
+  drawMLChart();
+
+  animRAF = requestAnimationFrame(runAnim);
+}
+
+function drawMLChart(){
+  const mc = document.getElementById('mlchart');
+  const mw = mc.parentElement.clientWidth - 24;
+  mc.width  = mw; mc.height = 60;
+  const mx = mc.getContext('2d');
+  mx.clearRect(0,0,mw,60);
+
+  if(mlHistory.length < 2) return;
+  const maxMu = Math.max(...mlHistory, 5);
+  const pts = mlHistory.length;
+  const scaleX = mw / (pts-1);
+  const scaleY = 50 / maxMu;
+
+  // Grid line at mu=1
+  mx.strokeStyle='rgba(255,255,255,0.08)'; mx.lineWidth=1;
+  mx.beginPath(); mx.moveTo(0,58-1*scaleY); mx.lineTo(mw,58-1*scaleY); mx.stroke();
+
+  // Curve
+  const grad = mx.createLinearGradient(0,0,mw,0);
+  grad.addColorStop(0,'rgba(0,212,255,0.3)');
+  grad.addColorStop(0.5,'rgba(0,212,255,1)');
+  grad.addColorStop(1,'rgba(0,212,255,0.3)');
+  mx.beginPath();
+  mlHistory.forEach((m,i)=>{
+    const x=i*scaleX, y=58-m*scaleY;
+    i===0 ? mx.moveTo(x,y) : mx.lineTo(x,y);
+  });
+  mx.strokeStyle=grad; mx.lineWidth=1.8; mx.stroke();
+
+  // Current mu label
+  const cur = mlHistory[mlHistory.length-1];
+  mx.fillStyle='rgba(0,212,255,0.9)';
+  mx.font='9px Space Mono,monospace';
+  mx.fillText(`μ = ${cur.toFixed(2)}`, mw-60, 12);
+}
+
+// ════════════════════════════════════════════
+// CONTROLS
+// ════════════════════════════════════════════
+function onMassSlider(){
+  logM = parseFloat(document.getElementById('mass-slider').value);
+  updateValues();
+  if(!animRunning) redraw();
+  // Highlight matching preset
+  PRESETS.forEach((p,i)=>{
+    document.getElementById('p'+i).classList.toggle('active', Math.abs(logM-p.logM)<1);
+  });
+}
+
+function applyPreset(i){
+  logM = PRESETS[i].logM;
+  document.getElementById('mass-slider').value = logM;
+  PRESETS.forEach((_,j)=>document.getElementById('p'+j).classList.toggle('active',i===j));
+  updateValues();
+  if(!animRunning) redraw();
+}
+
+// ════════════════════════════════════════════
+// LANG
+// ════════════════════════════════════════════
+const TL = {
+  es:{
+    back:'← LABORATORIO', backHref:'labs.html',
+    stripTitle:'LENSING <span>GRAVITACIONAL</span>',
+    badge:'TRES.JS · TIEMPO REAL',
+    lbl_preset:'TIPO DE OBJETO',
+    lbl_masa:'MASA DEL OBJETO',
+    lbl_log:'log₁₀(M/M☉)',
+    lbl_mlo:'1 M☉', lbl_mhi:'10¹⁵ M☉',
+    lbl_vals:'PARÁMETROS CALCULADOS',
+    k_rs:'rₛ (Schwarzschild)', k_rh:'rₕ (TIE)', k_ratio:'rₕ / rₛ', k_alpha:'α máx deflexión',
+    lbl_vis:'VISUALIZACIÓN',
+    tog_rays:'Mostrar rayos de luz', tog_ring:'Anillo de Einstein', tog_rh:'Mostrar rₕ TIE',
+    btn_anim:'▶ ANIMAR MICROLENSING', btn_stop:'■ DETENER ANIMACIÓN',
+    mlchart_title:'CURVA DE MICROLENSING · MAGNIFICACIÓN',
+    insight:'En TIE, para masas galácticas <strong>rₕ ≫ rₛ</strong> — el horizonte efectivo es mucho mayor que en GR. Esto explica el lensing observado <strong>sin materia oscura ni parámetros libres</strong>.',
+    presets:['⭐ ESTRELLA','⚫ AG. NEGRO','🌀 GALAXIA','🔮 CÚMULO'],
+  },
+  en:{
+    back:'← LABORATORY', backHref:'labs-en.html',
+    stripTitle:'GRAVITATIONAL <span>LENSING</span>',
+    badge:'THREE.JS · REAL-TIME',
+    lbl_preset:'OBJECT TYPE',
+    lbl_masa:'OBJECT MASS',
+    lbl_log:'log₁₀(M/M☉)',
+    lbl_mlo:'1 M☉', lbl_mhi:'10¹⁵ M☉',
+    lbl_vals:'COMPUTED PARAMETERS',
+    k_rs:'rₛ (Schwarzschild)', k_rh:'rₕ (TIE)', k_ratio:'rₕ / rₛ', k_alpha:'max deflection α',
+    lbl_vis:'VISUALIZATION',
+    tog_rays:'Show light rays', tog_ring:'Einstein ring', tog_rh:'Show TIE rₕ',
+    btn_anim:'▶ ANIMATE MICROLENSING', btn_stop:'■ STOP ANIMATION',
+    mlchart_title:'MICROLENSING CURVE · MAGNIFICATION',
+    insight:'In TIE, for galactic masses <strong>rₕ ≫ rₛ</strong> — the effective horizon is much larger than in GR. This explains observed lensing <strong>without dark matter or free parameters</strong>.',
+    presets:['⭐ STAR','⚫ BLACK HOLE','🌀 GALAXY','🔮 CLUSTER'],
+  }
+};
+
+function setLang(l){
+  lang = l;
+  const t = TL[l];
+  document.getElementById('btn-es').className='lang-btn '+(l==='es'?'active':'inactive');
+  document.getElementById('btn-en').className='lang-btn '+(l==='en'?'active':'inactive');
+  const lb = document.getElementById('lnk-back'); lb.textContent=t.back; lb.href=t.backHref;
+  document.getElementById('strip-title').innerHTML=t.stripTitle;
+  document.getElementById('strip-badge').textContent=t.badge;
+  document.getElementById('lbl-preset').textContent=t.lbl_preset;
+  document.getElementById('lbl-masa').textContent=t.lbl_masa;
+  document.getElementById('lbl-log').textContent=t.lbl_log;
+  document.getElementById('lbl-mlo').textContent=t.lbl_mlo;
+  document.getElementById('lbl-mhi').textContent=t.lbl_mhi;
+  document.getElementById('lbl-vals').textContent=t.lbl_vals;
+  document.getElementById('k-rs').textContent=t.k_rs;
+  document.getElementById('k-rh').textContent=t.k_rh;
+  document.getElementById('k-ratio').textContent=t.k_ratio;
+  document.getElementById('k-alpha').textContent=t.k_alpha;
+  document.getElementById('lbl-vis').textContent=t.lbl_vis;
+  document.getElementById('tog-rays-lbl').textContent=t.tog_rays;
+  document.getElementById('tog-ring-lbl').textContent=t.tog_ring;
+  document.getElementById('tog-rh-lbl').textContent=t.tog_rh;
+  document.getElementById('mlchart-title').textContent=t.mlchart_title;
+  document.getElementById('insight-txt').innerHTML=t.insight;
+  if(!animRunning) document.getElementById('btn-anim').textContent=t.btn_anim;
+  t.presets.forEach((n,i)=>document.getElementById('p'+i+'t').textContent=n);
+}
+
+// ════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════
+window.onload = function(){
+  setLang('en');
+  applyPreset(1);
+};
+</script>
+</body>
+</html>

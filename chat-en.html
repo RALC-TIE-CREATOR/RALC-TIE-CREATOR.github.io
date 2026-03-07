@@ -145,7 +145,7 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
 
 <div class="strip">
   <span class="s-tag">H-14 · AXON</span>
-  <span class="s-title">AGENT <span>AXON</span></span>
+  <span class="s-title">AGENTE <span>AXON</span></span>
   <span class="s-badge">⚡ GEMINI 2.5 FLASH · FREE</span>
 </div>
 
@@ -285,6 +285,65 @@ INSTRUCCIONES:
 - Usa LaTeX inline con \( ... \) para ecuaciones
 - Sé honesto sobre limitaciones e incertidumbres
 - Puedes calcular con las fórmulas si el usuario da números
+- Cuando el usuario mencione un cálculo específico, sugiere la herramienta del laboratorio correspondiente con su URL
+
+HERRAMIENTAS DEL LABORATORIO TIE (https://ralc.mx/labs.html):
+Cuando el usuario pregunte sobre cálculos o visualizaciones, menciona la herramienta correspondiente.
+
+H-01 · CONSTANTE COSMOLÓGICA
+URL: constante.html | Calcula Λ_TIE = 2H₀²/c² a partir de H₀. Compara con Λ_obs. Sin energía oscura.
+Fórmula: Λ_TIE = 2H₀²/c² = 1.145×10⁻⁵² m⁻²
+
+H-02 · MASA CRÍTICA
+URL: masa-critica.html | Calcula la masa crítica donde rₕ = rₛ. Mc ≈ 1.06×10²³ M☉.
+
+H-03 · AGUJEROS NEGROS
+URL: agujeros.html | Calcula rₛ (Schwarzschild) y rₕ (TIE) para cualquier masa. Muestra rₕ/rₛ.
+Fórmula: rₕ = 0.869·√(GM/a₀)
+
+H-04 · CURVAS DE ROTACIÓN
+URL: curvas.html | Genera v(r) TIE para galaxias. Sin materia oscura, 0 parámetros libres.
+Fórmula: v_flat = (GMa₀)^(1/4)
+
+H-05 · SPARC DATABASE
+URL: sparc.html | Compara predicciones TIE con 175 galaxias de la base SPARC. σ=0.07 dex.
+
+H-06 · GPS Y RELOJES
+URL: gps.html | Corrección TIE al GPS. Desfase acumulativo del campo φ en órbita.
+Fórmula: Δτ_TIE = (a₀·r/2c²)·Δt
+
+H-08 · FACTOR 2π
+URL: 2pi.html | Demuestra por qué 2π es fundamental en TIE. ω₀ = H₀ = 2π/T_universo.
+
+H-09 · MATERIA OSCURA
+URL: materia-oscura.html | TIE explica las curvas de rotación sin materia oscura. Comparativa.
+
+H-10 · RELOJ UNIVERSAL
+URL: reloj-universal.html | T₀ = 2π/H₀ ≈ 87.9 Gyr. Período fundamental del universo.
+
+H-11 · FALSIFICABILIDAD
+URL: falsibilidad.html | Predicciones verificables de TIE: LISA ~2.4 mHz, rₕ en BHs, SPARC.
+
+H-12 · PAPERS
+URL: papers.html | Publicaciones y documentos de TIE. Referencia académica.
+
+H-07 · LENSING GRAVITACIONAL (3D)
+URL: lensing.html | Simulador WebGL del lensing TIE. Anillo de Einstein, rₕ vs rₛ, microlensing animado.
+Fórmula: α = 4GM/c²b · θ_E = √(4GM/c² · D_LS/D_L/D_S)
+
+H-13 · CAMPO φ / ONDAS GRAVITACIONALES (3D)
+URL: campo-phi.html | Simulador del campo φ TIE. Coalescencia de binarias, T² artificial, señal LISA.
+Predicción TIE: f_LISA = a₀/πc ≈ 2.4 mHz (detectable por LISA 2035)
+
+H-14 · AXON (TÚ ESTÁS AQUÍ)
+URL: chat.html | Chat con el tratado TIE v11.8 completo en contexto. Eso eres tú.
+
+H-15 · GENERADOR LATEX
+URL: latex.html | 24 ecuaciones TIE con código LaTeX listo. Exporta .tex y .md. Editor custom.
+
+H-16 · API REST PÚBLICA
+URL: api.html | 6 endpoints con física TIE real: curva de rotación, horizontes, lensing, v_flat, ondas GW, cosmología.
+Ejemplo: GET /v1/rotation-curve?mass=1e11&r_max=30
 
 TRATADO COMPLETO TIE v11.8:
 `,
@@ -332,6 +391,60 @@ INSTRUCTIONS:
 - Use LaTeX inline with \( ... \) for equations
 - Be honest about limitations and uncertainties
 - You can calculate using TIE formulas if the user provides numbers
+- When the user mentions a specific calculation, suggest the corresponding lab tool with its URL
+
+TIE LABORATORY TOOLS (https://ralc.mx/labs-en.html):
+When the user asks about calculations or visualizations, mention the corresponding tool.
+
+H-01 · COSMOLOGICAL CONSTANT
+URL: constant-en.html | Computes Λ_TIE = 2H₀²/c² from H₀. Compares with Λ_obs. No dark energy.
+
+H-02 · CRITICAL MASS
+URL: critical-mass-en.html | Computes critical mass where rₕ = rₛ. Mc ≈ 1.06×10²³ M☉.
+
+H-03 · BLACK HOLES
+URL: black-holes-en.html | Computes rₛ (Schwarzschild) and rₕ (TIE) for any mass. Shows rₕ/rₛ.
+
+H-04 · ROTATION CURVES
+URL: rotation-curves-en.html | Generates v(r) TIE for galaxies. No dark matter, 0 free parameters.
+
+H-05 · SPARC DATABASE
+URL: sparc-en.html | Compares TIE predictions with 175 SPARC galaxies. σ=0.07 dex.
+
+H-06 · GPS & CLOCKS
+URL: gps-en.html | TIE correction to GPS. Cumulative phase shift of φ field in orbit.
+
+H-08 · 2π FACTOR
+URL: 2pi-en.html | Shows why 2π is fundamental in TIE. ω₀ = H₀ = 2π/T_universe.
+
+H-09 · DARK MATTER
+URL: dark-matter-en.html | TIE explains rotation curves without dark matter. Comparison.
+
+H-10 · UNIVERSAL CLOCK
+URL: universal-clock-en.html | T₀ = 2π/H₀ ≈ 87.9 Gyr. Fundamental period of the universe.
+
+H-11 · FALSIFIABILITY
+URL: falsifiability-en.html | TIE verifiable predictions: LISA ~2.4 mHz, rₕ in BHs, SPARC.
+
+H-12 · PAPERS
+URL: papers-en.html | TIE publications and documents.
+
+H-07 · GRAVITATIONAL LENSING (3D)
+URL: lensing-en.html | WebGL lensing simulator. Einstein ring, rₕ vs rₛ, animated microlensing.
+
+H-13 · φ FIELD / GRAVITATIONAL WAVES (3D)
+URL: campo-phi-en.html | TIE φ field simulator. Binary coalescence, T² modulation, LISA signal.
+TIE prediction: f_LISA = a₀/πc ≈ 2.4 mHz (detectable by LISA 2035)
+
+H-14 · AXON (YOU ARE HERE)
+URL: chat-en.html | Chat with full TIE treatise v11.8 in context. That's you.
+
+H-15 · LATEX GENERATOR
+URL: latex-en.html | 24 TIE equations with ready-to-copy LaTeX. Export .tex and .md.
+
+H-16 · PUBLIC REST API
+URL: api-en.html | 6 endpoints with real TIE physics: rotation curve, horizons, lensing, v_flat, GW, cosmology.
+Example: GET /v1/rotation-curve?mass=1e11&r_max=30
 
 COMPLETE TIE TREATISE v11.8:
 `,
@@ -561,7 +674,7 @@ function addBubble(role, text, loading=false) {
   div.className = `msg ${role==='user'?'user':'bot'}`;
   const av = document.createElement('div');
   av.className = 'avatar';
-  av.textContent = role==='user' ? 'TÚ' : 'AXON';
+  av.textContent = role==='user' ? 'TÚ' : 'AXN';
   const bub = document.createElement('div');
   bub.className = 'bubble';
   if (loading) {

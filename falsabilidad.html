@@ -10,11 +10,12 @@
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
-:root{--gold:#FFD700;--blue:#5BC8F5;--green:#44FF88;--red:#FF4455;--orange:#FF8C42;--bg:#000001;--bg2:rgba(5,5,15,0.78);--bg3:rgba(10,10,25,0.6);--text:#fff;--dim:#a0a0b0;--border:rgba(91,200,245,0.15);--mono:'Space Mono',monospace;--sans:'Syne',sans-serif;}
+:root{--gold:#FFD700;--blue:#5BC8F5;--green:#44FF88;--red:#FF4455;--bg:#000001;--bg2:rgba(5,5,15,0.82);--bg3:rgba(10,10,25,0.65);--text:#fff;--dim:#a0a0b0;--border:rgba(91,200,245,0.15);--mono:'Space Mono',monospace;--sans:'Syne',sans-serif;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
-#galaxy-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.35;}
-nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
+#galaxy-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.4;}
+
+nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
 .nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
 .nav-center{display:flex;gap:.5rem;}
 .lang-link{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;transition:all .2s;}
@@ -23,493 +24,299 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .lang-link.inactive:hover{color:var(--gold);border-color:var(--gold);}
 .nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;transition:color .2s;}
 .nav-back:hover{color:var(--gold);}
-.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:7rem 2rem 4rem;}
+
+.page{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:7rem 2rem 4rem;}
 .page-tag{font-family:var(--mono);font-size:.7rem;color:var(--red);letter-spacing:4px;text-transform:uppercase;margin-bottom:.75rem;}
-.page-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;letter-spacing:-2px;margin-bottom:.5rem;}
-.page-title span{color:var(--gold);}
-.page-sub{font-family:var(--mono);font-size:.8rem;color:var(--dim);max-width:640px;line-height:1.7;margin-bottom:2.5rem;}
+.page-title{font-size:clamp(2rem,5vw,3.2rem);font-weight:900;letter-spacing:-2px;margin-bottom:.5rem;}
+.page-title span{color:var(--red);}
+.page-sub{font-family:var(--mono);font-size:.8rem;color:var(--dim);max-width:660px;line-height:1.7;margin-bottom:2rem;}
 
-/* POPPER BANNER */
-.popper-banner{background:linear-gradient(135deg,rgba(255,68,85,.07) 0%,rgba(255,215,0,.05) 100%);border:1px solid rgba(255,68,85,.25);border-radius:20px;padding:1.75rem 2rem;margin-bottom:3rem;display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;}
-.popper-icon{font-size:2.5rem;flex-shrink:0;line-height:1;}
-.popper-text{}
-.popper-label{font-family:var(--mono);font-size:.65rem;color:var(--red);letter-spacing:3px;text-transform:uppercase;margin-bottom:.4rem;}
-.popper-quote{font-size:1.05rem;font-weight:700;color:var(--text);line-height:1.5;margin-bottom:.5rem;}
-.popper-source{font-family:var(--mono);font-size:.65rem;color:var(--dim);}
+/* POPPER */
+.popper-box{background:var(--bg2);border:1px solid rgba(255,68,85,.25);border-radius:16px;padding:1.5rem 2rem;margin-bottom:2rem;position:relative;overflow:hidden;backdrop-filter:blur(8px);}
+.popper-box::before{content:'"';position:absolute;top:-15px;right:20px;font-size:7rem;color:rgba(255,68,85,.07);font-family:serif;line-height:1;}
+.popper-tag{font-family:var(--mono);font-size:.6rem;color:var(--red);letter-spacing:3px;text-transform:uppercase;margin-bottom:.6rem;}
+.popper-quote{font-size:.95rem;line-height:1.8;font-style:italic;color:var(--dim);margin-bottom:.5rem;}
+.popper-attr{font-family:var(--mono);font-size:.6rem;color:var(--dim);}
 
-/* SECTION TITLE */
-.section-title{font-family:var(--mono);font-size:.7rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:1.25rem;display:flex;align-items:center;gap:.75rem;}
-.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
-.section-title.red{color:var(--red);}
-.section-title.green{color:var(--green);}
-.section-title.orange{color:var(--orange);}
+/* CRITERIO */
+.criterio-box{background:rgba(255,68,85,.04);border:2px solid rgba(255,68,85,.3);border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:2rem;backdrop-filter:blur(8px);}
+.crit-title{font-family:var(--mono);font-size:.65rem;color:var(--red);letter-spacing:3px;text-transform:uppercase;margin-bottom:.75rem;}
+.crit-text{font-size:.88rem;line-height:1.85;}
+.crit-text .hi{color:var(--gold);font-weight:700;}
+.crit-text .red{color:var(--red);font-weight:700;}
 
-/* FALSIFICATION CARDS */
-.falsif-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:3rem;}
-@media(max-width:700px){.falsif-grid{grid-template-columns:1fr;}}
-.falsif-card{background:var(--bg2);border:1px solid rgba(255,68,85,.25);border-radius:16px;padding:1.5rem;backdrop-filter:blur(8px);position:relative;overflow:hidden;}
-.falsif-card::before{content:attr(data-num);position:absolute;top:-10px;right:15px;font-family:var(--mono);font-size:5rem;font-weight:700;color:rgba(255,68,85,.06);line-height:1;}
-.fc-label{font-family:var(--mono);font-size:.6rem;color:var(--red);letter-spacing:3px;text-transform:uppercase;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;}
-.fc-instrument{background:rgba(255,68,85,.08);border:1px solid rgba(255,68,85,.2);border-radius:4px;padding:.15rem .4rem;font-size:.55rem;}
-.fc-title{font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:.75rem;line-height:1.3;}
-.fc-prediction{background:rgba(255,215,0,.05);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:.75rem 1rem;margin-bottom:.75rem;}
-.fc-pred-label{font-family:var(--mono);font-size:.58rem;color:var(--gold);letter-spacing:2px;margin-bottom:.3rem;}
-.fc-pred-value{font-family:var(--mono);font-size:.85rem;color:var(--text);line-height:1.5;}
-.fc-falsif{background:rgba(255,68,85,.05);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:.75rem 1rem;margin-bottom:.75rem;}
-.fc-falsif-label{font-family:var(--mono);font-size:.58rem;color:var(--red);letter-spacing:2px;margin-bottom:.3rem;}
-.fc-falsif-value{font-family:var(--mono);font-size:.82rem;color:var(--text);line-height:1.5;}
-.fc-timeline{display:flex;align-items:center;gap:.5rem;margin-top:.75rem;}
-.fc-tl-label{font-family:var(--mono);font-size:.6rem;color:var(--dim);}
-.fc-tl-value{font-family:var(--mono);font-size:.65rem;font-weight:700;}
-.fc-tl-value.soon{color:var(--orange);}
-.fc-tl-value.later{color:var(--dim);}
-.fc-tl-value.active{color:var(--green);}
+/* TARJETAS DE REFUTACIÓN */
+.section-title{font-family:var(--mono);font-size:.65rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:1.25rem;display:flex;align-items:center;gap:.75rem;color:var(--red);}
+.section-title::after{content:'';flex:1;height:1px;background:rgba(255,68,85,.2);}
 
-/* CONFIRMED PREDICTIONS TABLE */
-.predictions-stack{display:flex;flex-direction:column;gap:.65rem;margin-bottom:3rem;}
-.pred-row{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.9rem 1.25rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;backdrop-filter:blur(8px);}
-.pred-row.confirmed{border-color:rgba(68,255,136,.2);}
-.pred-row.pending{border-color:rgba(255,140,66,.2);}
-.pred-status{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;}
-.pred-status.ok{background:rgba(68,255,136,.12);border:1px solid rgba(68,255,136,.3);}
-.pred-status.wait{background:rgba(255,140,66,.1);border:1px solid rgba(255,140,66,.25);}
-.pred-info{flex:1;min-width:200px;}
-.pred-name{font-weight:700;font-size:.9rem;margin-bottom:.15rem;}
-.pred-desc{font-family:var(--mono);font-size:.6rem;color:var(--dim);line-height:1.5;}
-.pred-numbers{text-align:right;flex-shrink:0;}
-.pred-tie{font-family:var(--mono);font-size:.85rem;font-weight:700;}
-.pred-tie.ok{color:var(--green);}
-.pred-tie.wait{color:var(--orange);}
-.pred-err{font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-top:.1rem;}
-.pred-tool{font-family:var(--mono);font-size:.55rem;color:var(--dim);background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:.15rem .4rem;margin-left:.5rem;white-space:nowrap;}
+.ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem;}
+@media(max-width:700px){.ref-grid{grid-template-columns:1fr;}}
 
-/* RULES BOX */
-.rules-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:3rem;}
-@media(max-width:700px){.rules-grid{grid-template-columns:1fr;}}
-.rule-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.25rem;backdrop-filter:blur(8px);}
-.rule-card.bad{border-color:rgba(255,68,85,.25);}
-.rule-card.good{border-color:rgba(68,255,136,.2);}
-.rule-icon{font-size:1.5rem;margin-bottom:.75rem;}
-.rule-title{font-family:var(--mono);font-size:.65rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:.6rem;}
+.ref-card{background:var(--bg2);border:1px solid rgba(255,68,85,.2);border-radius:14px;padding:1.25rem;backdrop-filter:blur(8px);position:relative;overflow:hidden;transition:border-color .2s;}
+.ref-card:hover{border-color:rgba(255,68,85,.45);}
+.ref-card::before{content:attr(data-num);position:absolute;top:-10px;right:12px;font-family:var(--mono);font-size:5rem;font-weight:700;color:rgba(255,68,85,.06);line-height:1;}
+
+.rc-num{font-family:var(--mono);font-size:.6rem;color:var(--red);letter-spacing:3px;text-transform:uppercase;margin-bottom:.4rem;}
+.rc-name{font-size:1rem;font-weight:700;margin-bottom:.3rem;}
+.rc-window{font-family:var(--mono);font-size:.58rem;color:var(--dim);margin-bottom:.85rem;}
+.rc-window span{color:var(--gold);}
+
+.rc-pred{background:rgba(255,215,0,.05);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:.65rem .9rem;margin-bottom:.75rem;}
+.rc-pred-lbl{font-family:var(--mono);font-size:.55rem;color:var(--gold);letter-spacing:2px;margin-bottom:.25rem;}
+.rc-pred-val{font-family:var(--mono);font-size:.72rem;color:var(--text);line-height:1.6;}
+
+.rc-refuta{background:rgba(255,68,85,.05);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:.65rem .9rem;margin-bottom:.75rem;}
+.rc-refuta-lbl{font-family:var(--mono);font-size:.55rem;color:var(--red);letter-spacing:2px;margin-bottom:.25rem;}
+.rc-refuta-val{font-family:var(--mono);font-size:.72rem;color:var(--text);line-height:1.6;}
+
+.rc-caveat{background:rgba(91,200,245,.04);border:1px solid rgba(91,200,245,.15);border-radius:8px;padding:.55rem .8rem;}
+.rc-caveat-lbl{font-family:var(--mono);font-size:.55rem;color:var(--blue);letter-spacing:2px;margin-bottom:.2rem;}
+.rc-caveat-val{font-family:var(--mono);font-size:.62rem;color:var(--dim);line-height:1.6;}
+
+/* REGLAS */
+.rules-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-bottom:2rem;}
+@media(max-width:600px){.rules-grid{grid-template-columns:1fr;}}
+.rule-card{border-radius:12px;padding:1rem;backdrop-filter:blur(8px);}
+.rule-card.no{background:rgba(255,68,85,.05);border:1px solid rgba(255,68,85,.2);}
+.rule-card.si{background:rgba(68,255,136,.04);border:1px solid rgba(68,255,136,.2);}
+.rule-title{font-family:var(--mono);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:.6rem;}
 .rule-title.red{color:var(--red);}
 .rule-title.green{color:var(--green);}
-.rule-title.gold{color:var(--gold);}
-.rule-body{font-family:var(--mono);font-size:.65rem;color:var(--dim);line-height:1.7;}
-.rule-body strong{color:var(--text);}
+.rule-item{font-family:var(--mono);font-size:.62rem;color:var(--dim);line-height:2;padding-left:.5rem;}
+.rule-item.no::before{content:'✗ ';color:var(--red);}
+.rule-item.si::before{content:'✓ ';color:var(--green);}
 
-/* COMMITMENT BOX */
-.commitment{background:rgba(255,215,0,.04);border:2px solid rgba(255,215,0,.25);border-radius:20px;padding:2rem;margin-bottom:3rem;text-align:center;}
-.commitment-title{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:1rem;}
-.commitment-text{font-size:1rem;line-height:1.8;color:var(--dim);max-width:700px;margin:0 auto;}
-.commitment-text strong{color:var(--text);}
-.commitment-sig{font-family:var(--mono);font-size:.7rem;color:var(--gold);margin-top:1.25rem;letter-spacing:2px;}
+/* COMPROMISO */
+.commitment{background:linear-gradient(135deg,rgba(10,10,30,.95),rgba(5,5,15,.98));border:2px solid rgba(255,215,0,.4);border-radius:16px;padding:1.5rem 1.75rem;margin-bottom:1.5rem;position:relative;overflow:hidden;}
+.commitment::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,215,0,.04),transparent 70%);pointer-events:none;}
+.comm-title{font-family:var(--mono);font-size:.65rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:1rem;}
+.comm-text{font-size:.88rem;line-height:1.9;color:var(--dim);}
+.comm-text .hi{color:var(--gold);font-weight:700;}
+.comm-text .wt{color:var(--text);}
 
-/* CHANGELOG */
-.changelog{margin-bottom:3rem;}
-.cl-row{display:flex;gap:1rem;margin-bottom:.75rem;align-items:flex-start;}
-.cl-date{font-family:var(--mono);font-size:.65rem;color:var(--dim);white-space:nowrap;padding-top:.1rem;width:90px;flex-shrink:0;}
-.cl-dot{width:8px;height:8px;border-radius:50%;margin-top:.35rem;flex-shrink:0;}
-.cl-dot.green{background:var(--green);box-shadow:0 0 6px rgba(68,255,136,.5);}
-.cl-dot.gold{background:var(--gold);box-shadow:0 0 6px rgba(255,215,0,.4);}
-.cl-dot.blue{background:var(--blue);}
-.cl-line{width:1px;background:var(--border);flex-shrink:0;margin:0 .2rem;}
-.cl-content{flex:1;}
-.cl-title{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--text);margin-bottom:.2rem;}
-.cl-desc{font-family:var(--mono);font-size:.62rem;color:var(--dim);line-height:1.6;}
-
-.const-row{display:flex;flex-wrap:wrap;gap:.75rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.75rem 1.25rem;backdrop-filter:blur(8px);margin-top:1.25rem;}
-.ci{font-family:var(--mono);font-size:.65rem;}
-.ci .cl-s{color:var(--dim);}
-.ci .cv{color:var(--gold);font-weight:700;}
-.nav-links{display:flex;justify-content:center;gap:2rem;margin-top:2rem;flex-wrap:wrap;}
+.nav-links{display:flex;justify-content:space-between;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);}
 .nav-links a{font-family:var(--mono);font-size:.7rem;color:var(--dim);text-decoration:none;transition:color .2s;}
 .nav-links a:hover{color:var(--gold);}
+
 footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);margin-top:2rem;}
-footer .feq{font-family:var(--mono);font-size:.8rem;color:var(--gold);margin-bottom:.5rem;}
+footer .feq{font-family:var(--mono);font-size:.72rem;color:var(--gold);margin-bottom:.5rem;}
 footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;}
 </style>
 </head>
 <body>
 <canvas id="galaxy-canvas"></canvas>
+
 <nav>
   <a href="index.html" class="nav-logo">TIE / R@LC</a>
   <div class="nav-center">
     <a href="falsabilidad.html" class="lang-link active">ES</a>
     <a href="falsifiability-en.html" class="lang-link inactive">EN</a>
   </div>
-  <a href="index.html" class="nav-back">← INICIO</a>
+  <a href="labs.html" class="nav-back">← LABORATORIO</a>
 </nav>
 
 <div class="page">
   <div class="page-tag">⚠ Criterio de Popper · Ciencia falsable</div>
-  <h1 class="page-title">CÓMO PROBAR QUE <span>TIE ESTÁ MAL</span></h1>
-  <p class="page-sub">Una teoría científica debe especificar exactamente qué observaciones la refutarían. TIE hace cuatro predicciones cuantitativas no ajustadas que pueden refutarla. Si alguna falla, la teoría cae.</p>
+  <h1 class="page-title">CÓMO PROBAR QUE TIE <span>ESTÁ MAL</span></h1>
+  <p class="page-sub">Una teoría científica debe especificar exactamente qué observaciones la refutarían. TIE lo hace. Si alguna de estas cuatro condiciones se cumple, la teoría está equivocada y debe abandonarse sin excusas.</p>
 
-  <!-- POPPER BANNER -->
-  <div class="popper-banner">
-    <div class="popper-icon">🔬</div>
-    <div class="popper-text">
-      <div class="popper-label">Criterio de Demarcación — Karl Popper</div>
-      <div class="popper-quote">"Una afirmación científica es aquella que puede ser refutada por la experiencia. Lo que no puede ser refutado no es ciencia."</div>
-      <div class="popper-source">Logik der Forschung, 1934 · The Logic of Scientific Discovery</div>
+  <!-- POPPER -->
+  <div class="popper-box">
+    <div class="popper-tag">Karl Popper · Lógica de la Investigación Científica · 1934</div>
+    <div class="popper-quote">"Una afirmación científica es aquella que puede ser refutada por la experiencia. Lo que no puede ser refutado no es ciencia — es dogma."</div>
+    <div class="popper-attr">El criterio de demarcación: ciencia vs. pseudociencia</div>
+  </div>
+
+  <!-- CRITERIO TIE -->
+  <div class="criterio-box">
+    <div class="crit-title">El criterio de TIE</div>
+    <div class="crit-text">
+      TIE no pide fe. Pide que la midas. Las predicciones son <span class="hi">cuantitativas, derivadas sin parámetros libres</span> y especifican el umbral exacto de refutación. No hay margen de maniobra: si el número falla bajo las condiciones descritas, <span class="red">la teoría cae</span>. Sin revisiones ad hoc. Sin nuevos parámetros. Sin excusas.
     </div>
   </div>
 
-  <!-- FALSIFICATION CRITERIA -->
-  <div class="section-title red">☠ Cuatro formas de refutar TIE</div>
-  <div class="falsif-grid">
+  <!-- 4 TARJETAS -->
+  <div class="section-title">☠ Cuatro formas de refutar TIE</div>
+  <div class="ref-grid">
 
-    <div class="falsif-card" data-num="1">
-      <div class="fc-label">Criterio F-01 <span class="fc-instrument">ngEHT</span></div>
-      <div class="fc-title">Sombra de agujero negro inconsistente con rₕ</div>
-      <div class="fc-prediction">
-        <div class="fc-pred-label">PREDICCIÓN TIE</div>
-        <div class="fc-pred-value">rₕ = 0.869√(GM/a₀) ≫ rₛ (GR)<br>M87*: rₕ = 7.76×10¹⁶ km (4×10⁶× mayor que rₛ)<br>La sombra angular visible debe ser mucho mayor que la predicha por GR</div>
+    <!-- #1 EHT -->
+    <div class="ref-card" data-num="1">
+      <div class="rc-num">Condición #1</div>
+      <div class="rc-name">Sombra EHT — ngEHT</div>
+      <div class="rc-window">Ventana: <span>AMT Namibia · AtLAST · Telescopio Lunar · 2028–2030+</span></div>
+
+      <div class="rc-pred">
+        <div class="rc-pred-lbl">Predicción TIE</div>
+        <div class="rc-pred-val">El horizonte físico rₕ ≫ rₛ. Una vez derivada formalmente la fotosfera TIE, la sombra observable diferirá de la predicción GR (1.5·rₛ) de forma detectable con resolución sub-μas.</div>
       </div>
-      <div class="fc-falsif">
-        <div class="fc-falsif-label">TIE QUEDA REFUTADA SI</div>
-        <div class="fc-falsif-value">ngEHT resuelve la sombra de M87* o Sgr A* y coincide con rₛ (GR) con precisión &lt;10%. Una sombra angular compatible con Schwarzschild a alta resolución eliminaría rₕ.</div>
+
+      <div class="rc-refuta">
+        <div class="rc-refuta-lbl">✗ TIE queda refutada si</div>
+        <div class="rc-refuta-val">ngEHT con resolución ×10 resuelve la sombra de M87* o Sgr A* y el resultado es compatible con rₛ GR al &lt;10% — <strong>después de que la fotosfera TIE esté derivada formalmente</strong> y produzca una predicción angular concreta.</div>
       </div>
-      <div class="fc-timeline">
-        <span class="fc-tl-label">Instrumento:</span>
-        <span class="fc-tl-value soon">ngEHT · 2027–2030</span>
+
+      <div class="rc-caveat">
+        <div class="rc-caveat-lbl">⚠ Condición previa</div>
+        <div class="rc-caveat-val">Sin derivación formal de la fotosfera TIE, el experimento no puede refutar — no hay predicción que comparar. La fotosfera es trabajo futuro del Cap. X.</div>
       </div>
     </div>
 
-    <div class="falsif-card" data-num="2">
-      <div class="fc-label">Criterio F-02 <span class="fc-instrument">SPARC 175</span></div>
-      <div class="fc-title">Curvas SPARC sistemáticamente peores que MOND</div>
-      <div class="fc-prediction">
-        <div class="fc-pred-label">PREDICCIÓN TIE</div>
-        <div class="fc-pred-value">v_flat = (GM·a₀)^(1/4) con a₀ = cH₀/2π<br>Error promedio &lt;15% sobre 175 galaxias SPARC sin parámetros ajustados. La aceleración crítica es la misma para todas.</div>
+    <!-- #2 SPARC -->
+    <div class="ref-card" data-num="2">
+      <div class="rc-num">Condición #2</div>
+      <div class="rc-name">Curvas de rotación — SPARC vs MOND</div>
+      <div class="rc-window">Ventana: <span>Análisis estadístico disponible ahora · 175 galaxias SPARC</span></div>
+
+      <div class="rc-pred">
+        <div class="rc-pred-lbl">Predicción TIE</div>
+        <div class="rc-pred-val">Con a₀ = cH₀/2π fijo sin ajuste, TIE predice las curvas de rotación de 175 galaxias SPARC con error mediano &lt;15% — igual o mejor que MOND con a₀ libre.</div>
       </div>
-      <div class="fc-falsif">
-        <div class="fc-falsif-label">TIE QUEDA REFUTADA SI</div>
-        <div class="fc-falsif-value">Un análisis estadístico riguroso sobre SPARC muestra que MOND (con a₀ libre) supera sistemáticamente a TIE por &gt;2σ en error mediano, o si TIE produce sesgo sistemático por tipo morfológico.</div>
+
+      <div class="rc-refuta">
+        <div class="rc-refuta-lbl">✗ TIE queda refutada si</div>
+        <div class="rc-refuta-val">Un análisis estadístico riguroso con <strong>a₀ fijado al valor de H₀ para ambas teorías</strong> (TIE y MOND sin parámetro libre) muestra que MOND supera a TIE por &gt;2σ en error mediano, o si TIE produce sesgo sistemático por tipo morfológico (&gt;2σ entre espirales, enanas e irregulares).</div>
       </div>
-      <div class="fc-timeline">
-        <span class="fc-tl-label">Datos:</span>
-        <span class="fc-tl-value active">Disponibles hoy · Lelli+2016</span>
+
+      <div class="rc-caveat">
+        <div class="rc-caveat-lbl">⚠ Condición de comparación justa</div>
+        <div class="rc-caveat-val">MOND normalmente ajusta a₀ por galaxia. La comparación justa exige fijar a₀ = cH₀/2π para ambos. Con a₀ libre, MOND tiene ventaja artificial.</div>
       </div>
     </div>
 
-    <div class="falsif-card" data-num="3">
-      <div class="fc-label">Criterio F-03 <span class="fc-instrument">LISA</span></div>
-      <div class="fc-title">Sin señal gravitacional en ~2.4 mHz</div>
-      <div class="fc-prediction">
-        <div class="fc-pred-label">PREDICCIÓN TIE</div>
-        <div class="fc-pred-value">El campo escalar φ de la infraestructura tiene masa \( m_\phi = \hbar a_0 / c^2 \). Esto produce una señal de ondas gravitacionales en: \( f \approx 2.4 \text{ mHz} \) — dentro de la banda de sensibilidad de LISA.</div>
+    <!-- #3 LISA -->
+    <div class="ref-card" data-num="3">
+      <div class="rc-num">Condición #3</div>
+      <div class="rc-name">Señal campo φ — LISA</div>
+      <div class="rc-window">Ventana: <span>LISA lanzamiento 2035 · contrato €89.5M firmado ene 2026</span></div>
+
+      <div class="rc-pred">
+        <div class="rc-pred-lbl">Predicción TIE</div>
+        <div class="rc-pred-val">El campo de sincronía φ(x,t) produce una señal estocástica de fondo gravitacional en la banda 1–4 mHz, con pico en ~2.4 mHz, detectable por LISA a sensibilidad nominal.</div>
       </div>
-      <div class="fc-falsif">
-        <div class="fc-falsif-label">TIE QUEDA REFUTADA SI</div>
-        <div class="fc-falsif-value">LISA opera con sensibilidad nominal y no detecta ninguna señal estocástica en el rango 1–4 mHz consistente con un campo escalar de masa m_φ. El umbral de detección debe superar la señal predicha.</div>
+
+      <div class="rc-refuta">
+        <div class="rc-refuta-lbl">✗ TIE queda refutada si</div>
+        <div class="rc-refuta-val">LISA opera con sensibilidad nominal completa y no detecta ninguna señal estocástica en el rango 1–4 mHz que supere el umbral de detección nominal. El resultado debe ser estadísticamente significativo (&gt;3σ de no-detección).</div>
       </div>
-      <div class="fc-timeline">
-        <span class="fc-tl-label">Instrumento:</span>
-        <span class="fc-tl-value later">LISA · lanzamiento ~2035</span>
+
+      <div class="rc-caveat">
+        <div class="rc-caveat-lbl">ℹ Estado actual</div>
+        <div class="rc-caveat-val">Contrato de propulsión €89.5M Thales-OHB firmado ene 2026. Pruebas de unidades NASA ene 2026. Lanzamiento Ariane 6, 2035.</div>
       </div>
     </div>
 
-    <div class="falsif-card" data-num="4">
-      <div class="fc-label">Criterio F-04 <span class="fc-instrument">Euclid</span></div>
-      <div class="fc-title">Sin aceleración residual intergaláctica</div>
-      <div class="fc-prediction">
-        <div class="fc-pred-label">PREDICCIÓN TIE</div>
-        <div class="fc-pred-value">TIE predice una aceleración de fondo en el espacio intergaláctico de orden a₀ = 1.082×10⁻¹⁰ m/s². Esto produce una lente gravitacional "extra" coherente con Λ y medible en el campo débil de Euclid.</div>
-      </div>
-      <div class="fc-falsif">
-        <div class="fc-falsif-label">TIE QUEDA REFUTADA SI</div>
-        <div class="fc-falsif-value">Euclid mapea el campo gravitacional débil intergaláctico con precisión &gt;10× a₀ y no detecta el campo de fondo predicho. Un mapa consistente con Λ=0 en el campo débil eliminaría la predicción.</div>
-      </div>
-      <div class="fc-timeline">
-        <span class="fc-tl-label">Instrumento:</span>
-        <span class="fc-tl-value soon">Euclid · en operación desde 2024</span>
-      </div>
-    </div>
+    <!-- #4 AXIOMAS -->
+    <div class="ref-card" data-num="4">
+      <div class="rc-num">Condición #4</div>
+      <div class="rc-name">Contradicción lógica interna</div>
+      <div class="rc-window">Ventana: <span>Disponible ahora · solo requiere papel y lápiz</span></div>
 
-  </div>
+      <div class="rc-pred">
+        <div class="rc-pred-lbl">Estructura TIE</div>
+        <div class="rc-pred-val">Los axiomas de TIE (tiempo absoluto, ħ como cuanto de sincronía, eliminación del T² artificial, métrica 3×3) deben ser mutuamente consistentes y producir predicciones únicas sin ambigüedad.</div>
+      </div>
 
-  <!-- CONFIRMED PREDICTIONS -->
-  <div class="section-title green">✓ Predicciones ya verificadas (8/11)</div>
-  <div class="predictions-stack">
+      <div class="rc-refuta">
+        <div class="rc-refuta-lbl">✗ TIE queda refutada si</div>
+        <div class="rc-refuta-val">Se demuestra una contradicción lógica derivada <strong>formalmente desde los axiomas</strong> — no de aproximaciones, no de zonas aún no desarrolladas (fotosfera, Cap. XII) — que produzca dos predicciones matemáticamente incompatibles desde la misma base axiómatica.</div>
+      </div>
 
-    <div class="pred-row confirmed">
-      <div class="pred-status ok">✓</div>
-      <div class="pred-info">
-        <div class="pred-name">Materia oscura = 84.1%</div>
-        <div class="pred-desc">1 − 1/2π · derivado de primeros principios · universal para toda masa</div>
-      </div>
-      <div class="pred-numbers">
-        <div class="pred-tie ok">84.1% pred. · 84% obs.</div>
-        <div class="pred-err">Error &lt;0.1% · 0 parámetros libres</div>
-      </div>
-      <a href="materia-oscura.html" class="pred-tool">→ Calculadora</a>
-    </div>
-
-    <div class="pred-row confirmed">
-      <div class="pred-status ok">✓</div>
-      <div class="pred-info">
-        <div class="pred-name">Constante cosmológica Λ</div>
-        <div class="pred-desc">Λ = 2H₀²/c² · derivada de H₀ · no es energía oscura</div>
-      </div>
-      <div class="pred-numbers">
-        <div class="pred-tie ok">1.145×10⁻⁵² pred.</div>
-        <div class="pred-err">Error 3.5% vs Planck 2018 · QFT: 10¹²⁰ órdenes ✗</div>
-      </div>
-      <a href="constante.html" class="pred-tool">→ Calculadora</a>
-    </div>
-
-    <div class="pred-row confirmed">
-      <div class="pred-status ok">✓</div>
-      <div class="pred-info">
-        <div class="pred-name">Corrección GPS</div>
-        <div class="pred-desc">Dilatación temporal · viscosidad gravitacional de infraestructura · sin curvatura</div>
-      </div>
-      <div class="pred-numbers">
-        <div class="pred-tie ok">45.7 µs/día pred.</div>
-        <div class="pred-err">Error 0.4% vs 45.9 µs/día observado</div>
-      </div>
-      <a href="gps.html" class="pred-tool">→ Calculadora</a>
-    </div>
-
-    <div class="pred-row confirmed">
-      <div class="pred-status ok">✓</div>
-      <div class="pred-info">
-        <div class="pred-name">Precesión de Mercurio</div>
-        <div class="pred-desc">43.0''/siglo · campo gravitacional TIE en régimen fuerte (r ≪ rₜ)</div>
-      </div>
-      <div class="pred-numbers">
-        <div class="pred-tie ok">43.0'' /siglo pred.</div>
-        <div class="pred-err">Error 0.2% vs 43.1'' observado</div>
-      </div>
-    </div>
-
-    <div class="pred-row confirmed">
-      <div class="pred-status ok">✓</div>
-      <div class="pred-info">
-        <div class="pred-name">Radio de Bohr atómico</div>
-        <div class="pred-desc">a₀ = ħ²/m_e·e² · emerge de la constante de aceleración TIE</div>
-      </div>
-      <div class="pred-numbers">
-        <div class="pred-tie ok">5.292×10⁻¹¹ m pred.</div>
-        <div class="pred-err">Error 0.10% · conexión cuántica</div>
-      </div>
-    </div>
-
-    <div class="pred-row confirmed">
-      <div class="pred-status ok">✓</div>
-      <div class="pred-info">
-        <div class="pred-name">Constante de estructura fina α</div>
-        <div class="pred-desc">α = e²/4πε₀ħc ≈ 1/137 · emerge de la geometría 2π de la infraestructura</div>
-      </div>
-      <div class="pred-numbers">
-        <div class="pred-tie ok">1/137.036 pred.</div>
-        <div class="pred-err">Error &lt;0.1%</div>
-      </div>
-    </div>
-
-    <div class="pred-row confirmed">
-      <div class="pred-status ok">✓</div>
-      <div class="pred-info">
-        <div class="pred-name">Factor de masa en cúmulos (2π)</div>
-        <div class="pred-desc">Cociente masa dinámica / masa bariónica · catálogos de cúmulos galácticos</div>
-      </div>
-      <div class="pred-numbers">
-        <div class="pred-tie ok">6.28× pred.</div>
-        <div class="pred-err">Error 0.5% vs observaciones de cúmulos</div>
-      </div>
-    </div>
-
-    <div class="pred-row confirmed">
-      <div class="pred-status ok">✓</div>
-      <div class="pred-info">
-        <div class="pred-name">Regla de Oro de Fermi</div>
-        <div class="pred-desc">2π/ħ emerge nativamente de la fase de la infraestructura · sin postular</div>
-      </div>
-      <div class="pred-numbers">
-        <div class="pred-tie ok">2π/ħ nativo</div>
-        <div class="pred-err">Emergencia natural · no postulado</div>
-      </div>
-    </div>
-
-    <div class="pred-row pending">
-      <div class="pred-status wait">⏳</div>
-      <div class="pred-info">
-        <div class="pred-name">Sombra EHT — M87* y Sgr A*</div>
-        <div class="pred-desc">rₕ = 0.869√(GM/a₀) · esfera fotónica TIE pendiente de derivación · ngEHT</div>
-      </div>
-      <div class="pred-numbers">
-        <div class="pred-tie wait">⏳ ngEHT 2027+</div>
-        <div class="pred-err">Esfera fotónica TIE = trabajo futuro T.X.1</div>
-      </div>
-      <a href="agujeros.html" class="pred-tool">→ Agujeros negros</a>
-    </div>
-
-    <div class="pred-row pending">
-      <div class="pred-status wait">⏳</div>
-      <div class="pred-info">
-        <div class="pred-name">Señal LISA ~2.4 mHz</div>
-        <div class="pred-desc">Masa del campo φ · señal estocástica de ondas gravitacionales · banda LISA</div>
-      </div>
-      <div class="pred-numbers">
-        <div class="pred-tie wait">⏳ LISA ~2035</div>
-        <div class="pred-err">f ≈ ħa₀/c² · Hz</div>
-      </div>
-    </div>
-
-    <div class="pred-row pending">
-      <div class="pred-status wait">⏳</div>
-      <div class="pred-info">
-        <div class="pred-name">Campo débil intergaláctico (Euclid)</div>
-        <div class="pred-desc">Aceleración de fondo a₀ · lensing gravitacional débil · mapa de Euclid</div>
-      </div>
-      <div class="pred-numbers">
-        <div class="pred-tie wait">⏳ Euclid 2024+</div>
-        <div class="pred-err">a₀ = 1.082×10⁻¹⁰ m/s² · campo de fondo</div>
+      <div class="rc-caveat">
+        <div class="rc-caveat-lbl">⚠ Distinción crítica</div>
+        <div class="rc-caveat-val">Un error en una aproximación o en una zona no derivada formalmente no refuta los axiomas. Solo una contradicción en la estructura lógica central — verificada dimensionalmente — cuenta.</div>
       </div>
     </div>
 
   </div>
 
-  <!-- RULES -->
-  <div class="section-title gold" style="color:var(--gold)">⚖ Reglas de juego — lo que NO refuta TIE</div>
+  <!-- QUÉ NO REFUTA -->
+  <div class="section-title" style="color:var(--dim);">Lo que NO refuta TIE</div>
   <div class="rules-grid">
-    <div class="rule-card bad">
-      <div class="rule-icon">❌</div>
-      <div class="rule-title red">NO refuta TIE</div>
-      <div class="rule-body">
-        <strong>Objeciones filosóficas</strong> sin predicción alternativa cuantificada. "El tiempo no puede ser ciclos" no es un argumento falsificador — es una preferencia ontológica.<br><br>
-        <strong>Ajuste de parámetros</strong> de teorías rivales para que encajen <em>después</em> de ver los datos. TIE no tiene parámetros libres.<br><br>
-        <strong>Discrepancias en galaxias individuales</strong> con datos de baja calidad (Q=3). Las predicciones aplican estadísticamente sobre Q=1.
-      </div>
+    <div class="rule-card no">
+      <div class="rule-title red">✗ No refuta</div>
+      <div class="rule-item no">Que GR tenga más precisión en GPS (0.0% vs 0.4%)</div>
+      <div class="rule-item no">Que TIE no explique X todavía (trabajo futuro ≠ refutación)</div>
+      <div class="rule-item no">Que la comunidad no lo haya adoptado</div>
+      <div class="rule-item no">Que sea de un investigador independiente</div>
+      <div class="rule-item no">Que use lenguaje no estándar</div>
     </div>
-    <div class="rule-card bad">
-      <div class="rule-icon">⚠️</div>
-      <div class="rule-title red">Resultados ambiguos</div>
-      <div class="rule-body">
-        <strong>EHT actual (2019/2022)</strong> no tiene resolución suficiente para distinguir rₛ de rₕ — la diferencia es de 4×10⁶. Requiere ngEHT.<br><br>
-        <strong>SPARC con M/L libre</strong> (MOND clásico) no es una comparación justa — TIE usa M/L=0.5 fijo, MOND ajusta. El test correcto es ambos con los mismos parámetros fijos.<br><br>
-        <strong>Euclid primera fase</strong> aún no tiene sensibilidad suficiente en el campo débil extremo.
-      </div>
+    <div class="rule-card no">
+      <div class="rule-title red">✗ Tampoco refuta</div>
+      <div class="rule-item no">Un error en una aproximación específica</div>
+      <div class="rule-item no">Una predicción de una zona no derivada formalmente</div>
+      <div class="rule-item no">Una comparación con a₀ libre en MOND</div>
+      <div class="rule-item no">Una sombra EHT sin fotosfera TIE derivada</div>
+      <div class="rule-item no">Argumentos de autoridad o consenso</div>
     </div>
-    <div class="rule-card good">
-      <div class="rule-icon">✅</div>
-      <div class="rule-title green">Sí refuta TIE</div>
-      <div class="rule-body">
-        <strong>ngEHT con resolución ×10</strong> mostrando sombra compatible con rₛ (GR) al &lt;10% en M87* o Sgr A*.<br><br>
-        <strong>Análisis SPARC sistemático</strong> con los mismos priors para TIE y MOND mostrando &gt;2σ de ventaja para MOND.<br><br>
-        <strong>LISA sin señal estocástica</strong> en 1–4 mHz sobre el umbral de detección nominal.<br><br>
-        <strong>Una sola predicción matemática errónea</strong> derivada formalmente de los axiomas TIE (no de aproximaciones).
-      </div>
+    <div class="rule-card si">
+      <div class="rule-title green">✓ Sí refuta</div>
+      <div class="rule-item si">Sombra EHT incompatible (condición #1 completa)</div>
+      <div class="rule-item si">SPARC sistemático con priors iguales (condición #2)</div>
+      <div class="rule-item si">LISA sin señal en 1–4 mHz (condición #3)</div>
+      <div class="rule-item si">Contradicción axiomática formal (condición #4)</div>
     </div>
   </div>
 
-  <!-- COMMITMENT -->
+  <!-- COMPROMISO -->
   <div class="commitment">
-    <div class="commitment-title">Compromiso del autor</div>
-    <div class="commitment-text">
-      Si cualquiera de los cuatro criterios de falsificación es satisfecho por un experimento con la sensibilidad requerida, <strong>R@LC se compromete a reconocer públicamente que TIE está refutada</strong> y a publicar una nota de retractación en este sitio. La fecha y los resultados quedarán registrados en el changelog de abajo.
+    <div class="comm-title">El compromiso de R@LC</div>
+    <div class="comm-text">
+      <span class="wt">"No tengo institución que proteger. No tengo paradigma que defender. No tengo financiamiento que justificar.</span>
       <br><br>
-      Esta página existe porque <strong>una teoría que no puede ser falsificada no es ciencia</strong>. TIE es falsable. Es ciencia.
+      Si cualquiera de estas cuatro condiciones se cumple bajo los términos descritos, <span class="hi">publicaré la refutación antes que nadie</span>. Sin revisiones ad hoc. Sin nuevos parámetros introducidos a posteriori. Sin cambiar las reglas del juego.
+      <br><br>
+      Eso es ciencia. Y eso es lo que TIE intenta hacer.
+      <br><br>
+      <span class="wt">La única vara de medición que importa son los números."</span>
     </div>
-    <div class="commitment-sig">R@LC · MÉXICO · 2026 · INVESTIGADOR INDEPENDIENTE</div>
-  </div>
-
-  <!-- CHANGELOG -->
-  <div class="section-title" style="color:var(--blue)">📋 Changelog científico</div>
-  <div class="changelog">
-    <div class="cl-row">
-      <span class="cl-date">2026-03</span>
-      <div class="cl-dot green"></div>
-      <div class="cl-content">
-        <div class="cl-title">sparc.html — 175 galaxias procesadas del catálogo oficial</div>
-        <div class="cl-desc">Datos Lelli, McGaugh & Schombert 2016 · M/L=0.5 fijo · error mediano TIE: 13.5% (Q=1) · sin parámetros libres</div>
-      </div>
-    </div>
-    <div class="cl-row">
-      <span class="cl-date">2026-03</span>
-      <div class="cl-dot gold"></div>
-      <div class="cl-content">
-        <div class="cl-title">agujeros.html — Corrección valores M87* y Sgr A*</div>
-        <div class="cl-desc">rₕ(M87*) = 7.76×10¹⁶ km · ratio = 4.04×10⁶× · rₕ(Sgr A*) = 1.93×10¹⁵ km · ratio = 1.63×10⁸× · Opción B implementada (esfera fotónica pendiente)</div>
-      </div>
-    </div>
-    <div class="cl-row">
-      <span class="cl-date">2026-03</span>
-      <div class="cl-dot green"></div>
-      <div class="cl-content">
-        <div class="cl-title">theory-en.html — Corrección valores M87* en versión inglés</div>
-        <div class="cl-desc">Error de 2 órdenes de magnitud corregido · valores verificados contra SPARC data</div>
-      </div>
-    </div>
-    <div class="cl-row">
-      <span class="cl-date">2026-01</span>
-      <div class="cl-dot gold"></div>
-      <div class="cl-content">
-        <div class="cl-title">GPS — Verificación corrección 0.4%</div>
-        <div class="cl-desc">45.7 µs/día predichos · 45.9 µs/día observados · tabla completa 6 misiones históricas · récord Krikalev: +22.68 ms</div>
-      </div>
-    </div>
-    <div class="cl-row">
-      <span class="cl-date">2025-12</span>
-      <div class="cl-dot gold"></div>
-      <div class="cl-content">
-        <div class="cl-title">Λ cosmológica — Error 3.5% vs Planck 2018</div>
-        <div class="cl-desc">Λ = 2H₀²/c² = 1.145×10⁻⁵² m⁻² · sin energía oscura · con H₀=67.74 el error cae a &lt;1%</div>
-      </div>
-    </div>
-    <div class="cl-row">
-      <span class="cl-date">2025-11</span>
-      <div class="cl-dot green"></div>
-      <div class="cl-content">
-        <div class="cl-title">Materia oscura — Derivación 84.1% = 1−1/2π</div>
-        <div class="cl-desc">Universal · independiente de masa · 0 parámetros libres · verificado en cúmulos y SPARC</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="const-row">
-    <div class="ci"><span class="cl-s">a₀ = </span><span class="cv">1.082×10⁻¹⁰ m/s²</span></div>
-    <div class="ci"><span class="cl-s">Λ_TIE = </span><span class="cv">1.145×10⁻⁵² m⁻²</span></div>
-    <div class="ci"><span class="cl-s">rₕ(M87*) = </span><span class="cv">7.76×10¹⁶ km</span></div>
-    <div class="ci"><span class="cl-s">rₕ(Sgr A*) = </span><span class="cv">1.93×10¹⁵ km</span></div>
-    <div class="ci"><span class="cl-s">1−1/2π = </span><span class="cv">84.1%</span></div>
   </div>
 
   <div class="nav-links">
-    <a href="predicciones.html">← Predicciones</a>
-    <a href="agujeros.html">Agujeros negros</a>
-    <a href="papers.html">Papers →</a>
+    <a href="predicciones.html">← Estado de predicciones</a>
+    <a href="labs.html">Laboratorio →</a>
   </div>
 </div>
 
 <footer>
-  <div class="feq">Si no puede ser falsificada · no es ciencia · TIE puede ser falsificada · es ciencia</div>
+  <div class="feq">4 condiciones de refutación · cuantitativas · sin parámetros libres · sin excusas</div>
   <div class="fcopy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 
 <script>
 (function(){
   const canvas=document.getElementById('galaxy-canvas');
-  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(60,1,0.1,1000);
+  const scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(60,1,0.1,1000);
   const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));
   function resize(){renderer.setSize(canvas.clientWidth,canvas.clientHeight);camera.aspect=canvas.clientWidth/canvas.clientHeight;camera.updateProjectionMatrix();}
-  resize();window.addEventListener('resize',resize);
-  camera.position.set(0,4,6);camera.lookAt(0,0,0);
-  const p={count:55000,radius:4,branches:5,spin:1.2,randomness:0.4,randomPower:2.5};
-  const geo=new THREE.BufferGeometry(),pos=new Float32Array(p.count*3),col=new Float32Array(p.count*3);
-  const cIn=new THREE.Color('#FF4455'),cOut=new THREE.Color('#0a0a2a');
-  for(let i=0;i<p.count;i++){const r=Math.random()*p.radius,b=(i%p.branches)/p.branches*Math.PI*2,s=r*p.spin;const rx=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r,ry=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r*.3,rz=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r;pos[i*3]=Math.cos(b+s)*r+rx;pos[i*3+1]=ry;pos[i*3+2]=Math.sin(b+s)*r+rz;const m=new THREE.Color().lerpColors(cIn,cOut,r/p.radius);col[i*3]=m.r;col[i*3+1]=m.g;col[i*3+2]=m.b;}
-  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
-  const mat=new THREE.PointsMaterial({size:.008,sizeAttenuation:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true});
+  resize(); window.addEventListener('resize',resize);
+  camera.position.set(0,4,7); camera.lookAt(0,0,0);
+  const N=55000, pos=new Float32Array(N*3), col=new Float32Array(N*3);
+  const cIn=new THREE.Color('#FF4455'), cOut=new THREE.Color('#050510');
+  for(let i=0;i<N;i++){
+    const r=Math.random()*5, b=(i%4)/4*Math.PI*2, s=r*1.3;
+    const rx=Math.pow(Math.random(),3)*(Math.random()<.5?1:-1)*.3*r;
+    const ry=Math.pow(Math.random(),3)*(Math.random()<.5?1:-1)*.1*r;
+    const rz=Math.pow(Math.random(),3)*(Math.random()<.5?1:-1)*.3*r;
+    pos[i*3]=Math.cos(b+s)*r+rx; pos[i*3+1]=ry; pos[i*3+2]=Math.sin(b+s)*r+rz;
+    const m=new THREE.Color().lerpColors(cIn,cOut,r/5);
+    col[i*3]=m.r; col[i*3+1]=m.g; col[i*3+2]=m.b;
+  }
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+  const mat=new THREE.PointsMaterial({size:.006,sizeAttenuation:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true});
   scene.add(new THREE.Points(geo,mat));
-  (function animate(){requestAnimationFrame(animate);scene.rotation.y+=.0006;renderer.render(scene,camera);})();
+  (function animate(){requestAnimationFrame(animate);scene.rotation.y+=.0004;renderer.render(scene,camera);})();
 })();
-
+</script>
+<script>
 window.onload=()=>{
-  renderMathInElement(document.body,{delimiters:[{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});
+  renderMathInElement(document.body,{
+    delimiters:[{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]
+  });
 };
 </script>
 </body>
 </html>
+

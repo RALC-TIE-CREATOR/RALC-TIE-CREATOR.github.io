@@ -206,11 +206,18 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   <!-- ERROR METER -->
   <div class="error-meter">
     <div class="em-header">
-      <span class="em-label">Error TIE vs Planck (Λ)</span>
-      <span class="em-val" id="err-val" style="color:var(--green)">3.5%</span>
+      <span class="em-label">Error TIE vs Planck (Λ) — con signo</span>
+      <span class="em-val" id="err-val" style="color:var(--green)">+3.5%</span>
     </div>
-    <div class="em-bar-wrap">
-      <div class="em-bar" id="err-bar" style="width:3.5%;background:var(--green);"></div>
+    <!-- Barra centrada — izquierda=subestima, derecha=sobreestima -->
+    <div style="position:relative;height:10px;background:rgba(255,255,255,.05);border-radius:5px;margin:.5rem 0;overflow:hidden;">
+      <div style="position:absolute;left:50%;top:0;width:1px;height:100%;background:rgba(255,255,255,.2);"></div>
+      <div id="err-bar-signed" style="position:absolute;top:0;height:100%;border-radius:5px;transition:all .4s ease;"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.55rem;color:var(--dim);margin-bottom:.5rem;">
+      <span>− TIE subestima Λ</span>
+      <span id="err-zero-lbl" style="color:var(--green)">H₀≈68.5 → error=0</span>
+      <span>+ TIE sobreestima Λ</span>
     </div>
     <div class="em-note" id="err-note">
       Con H₀=70 km/s/Mpc · Mueve el slider para explorar la tensión de Hubble · El error mínimo ocurre cerca de H₀=68.5
@@ -298,8 +305,10 @@ function update() {
   const a0   = c * h0si / (2 * Math.PI);
   const lam  = 2 * h0si * h0si / (c * c);
   const err  = (lam - LAMBDA_PLANCK) / LAMBDA_PLANCK * 100;
+  const errSigned = (err >= 0 ? '+' : '') + err.toFixed(1);
   const errAbs = Math.abs(err).toFixed(1);
   const isGood = Math.abs(err) < 10;
+  const errColor = Math.abs(err) < 1 ? 'var(--green)' : Math.abs(err) < 5 ? 'var(--gold)' : 'var(--red)';
 
   // Slider gradient
   const pct = ((h0k - 67) / (74 - 67) * 100).toFixed(1);
@@ -311,27 +320,36 @@ function update() {
   document.getElementById('lambda-val').textContent = fmtExp(lam);
   document.getElementById('lambda-comp').textContent= fmtExp(lam);
 
-  // Error
-  const errColor = isGood ? 'var(--green)' : 'var(--red)';
-  document.getElementById('err-val').textContent  = errAbs + '%';
-  document.getElementById('err-val').style.color  = errColor;
-  document.getElementById('note-err').textContent = errAbs + '%';
-  document.getElementById('note-err').style.color = errColor;
+  // Error — signed display
+  const errColor2 = Math.abs(err) < 1 ? 'var(--green)' : Math.abs(err) < 5 ? 'var(--gold)' : 'var(--red)';
+  document.getElementById('err-val').textContent  = errSigned + '%';
+  document.getElementById('err-val').style.color  = errColor2;
+  document.getElementById('note-err').textContent = errSigned + '%';
+  document.getElementById('note-err').style.color = errColor2;
 
-  // Error bar (scale: 0-20% visible range)
-  const barW = Math.min(Math.abs(err), 20) / 20 * 100;
-  const bar  = document.getElementById('err-bar');
-  bar.style.width      = barW + '%';
-  bar.style.background = isGood ? 'var(--green)' : 'var(--red)';
+  // Centered signed bar: positive → extends right from center, negative → extends left
+  const maxRange = 15; // ±15% visible range
+  const barPct = Math.min(Math.abs(err), maxRange) / maxRange * 50; // max 50% of total width
+  const bar = document.getElementById('err-bar-signed');
+  if (err >= 0) {
+    bar.style.left = '50%';
+    bar.style.right = 'auto';
+    bar.style.width = barPct + '%';
+  } else {
+    bar.style.right = '50%';
+    bar.style.left = 'auto';
+    bar.style.width = barPct + '%';
+  }
+  bar.style.background = errColor2;
 
   // TIE badge
   const badge = document.getElementById('tie-badge');
-  badge.textContent        = 'ERROR: ' + errAbs + '%';
-  badge.className          = 'comp-badge ' + (isGood ? 'green' : 'red');
+  badge.textContent = 'ERROR: ' + errSigned + '%';
+  badge.className   = 'comp-badge ' + (Math.abs(err) < 10 ? 'green' : 'red');
 
   // H0 note
   document.getElementById('h0-note').innerHTML =
-    `H₀=${h0k.toFixed(1)} → a₀=${fmtExp(a0)} m/s² · Λ=${fmtExp(lam)} m⁻² · error vs Planck: <span id="note-err" style="color:${errColor}">${errAbs}%</span>`;
+    `H₀=${h0k.toFixed(1)} → a₀=${fmtExp(a0)} m/s² · Λ=${fmtExp(lam)} m⁻² · error vs Planck: <span id="note-err" style="color:${errColor2}">${errSigned}%</span>`;
 
   // Error note text
   const minH0 = (Math.sqrt(LAMBDA_PLANCK / 2) * c * Mpc / 1000).toFixed(1);
@@ -357,3 +375,4 @@ window.onload = () => {
 </script>
 </body>
 </html>
+

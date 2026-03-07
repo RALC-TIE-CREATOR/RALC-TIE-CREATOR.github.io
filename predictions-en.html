@@ -3,770 +3,411 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TIE · VERIFIABLE PREDICTIONS</title>
+<title>TIE · Verifiable Predictions</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
-:root {
-  --gold: #FFD700;
-  --blue: #5BC8F5;
-  --green: #44FF88;
-  --red: #FF4455;
-  --yellow: #FFD700;
-  --bg: #000001;
-  --bg2: rgba(5, 5, 15, 0.6);
-  --bg3: rgba(10, 10, 25, 0.4);
-  --text: #ffffff;
-  --dim: #a0a0b0;
-  --border: rgba(91, 200, 245, 0.15);
-  --mono: 'Space Mono', monospace;
-  --sans: 'Syne', sans-serif;
-}
+:root{--gold:#FFD700;--blue:#5BC8F5;--green:#44FF88;--red:#FF4455;--bg:#000001;--bg2:rgba(5,5,15,0.80);--bg3:rgba(10,10,25,0.6);--text:#fff;--dim:#a0a0b0;--border:rgba(91,200,245,0.15);--mono:'Space Mono',monospace;--sans:'Syne',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+#galaxy-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.4;}
 
-* { margin:0; padding:0; box-sizing:border-box; }
+nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
+.nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
+.nav-center{display:flex;gap:.5rem;}
+.lang-link{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;transition:all .2s;}
+.lang-link.active{color:#000;background:var(--gold);}
+.lang-link.inactive{color:var(--dim);border:1px solid var(--border);}
+.lang-link.inactive:hover{color:var(--gold);border-color:var(--gold);}
+.nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-back:hover{color:var(--gold);}
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
-}
+.page{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:7rem 2rem 4rem;}
+.page-tag{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:.75rem;}
+.page-title{font-size:clamp(2rem,5vw,3.2rem);font-weight:900;letter-spacing:-2px;margin-bottom:.5rem;}
+.page-title span{color:var(--gold);}
+.page-sub{font-family:var(--mono);font-size:.8rem;color:var(--dim);max-width:660px;line-height:1.7;margin-bottom:2rem;}
 
-#galaxy-canvas {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 120vw;
-  height: 120vh;
-  min-width: 1200px;
-  min-height: 1200px;
-  z-index: -2;
-  opacity: 0.7;
-  pointer-events: none;
-}
+.semaforo{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
+.sem-card{border-radius:16px;padding:1.5rem;text-align:center;backdrop-filter:blur(8px);}
+.sem-card.verde{background:rgba(68,255,136,.06);border:2px solid rgba(68,255,136,.35);}
+.sem-card.amarillo{background:rgba(255,215,0,.06);border:2px solid rgba(255,215,0,.3);}
+.sem-card.rojo{background:rgba(255,68,85,.06);border:2px solid rgba(255,68,85,.25);}
+.sem-num{font-family:var(--mono);font-size:3.5rem;font-weight:700;line-height:1;}
+.sem-num.verde{color:var(--green);}
+.sem-num.amarillo{color:var(--gold);}
+.sem-num.rojo{color:var(--red);}
+.sem-lbl{font-family:var(--mono);font-size:.65rem;letter-spacing:3px;text-transform:uppercase;margin-top:.4rem;}
+.sem-lbl.verde{color:var(--green);}
+.sem-lbl.amarillo{color:var(--gold);}
+.sem-lbl.rojo{color:var(--red);}
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle at 30% 40%, rgba(91,200,245,0.08) 0%, transparent 60%),
-              radial-gradient(circle at 70% 60%, rgba(255,215,0,0.08) 0%, transparent 60%);
-  z-index: -1;
-  pointer-events: none;
-  mix-blend-mode: screen;
-}
+.progress-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.9rem 1.25rem;margin-bottom:2rem;backdrop-filter:blur(8px);}
+.progress-track{height:10px;background:rgba(255,255,255,.06);border-radius:5px;overflow:hidden;margin-bottom:.5rem;display:flex;}
+.progress-green{background:var(--green);border-radius:5px 0 0 5px;}
+.progress-yellow{background:var(--gold);}
+.progress-red{background:var(--red);border-radius:0 5px 5px 0;}
+.progress-legend{display:flex;gap:1.5rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);}
+.pl-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:.3rem;vertical-align:middle;}
 
-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.2rem 4rem;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(15px);
-  border-bottom: 2px solid rgba(255,215,0,0.2);
-}
+.pred-list{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.5rem;}
+.pred-item{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.9rem 1.1rem;display:flex;align-items:center;gap:1rem;backdrop-filter:blur(8px);transition:border-color .2s;}
+.pred-item:hover{border-color:rgba(255,215,0,.2);}
+.pred-item.confirmed{border-left:3px solid var(--green);}
+.pred-item.pending{border-left:3px solid var(--gold);}
+.pred-item.refuted{border-left:3px solid var(--red);}
+.pred-icon{font-size:1.3rem;flex-shrink:0;width:28px;text-align:center;}
+.pred-body{flex:1;min-width:0;}
+.pred-name{font-family:var(--mono);font-size:.72rem;font-weight:700;margin-bottom:.2rem;}
+.pred-vals{display:flex;gap:1rem;flex-wrap:wrap;}
+.pred-tie{font-family:var(--mono);font-size:.6rem;color:var(--gold);}
+.pred-obs{font-family:var(--mono);font-size:.6rem;color:var(--green);}
+.pred-src{font-family:var(--mono);font-size:.55rem;color:var(--dim);margin-top:.15rem;}
+.pred-badge{font-family:var(--mono);font-size:.58rem;padding:.2rem .55rem;border-radius:5px;white-space:nowrap;flex-shrink:0;}
+.pred-badge.green{background:rgba(68,255,136,.1);color:var(--green);border:1px solid rgba(68,255,136,.25);}
+.pred-badge.yellow{background:rgba(255,215,0,.1);color:var(--gold);border:1px solid rgba(255,215,0,.25);}
+.pred-badge.red{background:rgba(255,68,85,.1);color:var(--red);border:1px solid rgba(255,68,85,.25);}
 
-.nav-logo {
-  font-family: var(--mono);
-  font-size: 1rem;
-  color: var(--gold);
-  letter-spacing: 4px;
-  text-decoration: none;
-  font-weight: 700;
-}
+.section-hdr{font-family:var(--mono);font-size:.65rem;letter-spacing:3px;text-transform:uppercase;padding:.4rem .8rem;border-radius:6px;margin-bottom:.6rem;display:inline-block;}
+.section-hdr.verde{background:rgba(68,255,136,.08);color:var(--green);border:1px solid rgba(68,255,136,.2);}
+.section-hdr.amarillo{background:rgba(255,215,0,.08);color:var(--gold);border:1px solid rgba(255,215,0,.2);}
 
-.lang-selector {
-  display: flex;
-  gap: 0.8rem;
-  align-items: center;
-}
+.news-box{background:rgba(68,255,136,.04);border:1px solid rgba(68,255,136,.2);border-radius:14px;padding:1.1rem 1.35rem;margin-bottom:1.5rem;}
+.news-title{font-family:var(--mono);font-size:.62rem;color:var(--green);letter-spacing:3px;text-transform:uppercase;margin-bottom:.8rem;}
+.news-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.63rem;}
+.news-table th{color:var(--dim);font-weight:400;padding:.35rem .5rem;border-bottom:1px solid var(--border);text-align:left;}
+.news-table td{padding:.35rem .5rem;border-bottom:1px solid rgba(91,200,245,.06);vertical-align:top;line-height:1.5;}
+.tag-activo{display:inline-block;background:rgba(68,255,136,.1);color:var(--green);border:1px solid rgba(68,255,136,.25);border-radius:4px;font-size:.55rem;padding:.1rem .35rem;}
+.tag-2028{display:inline-block;background:rgba(255,215,0,.08);color:var(--gold);border:1px solid rgba(255,215,0,.2);border-radius:4px;font-size:.55rem;padding:.1rem .35rem;}
+.tag-2035{display:inline-block;background:rgba(91,200,245,.08);color:var(--blue);border:1px solid rgba(91,200,245,.2);border-radius:4px;font-size:.55rem;padding:.1rem .35rem;}
 
-.lang-link {
-  font-family: var(--mono);
-  text-decoration: none;
-  transition: 0.3s;
-  font-size: 0.9rem;
-}
+.falsab-box{background:rgba(255,68,85,.04);border:2px solid rgba(255,68,85,.25);border-radius:16px;padding:1.35rem 1.5rem;margin-bottom:1.5rem;}
+.falsab-title{font-family:var(--mono);font-size:.65rem;color:var(--red);letter-spacing:3px;text-transform:uppercase;margin-bottom:.75rem;}
+.falsab-text{font-size:.83rem;line-height:1.8;margin-bottom:.9rem;}
+.falsab-list{list-style:none;font-family:var(--mono);font-size:.65rem;color:var(--dim);line-height:2;}
+.falsab-list li::before{content:'⚠ ';color:var(--red);}
+.falsab-list li strong{color:var(--text);}
 
-.lang-link.active {
-  color: var(--gold);
-  font-weight: 700;
-  border-bottom: 2px solid var(--gold);
-  padding-bottom: 2px;
-}
+.cow-panel{background:var(--bg2);border:1px solid rgba(91,200,245,.2);border-radius:14px;padding:1.1rem 1.35rem;margin-bottom:1.5rem;backdrop-filter:blur(8px);}
+.cow-title{font-family:var(--mono);font-size:.62rem;color:var(--blue);letter-spacing:3px;text-transform:uppercase;margin-bottom:.75rem;}
+.cow-eq{margin:.6rem 0;}
+.cow-note{font-family:var(--mono);font-size:.62rem;color:var(--dim);line-height:1.8;margin-top:.6rem;}
 
-.lang-link.inactive {
-  color: var(--dim);
-}
-
-.lang-link.inactive:hover {
-  color: var(--gold);
-}
-
-.lang-divider {
-  color: var(--dim);
-}
-
-.nav-back {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  color: var(--dim);
-  text-decoration: none;
-  border: 1px solid var(--border);
-  padding: 0.4rem 1.2rem;
-  border-radius: 30px;
-  transition: 0.3s;
-}
-
-.nav-back:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-}
-
-.page {
-  padding: 120px 2rem 4rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 10;
-}
-
-.page-tag {
-  font-family: var(--mono);
-  font-size: 0.9rem;
-  letter-spacing: 8px;
-  color: var(--red);
-  margin-bottom: 1rem;
-  border-bottom: 2px solid rgba(255,68,85,0.4);
-  padding-bottom: 0.8rem;
-  display: inline-block;
-}
-
-.page-title {
-  font-size: 3rem;
-  font-weight: 900;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--red) 0%, var(--gold) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.page-sub {
-  font-size: 1.1rem;
-  color: var(--dim);
-  max-width: 600px;
-  margin-bottom: 3rem;
-  line-height: 1.6;
-}
-
-.big-traffic-light {
-  display: flex;
-  gap: 3rem;
-  justify-content: center;
-  margin: 3rem 0;
-}
-
-.light-item {
-  text-align: center;
-}
-
-.light-circle {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  margin: 0 auto 0.5rem;
-  box-shadow: 0 0 30px currentColor;
-}
-
-.light-circle.green {
-  background: var(--green);
-  color: var(--green);
-}
-
-.light-circle.yellow {
-  background: var(--yellow);
-  color: var(--yellow);
-}
-
-.light-circle.red {
-  background: var(--red);
-  color: var(--red);
-}
-
-.light-number {
-  font-family: var(--mono);
-  font-size: 2rem;
-  font-weight: 700;
-  display: block;
-  line-height: 1;
-}
-
-.light-label {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--dim);
-  letter-spacing: 2px;
-}
-
-.predictions-list {
-  background: rgba(5,5,15,0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 2rem;
-  margin: 3rem 0;
-}
-
-.prediction-item {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 1.5rem 0;
-  border-bottom: 1px solid var(--border);
-  flex-wrap: wrap;
-}
-
-.prediction-item:last-child {
-  border-bottom: none;
-}
-
-.prediction-status {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  flex-shrink: 0;
-}
-
-.prediction-status.green {
-  background: rgba(68,255,136,0.2);
-  color: var(--green);
-  border: 2px solid var(--green);
-}
-
-.prediction-status.yellow {
-  background: rgba(255,215,0,0.2);
-  color: var(--yellow);
-  border: 2px solid var(--yellow);
-}
-
-.prediction-content {
-  flex: 1;
-  min-width: 250px;
-}
-
-.prediction-name {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 0.3rem;
-}
-
-.prediction-values {
-  display: flex;
-  gap: 2rem;
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  flex-wrap: wrap;
-}
-
-.prediction-tie {
-  color: var(--gold);
-}
-
-.prediction-obs {
-  color: var(--dim);
-}
-
-.prediction-error {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--green);
-  background: rgba(68,255,136,0.1);
-  padding: 0.2rem 0.6rem;
-  border-radius: 30px;
-  white-space: nowrap;
-}
-
-.prediction-error.yellow {
-  color: var(--yellow);
-  background: rgba(255,215,0,0.1);
-}
-
-.falsifiability-box {
-  background: linear-gradient(145deg, rgba(255,68,85,0.1) 0%, rgba(10,10,20,0.8) 100%);
-  border: 2px solid var(--red);
-  border-radius: 16px;
-  padding: 2rem;
-  margin: 3rem 0;
-}
-
-.falsifiability-title {
-  font-family: var(--mono);
-  font-size: 0.9rem;
-  color: var(--red);
-  letter-spacing: 2px;
-  margin-bottom: 1rem;
-}
-
-.falsifiability-text {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  margin-bottom: 1.5rem;
-}
-
-.falsifiability-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
-
-.falsifiability-list li {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-family: var(--mono);
-  font-size: 0.9rem;
-  color: var(--dim);
-}
-
-.falsifiability-list li::before {
-  content: '🔴';
-  font-size: 1rem;
-}
-
-.changelog {
-  background: rgba(5,5,15,0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin: 2rem 0;
-}
-
-.changelog-item {
-  display: flex;
-  gap: 1rem;
-  padding: 0.8rem 0;
-  border-bottom: 1px solid var(--border);
-  font-family: var(--mono);
-  font-size: 0.8rem;
-}
-
-.changelog-item:last-child {
-  border-bottom: none;
-}
-
-.changelog-date {
-  color: var(--gold);
-  min-width: 90px;
-}
-
-.changelog-text {
-  color: var(--dim);
-}
-
-.changelog-text .green {
-  color: var(--green);
-}
-
-.progress-section {
-  margin: 2rem 0;
-  text-align: center;
-}
-
-.progress-bar-bg {
-  width: 100%;
-  height: 20px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 30px;
-  overflow: hidden;
-  margin: 1rem 0;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--gold), var(--green));
-  width: 73%;
-  border-radius: 30px;
-  box-shadow: 0 0 20px rgba(68,255,136,0.5);
-}
-
-.progress-label {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  color: var(--dim);
-}
-
-footer {
-  padding: 3rem;
-  text-align: center;
-  border-top: 1px solid rgba(255,215,0,0.1);
-  margin-top: 4rem;
-  background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(10px);
-}
-
-.footer-equation {
-  font-family: var(--mono);
-  font-size: 1rem;
-  color: var(--gold);
-  margin-bottom: 0.5rem;
-  text-shadow: 0 0 20px rgba(255,215,0,0.3);
-}
-
-.footer-copy {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--dim);
-  letter-spacing: 2px;
-}
+footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);margin-top:2rem;}
+footer .feq{font-family:var(--mono);font-size:.72rem;color:var(--gold);margin-bottom:.5rem;}
+footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;}
 </style>
 </head>
 <body>
-
 <canvas id="galaxy-canvas"></canvas>
 
 <nav>
   <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
-  
-  <div class="lang-selector">
-    <a href="../predicciones.html" class="lang-link inactive">ES</a>
-    <span class="lang-divider">/</span>
+  <div class="nav-center">
+    <a href="predicciones.html" class="lang-link inactive">ES</a>
     <a href="predictions-en.html" class="lang-link active">EN</a>
   </div>
-  
-  <a href="index-en.html" class="nav-back">← BACK TO HOME</a>
+  <a href="lab-en.html" class="nav-back">← LABORATORY</a>
 </nav>
 
 <div class="page">
-  <div class="page-tag">VERIFICATION STATUS</div>
-  <h1 class="page-title">VERIFIABLE PREDICTIONS</h1>
-  <p class="page-sub">11 predictions. 8 confirmed. 3 pending. Zero free parameters. No faith. Only numbers.</p>
+  <div class="page-tag">Verification Status · No Faith · Only Numbers</div>
+  <h1 class="page-title">VERIFIABLE <span>PREDICTIONS</span></h1>
+  <p class="page-sub">TIE makes concrete numerical predictions with zero free parameters. Each one can be confirmed or refuted with data. If any fails, the theory is wrong. That is how science works.</p>
 
-  <!-- BIG TRAFFIC LIGHT -->
-  <div class="big-traffic-light">
-    <div class="light-item">
-      <div class="light-circle green"></div>
-      <span class="light-number">8</span>
-      <span class="light-label">CONFIRMED</span>
+  <!-- TRAFFIC LIGHT -->
+  <div class="semaforo">
+    <div class="sem-card verde">
+      <div class="sem-num verde">8</div>
+      <div class="sem-lbl verde">✓ Confirmed</div>
     </div>
-    <div class="light-item">
-      <div class="light-circle yellow"></div>
-      <span class="light-number">3</span>
-      <span class="light-label">PENDING</span>
+    <div class="sem-card amarillo">
+      <div class="sem-num amarillo">3</div>
+      <div class="sem-lbl amarillo">⏳ Pending</div>
     </div>
-    <div class="light-item">
-      <div class="light-circle red"></div>
-      <span class="light-number">0</span>
-      <span class="light-label">REFUTED</span>
+    <div class="sem-card rojo">
+      <div class="sem-num rojo">0</div>
+      <div class="sem-lbl rojo">✗ Refuted</div>
     </div>
   </div>
 
   <!-- PROGRESS BAR -->
-  <div class="progress-section">
-    <div class="progress-bar-bg">
-      <div class="progress-bar-fill"></div>
+  <div class="progress-wrap">
+    <div class="progress-track">
+      <div class="progress-green" style="width:72.7%"></div>
+      <div class="progress-yellow" style="width:27.3%"></div>
     </div>
-    <div class="progress-label">8/11 confirmed · 73% verified</div>
-  </div>
-
-  <!-- PREDICTIONS LIST -->
-  <div class="predictions-list">
-    <!-- 1. Dark matter -->
-    <div class="prediction-item">
-      <div class="prediction-status green">✅</div>
-      <div class="prediction-content">
-        <div class="prediction-name">Dark matter</div>
-        <div class="prediction-values">
-          <span class="prediction-tie">TIE: 84.1%</span>
-          <span class="prediction-obs">Obs: ~84%</span>
-        </div>
-      </div>
-      <span class="prediction-error">error &lt;1%</span>
-    </div>
-
-    <!-- 2. Cosmological constant Λ -->
-    <div class="prediction-item">
-      <div class="prediction-status green">✅</div>
-      <div class="prediction-content">
-        <div class="prediction-name">Cosmological constant Λ</div>
-        <div class="prediction-values">
-          <span class="prediction-tie">TIE: 1.145×10⁻⁵² m⁻²</span>
-          <span class="prediction-obs">Planck: 1.106×10⁻⁵² m⁻²</span>
-        </div>
-      </div>
-      <span class="prediction-error">error 3.5%</span>
-    </div>
-
-    <!-- 3. GPS correction -->
-    <div class="prediction-item">
-      <div class="prediction-status green">✅</div>
-      <div class="prediction-content">
-        <div class="prediction-name">GPS correction</div>
-        <div class="prediction-values">
-          <span class="prediction-tie">TIE: 45.7 μs/day</span>
-          <span class="prediction-obs">Obs: 45.9 μs/day</span>
-        </div>
-      </div>
-      <span class="prediction-error">error 0.4%</span>
-    </div>
-
-    <!-- 4. Mercury precession -->
-    <div class="prediction-item">
-      <div class="prediction-status green">✅</div>
-      <div class="prediction-content">
-        <div class="prediction-name">Mercury precession</div>
-        <div class="prediction-values">
-          <span class="prediction-tie">TIE: 43.0″/century</span>
-          <span class="prediction-obs">Obs: 43.1±0.5″/century</span>
-        </div>
-      </div>
-      <span class="prediction-error">error 0.2%</span>
-    </div>
-
-    <!-- 5. Bohr radius -->
-    <div class="prediction-item">
-      <div class="prediction-status green">✅</div>
-      <div class="prediction-content">
-        <div class="prediction-name">Bohr radius</div>
-        <div class="prediction-values">
-          <span class="prediction-tie">TIE: 5.292×10⁻¹¹ m</span>
-          <span class="prediction-obs">Obs: 5.297×10⁻¹¹ m</span>
-        </div>
-      </div>
-      <span class="prediction-error">error 0.10%</span>
-    </div>
-
-    <!-- 6. Fine structure α -->
-    <div class="prediction-item">
-      <div class="prediction-status green">✅</div>
-      <div class="prediction-content">
-        <div class="prediction-name">Fine structure constant α</div>
-        <div class="prediction-values">
-          <span class="prediction-tie">TIE: 1/137.12</span>
-          <span class="prediction-obs">Obs: 1/137.04</span>
-        </div>
-      </div>
-      <span class="prediction-error">error &lt;0.1%</span>
-    </div>
-
-    <!-- 7. Cluster factor -->
-    <div class="prediction-item">
-      <div class="prediction-status green">✅</div>
-      <div class="prediction-content">
-        <div class="prediction-name">Galaxy cluster factor</div>
-        <div class="prediction-values">
-          <span class="prediction-tie">TIE: 2π = 6.28×</span>
-          <span class="prediction-obs">Obs: ~6.25×</span>
-        </div>
-      </div>
-      <span class="prediction-error">error 0.5%</span>
-    </div>
-
-    <!-- 8. Fermi's Golden Rule -->
-    <div class="prediction-item">
-      <div class="prediction-status green">✅</div>
-      <div class="prediction-content">
-        <div class="prediction-name">Fermi's Golden Rule</div>
-        <div class="prediction-values">
-          <span class="prediction-tie">TIE: 2π/ħ native</span>
-          <span class="prediction-obs">Fermi 1934</span>
-        </div>
-      </div>
-      <span class="prediction-error">independent validation</span>
-    </div>
-
-    <!-- 9. EHT shadow (pending) -->
-    <div class="prediction-item">
-      <div class="prediction-status yellow">⏳</div>
-      <div class="prediction-content">
-        <div class="prediction-name">EHT shadow (M87*, Sgr A*)</div>
-        <div class="prediction-values">
-          <span class="prediction-tie">TIE: rₕ ≫ rₛ</span>
-          <span class="prediction-obs">Pending (ngEHT)</span>
-        </div>
-      </div>
-      <span class="prediction-error yellow">falsifiable 2028+</span>
-    </div>
-
-    <!-- 10. LISA signal -->
-    <div class="prediction-item">
-      <div class="prediction-status yellow">⏳</div>
-      <div class="prediction-content">
-        <div class="prediction-name">LISA signal</div>
-        <div class="prediction-values">
-          <span class="prediction-tie">TIE: ~2.4 mHz</span>
-          <span class="prediction-obs">Pending (2030+)</span>
-        </div>
-      </div>
-      <span class="prediction-error yellow">to be verified</span>
-    </div>
-
-    <!-- 11. Intergalactic cross-field -->
-    <div class="prediction-item">
-      <div class="prediction-status yellow">⏳</div>
-      <div class="prediction-content">
-        <div class="prediction-name">Intergalactic cross-field</div>
-        <div class="prediction-values">
-          <span class="prediction-tie">TIE: Residual acceleration</span>
-          <span class="prediction-obs">Pending (Euclid)</span>
-        </div>
-      </div>
-      <span class="prediction-error yellow">in progress</span>
+    <div class="progress-legend">
+      <span><span class="pl-dot" style="background:var(--green)"></span>8 confirmed (72.7%)</span>
+      <span><span class="pl-dot" style="background:var(--gold)"></span>3 pending (27.3%)</span>
+      <span><span class="pl-dot" style="background:var(--red)"></span>0 refuted</span>
     </div>
   </div>
 
-  <!-- FALSIFIABILITY SECTION -->
-  <div class="falsifiability-box">
-    <div class="falsifiability-title">🔴 FALSIFIABILITY</div>
-    <div class="falsifiability-text">
-      TIE does not ask for faith. It asks to be measured. If these experiments do not confirm the predictions, the theory is wrong.
+  <!-- CONFIRMED -->
+  <div class="section-hdr verde" style="margin-bottom:.8rem;">✓ Confirmed — 8 predictions</div>
+  <div class="pred-list">
+
+    <div class="pred-item confirmed">
+      <div class="pred-icon">✅</div>
+      <div class="pred-body">
+        <div class="pred-name">Dark matter — exact fraction</div>
+        <div class="pred-vals">
+          <span class="pred-tie">TIE: 1 − 1/2π = 84.1%</span>
+          <span class="pred-obs">Observed: ~84%</span>
+        </div>
+        <div class="pred-src">Planck 2018 · CMB + gravitational lensing · Cap. V</div>
+      </div>
+      <span class="pred-badge green">error &lt;1%</span>
     </div>
-    <ul class="falsifiability-list">
-      <li>ngEHT (next generation) — if the shadow of M87* or Sgr A* matches rₛ and not rₕ</li>
-      <li>LISA (2030+) — if the ~2.4 mHz signal of the φ field is not detected</li>
-      <li>Euclid — if residual acceleration in intergalactic space is not measured</li>
-      <li>Next generation GPS — if the correction systematically differs from 45.7 μs/day</li>
+
+    <div class="pred-item confirmed">
+      <div class="pred-icon">✅</div>
+      <div class="pred-body">
+        <div class="pred-name">Cosmological constant Λ</div>
+        <div class="pred-vals">
+          <span class="pred-tie">TIE: 1.145×10⁻⁵² m⁻²</span>
+          <span class="pred-obs">Planck: 1.106×10⁻⁵² m⁻²</span>
+        </div>
+        <div class="pred-src">Derived from H₀ — no free parameters · Cap. XI</div>
+      </div>
+      <span class="pred-badge green">error 3.5%</span>
+    </div>
+
+    <div class="pred-item confirmed">
+      <div class="pred-icon">✅</div>
+      <div class="pred-body">
+        <div class="pred-name">GPS correction — time dilation</div>
+        <div class="pred-vals">
+          <span class="pred-tie">TIE: 45.7 μs/day</span>
+          <span class="pred-obs">Observed: 45.9 μs/day</span>
+        </div>
+        <div class="pred-src">GPS constellation 1978–present · regime a_N ≫ a₀ · Cap. VI</div>
+      </div>
+      <span class="pred-badge green">error 0.4%</span>
+    </div>
+
+    <div class="pred-item confirmed">
+      <div class="pred-icon">✅</div>
+      <div class="pred-body">
+        <div class="pred-name">Mercury perihelion precession</div>
+        <div class="pred-vals">
+          <span class="pred-tie">TIE: 43.0″/century</span>
+          <span class="pred-obs">Observed: 43.1 ± 0.5″/century</span>
+        </div>
+        <div class="pred-src">Historical observations · factor 2 from δ∫dφ=0 · Cap. IX</div>
+      </div>
+      <span class="pred-badge green">error 0.2%</span>
+    </div>
+
+    <div class="pred-item confirmed">
+      <div class="pred-icon">✅</div>
+      <div class="pred-body">
+        <div class="pred-name">Bohr radius — atomic structure</div>
+        <div class="pred-vals">
+          <span class="pred-tie">TIE: 5.292×10⁻¹¹ m</span>
+          <span class="pred-obs">Observed: 5.297×10⁻¹¹ m</span>
+        </div>
+        <div class="pred-src">Precision spectroscopy · ψ as real density · Cap. VII</div>
+      </div>
+      <span class="pred-badge green">error 0.10%</span>
+    </div>
+
+    <div class="pred-item confirmed">
+      <div class="pred-icon">✅</div>
+      <div class="pred-body">
+        <div class="pred-name">Fine structure constant α</div>
+        <div class="pred-vals">
+          <span class="pred-tie">TIE: 1/137.12</span>
+          <span class="pred-obs">Observed: 1/137.036</span>
+        </div>
+        <div class="pred-src">CODATA 2018 · derived without tuning · Cap. VII</div>
+      </div>
+      <span class="pred-badge green">error &lt;0.1%</span>
+    </div>
+
+    <div class="pred-item confirmed">
+      <div class="pred-icon">✅</div>
+      <div class="pred-body">
+        <div class="pred-name">Galaxy cluster mass factor</div>
+        <div class="pred-vals">
+          <span class="pred-tie">TIE: 2π = 6.283×</span>
+          <span class="pred-obs">Observed: ~6.25×</span>
+        </div>
+        <div class="pred-src">Cluster observations · visible vs dynamical mass · Cap. V</div>
+      </div>
+      <span class="pred-badge green">error 0.5%</span>
+    </div>
+
+    <div class="pred-item confirmed">
+      <div class="pred-icon">✅</div>
+      <div class="pred-body">
+        <div class="pred-name">Fermi's Golden Rule — independent validation</div>
+        <div class="pred-vals">
+          <span class="pred-tie">TIE: native structure 2π/ħ</span>
+          <span class="pred-obs">Fermi 1934 — built without knowing TIE</span>
+        </div>
+        <div class="pred-src">Nuclear decay · transition rate · Cap. VII</div>
+      </div>
+      <span class="pred-badge green">validation 1934</span>
+    </div>
+
+  </div>
+
+  <!-- PENDING -->
+  <div class="section-hdr amarillo" style="margin-bottom:.8rem;">⏳ Pending — 3 falsifiable predictions</div>
+  <div class="pred-list" style="margin-bottom:1rem;">
+
+    <div class="pred-item pending">
+      <div class="pred-icon">⏳</div>
+      <div class="pred-body">
+        <div class="pred-name">TIE photosphere — black hole shadow</div>
+        <div class="pred-vals">
+          <span class="pred-tie">TIE: rₕ ≫ rₛ (physical horizon)</span>
+          <span class="pred-obs">Observable photosphere not yet derived</span>
+        </div>
+        <div class="pred-src">EHT measures photosphere, not horizon · TIE photosphere = future work Cap. X · ngEHT 2028+ · AMT Namibia · Lunar Telescope</div>
+      </div>
+      <span class="pred-badge yellow">2028–2030+</span>
+    </div>
+
+    <div class="pred-item pending">
+      <div class="pred-icon">⏳</div>
+      <div class="pred-body">
+        <div class="pred-name">φ field signal — LISA ~2.4 mHz</div>
+        <div class="pred-vals">
+          <span class="pred-tie">TIE: signal ~2.4 mHz in gravitational waves</span>
+          <span class="pred-obs">LISA launch 2035</span>
+        </div>
+        <div class="pred-src">€89.5M Thales-OHB contract signed Jan 2026 · NASA unit tests Jan 2026 · Cap. VIII</div>
+      </div>
+      <span class="pred-badge yellow">LISA 2035</span>
+    </div>
+
+    <div class="pred-item pending">
+      <div class="pred-icon">⏳</div>
+      <div class="pred-body">
+        <div class="pred-name">COW correction — neutron interferometry</div>
+        <div class="pred-vals">
+          <span class="pred-tie">TIE: ΔφTIE = ΔφCOW · (1 + a₀·L/g)</span>
+          <span class="pred-obs">Correction ~10⁻¹¹ — below current precision</span>
+        </div>
+        <div class="pred-src">ILL-Grenoble · next-generation NIST · Cap. VII §7.6</div>
+      </div>
+      <span class="pred-badge yellow">next gen.</span>
+    </div>
+
+  </div>
+
+  <!-- MARCH 2026 NEWS -->
+  <div class="news-box">
+    <div class="news-title">🚀 Experimental updates — March 2026</div>
+    <table class="news-table">
+      <tr><th>Project</th><th>Update</th><th>Date</th><th>TIE prediction</th><th>Status</th></tr>
+      <tr>
+        <td style="color:var(--text);font-weight:700">AMT Africa (Namibia)</td>
+        <td>Unisa-UNAM agreement signed — Africa Millimetre Telescope. Improves EHT coverage in the southern hemisphere.</td>
+        <td style="color:var(--dim)">Feb 2026</td>
+        <td style="color:var(--gold)">TIE photosphere</td>
+        <td><span class="tag-activo">ACTIVE</span></td>
+      </tr>
+      <tr>
+        <td style="color:var(--text);font-weight:700">AtLAST + EHT</td>
+        <td>Study published on expanding the population of observable black holes at horizon scale.</td>
+        <td style="color:var(--dim)">Feb 2026</td>
+        <td style="color:var(--gold)">TIE photosphere</td>
+        <td><span class="tag-2028">2028+</span></td>
+      </tr>
+      <tr>
+        <td style="color:var(--text);font-weight:700">Lunar Telescope</td>
+        <td>Zhao et al.: lunar antenna with sub-μas resolution. 6 candidates including M104/Sombrero.</td>
+        <td style="color:var(--dim)">Jan 2026</td>
+        <td style="color:var(--gold)">TIE photosphere</td>
+        <td><span class="tag-2028">2030+</span></td>
+      </tr>
+      <tr>
+        <td style="color:var(--text);font-weight:700">LISA</td>
+        <td>€89.5M Thales-OHB contract signed. NASA tests control units. Ariane 6, 2035.</td>
+        <td style="color:var(--dim)">Jan 2026</td>
+        <td style="color:var(--gold)">φ field ~2.4 mHz</td>
+        <td><span class="tag-2035">2035</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- COW DETAILS -->
+  <div class="cow-panel">
+    <div class="cow-title">🔬 Detail — Corrected COW experiment (Cap. VII §7.6)</div>
+    <div class="cow-eq">\( \Delta\phi_{\text{TIE}} = \Delta\phi_{\text{COW}} \cdot \left(1 + \frac{a_0 \cdot L}{g}\right) \)</div>
+    <div class="cow-note">
+      Where a₀ = cH₀/2π ≈ 1.08×10⁻¹⁰ m/s² and g ≈ 9.81 m/s²<br>
+      → Correction: a₀/g ≈ <strong style="color:var(--blue)">1.1×10⁻¹¹</strong> — predicted without free parameters<br>
+      → Verifiable with next-generation neutron interferometry at <strong style="color:var(--text)">ILL-Grenoble</strong> or <strong style="color:var(--text)">NIST</strong><br>
+      → The correction is small but non-zero — its exact magnitude distinguishes TIE from the standard formulation of ψ
+    </div>
+  </div>
+
+  <!-- FALSIFIABILITY -->
+  <div class="falsab-box">
+    <div class="falsab-title">⚠ Falsifiability conditions — when TIE would be refuted</div>
+    <div class="falsab-text">TIE asks for no faith. It asks you to measure it. If any of these conditions is met, the theory is wrong and must be abandoned.</div>
+    <ul class="falsab-list">
+      <li><strong>ngEHT / AMT / Lunar Telescope</strong> — if the observable shadow of M87* or Sgr A* matches rₛ (GR) and not the TIE photosphere once formally derived</li>
+      <li><strong>LISA 2035</strong> — if no signal is detected in the ~2.4 mHz band of the φ field at LISA's sensitivity</li>
+      <li><strong>ILL-Grenoble / NIST</strong> — if the COW correction is zero at 10⁻¹² precision (below TIE's prediction of 10⁻¹¹)</li>
+      <li><strong>Next-generation GPS</strong> — if the measured correction systematically differs from 45.7 μs/day at &lt;0.1% precision</li>
     </ul>
   </div>
 
-  <!-- SCIENTIFIC CHANGELOG -->
-  <h2 style="font-size:1.8rem; margin:3rem 0 1rem;">📋 SCIENTIFIC CHANGELOG</h2>
-  <div class="changelog">
-    <div class="changelog-item">
-      <span class="changelog-date">2026-03-05</span>
-      <span class="changelog-text"><span class="green">✅ Confirmed</span> fine structure α with error &lt;0.1%</span>
-    </div>
-    <div class="changelog-item">
-      <span class="changelog-date">2026-03-04</span>
-      <span class="changelog-text"><span class="green">✅ Confirmed</span> GPS correction (error 0.4%)</span>
-    </div>
-    <div class="changelog-item">
-      <span class="changelog-date">2026-03-03</span>
-      <span class="changelog-text"><span class="green">✅ Confirmed</span> cosmological constant Λ (error 3.5%)</span>
-    </div>
-    <div class="changelog-item">
-      <span class="changelog-date">2026-03-02</span>
-      <span class="changelog-text"><span class="green">✅ Confirmed</span> dark matter 84.1% (Planck 2018)</span>
-    </div>
-    <div class="changelog-item">
-      <span class="changelog-date">2026-03-01</span>
-      <span class="changelog-text"><span class="green">✅ Confirmed</span> Fermi's Golden Rule (independent validation 1934)</span>
-    </div>
+  <div style="font-family:var(--mono);font-size:.65rem;color:var(--dim);text-align:center;padding:.75rem;border:1px solid var(--border);border-radius:8px;line-height:1.8;">
+    Last updated: March 2026 · 11 predictions · 8 confirmed · 3 pending · 0 refuted<br>
+    All derived from H₀ and ħ — zero free parameters tuned
   </div>
+
 </div>
 
 <footer>
-  <div class="footer-equation">11 predictions · 8 confirmed · 3 pending · 0 refuted</div>
-  <div class="footer-copy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
+  <div class="feq">11 predictions · 8 confirmed · 3 pending · 0 refuted · 0 free parameters</div>
+  <div class="fcopy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-const canvas = document.getElementById('galaxy-canvas');
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
-
-const parameters = {
-  count: 50000,
-  size: 0.03,
-  radius: 20,
-  branches: 4,
-  spin: 1.2,
-  randomness: 0.4,
-  randomnessPower: 2,
-  insideColor: 0xffaa00,
-  outsideColor: 0x1b3984
+(function(){
+  const canvas=document.getElementById('galaxy-canvas');
+  const scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(60,1,0.1,1000);
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  function resize(){renderer.setSize(canvas.clientWidth,canvas.clientHeight);camera.aspect=canvas.clientWidth/canvas.clientHeight;camera.updateProjectionMatrix();}
+  resize(); window.addEventListener('resize',resize);
+  camera.position.set(0,4,7); camera.lookAt(0,0,0);
+  const N=55000, pos=new Float32Array(N*3), col=new Float32Array(N*3);
+  const cIn=new THREE.Color('#FFD700'), cOut=new THREE.Color('#050518');
+  for(let i=0;i<N;i++){
+    const r=Math.random()*5, b=(i%4)/4*Math.PI*2, s=r*1.3;
+    const rx=Math.pow(Math.random(),3)*(Math.random()<.5?1:-1)*.3*r;
+    const ry=Math.pow(Math.random(),3)*(Math.random()<.5?1:-1)*.1*r;
+    const rz=Math.pow(Math.random(),3)*(Math.random()<.5?1:-1)*.3*r;
+    pos[i*3]=Math.cos(b+s)*r+rx; pos[i*3+1]=ry; pos[i*3+2]=Math.sin(b+s)*r+rz;
+    const m=new THREE.Color().lerpColors(cIn,cOut,r/5);
+    col[i*3]=m.r; col[i*3+1]=m.g; col[i*3+2]=m.b;
+  }
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+  const mat=new THREE.PointsMaterial({size:.006,sizeAttenuation:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true});
+  scene.add(new THREE.Points(geo,mat));
+  (function animate(){requestAnimationFrame(animate);scene.rotation.y+=.0004;renderer.render(scene,camera);})();
+})();
+</script>
+<script>
+window.onload=()=>{
+  renderMathInElement(document.body,{
+    delimiters:[{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]
+  });
 };
-
-const galaxyGeometry = new THREE.BufferGeometry();
-const positions = new Float32Array(parameters.count * 3);
-const colors = new Float32Array(parameters.count * 3);
-
-const colorInside = new THREE.Color(parameters.insideColor);
-const colorOutside = new THREE.Color(parameters.outsideColor);
-
-for (let i = 0; i < parameters.count; i++) {
-  const i3 = i * 3;
-  const r = Math.random() * parameters.radius;
-  const spinAngle = r * parameters.spin;
-  const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
-  
-  const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
-  const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
-  const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
-  
-  const x = Math.cos(branchAngle + spinAngle) * r + randomX;
-  const y = randomY * 0.5;
-  const z = Math.sin(branchAngle + spinAngle) * r + randomZ;
-  
-  positions[i3] = x;
-  positions[i3 + 1] = y;
-  positions[i3 + 2] = z;
-  
-  const mixedColor = colorInside.clone().lerp(colorOutside, r / parameters.radius);
-  colors[i3] = mixedColor.r;
-  colors[i3 + 1] = mixedColor.g;
-  colors[i3 + 2] = mixedColor.b;
-}
-
-galaxyGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-galaxyGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-const galaxyMaterial = new THREE.PointsMaterial({
-  size: parameters.size,
-  sizeAttenuation: true,
-  depthWrite: false,
-  blending: THREE.AdditiveBlending,
-  vertexColors: true,
-  transparent: true,
-  opacity: 0.8
-});
-
-const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
-scene.add(galaxy);
-
-camera.position.set(10, 5, 25);
-camera.lookAt(0, 0, 0);
-
-let mouseX = 0;
-let mouseY = 0;
-
-document.addEventListener('mousemove', (event) => {
-  mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
-  mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
-});
-
-function animate() {
-  requestAnimationFrame(animate);
-  galaxy.rotation.y += 0.00015;
-  galaxy.rotation.x += 0.00005;
-  galaxy.rotation.y += mouseX * 0.0003;
-  galaxy.rotation.x += mouseY * 0.0002;
-  renderer.render(scene, camera);
-}
-
-animate();
-
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
 </script>
 </body>
 </html>

@@ -641,7 +641,7 @@ function setLang(l){
   document.getElementById('btn-en').className='lang-btn '+(l==='en'?'active':'inactive');
   const lb=document.getElementById('lnk-back');
   lb.textContent = l==='es'?'← LABORATORIO':'← LABORATORY';
-  lb.href = l==='es'?'labs.html':'labs-en.html';
+  lb.href = l==='es'?'labs.html':'lab-en.html';
   document.getElementById('strip-title').innerHTML = l==='es'?'GENERADOR <span>LaTeX</span>':'<span>LaTeX</span> GENERATOR';
   document.getElementById('strip-badge').textContent = 'TIE v11.8 · KATEX';
   document.getElementById('cat-search').placeholder = l==='es'?'Buscar ecuación...':'Search equation...';

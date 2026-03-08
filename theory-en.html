@@ -1224,5 +1224,388 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 </script>
+
 </body>
 </html>
+<script>
+
+// ═══════════════════════════════════════
+// GLOSARIO TIE
+// ═══════════════════════════════════════
+const GLOSARIO = [
+  {
+    id:'a0', symbol:'a₀', color:'#FFD700',
+    term:'Aceleración de Milgrom',
+    tagline:'La constante que conecta gravedad con el cosmos',
+    cat:'fundamental',
+    def:`<strong>a₀</strong> es la aceleración crítica que marca la frontera entre el régimen newtoniano y el régimen TIE. Por encima de a₀ la gravedad se comporta según Newton. Por debajo emerge la física de infraestructura.<br><br>En TIE no es un parámetro libre: se <strong>deriva directamente de H₀</strong>, conectando la escala local de la gravedad con la expansión global del universo.`,
+    formula:'a_0 = \\frac{cH_0}{2\\pi} = 1.082 \\times 10^{-10}\\,\\text{m/s}^2',
+    origin:`<em>1983</em> — Mordehai Milgrom propone MOND y encuentra empíricamente que a₀ ≈ cH₀/6. No explica el porqué del factor.<br><br><em>2024 · TIE</em> — Rubén Lecona demuestra que el factor correcto es <em>2π</em>. El 2π emerge de tratar la expansión del universo como una rotación: ω₀ = H₀ = 2π/T_universo. Con este factor, a₀ = cH₀/2π coincide con las observaciones con precisión del 0.3%.`,
+    viz:'a0',
+    links:[{txt:'Calculadora a₀',href:'constante.html'},{txt:'Factor 2π',href:'2pi.html'}]
+  },
+  {
+    id:'phi', symbol:'φ', color:'#00f5c8',
+    term:'Campo de Infraestructura Espacial',
+    tagline:'El tejido dinámico del espacio-tiempo',
+    cat:'fundamental',
+    def:`<strong>φ</strong> es el campo escalar que describe el estado dinámico del espacio mismo. No es un campo de fuerza adicional — es la geometría cuantificable del vacío.<br><br>En la gravedad newtoniana el espacio es pasivo. En TIE el espacio tiene una <strong>capacidad de respuesta</strong> que se manifiesta como el campo φ, con potencial modificado respecto a GR en regímenes de baja aceleración.`,
+    formula:'\\phi(r) = -\\frac{GM}{r}\\left(1 + \\frac{a_0 r}{2c^2}\\right)',
+    origin:`<em>Einstein 1915</em> — el espacio-tiempo es geométrico pero el vacío no tiene grados de libertad internos.<br><br><em>TIE</em> — Lecona introduce φ como campo de infraestructura. La corrección <em>a₀r/2c²</em> es pequeña en el sistema solar pero dominante en galaxias, explicando las curvas de rotación planas sin materia oscura.`,
+    viz:'phi',
+    links:[{txt:'Campo φ 3D',href:'campo-phi.html'},{txt:'Corrección GPS',href:'gps.html'}]
+  },
+  {
+    id:'rh', symbol:'rₕ', color:'#FF8C42',
+    term:'Horizonte TIE',
+    tagline:'El horizonte gravitacional más allá de Schwarzschild',
+    cat:'agujeros',
+    def:`<strong>rₕ</strong> es el radio al cual la infraestructura espacial TIE domina sobre la curvatura de Schwarzschild. Para masas grandes rₕ ≫ rₛ.<br><br>Para M87* (6.5×10⁹ M☉): rₕ = <strong>4.04×10⁶ × rₛ</strong>. Esto tiene consecuencias observables para el EHT y la sombra del agujero negro.`,
+    formula:'r_h = 0.869\\,\\sqrt{\\frac{GM}{a_0}}',
+    origin:`<em>Schwarzschild 1916</em> — rₛ = 2GM/c² define el horizonte de eventos clásico.<br><br><em>TIE</em> — Al extender el potencial gravitacional con el campo φ, aparece un segundo radio característico. El coeficiente 0.869 se obtiene igualando φ_TIE = φ_GR. Para M > Mc ≈ 1.06×10²³ M☉, rₕ > rₛ y TIE domina.`,
+    viz:'rh',
+    links:[{txt:'Calculadora rₕ',href:'agujeros.html'},{txt:'Lensing 3D',href:'lensing.html'}]
+  },
+  {
+    id:'t2', symbol:'T²', color:'#ff6eb4',
+    term:'Tiempo Artificial T²',
+    tagline:'El bisturí que corrige la doble derivación',
+    cat:'fundamental',
+    def:`<strong>T²</strong> artificial es el factor de tiempo al cuadrado que aparece en ecuaciones físicas como artefacto de medición, no como física real.<br><br>El bisturí TIE: identificar qué T² son <strong>reales</strong> (doble derivación genuina) y cuáles son <strong>artificiales</strong> (artefactos de coordenadas o unidades).`,
+    formula:'a = \\frac{\\Delta v}{\\Delta t} \\implies [\\text{m/s}^2] = \\frac{[\\text{m/s}]}{[\\text{s}]} \\quad \\leftarrow T^2\\text{ artificial}',
+    origin:`<em>Concepto central de TIE</em> — Lecona observa que el "problema de ajuste fino" de Λ (10¹²⁰ órdenes de error) existe porque la QFT calcula energía del vacío con un T² artificial.<br><br>Al eliminarlo, Λ_TIE = 2H₀²/c² emerge naturalmente. <em>El problema de ajuste fino desaparece</em>.`,
+    viz:'t2',
+    links:[{txt:'Teoría completa',href:'teoria.html'},{txt:'Constante Λ',href:'constante.html'}]
+  },
+  {
+    id:'lambda', symbol:'Λ', color:'#5BC8F5',
+    term:'Constante Cosmológica TIE',
+    tagline:'Sin energía oscura, sin ajuste fino',
+    cat:'cosmologia',
+    def:`<strong>Λ_TIE</strong> es la constante cosmológica derivada en TIE a partir únicamente de H₀. No requiere energía oscura ni ajuste fino.<br><br>El problema clásico: la QFT predice una densidad de vacío 10¹²⁰ veces mayor que la observada. TIE resuelve esto identificando un <strong>T² artificial</strong> en el cálculo de QFT.`,
+    formula:'\\Lambda_{\\text{TIE}} = \\frac{2H_0^2}{c^2} = 1.145 \\times 10^{-52}\\,\\text{m}^{-2}',
+    origin:`<em>Einstein 1917</em> — introduce Λ ad hoc para universo estático.<br><em>Hubble 1929</em> — Λ resurge como "energía oscura".<br><br><em>TIE</em> — Λ no es constante libre ni energía misteriosa. Es la curvatura residual del espacio en expansión: <em>2H₀²/c²</em>. Coincide con Λ_obs con error < 3.5%.`,
+    viz:'lambda',
+    links:[{txt:'Calculadora Λ',href:'constante.html'},{txt:'Predicciones',href:'predicciones.html'}]
+  },
+  {
+    id:'vflat', symbol:'v∞', color:'#aaff00',
+    term:'Velocidad Plana de Rotación',
+    tagline:'La predicción perfecta sin materia oscura',
+    cat:'galaxias',
+    def:`<strong>v_flat</strong> es la velocidad asintótica de rotación de estrellas en el exterior de una galaxia. Según Newton debería decrecer como 1/√r. Las observaciones muestran que permanece <strong>constante</strong> — la anomalía que llevó a postular materia oscura.<br><br>TIE predice v_flat exactamente a partir de la masa bariónica visible, sin parámetros libres y sin materia oscura.`,
+    formula:'v_{\\text{flat}} = (G M_{\\text{bar}} a_0)^{1/4}',
+    origin:`<em>1970s — Vera Rubin</em> descubre las curvas de rotación planas. La comunidad postula halos de materia oscura.<br><br><em>1983 — Milgrom</em> propone v_flat = (GMa₀)^(1/4) empíricamente.<br><br><em>TIE</em> — la misma fórmula emerge <em>naturalmente</em> del campo φ. Testado en <em>175 galaxias SPARC</em> con σ = 0.07 dex.`,
+    viz:'vflat',
+    links:[{txt:'Curvas de rotación',href:'curvas.html'},{txt:'Base SPARC',href:'sparc.html'}]
+  },
+  {
+    id:'mc', symbol:'Mc', color:'#FF4455',
+    term:'Masa Crítica TIE',
+    tagline:'El umbral donde TIE supera a GR',
+    cat:'agujeros',
+    def:`<strong>Mc</strong> es la masa para la cual rₕ = rₛ exactamente. Por encima de Mc el horizonte TIE domina; por debajo domina GR.<br><br><strong>Mc ≈ 1.06×10²³ M☉</strong> — equivalente a ~100 veces la masa del cúmulo de Virgo.`,
+    formula:'M_c = \\frac{c^2}{G}\\sqrt{\\frac{c^2}{a_0 G}} \\approx 1.06\\times 10^{23}\\,M_\\odot',
+    origin:`<em>Derivación TIE</em> — Se obtiene igualando rₕ = rₛ y despejando M. Mc depende únicamente de c, G y H₀ — <em>cero parámetros ajustables</em>.`,
+    viz:'mc',
+    links:[{txt:'Agujeros negros',href:'agujeros.html'}]
+  },
+  {
+    id:'flisa', symbol:'f♦', color:'#b388ff',
+    term:'Frecuencia LISA de TIE',
+    tagline:'La huella de a₀ en las ondas gravitacionales',
+    cat:'predicciones',
+    def:`<strong>f_LISA</strong> es la frecuencia a la que TIE predice que las ondas gravitacionales llevan la modulación del T² artificial. Coincide con la frecuencia de máxima sensibilidad de LISA.<br><br>Esta no es coincidencia: <strong>LISA detectará exactamente donde TIE predice su huella</strong>.`,
+    formula:'f_{\\text{LISA}} = \\frac{a_0}{\\pi c} = \\frac{H_0}{2\\pi^2} \\approx 2.4\\,\\text{mHz}',
+    origin:`<em>TIE</em> — El campo φ tiene una frecuencia natural de oscilación determinada por a₀ y c.<br><br><em>LISA (2035)</em> — Sensibilidad máxima en ~2–3 mHz. <em>Exactamente donde TIE predice la huella</em>. Si LISA detecta la modulación de T² confirmaría TIE.`,
+    viz:'flisa',
+    links:[{txt:'Campo φ / GW',href:'campo-phi.html'},{txt:'Falsificabilidad',href:'falsabilidad.html'}]
+  },
+  {
+    id:'infra', symbol:'IE', color:'#FFD700',
+    term:'Infraestructura Espacial',
+    tagline:'El espacio no es vacío — tiene estructura',
+    cat:'fundamental',
+    def:`La <strong>Infraestructura Espacial</strong> es la propiedad del espacio-tiempo de tener un estado dinámico interno, cuantificado por el campo φ. No es éter ni energía oscura.<br><br>Es la generalización de la geometría de Einstein: el espacio no solo se curva — <strong>tiene capacidad de almacenar y transmitir información gravitacional</strong> a escalas donde a < a₀.`,
+    formula:'S_{\\text{TIE}} = \\int d^4x\\,\\sqrt{-g}\\left[\\frac{R}{16\\pi G} + \\mathcal{L}_\\phi + \\mathcal{L}_m\\right]',
+    origin:`<em>Einstein 1915</em> — espacio-tiempo geométrico y dinámico, pero sin grados de libertad internos del vacío.<br><br><em>TIE</em> — el vacío cuántico tiene fluctuaciones que en el límite macroscópico se manifiestan como el campo φ. El nombre <em>TIE</em> surge directamente: <em>T</em>eoría de la <em>I</em>nfraestructura <em>E</em>spacial.`,
+    viz:'infra',
+    links:[{txt:'Teoría',href:'teoria.html'}]
+  },
+  {
+    id:'twopi', symbol:'2π', color:'#aaff00',
+    term:'Factor 2π Universal',
+    tagline:'Por qué el universo "rota" a 2π/T',
+    cat:'fundamental',
+    def:`El <strong>factor 2π</strong> conecta la frecuencia de Hubble con la frecuencia angular del universo. Emerge de tratar la expansión cósmica como un proceso <strong>periódico</strong> en 4D.<br><br>Su presencia en a₀ = cH₀/<strong>2π</strong> hace que TIE sea una teoría derivada, no paramétrica.`,
+    formula:'\\omega_0 = H_0 = \\frac{2\\pi}{T_{\\text{universo}}} \\implies a_0 = \\frac{cH_0}{2\\pi}',
+    origin:`<em>Milgrom 1983</em> — ajusta empíricamente a₀ ≈ 1.2×10⁻¹⁰ m/s², nota que es del orden de cH₀ pero no deriva el factor exacto.<br><br><em>TIE</em> — al modelar el universo en expansión como sistema rotante en 4D, la frecuencia angular es ω₀ = 2π/T_universo = H₀. El 2π es la firma de la periodicidad, no un ajuste.`,
+    viz:'twopi',
+    links:[{txt:'Calculadora 2π',href:'2pi.html'},{txt:'Reloj universal',href:'reloj-universal.html'}]
+  },
+  {
+    id:'sparc', symbol:'σ', color:'#5BC8F5',
+    term:'Test SPARC',
+    tagline:'175 galaxias, 0 parámetros libres',
+    cat:'predicciones',
+    def:`<strong>SPARC</strong> es la base de datos de referencia para curvas de rotación galácticas. 175 galaxias con masas estelares determinadas por fotometría infrarroja independiente.<br><br>TIE predice v_flat para cada galaxia usando <em>únicamente la masa bariónica visible</em>. La dispersión es <strong>σ = 0.07 dex</strong> — el límite del error observacional.`,
+    formula:'\\log v_f = \\frac{1}{4}\\log(G M_{\\text{bar}} a_0) \\quad \\sigma = 0.07\\,\\text{dex}',
+    origin:`<em>2016 — McGaugh, Lelli, Schombert</em> publican la Baryonic Tully-Fisher Relation usando SPARC.<br><br><em>TIE</em> — la misma relación emerge de v_flat = (GM_bar·a₀)^(1/4). La dispersión de 0.07 dex es consistente con los errores de medición — <em>no hay dispersión intrínseca</em>.`,
+    viz:'sparc',
+    links:[{txt:'Explorador SPARC',href:'sparc.html'},{txt:'Materia oscura',href:'materia-oscura.html'}]
+  },
+  {
+    id:'t0', symbol:'T₀', color:'#FF8C42',
+    term:'Período Universal T₀',
+    tagline:'El reloj que late desde el Big Bang',
+    cat:'cosmologia',
+    def:`<strong>T₀</strong> es el período fundamental del universo en TIE. No implica que el universo sea cíclico — es la escala de tiempo natural que define a₀ y f_LISA.<br><br><strong>T₀ ≈ 87.9 Gyr</strong> — aproximadamente 6.4 veces la edad actual del universo.`,
+    formula:'T_0 = \\frac{2\\pi}{H_0} \\approx 87.9\\,\\text{Gyr}',
+    origin:`<em>TIE</em> — al escribir H₀ = 2π/T₀, la expansión de Hubble toma la forma de frecuencia angular. T₀ es el período asociado.<br><br>Importancia: <em>un solo parámetro (H₀) genera toda la fenomenología</em>. La aceleración a₀ = c/T₀. La frecuencia LISA f_LISA = H₀/2π².`,
+    viz:'t0',
+    links:[{txt:'Reloj universal',href:'reloj-universal.html'},{txt:'Factor 2π',href:'2pi.html'}]
+  },
+];
+
+const CATS_GLOS = {
+  todos:'ALL', fundamental:'FUNDAMENTAL', agujeros:'BLACK HOLES',
+  cosmologia:'COSMOLOGY', galaxias:'GALAXIES', predicciones:'PREDICTIONS'
+};
+
+let glosActiveCat = 'todos';
+let glosOpenId = null;
+let glosTabState = {};
+
+function glosRenderFilters(){
+  const wrap = document.getElementById('glos-filters');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  Object.entries(CATS_GLOS).forEach(([k,v])=>{
+    const btn = document.createElement('button');
+    btn.className = 'glos-filter' + (k===glosActiveCat?' active':'');
+    btn.textContent = v;
+    btn.onclick = ()=>{ glosActiveCat=k; glosRenderFilters(); glosRenderGrid(); };
+    wrap.appendChild(btn);
+  });
+}
+
+function glosFilter(){
+  glosRenderGrid();
+}
+
+function glosRenderGrid(){
+  const grid = document.getElementById('glos-grid');
+  if(!grid) return;
+  const q = (document.getElementById('glos-search')?.value||'').toLowerCase();
+  const items = GLOSARIO.filter(g=>{
+    const matchCat = glosActiveCat==='todos'||g.cat===glosActiveCat;
+    const matchQ = !q || g.term.toLowerCase().includes(q) || g.tagline.toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
+  grid.innerHTML = '';
+  if(items.length===0){
+    grid.innerHTML='<div class="glos-no-results">— SIN RESULTADOS —</div>';
+    return;
+  }
+  items.forEach(g=>{
+    const isOpen = glosOpenId === g.id;
+    const div = document.createElement('div');
+    div.className = 'glos-item' + (isOpen?' open':'');
+    div.id = 'glos-'+g.id;
+    div.innerHTML = `
+      <div class="glos-header" onclick="glosToggle('${g.id}')">
+        <div class="glos-symbol" style="color:${g.color}">${g.symbol}</div>
+        <div class="glos-head-info">
+          <div class="glos-term">${g.term}</div>
+          <div class="glos-tagline">${g.tagline}</div>
+        </div>
+        <span class="glos-cat-badge" style="color:${g.color};border-color:${g.color}33;background:${g.color}0d">${CATS_GLOS[g.cat]||g.cat}</span>
+        <span class="glos-arrow">▾</span>
+      </div>
+      <div class="glos-body">
+        <div class="glos-tabs">
+          <button class="glos-tab active" onclick="glosTab(event,'${g.id}','def')">DEFINICIÓN</button>
+          <button class="glos-tab" onclick="glosTab(event,'${g.id}','origen')">ORIGEN</button>
+          <button class="glos-tab" onclick="glosTab(event,'${g.id}','viz')">VISUALIZACIÓN</button>
+        </div>
+        <div id="glos-pane-def-${g.id}" class="glos-pane active">
+          <div class="glos-def">${g.def}</div>
+          <div class="glos-formula-box" id="glos-formula-${g.id}"></div>
+          <div class="glos-links">${g.links.map(l=>`<a href="${l.href}" class="glos-link-btn">→ ${l.txt}</a>`).join('')}</div>
+        </div>
+        <div id="glos-pane-origen-${g.id}" class="glos-pane">
+          <div class="glos-origin">${g.origin}</div>
+        </div>
+        <div id="glos-pane-viz-${g.id}" class="glos-pane">
+          <div class="glos-viz">
+            <canvas id="glos-canvas-${g.id}" height="160"></canvas>
+            <span class="glos-viz-label" id="glos-viz-lbl-${g.id}"></span>
+          </div>
+        </div>
+      </div>`;
+    grid.appendChild(div);
+    if(window.katex){
+      try{ katex.render(g.formula, document.getElementById('glos-formula-'+g.id), {throwOnError:false,displayMode:true}); }catch(e){}
+    }
+  });
+}
+
+function glosToggle(id){
+  glosOpenId = glosOpenId===id ? null : id;
+  glosRenderGrid();
+  if(glosOpenId){
+    const tab = glosTabState[id]||'def';
+    if(tab==='viz') setTimeout(()=>glosDrawViz(id),50);
+    setTimeout(()=>{ const el=document.getElementById('glos-'+id); if(el) el.scrollIntoView({behavior:'smooth',block:'nearest'}); },80);
+  }
+}
+
+function glosTab(e, id, tab){
+  e.stopPropagation();
+  glosTabState[id]=tab;
+  const body=document.getElementById('glos-'+id)?.querySelector('.glos-body');
+  if(!body) return;
+  body.querySelectorAll('.glos-tab').forEach((t,i)=>{ t.classList.toggle('active',['def','origen','viz'][i]===tab); });
+  body.querySelectorAll('.glos-pane').forEach(p=>p.classList.remove('active'));
+  const pane=document.getElementById('glos-pane-'+tab+'-'+id);
+  if(pane){ pane.classList.add('active'); if(tab==='viz') setTimeout(()=>glosDrawViz(id),30); }
+}
+
+function glosDrawViz(id){
+  const cv=document.getElementById('glos-canvas-'+id);
+  if(!cv) return;
+  cv.width=cv.clientWidth||500; const W=cv.width,H=160;
+  const ctx=cv.getContext('2d'); ctx.clearRect(0,0,W,H);
+  const gold='#FFD700',dim='rgba(255,255,255,0.15)';
+  const drawAxes=()=>{ ctx.strokeStyle=dim;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(40,H-30);ctx.lineTo(W-20,H-30);ctx.stroke();ctx.beginPath();ctx.moveTo(40,H-30);ctx.lineTo(40,15);ctx.stroke(); };
+  const lbl=document.getElementById('glos-viz-lbl-'+id);
+
+  if(id==='a0'){
+    if(lbl) lbl.textContent='a₀ como frontera de regímenes';
+    drawAxes();
+    ctx.strokeStyle='#5BC8F5';ctx.lineWidth=2;ctx.beginPath();
+    for(let x=1;x<W-55;x++){const r=(x/(W-60))*5+0.1;const v=1/Math.sqrt(r);const py=H-30-(v*0.55*(H-50));x===1?ctx.moveTo(x+40,Math.max(15,py)):ctx.lineTo(x+40,Math.max(15,py));}
+    ctx.stroke();
+    ctx.strokeStyle=gold;ctx.lineWidth=2;ctx.beginPath();
+    for(let x=1;x<W-55;x++){const r=(x/(W-60))*5+0.1;const aN=1/(r*r);const a=(aN+Math.sqrt(aN*aN+4*aN*0.3))/2;const v=Math.sqrt(a*r)*0.55;const py=H-30-(v*(H-50));x===1?ctx.moveTo(x+40,Math.max(15,py)):ctx.lineTo(x+40,Math.max(15,py));}
+    ctx.stroke();
+    const xa0=40+(0.25/(5)*(W-60));
+    ctx.strokeStyle='rgba(255,215,0,0.4)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(xa0,15);ctx.lineTo(xa0,H-30);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='#5BC8F5';ctx.font='9px monospace';ctx.fillText('Newton',W-75,H-50);
+    ctx.fillStyle=gold;ctx.fillText('TIE',W-45,38);
+  }
+  else if(id==='phi'){
+    if(lbl) lbl.textContent='φ(r): TIE vs Newton';
+    drawAxes();
+    ctx.strokeStyle='#5BC8F5';ctx.lineWidth=2;ctx.beginPath();
+    for(let x=1;x<W-55;x++){const r=0.3+(x/(W-60))*5;const phi=-1/r;const py=H-30+(phi*0.65*(H-45));x===1?ctx.moveTo(x+40,Math.min(H-31,Math.max(15,py))):ctx.lineTo(x+40,Math.min(H-31,Math.max(15,py)));}
+    ctx.stroke();
+    ctx.strokeStyle=gold;ctx.lineWidth=2;ctx.beginPath();
+    for(let x=1;x<W-55;x++){const r=0.3+(x/(W-60))*5;const phi=-1/r*(1+r*0.12);const py=H-30+(phi*0.65*(H-45));x===1?ctx.moveTo(x+40,Math.min(H-31,Math.max(15,py))):ctx.lineTo(x+40,Math.min(H-31,Math.max(15,py)));}
+    ctx.stroke();
+    ctx.fillStyle='#5BC8F5';ctx.font='9px monospace';ctx.fillText('-GM/r',W-60,H-52);
+    ctx.fillStyle=gold;ctx.fillText('φ_TIE',W-55,H-68);
+  }
+  else if(id==='rh'||id==='mc'){
+    if(lbl) lbl.textContent='rₕ (TIE) vs rₛ (GR)';
+    drawAxes();
+    ctx.strokeStyle='#5BC8F5';ctx.lineWidth=2;ctx.beginPath();
+    for(let x=0;x<=W-60;x++){const logM=(x/(W-60))*6;const py=H-30-((logM/6))*(H-50);x===0?ctx.moveTo(x+40,py):ctx.lineTo(x+40,py);}
+    ctx.stroke();
+    ctx.strokeStyle=gold;ctx.lineWidth=2;ctx.beginPath();
+    for(let x=0;x<=W-60;x++){const logM=(x/(W-60))*6;const logRh=logM*0.5+1.2;const py=H-30-((logRh/6))*(H-50);x===0?ctx.moveTo(x+40,Math.max(15,py)):ctx.lineTo(x+40,Math.max(15,py));}
+    ctx.stroke();
+    const xMc=40+(2/6)*(W-60);
+    ctx.strokeStyle='rgba(255,68,85,0.5)';ctx.setLineDash([4,4]);ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(xMc,15);ctx.lineTo(xMc,H-30);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='rgba(255,68,85,0.8)';ctx.font='9px monospace';ctx.fillText('Mc',xMc-6,22);
+    ctx.fillStyle='#5BC8F5';ctx.fillText('rₛ',W-30,35);
+    ctx.fillStyle=gold;ctx.fillText('rₕ',W-30,58);
+  }
+  else if(id==='vflat'||id==='sparc'){
+    if(lbl) lbl.textContent='BTFR: 175 galaxias SPARC';
+    drawAxes();
+    let r=12345;
+    for(let i=0;i<60;i++){r=(r*22695477+1)&0xffffffff;const logM=8.5+(r%100)/100*4;const logV=0.25*(logM-10)+2.1+((r>>8)%20-10)*0.025;const px=40+((logM-8.5)/4)*(W-60);const py=H-30-((logV-1.5)/1.2)*(H-50);ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fillStyle='rgba(91,200,245,0.65)';ctx.fill();}
+    ctx.strokeStyle=gold;ctx.lineWidth=2;ctx.beginPath();
+    for(let x=0;x<=W-60;x++){const logM=8.5+(x/(W-60))*4;const logV=0.25*(logM-10)+2.1;const px=x+40,py=H-30-((logV-1.5)/1.2)*(H-50);x===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}
+    ctx.stroke();
+    ctx.fillStyle=gold;ctx.font='9px monospace';ctx.fillText('v∝M^(1/4) · σ=0.07dex',40,22);
+  }
+  else if(id==='lambda'){
+    if(lbl) lbl.textContent='Error QFT vs TIE vs observación';
+    const bars=[{lbl:'QFT',val:120,color:'#FF4455'},{lbl:'TIE',val:3.5,color:gold},{lbl:'Obs.',val:0.5,color:'#44FF88'}];
+    const bw=55,gap=35,startX=45;
+    bars.forEach((b,i)=>{
+      const x=startX+i*(bw+gap);const barH=Math.max(4,(b.val/120)*(H-50));
+      ctx.fillStyle=b.color+'22';ctx.strokeStyle=b.color;ctx.lineWidth=1.5;
+      ctx.fillRect(x,H-30-barH,bw,barH);ctx.strokeRect(x,H-30-barH,bw,barH);
+      ctx.fillStyle=b.color;ctx.font='9px monospace';
+      ctx.fillText(b.lbl==='QFT'?'10¹²⁰×':b.lbl==='TIE'?'3.5%':'~0%',x+4,H-35-barH);
+      ctx.fillStyle='rgba(255,255,255,0.5)';ctx.fillText(b.lbl,x+bw/2-12,H-15);
+    });
+  }
+  else if(id==='t2'){
+    if(lbl) lbl.textContent='T² real vs T² artificial';
+    [0.28,0.72].forEach((fx,i)=>{
+      const x=W*fx,r=Math.min(W*0.18,H*0.32);
+      ctx.strokeStyle=i===0?'#44FF88':'#FF4455';ctx.lineWidth=2;
+      ctx.beginPath();ctx.arc(x,H/2,r,0,Math.PI*2);ctx.stroke();
+      const a=-Math.PI/3;ctx.beginPath();ctx.moveTo(x,H/2);ctx.lineTo(x+r*0.7*Math.sin(a),H/2-r*0.7*Math.cos(a));ctx.stroke();
+      ctx.fillStyle=i===0?'#44FF88':'#FF4455';ctx.font='9px monospace';
+      ctx.fillText(i===0?'REAL':'ARTIFICIAL',x-r+2,H/2+r+14);
+      ctx.font='18px monospace';ctx.fillText(i===0?'✓':'✗',x-6,H/2+7);
+    });
+  }
+  else if(id==='flisa'){
+    if(lbl) lbl.textContent='Banda LISA y predicción TIE ~2.4mHz';
+    drawAxes();
+    const xOf=f=>40+((Math.log10(f)-Math.log10(0.1))/(Math.log10(100)-Math.log10(0.1)))*(W-60);
+    ctx.fillStyle='rgba(91,200,245,0.05)';ctx.fillRect(xOf(0.1),15,xOf(100)-xOf(0.1),H-45);
+    ctx.strokeStyle='rgba(91,200,245,0.4)';ctx.lineWidth=1.5;ctx.beginPath();
+    for(let i=0;i<=100;i++){const f=Math.pow(10,Math.log10(0.1)+(Math.log10(100)-Math.log10(0.1))*i/100);const sens=0.5*(Math.pow(f/3,-4)+1+Math.pow(f/7,4));const x=xOf(f),y=H-30-(1-Math.min(1,Math.log10(sens+1)*0.4))*(H-50);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+    ctx.stroke();
+    const xf=xOf(2.4);ctx.strokeStyle=gold;ctx.lineWidth=2;ctx.setLineDash([5,3]);
+    ctx.beginPath();ctx.moveTo(xf,15);ctx.lineTo(xf,H-30);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle=gold;ctx.font='10px monospace';ctx.fillText('2.4mHz',xf-20,28);
+    ctx.fillStyle='rgba(91,200,245,0.7)';ctx.font='9px monospace';ctx.fillText('LISA band',W/2-25,H-18);
+  }
+  else if(id==='infra'){
+    if(lbl) lbl.textContent='Campo φ deformando el espacio';
+    const cx=W*0.55,cy=H*0.5;
+    ctx.strokeStyle='rgba(255,215,0,0.12)';ctx.lineWidth=0.8;
+    for(let i=0;i<=7;i++){ctx.beginPath();for(let j=0;j<=9;j++){const x0=25+j*(W-45)/9,y0=8+i*(H-22)/7;const dx=x0-cx,dy=y0-cy,r=Math.sqrt(dx*dx+dy*dy)||1;const def=18/(r*0.1+1);const x=x0+dx/r*def*0.35,y=y0+dy/r*def*0.35;j===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();}
+    for(let j=0;j<=9;j++){ctx.beginPath();for(let i=0;i<=7;i++){const x0=25+j*(W-45)/9,y0=8+i*(H-22)/7;const dx=x0-cx,dy=y0-cy,r=Math.sqrt(dx*dx+dy*dy)||1;const def=18/(r*0.1+1);const x=x0+dx/r*def*0.35,y=y0+dy/r*def*0.35;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();}
+    ctx.beginPath();ctx.arc(cx,cy,7,0,Math.PI*2);ctx.fillStyle=gold;ctx.fill();
+  }
+  else if(id==='twopi'){
+    if(lbl) lbl.textContent='ω₀ = H₀ = 2π/T_universo';
+    const cx=W*0.35,cy=H*0.5,r=Math.min(cx-20,cy-15)*0.85;
+    ctx.strokeStyle='rgba(170,255,0,0.25)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();
+    ctx.strokeStyle=gold;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.PI*1.97);ctx.stroke();
+    ctx.fillStyle=gold;ctx.font='11px monospace';ctx.fillText('2π',cx+r*0.55,cy-r*0.55);
+    ctx.fillStyle='rgba(255,255,255,0.7)';ctx.font='11px monospace';
+    ctx.fillText('ω₀ = H₀',W*0.62,cy-18);ctx.fillText('= 2π/T₀',W*0.62,cy+2);
+    ctx.fillStyle='rgba(170,255,0,0.8)';ctx.fillText('⟹ a₀=cH₀/2π',W*0.59,cy+26);
+  }
+  else if(id==='t0'){
+    if(lbl) lbl.textContent='T₀ en la línea de tiempo cósmica';
+    const barY=H*0.42,barH2=20,tAge=13.8,tTotal=87.9;
+    const xAge=30+((tAge/tTotal))*(W-50),xT0=W-20;
+    ctx.fillStyle='rgba(255,140,66,0.15)';ctx.fillRect(30,barY,xAge-30,barH2);
+    ctx.fillStyle='rgba(255,215,0,0.06)';ctx.fillRect(xAge,barY,xT0-xAge,barH2);
+    ctx.strokeStyle='rgba(255,140,66,0.5)';ctx.lineWidth=1.5;ctx.strokeRect(30,barY,xAge-30,barH2);
+    ctx.strokeStyle='rgba(255,215,0,0.25)';ctx.strokeRect(xAge,barY,xT0-xAge,barH2);
+    ctx.strokeStyle=gold;ctx.lineWidth=2;ctx.setLineDash([4,3]);
+    ctx.beginPath();ctx.moveTo(xAge,barY-14);ctx.lineTo(xAge,barY+barH2+14);ctx.stroke();ctx.setLineDash([]);
+    ctx.font='9px monospace';ctx.fillStyle='rgba(255,140,66,0.9)';ctx.fillText('Hoy 13.8Gyr',xAge-36,barY-17);
+    ctx.fillStyle='rgba(255,215,0,0.6)';ctx.fillText('T₀=87.9Gyr →',xAge+6,barY+barH2+20);
+    ctx.fillStyle='rgba(255,255,255,0.3)';ctx.fillText('Big Bang',32,barY+barH2+20);
+  }
+}
+
+function initGlosario(){
+  glosRenderFilters();
+  glosRenderGrid();
+}
+
+</script>

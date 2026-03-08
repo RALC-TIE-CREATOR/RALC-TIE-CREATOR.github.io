@@ -145,7 +145,7 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
 <canvas id="bg-canvas"></canvas>
 
 <nav>
-  <a href="index.html" class="nav-logo">TIE / R@LC</a>
+  <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
   <div class="nav-center">
     <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ES</button>
     <button class="lang-btn inactive" id="btn-en" onclick="setLang('en')">EN</button>
@@ -642,7 +642,7 @@ function setLang(l){
   document.getElementById('btn-en').className='lang-btn '+(l==='en'?'active':'inactive');
   const lb=document.getElementById('lnk-back');
   lb.textContent=l==='es'?'← LABORATORIO':'← LABORATORY';
-  lb.href=l==='es'?'labs.html':'labs-en.html';
+  lb.href=l==='es'?'labs.html':'lab-en.html';
   document.getElementById('strip-title').innerHTML=l==='es'?'API <span>PÚBLICA</span> REST · TIE':'<span>PUBLIC</span> REST API · TIE';
   document.getElementById('ep-header-title').textContent=l==='es'?'ENDPOINTS':'ENDPOINTS';
   document.getElementById('ic-status-title').textContent=l==='es'?'ESTADO API':'API STATUS';

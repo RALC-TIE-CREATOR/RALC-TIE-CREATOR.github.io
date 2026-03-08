@@ -190,13 +190,13 @@ INSTRUCTIONS:
   const HTML = `
 <div id="axon-widget">
   <button id="axon-btn" aria-label="AXON Chat">
-    <span id="axon-btn-lbl">AXN</span>
+    <span id="axon-btn-lbl">AXON</span>
     <span id="axon-notif"></span>
   </button>
   <div id="axon-panel" role="dialog" aria-label="AXON Chat">
     <div id="axon-head">
       <div id="axon-head-left">
-        <div id="axon-avatar">AXN</div>
+        <div id="axon-avatar">AXON</div>
         <div id="axon-head-info">
           <div id="axon-head-name">${T.title}</div>
           <div id="axon-head-page">${T.page}</div>

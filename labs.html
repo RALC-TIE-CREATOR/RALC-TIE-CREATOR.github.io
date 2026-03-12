@@ -35,11 +35,65 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .stat-n{font-family:var(--mono);font-size:1.5rem;font-weight:700;color:var(--gold);line-height:1;}
 .stat-l{font-family:var(--mono);font-size:.58rem;color:var(--dim);letter-spacing:1px;margin-top:.15rem;}
 
-/* SECTION */
+/* SECTION LABEL */
 .section-label{font-family:var(--mono);font-size:.65rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:.75rem;}
 .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
 
-/* FALSIF BANNER — special */
+/* ── DOOR CARDS ── */
+.doors-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:1.25rem;}
+.doors-row2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-bottom:2.5rem;max-width:810px;}
+
+.door{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.75rem 1.5rem;text-decoration:none;color:inherit;transition:all .25s;display:flex;flex-direction:column;gap:.65rem;backdrop-filter:blur(8px);position:relative;overflow:hidden;}
+.door::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .25s;}
+.door:hover{transform:translateY(-4px);}
+.door:hover::before{opacity:1;}
+
+.door-purple::before{background:var(--purple);}
+.door-purple:hover{border-color:rgba(187,136,255,.35);box-shadow:0 12px 32px rgba(187,136,255,.1);}
+.door-blue::before{background:var(--blue);}
+.door-blue:hover{border-color:rgba(91,200,245,.35);box-shadow:0 12px 32px rgba(91,200,245,.1);}
+.door-gold::before{background:var(--gold);}
+.door-gold:hover{border-color:rgba(255,215,0,.35);box-shadow:0 12px 32px rgba(255,215,0,.1);}
+.door-green::before{background:var(--green);}
+.door-green:hover{border-color:rgba(68,255,136,.3);box-shadow:0 12px 32px rgba(68,255,136,.08);}
+.door-orange::before{background:var(--orange);}
+.door-orange:hover{border-color:rgba(255,140,66,.3);box-shadow:0 12px 32px rgba(255,140,66,.08);}
+
+.door-header{display:flex;justify-content:space-between;align-items:flex-start;}
+.door-num{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+.door-purple .door-num{color:var(--purple);}
+.door-blue   .door-num{color:var(--blue);}
+.door-gold   .door-num{color:var(--gold);}
+.door-green  .door-num{color:var(--green);}
+.door-orange .door-num{color:var(--orange);}
+
+.door-count-badge{font-family:var(--mono);font-size:.5rem;padding:.15rem .5rem;border-radius:100px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--dim);}
+.door-icon{font-size:1.5rem;}
+.door-name{font-size:1.35rem;font-weight:800;line-height:1.2;}
+.door-subtitle{font-family:var(--mono);font-size:.7rem;}
+.door-purple .door-subtitle{color:var(--purple);}
+.door-blue   .door-subtitle{color:var(--blue);}
+.door-gold   .door-subtitle{color:var(--gold);}
+.door-green  .door-subtitle{color:var(--green);}
+.door-orange .door-subtitle{color:var(--orange);}
+
+.door-desc{font-family:var(--mono);font-size:.63rem;color:var(--dim);line-height:1.65;flex:1;}
+
+.door-chips{display:flex;flex-wrap:wrap;gap:.35rem;}
+.chip{font-family:var(--mono);font-size:.52rem;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;padding:.1rem .4rem;}
+.chip.new{color:var(--gold);border-color:rgba(255,215,0,.3);background:rgba(255,215,0,.05);}
+
+.door-footer{display:flex;justify-content:space-between;align-items:center;padding-top:.6rem;border-top:1px solid rgba(255,255,255,.05);}
+.door-tools-count{font-family:var(--mono);font-size:.58rem;color:var(--dim);}
+.door-enter{font-family:var(--mono);font-size:.65rem;transition:transform .2s;}
+.door-purple .door-enter{color:var(--purple);}
+.door-blue   .door-enter{color:var(--blue);}
+.door-gold   .door-enter{color:var(--gold);}
+.door-green  .door-enter{color:var(--green);}
+.door-orange .door-enter{color:var(--orange);}
+.door:hover .door-enter{transform:translateX(4px);}
+
+/* FALSIF BANNER */
 .falsif-banner{display:flex;align-items:center;gap:1.25rem;background:linear-gradient(135deg,rgba(255,68,85,.08) 0%,rgba(255,215,0,.05) 100%);border:1px solid rgba(255,68,85,.3);border-radius:16px;padding:1.25rem 1.75rem;margin-bottom:2.5rem;text-decoration:none;color:inherit;transition:all .3s;backdrop-filter:blur(8px);}
 .falsif-banner:hover{border-color:rgba(255,68,85,.6);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,68,85,.12);}
 .fb-icon{font-size:2rem;flex-shrink:0;}
@@ -50,57 +104,12 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .fb-arrow{font-family:var(--mono);font-size:.75rem;color:var(--red);flex-shrink:0;transition:transform .2s;}
 .falsif-banner:hover .fb-arrow{transform:translateX(5px);}
 
-/* TOOLS GRID */
-.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem;margin-bottom:2.5rem;}
-
-/* TOOL CARD */
-.tool-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-decoration:none;color:inherit;transition:all .25s;display:flex;flex-direction:column;gap:.75rem;backdrop-filter:blur(8px);position:relative;overflow:hidden;}
-.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .25s;}
-.tool-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.4);}
-.tool-card:hover::before{opacity:1;}
-
-/* Per-color variants */
-.tc-gold{--cc:var(--gold);}
-.tc-gold:hover{border-color:rgba(255,215,0,.35);}
-.tc-gold::before{background:var(--gold);}
-.tc-blue{--cc:var(--blue);}
-.tc-blue:hover{border-color:rgba(91,200,245,.35);}
-.tc-blue::before{background:var(--blue);}
-.tc-green{--cc:var(--green);}
-.tc-green:hover{border-color:rgba(68,255,136,.3);}
-.tc-green::before{background:var(--green);}
-.tc-red{--cc:var(--red);}
-.tc-red:hover{border-color:rgba(255,68,85,.3);}
-.tc-red::before{background:var(--red);}
-.tc-purple{--cc:var(--purple);}
-.tc-purple:hover{border-color:rgba(187,136,255,.3);}
-.tc-purple::before{background:var(--purple);}
-.tc-orange{--cc:var(--orange);}
-.tc-orange:hover{border-color:rgba(255,140,66,.3);}
-.tc-orange::before{background:var(--orange);}
-
-.tc-header{display:flex;justify-content:space-between;align-items:flex-start;}
-.tc-id{font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cc,var(--gold));}
-.tc-badge{font-family:var(--mono);font-size:.5rem;padding:.15rem .45rem;border-radius:100px;letter-spacing:1px;}
-.tc-badge.live{background:rgba(68,255,136,.12);color:var(--green);border:1px solid rgba(68,255,136,.25);}
-.tc-badge.new{background:rgba(255,215,0,.12);color:var(--gold);border:1px solid rgba(255,215,0,.25);}
-.tc-badge.soon{background:rgba(255,140,66,.1);color:var(--orange);border:1px solid rgba(255,140,66,.2);}
-.tc-name{font-size:1.2rem;font-weight:800;line-height:1.2;}
-.tc-eq{font-size:.8rem;color:var(--cc,var(--gold));margin:.1rem 0;}
-.tc-desc{font-family:var(--mono);font-size:.65rem;color:var(--dim);line-height:1.65;flex:1;}
-.tc-footer{display:flex;justify-content:space-between;align-items:center;padding-top:.6rem;border-top:1px solid rgba(255,255,255,.05);}
-.tc-tags{display:flex;gap:.35rem;flex-wrap:wrap;}
-.tc-tag{font-family:var(--mono);font-size:.55rem;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;padding:.1rem .4rem;}
-.tc-link{font-family:var(--mono);font-size:.65rem;color:var(--cc,var(--gold));transition:transform .2s;white-space:nowrap;}
-.tool-card:hover .tc-link{transform:translateX(4px);}
-
-/* COMING SOON CARD */
-.tool-card.coming{opacity:.5;cursor:default;}
-.tool-card.coming:hover{transform:none;box-shadow:none;}
-
 footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);margin-top:2rem;}
 footer .feq{font-family:var(--mono);font-size:.8rem;color:var(--gold);margin-bottom:.5rem;}
 footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;}
+
+@media(max-width:1000px){.doors-grid{grid-template-columns:repeat(2,1fr)}.doors-row2{grid-template-columns:1fr;max-width:100%}}
+@media(max-width:640px){.doors-grid{grid-template-columns:1fr}.stats-bar{gap:1rem}}
 </style>
 </head>
 <body>
@@ -117,226 +126,127 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 <div class="page">
   <div class="page-tag">LABORATORIO DE INFRAESTRUCTURA</div>
   <h1 class="page-title">HERRAMIENTAS DE <span>VERIFICACIÓN</span></h1>
-  <p class="page-sub">11 módulos interactivos para poner a prueba TIE con datos reales. Sin fe. Solo números.</p>
+  <p class="page-sub">19 módulos interactivos organizados en 5 laboratorios temáticos. Sin fe. Solo números.</p>
 
   <div class="stats-bar">
-    <div class="stat"><div class="stat-n">10</div><div class="stat-l">HERRAMIENTAS</div></div>
-    <div class="stat"><div class="stat-n" style="color:var(--green)">8</div><div class="stat-l">EN VIVO</div></div>
+    <div class="stat"><div class="stat-n">19</div><div class="stat-l">HERRAMIENTAS</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--green)">5</div><div class="stat-l">LABORATORIOS</div></div>
     <div class="stat"><div class="stat-n" style="color:var(--gold)">175</div><div class="stat-l">GALAXIAS SPARC</div></div>
     <div class="stat"><div class="stat-n" style="color:var(--green)">8/11</div><div class="stat-l">PREDICCIONES ✓</div></div>
     <div class="stat"><div class="stat-n" style="color:var(--blue)">0</div><div class="stat-l">PARÁMETROS LIBRES</div></div>
   </div>
 
-  <!-- MASA Y GALAXIAS -->
-  <div class="section-label" style="color:var(--gold)">⚛ Masa · Galaxias · Constantes</div>
-  <div class="tools-grid">
+  <div class="section-label" style="color:var(--gold)">🚪 Cinco laboratorios · Elige tu entrada</div>
 
-    <a href="2pi.html" class="tool-card tc-gold">
-      <div class="tc-header">
-        <span class="tc-id">H-03</span>
-        <span class="tc-badge live">EN VIVO</span>
+  <!-- FILA 1: 3 puertas -->
+  <div class="doors-grid">
+
+    <a href="lab-fundamentos.html" class="door door-purple">
+      <div class="door-header">
+        <span class="door-num">LAB 01</span>
+        <span class="door-count-badge">5 herramientas</span>
       </div>
-      <div class="tc-name">Calculadora 2π</div>
-      <div class="tc-eq">\( m_{\text{TIE}} = 2\pi \cdot m_{\text{obs}} \)</div>
-      <div class="tc-desc">El factor 2π conecta masa observada con masa real de infraestructura. Selecciona entre 55 galaxias SPARC, filtra por tipo, ajusta H₀ con slider. Gráfica Plotly v_flat vs masa.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">55 galaxias</span><span class="tc-tag">H₀ slider</span><span class="tc-tag">Plotly</span></div>
-        <span class="tc-link">→ EJECUTAR</span>
+      <div class="door-icon">⚛</div>
+      <div class="door-name">FUNDAMENTOS</div>
+      <div class="door-subtitle">Lo que ES el Tratado TIE</div>
+      <p class="door-desc">El núcleo ontológico. La jerarquía dimensional T⁰→T¹→T², el factor 2π, la masa real de la infraestructura, la aceleración a₀ derivada y el Bisturí que elimina los T² espurios de la física estándar.</p>
+      <div class="door-chips">
+        <span class="chip">H-03 · 2π</span>
+        <span class="chip">H-05 · Materia Oscura</span>
+        <span class="chip">H-08 · a₀ y Λ</span>
+        <span class="chip new">H-17 · Jerarquía ★</span>
+        <span class="chip new">H-04 · Bisturí ★</span>
+      </div>
+      <div class="door-footer">
+        <span class="door-tools-count">2 herramientas nuevas</span>
+        <span class="door-enter">ENTRAR →</span>
       </div>
     </a>
 
-    <a href="materia-oscura.html" class="tool-card tc-green">
-      <div class="tc-header">
-        <span class="tc-id">H-05</span>
-        <span class="tc-badge live">EN VIVO</span>
+    <a href="lab-galaxias.html" class="door door-blue">
+      <div class="door-header">
+        <span class="door-num">LAB 02</span>
+        <span class="door-count-badge">4 herramientas</span>
       </div>
-      <div class="tc-name">Materia Oscura</div>
-      <div class="tc-eq">\( 1 - 1/2\pi = 84.1\% \)</div>
-      <div class="tc-desc">Conversor de masa observable a masa real TIE. La materia oscura no es una partícula — es la fracción de infraestructura no contabilizada. Barra animada 15.9% / 84.1%. 4 unidades.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">0 parámetros</span><span class="tc-tag">universal</span></div>
-        <span class="tc-link">→ EJECUTAR</span>
+      <div class="door-icon">🌌</div>
+      <div class="door-name">GALAXIAS</div>
+      <div class="door-subtitle">Evidencia galáctica directa</div>
+      <p class="door-desc">Las 175 galaxias del catálogo SPARC contra la predicción TIE. Curvas de rotación, RAR y el test estadístico RMS global — σ = 0.067 dex con cero parámetros libres.</p>
+      <div class="door-chips">
+        <span class="chip">H-01 · Curvas</span>
+        <span class="chip">H-02 · Explorador SPARC</span>
+        <span class="chip new">H-06 · RAR ★</span>
+        <span class="chip new">H-21 · RMS Global ★</span>
       </div>
-    </a>
-
-    <a href="constante.html" class="tool-card tc-blue">
-      <div class="tc-header">
-        <span class="tc-id">H-08</span>
-        <span class="tc-badge live">EN VIVO</span>
-      </div>
-      <div class="tc-name">a₀ y Λ</div>
-      <div class="tc-eq">\( a_0 = cH_0/2\pi \quad \Lambda = 2H_0^2/c^2 \)</div>
-      <div class="tc-desc">Slider H₀ de 67 a 74 km/s/Mpc. Calcula a₀, Λ y radio de transición de la VL en tiempo real. Error 3.5% vs Planck 2018 — vs 10¹²⁰ órdenes de la QFT. Gráfica doble eje.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">Planck vs SH0ES</span><span class="tc-tag">Λ sin energía oscura</span></div>
-        <span class="tc-link">→ EJECUTAR</span>
+      <div class="door-footer">
+        <span class="door-tools-count">2 herramientas nuevas</span>
+        <span class="door-enter">ENTRAR →</span>
       </div>
     </a>
 
-  </div>
-
-  <!-- GALAXIAS Y CURVAS -->
-  <div class="section-label" style="color:var(--blue)">🌌 Galaxias · Curvas de Rotación</div>
-  <div class="tools-grid">
-
-    <a href="curvas.html" class="tool-card tc-gold">
-      <div class="tc-header">
-        <span class="tc-id">H-01</span>
-        <span class="tc-badge live">EN VIVO</span>
+    <a href="lab-gravedad.html" class="door door-gold">
+      <div class="door-header">
+        <span class="door-num">LAB 03</span>
+        <span class="door-count-badge">4 herramientas</span>
       </div>
-      <div class="tc-name">Curvas de Rotación</div>
-      <div class="tc-eq">\( v(r) = \sqrt{r\sqrt{a_N(a_N+a_0)}} \)</div>
-      <div class="tc-desc">12 presets SPARC reales (espirales, gigantes, LSB, enanas). 3 modos: Presets / Libre / Comparar. Componentes v_disk, v_gas, v_Newton activables. Marcador rₜ con valor numérico.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">12 galaxias</span><span class="tc-tag">3 modos</span><span class="tc-tag">componentes</span></div>
-        <span class="tc-link">→ EJECUTAR</span>
+      <div class="door-icon">⏱</div>
+      <div class="door-name">GRAVEDAD</div>
+      <div class="door-subtitle">Relatividad y espaciotiempo</div>
+      <p class="door-desc">TIE vs Relatividad General. Corrección GPS, relojes en campos gravitacionales, agujeros negros (rₕ ≫ rₛ), y deflexión de fotones con el factor 2 emergente del potencial logarítmico.</p>
+      <div class="door-chips">
+        <span class="chip">H-11 · Agujeros Negros</span>
+        <span class="chip">H-12 · GPS</span>
+        <span class="chip">H-12.1 · Reloj</span>
+        <span class="chip new">H-09 · Lente ★</span>
       </div>
-    </a>
-
-    <a href="sparc.html" class="tool-card tc-blue">
-      <div class="tc-header">
-        <span class="tc-id">H-02</span>
-        <span class="tc-badge new">ACTUALIZADO</span>
-      </div>
-      <div class="tc-name">Explorador SPARC</div>
-      <div class="tc-eq">\( v_{\text{TIE}} = (GM_{\text{bar}}\,a_0)^{1/4} \)</div>
-      <div class="tc-desc">Catálogo completo: 175 galaxias reales (Lelli+2016). Filtros por tipo y calidad Q. 4 modos de gráfica: dispersión, v_TIE vs v_obs, histograma de error, distribución de distancias. Modal con detalle por galaxia.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">175 galaxias</span><span class="tc-tag">Q=1/2/3</span><span class="tc-tag">4 gráficas</span></div>
-        <span class="tc-link">→ EXPLORAR</span>
+      <div class="door-footer">
+        <span class="door-tools-count">1 herramienta nueva</span>
+        <span class="door-enter">ENTRAR →</span>
       </div>
     </a>
 
   </div>
 
-  <!-- GRAVEDAD Y TIEMPO -->
-  <div class="section-label" style="color:var(--purple)">⏱ Gravedad · Tiempo · Relatividad</div>
-  <div class="tools-grid">
+  <!-- FILA 2: 2 puertas centradas -->
+  <div class="doors-row2">
 
-    <a href="agujeros.html" class="tool-card tc-red">
-      <div class="tc-header">
-        <span class="tc-id">H-11</span>
-        <span class="tc-badge live">EN VIVO</span>
+    <a href="lab-cosmologia.html" class="door door-green">
+      <div class="door-header">
+        <span class="door-num">LAB 04</span>
+        <span class="door-count-badge">3 herramientas</span>
       </div>
-      <div class="tc-name">Agujeros Negros</div>
-      <div class="tc-eq">\( r_h = 0.869\sqrt{GM/a_0} \gg r_s \)</div>
-      <div class="tc-desc">TIE vs GR: horizonte √M vs horizonte lineal. 6 presets (M87*, Sgr A*, NGC 1277, GW150914, Sol, masa crítica). Gráfica modos RADIOS y FACTOR. Opción B honesta — esfera fotónica pendiente.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">M87* 4.04×10⁶×</span><span class="tc-tag">ngEHT</span><span class="tc-tag">sin singularidades</span></div>
-        <span class="tc-link">→ EJECUTAR</span>
+      <div class="door-icon">🔭</div>
+      <div class="door-name">COSMOLOGÍA</div>
+      <div class="door-subtitle">Escala universal</div>
+      <p class="door-desc">Constante Λ sin energía oscura, campo φ con señal LISA a 2.4 mHz, lensing 3D, y el Cúmulo Bala — desacople gravitacional sin materia oscura partícula.</p>
+      <div class="door-chips">
+        <span class="chip">H-07 · Lensing 3D</span>
+        <span class="chip">H-13 · Campo φ</span>
+        <span class="chip new">H-10 · Cúmulo Bala ★</span>
+      </div>
+      <div class="door-footer">
+        <span class="door-tools-count">1 herramienta nueva</span>
+        <span class="door-enter">ENTRAR →</span>
       </div>
     </a>
 
-    <a href="gps.html" class="tool-card tc-blue">
-      <div class="tc-header">
-        <span class="tc-id">H-12</span>
-        <span class="tc-badge live">EN VIVO</span>
+    <a href="lab-investigadores.html" class="door door-orange">
+      <div class="door-header">
+        <span class="door-num">LAB 05</span>
+        <span class="door-count-badge">3 herramientas</span>
       </div>
-      <div class="tc-name">Corrección GPS</div>
-      <div class="tc-eq">\( \Delta\tau = \Delta\Phi/c^2 \cdot t \)</div>
-      <div class="tc-desc">45.7 µs/día predichos, 45.9 observados — error 0.4%. 4 objetos centrales, 4 órbitas predefinidas. Tabla de 6 misiones históricas. Récord Krikalev: +22.68 ms. Gráfica corrección vs altitud.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">error 0.4%</span><span class="tc-tag">6 misiones</span><span class="tc-tag">Krikalev</span></div>
-        <span class="tc-link">→ EJECUTAR</span>
+      <div class="door-icon">🤖</div>
+      <div class="door-name">INVESTIGADORES</div>
+      <div class="door-subtitle">Herramientas técnicas</div>
+      <p class="door-desc">API REST pública para todos los cálculos TIE, generador LaTeX con catálogo completo de ecuaciones, y chat de IA con el Tratado completo en contexto.</p>
+      <div class="door-chips">
+        <span class="chip">H-14 · TIE AI Chat</span>
+        <span class="chip">H-15 · LaTeX</span>
+        <span class="chip">H-16 · API REST</span>
       </div>
-    </a>
-
-    <a href="reloj-universal.html" class="tool-card tc-purple">
-      <div class="tc-header">
-        <span class="tc-id">H-12.1</span>
-        <span class="tc-badge live">EN VIVO</span>
-      </div>
-      <div class="tc-name">Reloj Universal</div>
-      <div class="tc-eq">\( \tau_{\text{local}} = \tau_{\text{Motor}}/g \)</div>
-      <div class="tc-desc">Motor Absoluto produciendo ciclos en tiempo real. Dos relojes analógicos animados: GR (tiempo curvo) vs TIE (ciclos procesados). 6 ubicaciones preset. Slider de gravedad fino. Lógica corregida: espacio profundo va rapidísimo.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">tiempo real</span><span class="tc-tag">6 ubicaciones</span><span class="tc-tag">analógico</span></div>
-        <span class="tc-link">→ EJECUTAR</span>
-      </div>
-    </a>
-
-  </div>
-
-  
-<!-- FASE 4 — VISUALIZACIONES 3D -->
-  <div class="section-label" style="color:var(--gold)">🔭 Visualizaciones · 3D</div>
-  <div class="tools-grid">
-
-    <a href="lensing.html" class="tool-card tc-blue">
-      <div class="tc-header">
-        <span class="tc-id">H-07</span>
-        <span class="tc-badge live">LIVE</span>
-      </div>
-      <div class="tc-name">Lensing Gravitacional</div>
-      <div class="tc-eq">\( \alpha = \frac{4GM}{c^2 b} \)</div>
-      <div class="tc-desc">Simulador de deflexión gravitacional TIE vs GR. Anillo de Einstein, horizonte rₕ TIE, microlensing animado con curva de magnificación.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">Three.js</span><span class="tc-tag">fotones</span><span class="tc-tag">Einstein ring</span></div>
-        <span class="tc-link">→ ABRIR</span>
-      </div>
-    </a>
-
-    <a href="campo-phi.html" class="tool-card tc-green">
-      <div class="tc-header">
-        <span class="tc-id">H-13</span>
-        <span class="tc-badge live">LIVE</span>
-      </div>
-      <div class="tc-name">Campo φ · Ondas GW</div>
-      <div class="tc-eq">\( m_\phi = \hbar a_0 / c^2 \)</div>
-      <div class="tc-desc">Campo φ de infraestructura espacial. Coalescencia de binarias, T² artificial, señal LISA ~2.4 mHz. Tres modos: campo, curvatura, órbita 3D.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">ondas GW</span><span class="tc-tag">LISA</span><span class="tc-tag">T²</span></div>
-        <span class="tc-link">→ ABRIR</span>
-      </div>
-    </a>
-
-  </div>
-
-  <!-- INVESTIGADORES -->
-  <div class="section-label">🤖 Investigadores · IA</div>
-  <div class="tools-grid">
-
-    <a href="latex.html" class="tool-card tc-lime">
-      <div class="tc-header">
-        <span class="tc-id">H-15</span>
-        <span class="tc-badge live">LIVE</span>
-      </div>
-      <div class="tc-name">Generador LaTeX</div>
-      <div class="tc-eq">\( a_0 = \frac{cH_0}{2\pi} \)</div>
-      <div class="tc-desc">Catálogo completo de ecuaciones TIE con código LaTeX listo para copiar. Renderizado KaTeX, exportar .tex y .md, editor custom y constantes.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">LaTeX</span><span class="tc-tag">KaTeX</span><span class="tc-tag">exportar</span></div>
-        <span class="tc-link">→ ABRIR</span>
-      </div>
-    </a>
-
-    <a href="api.html" class="tool-card tc-orange">
-      <div class="tc-header">
-        <span class="tc-id">H-16</span>
-        <span class="tc-badge live">LIVE</span>
-      </div>
-      <div class="tc-name">API Pública REST</div>
-      <div class="tc-eq">\( v_{\text{flat}} = (GMa_0)^{1/4} \)</div>
-      <div class="tc-desc">API REST pública para todos los cálculos TIE. Curvas de rotación, horizontes, deflexión gravitacional. Docs interactivas OpenAPI.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">REST API</span><span class="tc-tag">OpenAPI</span><span class="tc-tag">JSON</span></div>
-        <span class="tc-link">→ ABRIR</span>
-      </div>
-    </a>
-
-
-
-    <a href="chat.html" class="tool-card tc-purple">
-      <div class="tc-header">
-        <span class="tc-id">H-14</span>
-        <span class="tc-badge live">LIVE</span>
-      </div>
-      <div class="tc-name">TIE AI Chat</div>
-      <div class="tc-eq">\( \text{TIE v11.8} \times \text{Gemini} \)</div>
-      <div class="tc-desc">Pregunta cualquier cosa sobre TIE. El tratado completo está en contexto. Derivaciones, cálculos, comparaciones con el modelo estándar. Bilingüe ES/EN.</div>
-      <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">Gemini 2.5 Flash</span><span class="tc-tag">free</span><span class="tc-tag">bilingüe</span></div>
-        <span class="tc-link">→ ABRIR CHAT</span>
+      <div class="door-footer">
+        <span class="door-tools-count">3 herramientas activas</span>
+        <span class="door-enter">ENTRAR →</span>
       </div>
     </a>
 
@@ -353,7 +263,6 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="fb-arrow">→ VER</div>
   </a>
 
-  
 </div>
 
 <footer>

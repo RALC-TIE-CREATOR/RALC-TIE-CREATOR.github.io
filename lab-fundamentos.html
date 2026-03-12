@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIE · Lab 01 · Fundamentos · Lo que ES TIE</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{--gold:#FFD700;--blue:#5BC8F5;--green:#44FF88;--red:#FF4455;--purple:#BB88FF;--orange:#FF8C42;--bg:#000001;--bg2:rgba(5,5,15,0.78);--bg3:rgba(10,10,25,0.6);--text:#fff;--dim:#a0a0b0;--border:rgba(91,200,245,0.15);--mono:'Space Mono',monospace;--sans:'Syne',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+#galaxy-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.35;}
+nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
+.nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
+.nav-center{display:flex;gap:.5rem;}
+.lang-link{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;transition:all .2s;}
+.lang-link.active{color:#000;background:var(--gold);}
+.lang-link.inactive{color:var(--dim);border:1px solid var(--border);}
+.lang-link.inactive:hover{color:var(--gold);border-color:var(--gold);}
+.nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-back:hover{color:var(--gold);}
+.page{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:7rem 2rem 4rem;}
+.page-tag{font-family:var(--mono);font-size:.7rem;color:var(--purple);letter-spacing:4px;text-transform:uppercase;margin-bottom:.75rem;}
+.page-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;letter-spacing:-2px;margin-bottom:.5rem;}
+.page-title span{color:var(--purple);}
+.page-sub{font-family:var(--mono);font-size:.8rem;color:var(--dim);max-width:640px;line-height:1.6;margin-bottom:.75rem;}
+.page-eq{font-family:var(--mono);font-size:.78rem;color:var(--gold);margin-bottom:2.5rem;}
+
+/* ACCENT BAR */
+.accent-bar{height:3px;background:linear-gradient(90deg,var(--purple),transparent);margin-bottom:2.5rem;border-radius:2px;}
+
+/* STATS */
+.stats-bar{display:flex;gap:2rem;flex-wrap:wrap;background:var(--bg2);border:1px solid rgba(187,136,255,0.2);border-radius:16px;padding:1rem 1.5rem;backdrop-filter:blur(8px);margin-bottom:2.5rem;}
+.stat{text-align:center;}
+.stat-n{font-family:var(--mono);font-size:1.5rem;font-weight:700;line-height:1;}
+.stat-l{font-family:var(--mono);font-size:.58rem;color:var(--dim);letter-spacing:1px;margin-top:.15rem;}
+
+/* SECTION */
+.section-label{font-family:var(--mono);font-size:.65rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:.75rem;}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* TOOLS GRID */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem;margin-bottom:2.5rem;}
+
+/* TOOL CARD — idéntico al original */
+.tool-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-decoration:none;color:inherit;transition:all .25s;display:flex;flex-direction:column;gap:.75rem;backdrop-filter:blur(8px);position:relative;overflow:hidden;}
+.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .25s;}
+.tool-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.4);}
+.tool-card:hover::before{opacity:1;}
+.tc-purple{--cc:var(--purple);}
+.tc-purple:hover{border-color:rgba(187,136,255,.35);}
+.tc-purple::before{background:var(--purple);}
+.tc-gold{--cc:var(--gold);}
+.tc-gold:hover{border-color:rgba(255,215,0,.35);}
+.tc-gold::before{background:var(--gold);}
+.tc-blue{--cc:var(--blue);}
+.tc-blue:hover{border-color:rgba(91,200,245,.35);}
+.tc-blue::before{background:var(--blue);}
+.tc-green{--cc:var(--green);}
+.tc-green:hover{border-color:rgba(68,255,136,.3);}
+.tc-green::before{background:var(--green);}
+
+.tc-header{display:flex;justify-content:space-between;align-items:flex-start;}
+.tc-id{font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cc,var(--purple));}
+.tc-badge{font-family:var(--mono);font-size:.5rem;padding:.15rem .45rem;border-radius:100px;letter-spacing:1px;}
+.tc-badge.live{background:rgba(68,255,136,.12);color:var(--green);border:1px solid rgba(68,255,136,.25);}
+.tc-badge.new{background:rgba(255,215,0,.12);color:var(--gold);border:1px solid rgba(255,215,0,.25);}
+.tc-name{font-size:1.2rem;font-weight:800;line-height:1.2;}
+.tc-eq{font-size:.8rem;color:var(--cc,var(--purple));margin:.1rem 0;}
+.tc-desc{font-family:var(--mono);font-size:.65rem;color:var(--dim);line-height:1.65;flex:1;}
+.tc-footer{display:flex;justify-content:space-between;align-items:center;padding-top:.6rem;border-top:1px solid rgba(255,255,255,.05);}
+.tc-tags{display:flex;gap:.35rem;flex-wrap:wrap;}
+.tc-tag{font-family:var(--mono);font-size:.55rem;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;padding:.1rem .4rem;}
+.tc-link{font-family:var(--mono);font-size:.65rem;color:var(--cc,var(--purple));transition:transform .2s;white-space:nowrap;}
+.tool-card:hover .tc-link{transform:translateX(4px);}
+
+/* LAB NAV */
+.lab-nav{display:flex;justify-content:space-between;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.85rem 1.5rem;margin-top:1rem;}
+.lab-nav a{font-family:var(--mono);font-size:.7rem;color:var(--dim);text-decoration:none;transition:color .2s;}
+.lab-nav a:hover{color:var(--gold);}
+.lab-nav-center{font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:2px;}
+
+footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);margin-top:2rem;}
+footer .feq{font-family:var(--mono);font-size:.8rem;color:var(--gold);margin-bottom:.5rem;}
+footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;}
+</style>
+</head>
+<body>
+<canvas id="galaxy-canvas"></canvas>
+<nav>
+  <a href="index.html" class="nav-logo">TIE / R@LC</a>
+  <div class="nav-center">
+    <a href="lab-fundamentos.html" class="lang-link active">ES</a>
+    <a href="lab-fundamentos-en.html" class="lang-link inactive">EN</a>
+  </div>
+  <a href="labs.html" class="nav-back">← LABORATORIO</a>
+</nav>
+
+<div class="page">
+  <div class="page-tag">⚛ Laboratorio 01 · 5 herramientas · 2 nuevas</div>
+  <h1 class="page-title">FUNDA<span>MENTOS</span></h1>
+  <p class="page-sub">El núcleo ontológico del Tratado TIE. La jerarquía dimensional T⁰→T¹→T², el factor 2π, la aceleración a₀ derivada y el Bisturí que elimina los T² espurios de la física estándar.</p>
+  <div class="page-eq">\( \nabla\phi_0 = mv_0/\hbar \quad(\text{T}^0) \;\to\; v_0 = c/2\pi \quad(\text{T}^1) \;\to\; a_0 = v_0 H_0 \quad(\text{T}^2) \)</div>
+
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-n" style="color:var(--purple)">5</div><div class="stat-l">HERRAMIENTAS</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--gold)">2</div><div class="stat-l">NUEVAS ★</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--green)">0</div><div class="stat-l">PARÁMETROS LIBRES</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--blue)">84.1%</div><div class="stat-l">MATERIA OSCURA = 1−1/2π</div></div>
+  </div>
+
+  <div class="section-label" style="color:var(--purple)">★ Nuevas herramientas</div>
+  <div class="tools-grid">
+
+    <a href="jerarquia.html" class="tool-card tc-purple">
+      <div class="tc-header">
+        <span class="tc-id">H-17</span>
+        <span class="tc-badge new">★ NUEVO</span>
+      </div>
+      <div class="tc-name">Jerarquía Cósmica T⁰/T¹/T²</div>
+      <div class="tc-eq">\( \nabla\phi_0 \to v_0 = c/2\pi \to a_0 = v_0 H_0 \)</div>
+      <div class="tc-desc">La aceleración gravitacional no es una causa: es una sombra. Mueve el slider de H₀ (67–74 km/s/Mpc) y observa qué cambia (T²) y qué permanece invariante (T¹ = c/2π). El modo causal invierte la pirámide ortodoxa y muestra por qué se necesita materia oscura.</div>
+      <div class="tc-footer">
+        <div class="tc-tags"><span class="tc-tag">Slider H₀</span><span class="tc-tag">Invariante T¹</span><span class="tc-tag">Modo causal</span><span class="tc-tag">4 masas</span></div>
+        <span class="tc-link">→ EJECUTAR</span>
+      </div>
+    </a>
+
+    <a href="onto.html" class="tool-card tc-gold">
+      <div class="tc-header">
+        <span class="tc-id">H-04</span>
+        <span class="tc-badge new">★ NUEVO</span>
+      </div>
+      <div class="tc-name">Bisturí TIE v2.0</div>
+      <div class="tc-eq">\( \delta\!\int\!d\phi = 0 \;\cdot\; \text{T}^2_\text{espurio} \to \times 2\pi \;\cdot\; \text{NATIVA} \)</div>
+      <div class="tc-desc">El Traductor Ontológico. 10 ecuaciones de la física estándar bajo el Diagnóstico Dual: tres pruebas clasifican cada T² como espurio o cinemático. Pipeline de 4 pasos con la ecuación TIE purificada al final. La Regla de Fermi se valida como nativa.</div>
+      <div class="tc-footer">
+        <div class="tc-tags"><span class="tc-tag">10 ecuaciones</span><span class="tc-tag">Diagnóstico Dual</span><span class="tc-tag">Pipeline 4 pasos</span><span class="tc-tag">Fermi nativa</span></div>
+        <span class="tc-link">→ EJECUTAR</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="section-label" style="color:var(--dim)">Herramientas existentes</div>
+  <div class="tools-grid">
+
+    <a href="2pi.html" class="tool-card tc-purple">
+      <div class="tc-header">
+        <span class="tc-id">H-03</span>
+        <span class="tc-badge live">EN VIVO</span>
+      </div>
+      <div class="tc-name">Calculadora 2π</div>
+      <div class="tc-eq">\( m_\text{TIE} = 2\pi \cdot m_\text{obs} \)</div>
+      <div class="tc-desc">El factor 2π conecta la masa observada con la masa real de la infraestructura. Selecciona entre 55 galaxias SPARC, filtra por tipo morfológico y ajusta H₀ con slider. Gráfica v_flat vs masa con Plotly interactivo.</div>
+      <div class="tc-footer">
+        <div class="tc-tags"><span class="tc-tag">55 galaxias</span><span class="tc-tag">H₀ slider</span><span class="tc-tag">Plotly</span></div>
+        <span class="tc-link">→ EJECUTAR</span>
+      </div>
+    </a>
+
+    <a href="materia-oscura.html" class="tool-card tc-blue">
+      <div class="tc-header">
+        <span class="tc-id">H-05</span>
+        <span class="tc-badge live">EN VIVO</span>
+      </div>
+      <div class="tc-name">Materia Oscura</div>
+      <div class="tc-eq">\( 1 - 1/2\pi = 84.1\% \)</div>
+      <div class="tc-desc">Conversor de masa observable a masa real TIE. La materia oscura no es una partícula — es la fracción de infraestructura no contabilizada. Barra animada 15.9% / 84.1% con 4 unidades de masa. Cero parámetros, universal.</div>
+      <div class="tc-footer">
+        <div class="tc-tags"><span class="tc-tag">0 parámetros</span><span class="tc-tag">Universal</span><span class="tc-tag">Animación</span></div>
+        <span class="tc-link">→ EJECUTAR</span>
+      </div>
+    </a>
+
+    <a href="constante.html" class="tool-card tc-green">
+      <div class="tc-header">
+        <span class="tc-id">H-08</span>
+        <span class="tc-badge live">EN VIVO</span>
+      </div>
+      <div class="tc-name">a₀ y Λ — Constantes TIE</div>
+      <div class="tc-eq">\( a_0 = cH_0/2\pi \;\cdot\; \Lambda = 2H_0^2/c^2 \)</div>
+      <div class="tc-desc">Slider H₀ de 67 a 74 km/s/Mpc. Calcula a₀, Λ y radio de transición en tiempo real. Error 3.5% vs Planck 2018 — frente a los 10¹²⁰ órdenes de la QFT. Gráfica doble eje Planck vs SH0ES.</div>
+      <div class="tc-footer">
+        <div class="tc-tags"><span class="tc-tag">Planck vs SH0ES</span><span class="tc-tag">Λ sin Λ</span><span class="tc-tag">Doble eje</span></div>
+        <span class="tc-link">→ EJECUTAR</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="lab-nav">
+    <a href="labs.html">← Hub de laboratorios</a>
+    <span class="lab-nav-center">LAB 01 · FUNDAMENTOS</span>
+    <a href="lab-galaxias.html">Lab 02 — Galaxias →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="feq">\( \nabla\phi_0 = mv_0/\hbar \;\cdot\; v_0 = c/2\pi \;\cdot\; a_0 = v_0 H_0 \;\cdot\; m_\text{TIE} = 2\pi\,m_\text{obs} \)</div>
+  <div class="fcopy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+</footer>
+
+<script>
+(function(){
+  const canvas=document.getElementById('galaxy-canvas');
+  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(60,1,0.1,1000);
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  function resize(){renderer.setSize(canvas.clientWidth,canvas.clientHeight);camera.aspect=canvas.clientWidth/canvas.clientHeight;camera.updateProjectionMatrix();}
+  resize();window.addEventListener('resize',resize);
+  camera.position.set(0,4,6);camera.lookAt(0,0,0);
+  const p={count:55000,radius:5,branches:5,spin:1.2,randomness:0.4,randomPower:2.5};
+  const geo=new THREE.BufferGeometry(),pos=new Float32Array(p.count*3),col=new Float32Array(p.count*3);
+  const cIn=new THREE.Color('#BB88FF'),cOut=new THREE.Color('#1a1a4e');
+  for(let i=0;i<p.count;i++){const r=Math.random()*p.radius,b=(i%p.branches)/p.branches*Math.PI*2,s=r*p.spin;const rx=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r,ry=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r*.3,rz=Math.pow(Math.random(),p.randomPower)*(Math.random()<.5?1:-1)*p.randomness*r;pos[i*3]=Math.cos(b+s)*r+rx;pos[i*3+1]=ry;pos[i*3+2]=Math.sin(b+s)*r+rz;const m=new THREE.Color().lerpColors(cIn,cOut,r/p.radius);col[i*3]=m.r;col[i*3+1]=m.g;col[i*3+2]=m.b;}
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+  const mat=new THREE.PointsMaterial({size:.007,sizeAttenuation:true,depthWrite:false,blending:THREE.AdditiveBlending,vertexColors:true});
+  scene.add(new THREE.Points(geo,mat));
+  let mx=0,my=0;
+  document.addEventListener('mousemove',e=>{mx=(e.clientX/innerWidth-.5)*.5;my=(e.clientY/innerHeight-.5)*.5;});
+  (function animate(){requestAnimationFrame(animate);scene.rotation.y+=.0004+mx*.0003;scene.rotation.x+=my*.0002;renderer.render(scene,camera);})();
+})();
+window.onload=()=>{renderMathInElement(document.body,{delimiters:[{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});};
+</script>
+<script src="axon-widget.js"></script>
+</body>
+</html>

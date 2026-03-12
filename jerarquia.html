@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIE · Jerarquía Cósmica · T⁰ / T¹ / T²</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold:   #FFD700;
+            --blue:   #5BC8F5;
+            --green:  #44FF88;
+            --red:    #FF4455;
+            --purple: #a855f7;
+            --bg:     #000001;
+            --bg2:    rgba(5,5,15,0.97);
+            --text:   #ffffff;
+            --dim:    #a0a0b0;
+            --border: rgba(91,200,245,0.15);
+            --mono:   'Space Mono', monospace;
+            --sans:   'Syne', sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ── NAV ── */
+        nav {
+            background: rgba(0,0,1,0.95);
+            border-bottom: 1px solid var(--border);
+            padding: 0.85rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .nav-logo { font-family:var(--mono); color:var(--gold); text-decoration:none; font-weight:700; font-size:0.85rem; letter-spacing:2px; }
+        .nav-right { display:flex; align-items:center; gap:1.5rem; }
+        .nav-lang  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; letter-spacing:1px; }
+        .nav-lang.active { color:var(--text); }
+        .nav-back  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; border:1px solid rgba(160,160,176,0.3); padding:0.35rem 0.75rem; transition:0.2s; letter-spacing:1px; }
+        .nav-back:hover { color:var(--blue); border-color:var(--blue); }
+
+        /* ── HEADER ── */
+        .page-header { padding:1.1rem 2rem 0.9rem; border-bottom:1px solid var(--border); flex-shrink:0; }
+        .page-label  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.3rem; }
+        .page-header h1 { font-size:1.6rem; font-weight:900; letter-spacing:1px; margin-bottom:0.2rem; }
+        .page-desc { font-size:0.85rem; color:var(--dim); max-width:700px; }
+        .page-eq   { font-family:var(--mono); font-size:0.78rem; color:var(--gold); margin-top:0.35rem; }
+
+        /* ── STATS ── */
+        .stats-bar { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
+        .stat { padding:0.55rem 1.5rem; border-right:1px solid var(--border); text-align:center; }
+        .stat-number { font-family:var(--mono); font-size:1.05rem; font-weight:700; color:var(--gold); }
+        .stat-label  { font-family:var(--mono); font-size:0.58rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
+
+        /* ── MAIN ── */
+        .main-wrap { flex:1; display:flex; padding:1.25rem 1.5rem; gap:1.5rem; min-height:0; overflow:hidden; }
+
+        /* ── SIDEBAR ── */
+        .sidebar { width:300px; flex-shrink:0; display:flex; flex-direction:column; gap:1.1rem; overflow-y:auto; }
+        .sidebar::-webkit-scrollbar { width:3px; }
+        .sidebar::-webkit-scrollbar-thumb { background:var(--border); }
+
+        .panel { border:1px solid var(--border); background:var(--bg2); padding:1rem; }
+        .panel-title { font-family:var(--mono); font-size:0.68rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.4rem; margin-bottom:0.8rem; }
+
+        .slider-wrap { display:flex; flex-direction:column; gap:6px; }
+        .slider-wrap label { font-family:var(--mono); font-size:0.72rem; color:var(--blue); display:flex; justify-content:space-between; }
+        input[type=range] {
+            -webkit-appearance:none; width:100%;
+            background:rgba(91,200,245,0.12); height:3px; border-radius:2px; outline:none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance:none; width:14px; height:14px;
+            background:var(--blue); border-radius:50%; cursor:pointer;
+            box-shadow: 0 0 6px var(--blue);
+        }
+
+        .mass-btns { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+        .mass-btn {
+            background:rgba(0,0,0,0.4); border:1px solid var(--border);
+            color:var(--dim); padding:0.55rem 0.5rem;
+            font-family:var(--mono); font-size:0.65rem; cursor:pointer;
+            transition:0.2s; text-align:center; border-radius:2px;
+        }
+        .mass-btn:hover { background:rgba(91,200,245,0.05); color:var(--text); }
+        .mass-btn.active { border-color:var(--blue); color:var(--blue); background:rgba(91,200,245,0.07); }
+
+        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.72rem; color:var(--dim); padding:0.22rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+        .data-val { color:var(--text); font-weight:700; }
+
+        .note { font-family:var(--mono); font-size:0.68rem; color:var(--dim); line-height:1.6; }
+
+        /* ── CAUSAL DIR TOGGLE ── */
+        .causal-toggle { display:flex; gap:6px; }
+        .causal-btn {
+            flex:1; padding:0.55rem; font-family:var(--mono); font-size:0.65rem;
+            font-weight:700; cursor:pointer; border-radius:2px; transition:0.2s;
+            text-align:center; border:1px solid var(--border); background:transparent; color:var(--dim);
+        }
+        .causal-btn.active-tie    { border-color:var(--gold);  color:var(--gold);  background:rgba(255,215,0,0.07); }
+        .causal-btn.active-ortho  { border-color:var(--red);   color:var(--red);   background:rgba(255,68,85,0.07); }
+
+        /* ── CASCADE ── */
+        .cascade-area {
+            flex:1; display:flex; flex-direction:column;
+            justify-content:center; align-items:center;
+            gap:0; position:relative; min-width:0;
+        }
+
+        /* Tier cards */
+        .tier {
+            width:100%; max-width:680px;
+            border:1px solid var(--border);
+            background:var(--bg2);
+            padding:1.1rem 1.4rem;
+            position:relative;
+            transition: border-color 0.35s, box-shadow 0.35s;
+        }
+        .tier-t0 { border-color: rgba(168,85,247,0.5); }
+        .tier-t1 { border-color: rgba(255,215,0,0.5); background:rgba(10,8,0,0.97); }
+        .tier-t2 { border-color: rgba(91,200,245,0.4); }
+
+        .tier.flash-change {
+            animation: tierFlash 0.5s ease-out;
+        }
+        .tier-t1.invariant-pulse {
+            animation: invariantPulse 0.6s ease-out;
+        }
+        @keyframes tierFlash {
+            0%   { box-shadow: 0 0 0 rgba(91,200,245,0); }
+            40%  { box-shadow: 0 0 22px rgba(91,200,245,0.35); }
+            100% { box-shadow: 0 0 0 rgba(91,200,245,0); }
+        }
+        @keyframes invariantPulse {
+            0%   { box-shadow: 0 0 0 rgba(255,215,0,0); }
+            40%  { box-shadow: 0 0 28px rgba(255,215,0,0.4); }
+            100% { box-shadow: 0 0 0 rgba(255,215,0,0); }
+        }
+
+        .tier-header { display:flex; align-items:center; gap:0.9rem; margin-bottom:0.6rem; }
+        .tier-badge {
+            font-family:var(--mono); font-size:0.65rem; font-weight:700;
+            padding:3px 9px; border-radius:2px; letter-spacing:1px; flex-shrink:0;
+        }
+        .badge-t0 { background:rgba(168,85,247,0.2); color:var(--purple); border:1px solid rgba(168,85,247,0.4); }
+        .badge-t1 { background:rgba(255,215,0,0.15);  color:var(--gold);   border:1px solid rgba(255,215,0,0.4); }
+        .badge-t2 { background:rgba(91,200,245,0.12); color:var(--blue);   border:1px solid rgba(91,200,245,0.35); }
+
+        .tier-name { font-family:var(--mono); font-size:0.75rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; }
+
+        .invariant-badge {
+            margin-left:auto; font-family:var(--mono); font-size:0.6rem;
+            color:var(--gold); border:1px solid rgba(255,215,0,0.35);
+            padding:2px 8px; letter-spacing:1px;
+            opacity:0; transition: opacity 0.3s;
+        }
+        .invariant-badge.show { opacity:1; }
+
+        .tier-body { display:flex; align-items:center; gap:1.5rem; }
+
+        .tier-eq {
+            font-family:var(--mono); font-size:1.05rem; font-weight:700;
+            color:var(--text); flex-shrink:0;
+        }
+        .tier-t0 .tier-eq { color:var(--purple); }
+        .tier-t1 .tier-eq { color:var(--gold); font-size:1.2rem; }
+        .tier-t2 .tier-eq { color:var(--blue); }
+
+        .tier-value-block { flex:1; }
+        .tier-value {
+            font-family:var(--mono); font-size:1.4rem; font-weight:700;
+            transition: color 0.3s;
+        }
+        .tier-t0 .tier-value { color:var(--purple); }
+        .tier-t1 .tier-value { color:var(--gold); }
+        .tier-t2 .tier-value { color:var(--blue); }
+
+        .tier-unit  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); margin-top:2px; }
+        .tier-interp { font-size:0.78rem; color:var(--dim); margin-top:4px; line-height:1.4; }
+
+        /* ── CONNECTOR ARROWS ── */
+        .connector {
+            width:100%; max-width:680px;
+            display:flex; flex-direction:column; align-items:center;
+            padding:0; position:relative; height:48px;
+        }
+        .conn-line {
+            width:2px; flex:1;
+            background: linear-gradient(to bottom, rgba(91,200,245,0.3), rgba(91,200,245,0.1));
+            position:relative;
+        }
+        .conn-label {
+            position:absolute; left:50%; transform:translateX(-50%);
+            top:50%; transform:translate(-50%,-50%);
+            font-family:var(--mono); font-size:0.62rem; color:var(--dim);
+            background:var(--bg); padding:0 8px; white-space:nowrap;
+            letter-spacing:1px;
+        }
+        .conn-arrow {
+            width:0; height:0;
+            border-left:6px solid transparent;
+            border-right:6px solid transparent;
+            border-top:8px solid rgba(91,200,245,0.35);
+        }
+
+        /* Ortho mode — arrows flip */
+        .causal-ortho .conn-line {
+            background: linear-gradient(to top, rgba(255,68,85,0.3), rgba(255,68,85,0.1));
+        }
+        .causal-ortho .conn-arrow {
+            border-top: none;
+            border-bottom:8px solid rgba(255,68,85,0.35);
+            order:-1;
+        }
+        .causal-ortho .tier-t2 { border-color:rgba(255,68,85,0.6); }
+        .causal-ortho .badge-t2 { background:rgba(255,68,85,0.12); color:var(--red); border-color:rgba(255,68,85,0.4); }
+        .causal-ortho .tier-t2 .tier-value { color:var(--red); }
+        .causal-ortho .tier-t2 .tier-eq    { color:var(--red); }
+        .causal-ortho .tier-t0 { opacity:0.4; }
+        .causal-ortho .tier-t1 { opacity:0.6; }
+
+        .ortho-warning {
+            width:100%; max-width:680px;
+            font-family:var(--mono); font-size:0.72rem; color:var(--red);
+            border:1px solid rgba(255,68,85,0.3); background:rgba(255,68,85,0.05);
+            padding:0.6rem 1rem; text-align:center; letter-spacing:1px;
+            display:none; margin-top:8px;
+        }
+        .causal-ortho ~ .ortho-warning { display:block; }
+
+        /* ── FOOTER ── */
+        footer { border-top:1px solid var(--border); padding:0.65rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+        .footer-nav { display:flex; gap:2rem; }
+        .footer-nav a { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; transition:0.2s; }
+        .footer-nav a:hover { color:var(--blue); }
+        .footer-eq     { font-family:var(--mono); font-size:0.7rem; color:rgba(255,215,0,0.5); text-align:center; }
+        .footer-credit { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; }
+
+        @media (max-width:900px) { .main-wrap{flex-direction:column;overflow-y:auto} .sidebar{width:100%} }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="nav-logo">TIE / R@LC</a>
+    <div class="nav-right">
+        <a href="jerarquia.html" class="nav-lang active">ES</a>
+        <a href="jerarquia-en.html" class="nav-lang">EN</a>
+        <a href="labs.html" class="nav-back">← LABORATORIO</a>
+    </div>
+</nav>
+
+<div class="page-header">
+    <div class="page-label">H-17 · EN VIVO · ONTOLOGÍA · JERARQUÍA DIMENSIONAL</div>
+    <h1>JERARQUÍA CÓSMICA T⁰ / T¹ / T²</h1>
+    <p class="page-desc">La aceleración gravitacional no es una causa: es una sombra. TIE revela los tres niveles ontológicos de la realidad y la dirección causal correcta. Mueve H₀ y observa qué cambia — y qué permanece invariante.</p>
+    <div class="page-eq">∇φ₀ = mv₀/ħ &nbsp;(T⁰) &nbsp;→&nbsp; v₀ = c/2π &nbsp;(T¹) &nbsp;→&nbsp; a₀ = v₀·H₀ &nbsp;(T²)</div>
+</div>
+
+<div class="stats-bar">
+    <div class="stat">
+        <div class="stat-number" id="stat-v0">47,713</div>
+        <div class="stat-label">v₀ km/s &nbsp;·&nbsp; INVARIANTE</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number" id="stat-a0">1.082</div>
+        <div class="stat-label">a₀ ×10⁻¹⁰ m/s² &nbsp;·&nbsp; sombra</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number" id="stat-h0">70.0</div>
+        <div class="stat-label">H₀ km/s/Mpc</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number">0</div>
+        <div class="stat-label">Parámetros libres</div>
+    </div>
+</div>
+
+<div class="main-wrap">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <div class="panel">
+            <div class="panel-title">Parámetro de Hubble</div>
+            <div class="slider-wrap">
+                <label>H₀ <span id="lbl-h0">70.0 km/s/Mpc</span></label>
+                <input type="range" id="sl-h0" min="67" max="74" step="0.1" value="70.0" oninput="onH0Change(this.value)">
+            </div>
+            <div style="margin-top:0.65rem;">
+                <div class="data-row">Planck 2018 <span class="data-val" style="color:var(--blue)">67.4</span></div>
+                <div class="data-row">SH0ES 2022  <span class="data-val" style="color:var(--red)">73.0</span></div>
+                <div class="data-row">TIE (este tratado) <span class="data-val" style="color:var(--gold)">70.0</span></div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Masa de referencia (T⁰)</div>
+            <div class="mass-btns">
+                <button class="mass-btn active" id="mb-electron" onclick="selectMass('electron',this)">Electrón<br><span style="color:var(--dim);font-size:0.6rem">9.11×10⁻³¹ kg</span></button>
+                <button class="mass-btn" id="mb-proton"   onclick="selectMass('proton',this)">Protón<br><span style="color:var(--dim);font-size:0.6rem">1.67×10⁻²⁷ kg</span></button>
+                <button class="mass-btn" id="mb-sol"      onclick="selectMass('sol',this)">Sol<br><span style="color:var(--dim);font-size:0.6rem">1.99×10³⁰ kg</span></button>
+                <button class="mass-btn" id="mb-galaxia"  onclick="selectMass('galaxia',this)">Galaxia<br><span style="color:var(--dim);font-size:0.6rem">10¹¹ M☉</span></button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Dirección causal</div>
+            <div class="causal-toggle">
+                <button class="causal-btn active-tie" id="cb-tie"   onclick="setCausal('tie')">↓ TIE<br><span style="font-size:0.6rem">T⁰ → T¹ → T²</span></button>
+                <button class="causal-btn" id="cb-ortho" onclick="setCausal('ortho')">↑ ORTODOXA<br><span style="font-size:0.6rem">T² ← postulado</span></button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Valores en vivo</div>
+            <div class="data-row">∇φ₀ <span class="data-val" id="dv-grad" style="color:var(--purple)">--</span></div>
+            <div class="data-row">v₀ = c/2π <span class="data-val" style="color:var(--gold)">47,713 km/s</span></div>
+            <div class="data-row">a₀ = v₀·H₀ <span class="data-val" id="dv-a0" style="color:var(--blue)">--</span></div>
+            <div class="data-row">Λ_TIE = 2H₀²/c² <span class="data-val" id="dv-lambda" style="color:var(--dim)">--</span></div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Clave ontológica</div>
+            <p class="note">
+                <span style="color:var(--purple)">T⁰</span> — geometría pura. No depende de H₀.<br>
+                <span style="color:var(--gold)">T¹</span> — velocidad topológica. <strong>INVARIANTE</strong>. c/2π nunca cambia.<br>
+                <span style="color:var(--blue)">T²</span> — sombra cinemática. Cambia con H₀.<br><br>
+                La física ortodoxa empieza por T² e inventa materia oscura. TIE empieza por T⁰ y la materia oscura desaparece.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- CASCADE -->
+    <div class="cascade-area" id="cascade">
+
+        <!-- T⁰ -->
+        <div class="tier tier-t0" id="tier-t0">
+            <div class="tier-header">
+                <span class="badge-t0 tier-badge">T⁰ · CAUSA</span>
+                <span class="tier-name">Gradiente de Fase — Geometría Pura</span>
+            </div>
+            <div class="tier-body">
+                <div class="tier-eq">∇φ₀ = mv₀/ħ</div>
+                <div class="tier-value-block">
+                    <div class="tier-value" id="val-t0">4.12×10¹¹</div>
+                    <div class="tier-unit">rad / m</div>
+                    <div class="tier-interp">Huella topológica estática. Sin tiempo. Sin movimiento. Solo curvatura de fase.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conector 1 -->
+        <div class="connector" id="conn1">
+            <div class="conn-line"></div>
+            <span class="conn-label" id="conn1-label">Motor Absoluto · procesa a c</span>
+            <div class="conn-arrow"></div>
+        </div>
+
+        <!-- T¹ -->
+        <div class="tier tier-t1" id="tier-t1">
+            <div class="tier-header">
+                <span class="badge-t1 tier-badge">T¹ · EFECTO PRIMARIO</span>
+                <span class="tier-name">Velocidad Topológica — Invariante Absoluta</span>
+                <span class="invariant-badge" id="inv-badge">INVARIANTE</span>
+            </div>
+            <div class="tier-body">
+                <div class="tier-eq">v₀ = c/2π</div>
+                <div class="tier-value-block">
+                    <div class="tier-value" id="val-t1">47,713 km/s</div>
+                    <div class="tier-unit">m / s &nbsp;·&nbsp; no depende de H₀</div>
+                    <div class="tier-interp">Acoplamiento del límite causal (c) con la geometría cíclica (2π). Nunca cambia.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conector 2 -->
+        <div class="connector" id="conn2">
+            <div class="conn-line"></div>
+            <span class="conn-label" id="conn2-label">Universo en expansión · H₀</span>
+            <div class="conn-arrow"></div>
+        </div>
+
+        <!-- T² -->
+        <div class="tier tier-t2" id="tier-t2">
+            <div class="tier-header">
+                <span class="badge-t2 tier-badge">T² · SOMBRA</span>
+                <span class="tier-name">Aceleración Aparente — Artefacto Cinemático</span>
+            </div>
+            <div class="tier-body">
+                <div class="tier-eq">a₀ = v₀ · H₀</div>
+                <div class="tier-value-block">
+                    <div class="tier-value" id="val-t2">1.082×10⁻¹⁰</div>
+                    <div class="tier-unit">m / s² &nbsp;·&nbsp; cambia con H₀</div>
+                    <div class="tier-interp">No es una fuerza tirando de las estrellas. Es inercia geométrica (v₀) resistiéndose a la expansión (H₀).</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warning modo ortodoxa -->
+        <div class="ortho-warning" id="ortho-warning">
+            ⚠ MODO ORTODOXA · Este enfoque invierte la causalidad · Requiere postular materia oscura para cerrar las ecuaciones
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    <div class="footer-nav">
+        <a href="constante.html">← a₀ y Λ</a>
+        <a href="onto.html">Bisturí v2.0 →</a>
+    </div>
+    <div class="footer-eq">∇φ₀ (T⁰) → v₀ = c/2π (T¹) → a₀ = v₀·H₀ (T²) &nbsp;·&nbsp; Capítulo 1 §4 · Glosario</div>
+    <div class="footer-credit">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+</footer>
+
+<script>
+    // ── CONSTANTES FÍSICAS ──
+    const C    = 2.998e8;        // m/s
+    const HBAR = 1.055e-34;      // J·s
+    const MPC  = 3.0857e22;      // m
+    const V0   = C / (2 * Math.PI); // m/s — INVARIANTE
+
+    const MASSES = {
+        electron: { m: 9.109e-31, label: 'Electrón' },
+        proton:   { m: 1.673e-27, label: 'Protón' },
+        sol:      { m: 1.989e30,  label: 'Sol' },
+        galaxia:  { m: 1.989e30 * 1e11, label: 'Galaxia (10¹¹ M☉)' }
+    };
+
+    let currentMass = 'electron';
+    let currentH0   = 70.0; // km/s/Mpc
+    let causalMode  = 'tie';
+    let h0FlashTimer = null;
+
+    function H0toSI(h0_kmsMpc) {
+        return h0_kmsMpc * 1000 / MPC; // s⁻¹
+    }
+
+    function formatSci(val) {
+        if (val === 0) return '0';
+        const exp = Math.floor(Math.log10(Math.abs(val)));
+        const man = val / Math.pow(10, exp);
+        return `${man.toFixed(3)}×10${superscript(exp)}`;
+    }
+
+    function superscript(n) {
+        const sups = {'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴',
+                      '5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+        return n.toString().split('').map(c=>sups[c]||c).join('');
+    }
+
+    function update() {
+        const H0_si = H0toSI(currentH0);
+        const m     = MASSES[currentMass].m;
+
+        // T⁰ — cambia con masa, no con H₀
+        const grad_phi = m * V0 / HBAR;
+
+        // T¹ — INVARIANTE
+        const v0_kms = V0 / 1000;
+
+        // T² — cambia con H₀
+        const a0 = V0 * H0_si;
+
+        // Λ_TIE = 2H₀²/c²
+        const lambda_tie = 2 * H0_si * H0_si / (C * C);
+
+        // Actualizar valores en cascada
+        document.getElementById('val-t0').textContent = formatSci(grad_phi);
+        document.getElementById('val-t1').textContent = `${v0_kms.toFixed(0).toLocaleString('es-MX')} km/s`;
+        document.getElementById('val-t2').textContent = formatSci(a0);
+
+        // Sidebar
+        document.getElementById('dv-grad').textContent   = formatSci(grad_phi) + ' rad/m';
+        document.getElementById('dv-a0').textContent     = formatSci(a0) + ' m/s²';
+        document.getElementById('dv-lambda').textContent = formatSci(lambda_tie) + ' m⁻²';
+
+        // Stats bar
+        document.getElementById('stat-v0').textContent = v0_kms.toFixed(0).toLocaleString('es-MX');
+        document.getElementById('stat-a0').textContent = (a0 * 1e10).toFixed(3);
+        document.getElementById('stat-h0').textContent = currentH0.toFixed(1);
+    }
+
+    function onH0Change(val) {
+        currentH0 = parseFloat(val);
+        document.getElementById('lbl-h0').textContent = `${currentH0.toFixed(1)} km/s/Mpc`;
+
+        // Flash T² (cambia) + pulse invariante en T¹
+        flashTier('tier-t2', 'flash-change');
+        pulseInvariant();
+        update();
+    }
+
+    function flashTier(id, cls) {
+        const el = document.getElementById(id);
+        el.classList.remove(cls);
+        void el.offsetWidth;
+        el.classList.add(cls);
+        setTimeout(() => el.classList.remove(cls), 600);
+    }
+
+    function pulseInvariant() {
+        const t1  = document.getElementById('tier-t1');
+        const bdg = document.getElementById('inv-badge');
+        t1.classList.remove('invariant-pulse');
+        void t1.offsetWidth;
+        t1.classList.add('invariant-pulse');
+        setTimeout(() => t1.classList.remove('invariant-pulse'), 700);
+        // Mostrar badge brevemente
+        bdg.classList.add('show');
+        if (h0FlashTimer) clearTimeout(h0FlashTimer);
+        h0FlashTimer = setTimeout(() => bdg.classList.remove('show'), 2000);
+    }
+
+    function selectMass(key, btn) {
+        currentMass = key;
+        document.querySelectorAll('.mass-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        flashTier('tier-t0', 'flash-change');
+        update();
+    }
+
+    function setCausal(mode) {
+        causalMode = mode;
+        const cascade = document.getElementById('cascade');
+
+        document.getElementById('cb-tie').className   = 'causal-btn';
+        document.getElementById('cb-ortho').className = 'causal-btn';
+
+        if (mode === 'tie') {
+            cascade.classList.remove('causal-ortho');
+            document.getElementById('cb-tie').classList.add('active-tie');
+            document.getElementById('conn1-label').textContent = 'Motor Absoluto · procesa a c';
+            document.getElementById('conn2-label').textContent = 'Universo en expansión · H₀';
+        } else {
+            cascade.classList.add('causal-ortho');
+            document.getElementById('cb-ortho').classList.add('active-ortho');
+            document.getElementById('conn1-label').textContent = 'materia oscura postulada ←';
+            document.getElementById('conn2-label').textContent = 'aceleración observada ← postulado';
+        }
+    }
+
+    // Init
+    update();
+</script>
+</body>
+</html>

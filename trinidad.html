@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIE · Trinidad Energética · E / U / K</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold:   #FFD700; --blue:#5BC8F5; --green:#44FF88;
+            --red:    #FF4455; --purple:#a855f7; --orange:#FF8800;
+            --bg:     #000001; --bg2:rgba(5,5,15,0.97);
+            --text:   #ffffff; --dim:#a0a0b0;
+            --border: rgba(91,200,245,0.15);
+            --mono:'Space Mono',monospace; --sans:'Syne',sans-serif;
+
+            /* colores de cada estado */
+            --ce: #FFD700;   /* Existencia */
+            --cu: #a855f7;   /* Tensión */
+            --ck: #5BC8F5;   /* Cinética */
+            --cr: #FF4455;   /* Radiación */
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:var(--bg); color:var(--text); font-family:var(--sans); height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+
+        /* ── NAV ── */
+        nav { background:rgba(0,0,1,0.95); border-bottom:1px solid var(--border); padding:0.85rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+        .nav-logo { font-family:var(--mono); color:var(--gold); text-decoration:none; font-weight:700; font-size:0.85rem; letter-spacing:2px; }
+        .nav-right { display:flex; align-items:center; gap:1.5rem; }
+        .nav-lang  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; letter-spacing:1px; }
+        .nav-lang.active { color:var(--text); }
+        .nav-back  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; border:1px solid rgba(160,160,176,0.3); padding:0.35rem 0.75rem; transition:0.2s; letter-spacing:1px; }
+        .nav-back:hover { color:var(--blue); border-color:var(--blue); }
+
+        /* ── HEADER ── */
+        .page-header { padding:1.1rem 2rem 0.9rem; border-bottom:1px solid var(--border); flex-shrink:0; }
+        .page-label  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.3rem; }
+        .page-header h1 { font-size:1.6rem; font-weight:900; letter-spacing:1px; margin-bottom:0.2rem; }
+        .page-desc { font-size:0.85rem; color:var(--dim); max-width:700px; }
+        .page-eq   { font-family:var(--mono); font-size:0.78rem; color:var(--gold); margin-top:0.35rem; }
+
+        /* ── STATS ── */
+        .stats-bar { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
+        .stat { padding:0.55rem 1.5rem; border-right:1px solid var(--border); text-align:center; }
+        .stat-number { font-family:var(--mono); font-size:1.05rem; font-weight:700; color:var(--gold); white-space:nowrap; }
+        .stat-label  { font-family:var(--mono); font-size:0.58rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
+
+        /* ── MAIN ── */
+        .main-wrap { flex:1; display:flex; padding:1.25rem 1.5rem; gap:1.5rem; min-height:0; overflow:hidden; }
+
+        /* ── SIDEBAR ── */
+        .sidebar { width:280px; flex-shrink:0; display:flex; flex-direction:column; gap:1rem; overflow-y:auto; }
+        .sidebar::-webkit-scrollbar { width:3px; }
+        .sidebar::-webkit-scrollbar-thumb { background:var(--border); }
+
+        .panel { border:1px solid var(--border); background:var(--bg2); padding:0.9rem; }
+        .panel-title { font-family:var(--mono); font-size:0.68rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.35rem; margin-bottom:0.75rem; }
+
+        /* Botones de escenario */
+        .scene-btn {
+            display:block; width:100%; text-align:left;
+            background:rgba(0,0,0,0.4); border:1px solid var(--border);
+            color:var(--dim); padding:0.65rem 0.8rem;
+            font-family:var(--mono); font-size:0.7rem; cursor:pointer;
+            transition:0.2s; margin-bottom:5px; border-radius:2px;
+        }
+        .scene-btn:hover { background:rgba(255,255,255,0.03); color:var(--text); }
+        .scene-btn.active { border-color:var(--gold); color:var(--gold); background:rgba(255,215,0,0.06); }
+        .scene-btn .sub { font-size:0.6rem; color:var(--dim); margin-top:3px; display:block; }
+
+        /* Slider de progreso */
+        .slider-wrap { display:flex; flex-direction:column; gap:6px; }
+        .slider-wrap label { font-family:var(--mono); font-size:0.72rem; color:var(--blue); display:flex; justify-content:space-between; }
+        input[type=range] { -webkit-appearance:none; width:100%; background:rgba(91,200,245,0.12); height:3px; border-radius:2px; outline:none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; background:var(--blue); border-radius:50%; cursor:pointer; box-shadow:0 0 6px var(--blue); }
+
+        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.72rem; color:var(--dim); padding:0.22rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+        .data-val { color:var(--text); font-weight:700; }
+        .note { font-family:var(--mono); font-size:0.68rem; color:var(--dim); line-height:1.6; }
+
+        /* ── STAGE ── */
+        .stage { flex:1; display:flex; flex-direction:column; gap:1rem; min-width:0; min-height:0; }
+
+        /* Barra de conservación total */
+        .conservation-bar {
+            border:1px solid rgba(255,255,255,0.15); background:var(--bg2);
+            padding:0.7rem 1.2rem;
+            display:flex; align-items:center; gap:1.5rem; flex-shrink:0;
+        }
+        .cons-label { font-family:var(--mono); font-size:0.68rem; color:var(--dim); letter-spacing:1px; white-space:nowrap; }
+        .cons-track { flex:1; height:6px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden; }
+        .cons-fill  { height:100%; background:linear-gradient(90deg, var(--gold), var(--green)); border-radius:3px; transition:width 0.4s; }
+        .cons-value { font-family:var(--mono); font-size:0.9rem; font-weight:700; color:var(--green); white-space:nowrap; min-width:120px; text-align:right; }
+        .cons-check { font-family:var(--mono); font-size:0.72rem; white-space:nowrap; }
+
+        /* Tres tanques */
+        .tanks-row { flex:1; display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; min-height:0; }
+
+        .tank {
+            border:1px solid var(--border); background:var(--bg2);
+            display:flex; flex-direction:column; overflow:hidden; position:relative;
+        }
+        .tank-header { padding:0.75rem 1rem 0.5rem; flex-shrink:0; }
+        .tank-badge  { font-family:var(--mono); font-size:0.62rem; font-weight:700; letter-spacing:1px; padding:2px 8px; border-radius:2px; display:inline-block; margin-bottom:5px; }
+        .tank-name   { font-family:var(--mono); font-size:0.8rem; font-weight:700; }
+        .tank-eq     { font-family:var(--mono); font-size:0.68rem; color:var(--dim); margin-top:3px; }
+
+        .tank-body { flex:1; position:relative; overflow:hidden; display:flex; align-items:flex-end; }
+        /* La barra de llenado */
+        .tank-fill {
+            position:absolute; bottom:0; left:0; right:0;
+            transition:height 0.55s cubic-bezier(0.4,0,0.2,1), opacity 0.3s;
+        }
+        .tank-grid {
+            position:absolute; top:0; left:0; right:0; bottom:0;
+            background-image: repeating-linear-gradient(
+                to bottom, transparent 0px, transparent 24px,
+                rgba(255,255,255,0.03) 24px, rgba(255,255,255,0.03) 25px
+            );
+            pointer-events:none;
+        }
+
+        .tank-value {
+            position:absolute; bottom:0; left:0; right:0;
+            padding:0.6rem 1rem;
+            font-family:var(--mono); font-size:1.1rem; font-weight:700;
+            text-align:center; z-index:2;
+            text-shadow: 0 0 20px currentColor;
+            transition: color 0.3s;
+        }
+        .tank-unit {
+            position:absolute; bottom:2.4rem; left:0; right:0;
+            font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.4);
+            text-align:center; z-index:2;
+        }
+        .tank-delta {
+            position:absolute; top:0.5rem; right:0.75rem;
+            font-family:var(--mono); font-size:0.75rem; font-weight:700;
+            opacity:0; transition:opacity 0.3s;
+        }
+        .tank-delta.show { opacity:1; }
+
+        /* Colores por tanque */
+        .tank-e .tank-badge { background:rgba(255,215,0,0.15);  color:var(--ce); border:1px solid rgba(255,215,0,0.3); }
+        .tank-e .tank-fill  { background:linear-gradient(to top, rgba(255,215,0,0.35), rgba(255,215,0,0.08)); border-top:2px solid var(--ce); }
+        .tank-e .tank-value { color:var(--ce); }
+        .tank-e .tank-delta { color:var(--ce); }
+
+        .tank-u .tank-badge { background:rgba(168,85,247,0.15); color:var(--cu); border:1px solid rgba(168,85,247,0.3); }
+        .tank-u .tank-fill  { background:linear-gradient(to top, rgba(168,85,247,0.35), rgba(168,85,247,0.08)); border-top:2px solid var(--cu); }
+        .tank-u .tank-value { color:var(--cu); }
+        .tank-u .tank-delta { color:var(--cu); }
+
+        .tank-k .tank-badge { background:rgba(91,200,245,0.12); color:var(--ck); border:1px solid rgba(91,200,245,0.3); }
+        .tank-k .tank-fill  { background:linear-gradient(to top, rgba(91,200,245,0.35), rgba(91,200,245,0.08)); border-top:2px solid var(--ck); }
+        .tank-k .tank-value { color:var(--ck); }
+        .tank-k .tank-delta { color:var(--ck); }
+
+        /* Tanque de radiación (solo aparece en aniquilación/emisión) */
+        .rad-banner {
+            display:none; border:1px solid rgba(255,68,85,0.4); background:rgba(255,68,85,0.06);
+            padding:0.6rem 1.2rem; flex-shrink:0;
+            font-family:var(--mono); font-size:0.82rem;
+            align-items:center; gap:1rem;
+        }
+        .rad-banner.show { display:flex; }
+        .rad-label { color:var(--dim); font-size:0.68rem; }
+        .rad-value { color:var(--red); font-weight:700; font-size:1rem; }
+        .rad-verify { margin-left:auto; color:var(--green); font-size:0.72rem; }
+
+        /* Partículas flotantes */
+        .particle {
+            position:absolute; width:6px; height:6px; border-radius:50%;
+            pointer-events:none; z-index:10;
+            animation:float-up 1.2s ease-out forwards;
+        }
+        @keyframes float-up {
+            0%   { opacity:1; transform:translateY(0) scale(1); }
+            100% { opacity:0; transform:translateY(-80px) scale(0.3); }
+        }
+
+        /* ── FOOTER ── */
+        footer { border-top:1px solid var(--border); padding:0.65rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+        .footer-nav { display:flex; gap:2rem; }
+        .footer-nav a { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; transition:0.2s; }
+        .footer-nav a:hover { color:var(--blue); }
+        .footer-eq     { font-family:var(--mono); font-size:0.7rem; color:rgba(255,215,0,0.5); text-align:center; }
+        .footer-credit { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; }
+
+        @media (max-width:900px) { .main-wrap{flex-direction:column;overflow-y:auto} .sidebar{width:100%} .tanks-row{grid-template-columns:1fr} }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="nav-logo">TIE / R@LC</a>
+    <div class="nav-right">
+        <a href="trinidad.html" class="nav-lang active">ES</a>
+        <a href="trinidad-en.html" class="nav-lang">EN</a>
+        <a href="labs.html" class="nav-back">← LABORATORIO</a>
+    </div>
+</nav>
+
+<div class="page-header">
+    <div class="page-label">H-18 · EN VIVO · TERMODINÁMICA · TRINIDAD ENERGÉTICA</div>
+    <h1>TRINIDAD ENERGÉTICA</h1>
+    <p class="page-desc">El Motor Absoluto redistribuye la energía entre tres estados ontológicos. La suma total nunca varía. Selecciona un escenario y mueve el slider para observar la transferencia en tiempo real.</p>
+    <div class="page-eq">E_total = E_existencia + U_tensión + K_cinética &nbsp;·&nbsp; E = m_TIE·c²/2π = m_obs·c²</div>
+</div>
+
+<div class="stats-bar">
+    <div class="stat">
+        <div class="stat-number" id="stat-etot" style="color:var(--green)">511.000</div>
+        <div class="stat-label">E_total (keV)</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number" id="stat-eex" style="color:var(--ce)">511.000</div>
+        <div class="stat-label">E_existencia</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number" id="stat-uten" style="color:var(--cu)">0.000</div>
+        <div class="stat-label">U_tensión</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number" id="stat-kc" style="color:var(--ck)">0.000</div>
+        <div class="stat-label">K_cinética</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number" id="stat-cons" style="color:var(--green)">✓ 0.000</div>
+        <div class="stat-label">Error conservación</div>
+    </div>
+</div>
+
+<div class="main-wrap">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <div class="panel">
+            <div class="panel-title">Escenario</div>
+            <button class="scene-btn active" id="sc-ann"  onclick="setScene('ann',this)">
+                1. Aniquilación e⁺e⁻
+                <span class="sub">E_existencia → 2×511 keV · verificación Cap.3</span>
+            </button>
+            <button class="scene-btn" id="sc-fall" onclick="setScene('fall',this)">
+                2. Caída libre gravitacional
+                <span class="sub">U → K · E_existencia constante</span>
+            </button>
+            <button class="scene-btn" id="sc-emit" onclick="setScene('emit',this)">
+                3. Emisión de fotón
+                <span class="sub">E_existencia → hν · decaimiento atómico</span>
+            </button>
+            <button class="scene-btn" id="sc-esc"  onclick="setScene('esc',this)">
+                4. Escape gravitacional
+                <span class="sub">K + U → 0 · velocidad de escape exacta</span>
+            </button>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Progreso del proceso</div>
+            <div class="slider-wrap">
+                <label>t/t_total &nbsp; <span id="lbl-prog">0%</span></label>
+                <input type="range" id="sl-prog" min="0" max="100" value="0" oninput="onProgress(this.value)">
+            </div>
+            <div style="margin-top:0.6rem; font-family:var(--mono); font-size:0.65rem; color:var(--dim);" id="scene-hint">
+                Mueve el slider para iniciar la aniquilación.
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Valores en vivo</div>
+            <div class="data-row">m_TIE electrón <span class="data-val">2π × m_e</span></div>
+            <div class="data-row">E_existencia(t=0) <span class="data-val" style="color:var(--ce)">511.000 keV</span></div>
+            <div class="data-row">E_TIE = m_TIE·c²/2π <span class="data-val" style="color:var(--ce)">= m_obs·c² ✓</span></div>
+            <div class="data-row">E transferida <span class="data-val" id="dv-trans">0.000 keV</span></div>
+            <div class="data-row">Conservación <span class="data-val" id="dv-cons" style="color:var(--green)">PERFECTA ✓</span></div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Nota ontológica</div>
+            <p class="note" id="scene-note">
+                La aniquilación produce exactamente 2×511 keV porque E_TIE = m_TIE·c²/2π con m_TIE = 2π·m_e. La corrección de TIE es ontológica — los joules no cambian, cambia qué fracción de la masa es física real.
+            </p>
+        </div>
+    </div>
+
+    <!-- STAGE -->
+    <div class="stage" id="stage">
+
+        <!-- Barra de conservación total -->
+        <div class="conservation-bar">
+            <span class="cons-label">CONSERVACIÓN TOTAL</span>
+            <div class="cons-track"><div class="cons-fill" id="cons-fill" style="width:100%"></div></div>
+            <span class="cons-value" id="cons-value">E = 511.000 keV</span>
+            <span class="cons-check" id="cons-check" style="color:var(--green)">✓ EXACTA</span>
+        </div>
+
+        <!-- Tres tanques -->
+        <div class="tanks-row">
+
+            <!-- Tanque E_existencia -->
+            <div class="tank tank-e" id="tank-e">
+                <div class="tank-header">
+                    <div class="tank-badge">E_EXISTENCIA</div>
+                    <div class="tank-name">Energía de Masa</div>
+                    <div class="tank-eq">E = m_TIE · c² / 2π = m_obs · c²</div>
+                </div>
+                <div class="tank-body">
+                    <div class="tank-grid"></div>
+                    <div class="tank-fill" id="fill-e" style="height:100%"></div>
+                    <div class="tank-unit">keV</div>
+                    <div class="tank-value" id="val-e">511.000</div>
+                    <div class="tank-delta" id="delta-e">—</div>
+                </div>
+            </div>
+
+            <!-- Tanque U_tensión -->
+            <div class="tank tank-u" id="tank-u">
+                <div class="tank-header">
+                    <div class="tank-badge">U_TENSIÓN</div>
+                    <div class="tank-name">Energía Potencial</div>
+                    <div class="tank-eq">U = −GMm / r</div>
+                </div>
+                <div class="tank-body">
+                    <div class="tank-grid"></div>
+                    <div class="tank-fill" id="fill-u" style="height:0%"></div>
+                    <div class="tank-unit">keV</div>
+                    <div class="tank-value" id="val-u">0.000</div>
+                    <div class="tank-delta" id="delta-u">—</div>
+                </div>
+            </div>
+
+            <!-- Tanque K_cinética -->
+            <div class="tank tank-k" id="tank-k">
+                <div class="tank-header">
+                    <div class="tank-badge">K_CINÉTICA</div>
+                    <div class="tank-name">Energía de Movimiento</div>
+                    <div class="tank-eq">K = ½ m v²</div>
+                </div>
+                <div class="tank-body">
+                    <div class="tank-grid"></div>
+                    <div class="tank-fill" id="fill-k" style="height:0%"></div>
+                    <div class="tank-unit">keV</div>
+                    <div class="tank-value" id="val-k">0.000</div>
+                    <div class="tank-delta" id="delta-k">—</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Banner de radiación (aniquilación / emisión) -->
+        <div class="rad-banner" id="rad-banner">
+            <span class="rad-label">FOTÓN EMITIDO</span>
+            <span class="rad-value" id="rad-value">0.000 keV</span>
+            <span class="rad-label" id="rad-label2"></span>
+            <span class="rad-verify" id="rad-verify"></span>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-nav">
+        <a href="bisturi.html">← Bisturí v2.0</a>
+        <a href="jerarquia.html">Jerarquía T⁰/T¹/T² →</a>
+    </div>
+    <div class="footer-eq">E_total = E + U + K &nbsp;·&nbsp; Motor Absoluto conserva &nbsp;·&nbsp; E_TIE = m_obs·c² (Cap. 3)</div>
+    <div class="footer-credit">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+</footer>
+
+<script>
+// ── CONSTANTES ──
+const E_ELECTRON = 511.0; // keV — energía en reposo del electrón
+
+// ── ESTADO ──
+let scene    = 'ann';
+let progress = 0; // 0..100
+
+// ── DEFINICIÓN DE ESCENARIOS ──
+// Cada escenario devuelve {E, U, K, rad, radLabel, radVerify} dado t ∈ [0,1]
+const SCENARIOS = {
+    ann: {
+        hint:  'Aniquilación e⁺e⁻: E_existencia se convierte en dos fotones gamma.',
+        note:  'La aniquilación produce exactamente 2×511 keV porque E_TIE = m_TIE·c²/2π con m_TIE = 2π·m_e. La corrección es ontológica: los joules no cambian, cambia qué fracción de la masa es física real.',
+        compute(t) {
+            // E_existencia cae. Rad sube. U y K = 0.
+            const E   = E_ELECTRON * (1 - t);
+            const rad = E_ELECTRON * t;
+            return { E, U:0, K:0, rad,
+                     radLabel: t > 0.99 ? '2 fotones γ emitidos' : `γ en formación (${(t*100).toFixed(0)}%)`,
+                     radVerify: t > 0.99 ? `✓ 2 × ${(E_ELECTRON).toFixed(3)} keV = 1022 keV` : '' };
+        }
+    },
+    fall: {
+        hint:  'Caída libre: la energía potencial U se transfiere exactamente a K. E_existencia constante.',
+        note:  'En caída libre, el Motor Absoluto mantiene E_existencia constante (la masa no cambia). Solo redistribuye entre U y K. Es la demostración más limpia de conservación: ΔU = −ΔK.',
+        compute(t) {
+            const U_0  = -E_ELECTRON * 0.5; // potencial inicial (50% de E)
+            const U    = U_0 * (1 - t);     // U → 0 a medida que cae
+            const K    = -U_0 * t;           // K sube exactamente
+            return { E:E_ELECTRON, U, K, rad:0, radLabel:'', radVerify:'' };
+        }
+    },
+    emit: {
+        hint:  'Emisión de fotón: un electrón excitado pierde hν y cae al estado fundamental.',
+        note:  'En la emisión atómica, E_existencia disminuye en exactamente hν. La energía no desaparece: sale como fotón. TIE describe esto como redistribución del campo de fase, no como "salto cuántico" misterioso.',
+        compute(t) {
+            const hnu  = E_ELECTRON * 0.08 * t; // 8% de E → fotón
+            const E    = E_ELECTRON - hnu;
+            return { E, U:0, K:0, rad: hnu,
+                     radLabel: t > 0.01 ? `hν = ${hnu.toFixed(3)} keV` : '',
+                     radVerify: t > 0.99 ? `✓ E_final = ${E.toFixed(3)} keV` : '' };
+        }
+    },
+    esc: {
+        hint:  'Escape gravitacional: K aumenta hasta que K + U = 0 en el límite de escape.',
+        note:  'La velocidad de escape es v_esc = √(2GM/r). En ese punto K = −U exactamente y E_existencia se mantiene invariante. TIE no requiere ningún parámetro extra para derivar esto.',
+        compute(t) {
+            const U_0 = -E_ELECTRON * 0.6;
+            // K sube hasta |U_0| en t=1 (escape exacto)
+            const K   = Math.abs(U_0) * t;
+            const U   = U_0 * (1 - t * 0.5); // U se reduce a la mitad cuando K = |U_inicial|
+            return { E:E_ELECTRON, U, K, rad:0,
+                     radLabel:'',
+                     radVerify: t > 0.99 ? `✓ K + U = ${(K+U).toFixed(3)} keV ≈ 0` : '' };
+        }
+    }
+};
+
+// ── UTILIDADES ──
+function lerp(a,b,t){ return a+(b-a)*t; }
+function fmt(v){ return (v>=0?'+':'')+v.toFixed(3); }
+
+// ── ACTUALIZAR UI ──
+let prevE=E_ELECTRON, prevU=0, prevK=0;
+
+function updateUI() {
+    const t   = progress/100;
+    const sc  = SCENARIOS[scene];
+    const {E,U,K,rad,radLabel,radVerify} = sc.compute(t);
+    const total = E + U + K + rad;
+
+    // Deltas
+    const dE = E-prevE, dU = U-prevU, dK = K-prevK;
+    prevE=E; prevU=U; prevK=K;
+
+    // Stats bar
+    document.getElementById('stat-etot').textContent = total.toFixed(3);
+    document.getElementById('stat-eex').textContent  = E.toFixed(3);
+    document.getElementById('stat-uten').textContent = U.toFixed(3);
+    document.getElementById('stat-kc').textContent   = K.toFixed(3);
+    const err = Math.abs(total - E_ELECTRON);
+    document.getElementById('stat-cons').textContent  = (err<0.001?'✓ ':'⚠ ')+err.toFixed(4);
+    document.getElementById('stat-cons').style.color  = err<0.001?'var(--green)':'var(--orange)';
+
+    // Valores en tanques
+    document.getElementById('val-e').textContent = E.toFixed(3);
+    document.getElementById('val-u').textContent = U.toFixed(3);
+    document.getElementById('val-k').textContent = K.toFixed(3);
+
+    // Alturas de barras (normalizadas respecto a E_ELECTRON)
+    const maxH = E_ELECTRON;
+    const hE = Math.max(0, Math.min(100, (E / maxH) * 100));
+    const hU = Math.max(0, Math.min(100, (Math.abs(U) / maxH) * 100));
+    const hK = Math.max(0, Math.min(100, (K / maxH) * 100));
+    document.getElementById('fill-e').style.height = hE + '%';
+    document.getElementById('fill-u').style.height = hU + '%';
+    document.getElementById('fill-k').style.height = hK + '%';
+
+    // Deltas visibles
+    setDelta('delta-e', dE);
+    setDelta('delta-u', dU);
+    setDelta('delta-k', dK);
+
+    // Barra de conservación
+    document.getElementById('cons-value').textContent = `E = ${total.toFixed(3)} keV`;
+    document.getElementById('cons-check').textContent  = err<0.001 ? '✓ EXACTA' : '⚠ REVISAR';
+    document.getElementById('cons-check').style.color  = err<0.001 ? 'var(--green)' : 'var(--orange)';
+
+    // Sidebar
+    document.getElementById('dv-trans').textContent = `${(E_ELECTRON-E+rad).toFixed(3)} keV`;
+    document.getElementById('dv-cons').textContent  = err<0.001 ? 'PERFECTA ✓' : 'REVISAR';
+    document.getElementById('dv-cons').style.color  = err<0.001 ? 'var(--green)' : 'var(--orange)';
+
+    // Banner de radiación
+    const banner = document.getElementById('rad-banner');
+    if (rad > 0.01) {
+        banner.classList.add('show');
+        document.getElementById('rad-value').textContent  = rad.toFixed(3) + ' keV';
+        document.getElementById('rad-label2').textContent = radLabel;
+        document.getElementById('rad-verify').textContent = radVerify;
+    } else {
+        banner.classList.remove('show');
+    }
+
+    // Partículas si hay transferencia grande
+    if (Math.abs(dK) > 0.5) spawnParticles('tank-k', 'var(--ck)', 3);
+    if (Math.abs(dU) > 0.5) spawnParticles('tank-u', 'var(--cu)', 2);
+    if (rad > 1 && t > 0.05) spawnParticles('rad-banner', 'var(--red)', 2);
+}
+
+function setDelta(id, dv) {
+    const el = document.getElementById(id);
+    if (Math.abs(dv) < 0.005) { el.classList.remove('show'); return; }
+    el.textContent = (dv>0?'▲ +':'▼ ') + Math.abs(dv).toFixed(2);
+    el.classList.add('show');
+    clearTimeout(el._t);
+    el._t = setTimeout(()=>el.classList.remove('show'), 1200);
+}
+
+function spawnParticles(parentId, color, count) {
+    const parent = document.getElementById(parentId);
+    if (!parent) return;
+    for (let i=0; i<count; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.cssText = `background:${color};box-shadow:0 0 6px ${color};
+            left:${20+Math.random()*60}%;bottom:${10+Math.random()*40}%;
+            animation-delay:${Math.random()*0.3}s;`;
+        parent.appendChild(p);
+        setTimeout(()=>p.remove(), 1500);
+    }
+}
+
+// ── ESCENA ──
+function setScene(id, btn) {
+    scene = id; progress = 0;
+    document.querySelectorAll('.scene-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const sl = document.getElementById('sl-prog');
+    sl.value = 0;
+    document.getElementById('lbl-prog').textContent = '0%';
+    document.getElementById('scene-hint').textContent = SCENARIOS[id].hint;
+    document.getElementById('scene-note').textContent = SCENARIOS[id].note;
+    prevE=E_ELECTRON; prevU=0; prevK=0;
+    updateUI();
+}
+
+function onProgress(val) {
+    progress = parseInt(val);
+    document.getElementById('lbl-prog').textContent = progress + '%';
+    updateUI();
+}
+
+// Init
+updateUI();
+</script>
+</body>
+</html>

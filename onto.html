@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIE · Bisturí v2.0 · Traductor Ontológico</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <style>
+        :root {
+            --gold:  #FFD700; --blue:#5BC8F5; --green:#44FF88;
+            --red:   #FF4455; --purple:#a855f7; --orange:#FF8800;
+            --bg:    #000001; --bg2:rgba(5,5,15,0.95);
+            --text:  #ffffff; --dim:#a0a0b0;
+            --border:rgba(91,200,245,0.15);
+            --mono:'Space Mono',monospace; --sans:'Syne',sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:var(--bg); color:var(--text); font-family:var(--sans); height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+
+        nav { background:rgba(0,0,1,0.95); border-bottom:1px solid var(--border); padding:0.85rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+        .nav-logo { font-family:var(--mono); color:var(--gold); text-decoration:none; font-weight:700; font-size:0.85rem; letter-spacing:2px; }
+        .nav-right { display:flex; align-items:center; gap:1.5rem; }
+        .nav-lang  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; letter-spacing:1px; }
+        .nav-lang.active { color:var(--text); }
+        .nav-back  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; letter-spacing:1px; border:1px solid rgba(160,160,176,0.3); padding:0.35rem 0.75rem; transition:0.2s; }
+        .nav-back:hover { color:var(--blue); border-color:var(--blue); }
+
+        .page-header { padding:1.2rem 2rem 1rem; border-bottom:1px solid var(--border); flex-shrink:0; }
+        .page-label  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.3rem; }
+        .page-header h1 { font-family:var(--sans); font-size:1.6rem; font-weight:900; letter-spacing:1px; margin-bottom:0.25rem; }
+        .page-desc { font-size:0.85rem; color:var(--dim); max-width:720px; }
+        .page-eq   { font-family:var(--mono); font-size:0.8rem; color:var(--gold); margin-top:0.4rem; }
+
+        .stats-bar { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
+        .stat { padding:0.6rem 1.5rem; border-right:1px solid var(--border); text-align:center; }
+        .stat-number { font-family:var(--mono); font-size:1.1rem; font-weight:700; color:var(--gold); }
+        .stat-label  { font-family:var(--mono); font-size:0.6rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
+
+        .main-wrap { flex:1; display:flex; padding:1.25rem 1.5rem; gap:1.25rem; min-height:0; }
+
+        /* ── SIDEBAR ── */
+        .sidebar { width:340px; flex-shrink:0; display:flex; flex-direction:column; gap:0; overflow-y:auto; border:1px solid var(--border); background:var(--bg2); }
+        .sidebar::-webkit-scrollbar { width:3px; }
+        .sidebar::-webkit-scrollbar-thumb { background:var(--border); }
+
+        .sidebar-title { font-family:var(--mono); font-size:0.7rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding:0.85rem 1rem 0.5rem; position:sticky; top:0; background:var(--bg2); z-index:10; }
+        .sidebar-desc  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); padding:0.5rem 1rem 0.75rem; line-height:1.5; border-bottom:1px solid var(--border); }
+
+        .eq-btn {
+            display:block; width:100%; text-align:left;
+            background:transparent; border:none;
+            border-bottom:1px solid rgba(91,200,245,0.06);
+            color:var(--dim); padding:0.65rem 1rem;
+            font-family:var(--mono); font-size:0.72rem;
+            cursor:pointer; transition:0.15s;
+            display:flex; flex-direction:column; gap:5px;
+        }
+        .eq-btn:hover { background:rgba(91,200,245,0.04); color:var(--text); }
+        .eq-btn.active { background:rgba(91,200,245,0.07); color:var(--blue); border-left:2px solid var(--blue); }
+        .eq-btn.active-fermi { background:rgba(68,255,136,0.06); color:var(--green); border-left:2px solid var(--green); }
+        .eq-btn .btn-label { font-size:0.65rem; color:inherit; opacity:0.7; letter-spacing:1px; text-transform:uppercase; }
+
+        .sidebar-status { padding:0.75rem 1rem; border-top:1px solid var(--border); margin-top:auto; }
+        .status-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.72rem; color:var(--dim); padding:0.2rem 0; }
+        .status-val { color:var(--text); font-weight:700; }
+
+        .btn-run {
+            margin:0.75rem 1rem 1rem;
+            padding:0.8rem; font-family:var(--mono); font-size:0.8rem; font-weight:700;
+            letter-spacing:2px; text-transform:uppercase; cursor:pointer;
+            background:var(--gold); color:#000; border:none; border-radius:2px; transition:0.2s;
+        }
+        .btn-run:hover   { background:#fff; }
+        .btn-run:disabled{ background:var(--dim); color:#555; cursor:not-allowed; }
+
+        /* ── PIPELINE ── */
+        .pipeline {
+            flex:1; border:1px solid var(--border); background:var(--bg2);
+            padding:1.5rem; overflow-y:auto; position:relative; min-width:0;
+            scroll-behavior:smooth;
+        }
+        .pipeline::-webkit-scrollbar { width:5px; }
+        .pipeline::-webkit-scrollbar-thumb { background:var(--blue); border-radius:2px; }
+
+        .laser {
+            position:absolute; top:0; left:0; width:100%; height:2px;
+            background:var(--blue); box-shadow:0 0 12px var(--blue);
+            z-index:50; display:none; opacity:0.85;
+        }
+
+        .step {
+            border:1px solid var(--border); background:rgba(0,0,0,0.5);
+            padding:1.25rem; margin-bottom:1rem;
+            opacity:0; transform:translateY(12px);
+            transition:all 0.4s ease-out;
+        }
+        .step.visible { opacity:1; transform:translateY(0); }
+        .step:last-child { margin-bottom:0; }
+
+        .step-header {
+            font-family:var(--mono); font-size:0.68rem; color:var(--dim);
+            letter-spacing:1px; margin-bottom:1rem;
+            display:flex; align-items:center; gap:8px;
+        }
+        .badge {
+            background:var(--blue); color:#000; padding:2px 7px;
+            font-weight:700; font-size:0.65rem; border-radius:2px;
+        }
+        .math-box {
+            text-align:center; padding:1rem 0.5rem;
+            background:rgba(255,255,255,0.02); overflow-x:auto;
+        }
+        .diag-text { font-family:var(--mono); font-size:0.82rem; color:var(--text); line-height:1.65; }
+        .diag-label { font-size:0.85rem; font-weight:700; margin-bottom:6px; display:block; font-family:var(--mono); }
+
+        #step-4.visible { border-color:var(--gold); }
+        #step-4 .math-box { color:var(--gold); }
+
+        .placeholder {
+            display:flex; align-items:center; justify-content:center;
+            height:100%; min-height:200px;
+            font-family:var(--mono); font-size:0.8rem; color:var(--dim);
+            text-align:center; line-height:2;
+        }
+
+        footer { border-top:1px solid var(--border); padding:0.65rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+        .footer-nav { display:flex; gap:2rem; }
+        .footer-nav a { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; transition:0.2s; }
+        .footer-nav a:hover { color:var(--blue); }
+        .footer-eq     { font-family:var(--mono); font-size:0.7rem; color:rgba(255,215,0,0.5); text-align:center; }
+        .footer-credit { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; }
+
+        @media (max-width:900px) { .main-wrap{flex-direction:column} .sidebar{width:100%;max-height:300px} }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="nav-logo">TIE / R@LC</a>
+    <div class="nav-right">
+        <a href="onto.html" class="nav-lang active">ES</a>
+        <a href="onto-en.html" class="nav-lang">EN</a>
+        <a href="labs.html" class="nav-back">← LABORATORIO</a>
+    </div>
+</nav>
+
+<div class="page-header">
+    <div class="page-label">H-04 · EN VIVO · BISTURÍ TIE v2.0 · DIAGNÓSTICO DIMENSIONAL</div>
+    <h1>TRADUCTOR ONTOLÓGICO</h1>
+    <p class="page-desc">10 ecuaciones de la física estándar bajo el Diagnóstico Dual del Bisturí v2.0. Tres pruebas clasifican cada T² como espurio o cinemático. Resultado: la ecuación TIE purificada.</p>
+    <div class="page-eq">δ∫dφ = 0 &nbsp;·&nbsp; T² espurio → eliminar (×2π) &nbsp;·&nbsp; T² cinemático → traducir (→ fase)</div>
+</div>
+
+<div class="stats-bar">
+    <div class="stat"><div class="stat-number">10</div><div class="stat-label">Ecuaciones</div></div>
+    <div class="stat"><div class="stat-number">8</div><div class="stat-label">T² Espurios</div></div>
+    <div class="stat"><div class="stat-number">1</div><div class="stat-label">Nativa (Fermi)</div></div>
+    <div class="stat"><div class="stat-number" id="stat-count" style="color:var(--dim)">0</div><div class="stat-label">Procesadas</div></div>
+</div>
+
+<div class="main-wrap">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-title">Seleccionar ecuación</div>
+        <div class="sidebar-desc">Las 10 fórmulas fundamentales. Aplica el Bisturí y observa la traducción ontológica.</div>
+
+        <button class="eq-btn" onclick="selectEq('base',this)">
+            <span class="btn-label">1 · Aceleración base</span>
+            <span id="tex-btn-1"></span>
+        </button>
+        <button class="eq-btn" onclick="selectEq('orbital',this)">
+            <span class="btn-label">2 · Aceleración orbital (galaxias)</span>
+            <span id="tex-btn-2"></span>
+        </button>
+        <button class="eq-btn" onclick="selectEq('hubble',this)">
+            <span class="btn-label">3 · Escala cosmológica (a₀)</span>
+            <span id="tex-btn-3"></span>
+        </button>
+        <button class="eq-btn" onclick="selectEq('rar',this)">
+            <span class="btn-label">4 · Gravedad emergente (MOND)</span>
+            <span id="tex-btn-4"></span>
+        </button>
+        <button class="eq-btn" onclick="selectEq('emc2',this)">
+            <span class="btn-label">5 · Energía de existencia</span>
+            <span id="tex-btn-5"></span>
+        </button>
+        <button class="eq-btn" onclick="selectEq('masa',this)">
+            <span class="btn-label">6 · Equivalencia de masa</span>
+            <span id="tex-btn-6"></span>
+        </button>
+        <button class="eq-btn" onclick="selectEq('coulomb',this)">
+            <span class="btn-label">7 · Ley de Coulomb (EM)</span>
+            <span id="tex-btn-7"></span>
+        </button>
+        <button class="eq-btn" onclick="selectEq('fuerte',this)">
+            <span class="btn-label">8 · Fuerza nuclear fuerte</span>
+            <span id="tex-btn-8"></span>
+        </button>
+        <button class="eq-btn" onclick="selectEq('debil',this)">
+            <span class="btn-label">9 · Decaimiento débil (Fermi)</span>
+            <span id="tex-btn-9"></span>
+        </button>
+        <button class="eq-btn" onclick="selectEq('geodesico',this)">
+            <span class="btn-label">10 · Principio geodésico clásico</span>
+            <span id="tex-btn-10"></span>
+        </button>
+
+        <div class="sidebar-status">
+            <div class="status-row">Objetivo <span class="status-val" id="status-target">--</span></div>
+            <div class="status-row">T² <span class="status-val" id="status-t2" style="color:var(--dim)">PENDIENTE</span></div>
+            <div class="status-row">Veredicto <span class="status-val" id="status-verdict" style="color:var(--dim)">PENDIENTE</span></div>
+        </div>
+        <button class="btn-run" id="btn-run" onclick="runBisturi()" disabled>EJECUTAR BISTURÍ</button>
+    </div>
+
+    <!-- PIPELINE -->
+    <div class="pipeline" id="scanner-area">
+        <div class="laser" id="scan-laser"></div>
+
+        <div class="placeholder" id="placeholder">
+            Selecciona una ecuación en el panel izquierdo<br>y ejecuta el Bisturí TIE v2.0
+        </div>
+
+        <div class="step" id="step-1" style="display:none">
+            <div class="step-header"><span class="badge">PASO 1</span> BÚSQUEDA DEL T² — ANÁLISIS DIMENSIONAL</div>
+            <div class="math-box" id="math-step-1"></div>
+        </div>
+        <div class="step" id="step-2" style="display:none">
+            <div class="step-header"><span class="badge" style="background:var(--orange);">PASO 2</span> DIAGNÓSTICO DUAL — TRES PRUEBAS</div>
+            <div class="diag-text" id="text-step-2"></div>
+        </div>
+        <div class="step" id="step-3" style="display:none">
+            <div class="step-header"><span class="badge" style="background:var(--purple);color:#fff;">PASO 3</span> TRATAMIENTO — ELIMINACIÓN O TRADUCCIÓN</div>
+            <div class="diag-text" id="text-step-3"></div>
+        </div>
+        <div class="step" id="step-4" style="display:none">
+            <div class="step-header"><span class="badge" style="background:var(--gold);">PASO 4</span> ECUACIÓN TIE RESULTANTE</div>
+            <div class="math-box" id="math-step-4"></div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-nav">
+        <a href="materia-oscura.html">← Materia Oscura</a>
+        <a href="constante.html">a₀ y Λ →</a>
+    </div>
+    <div class="footer-eq">Bisturí TIE v2.0 &nbsp;·&nbsp; δ∫dφ = 0 &nbsp;·&nbsp; Apéndice §A.7</div>
+    <div class="footer-credit">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+</footer>
+
+<script>
+let processedCount = 0;
+let currentEq = null;
+
+// Renderizar fórmulas en botones
+window.addEventListener('load', () => {
+    const btns = [
+        ["tex-btn-1",  "a = d^2x/dt^2"],
+        ["tex-btn-2",  "v^2 = r \\cdot a"],
+        ["tex-btn-3",  "a_0 = c \\cdot H_0"],
+        ["tex-btn-4",  "\\mu(a/a_0) \\cdot a = a_N"],
+        ["tex-btn-5",  "E = mc^2"],
+        ["tex-btn-6",  "F = m_{obs} \\cdot a"],
+        ["tex-btn-7",  "F_e = k_e q_1 q_2/r^2"],
+        ["tex-btn-8",  "F_s = (g_s^2/r^2)\\,e^{-r/\\lambda}"],
+        ["tex-btn-9",  "\\Gamma = (2\\pi/\\hbar)|M|^2\\rho"],
+        ["tex-btn-10", "\\delta S = \\delta\\!\\int\\! L\\,dt = 0"]
+    ];
+    btns.forEach(([id, tex]) => {
+        try { katex.render(tex, document.getElementById(id), {throwOnError:false}); } catch(e){}
+    });
+});
+
+// ── BASE DE DATOS DE ECUACIONES (terminología v2.0) ──
+const eqData = {
+    base: {
+        name: "Aceleración Base",
+        t2type: "CINEMÁTICO",
+        step1: "a = \\frac{d^2x}{d\\textcolor{#FF4455}{t^2}} \\implies \\frac{m}{\\textcolor{#FF4455}{s^2}}",
+        step2: `<span class='diag-label' style='color:var(--red)'>[ T² CINEMÁTICO — TRES PRUEBAS ]</span>
+Prueba 1 — Flecha del tiempo: despejar t da ±t, pero la aceleración gravitacional real es siempre positiva → solución unívoca ✓<br>
+Prueba 2 — Invarianza: el T² persiste en unidades naturales ✓<br>
+Prueba 3 — Reposo: aplica solo a movimiento real ✓<br>
+<strong>Veredicto: T² CINEMÁTICO</strong> — no se elimina, se traduce a espacio de fase.`,
+        step3: `<span class='diag-label' style='color:var(--blue)'>[ PASO 3b — TRADUCCIÓN A FASE ]</span>
+Aplicando la regla de la cadena con φ = ∫p·dx/ħ, el tiempo continuo se reemplaza por la fase cuántica φ operando a frecuencia ω. El T² cinemático se convierte en curvatura de fase.`,
+        step4: "a_{\\text{TIE}} = \\omega_\\phi^2\\,\\frac{d^2x}{d\\phi^2}"
+    },
+    orbital: {
+        name: "Aceleración Orbital",
+        t2type: "CINEMÁTICO",
+        step1: "v^2 = r \\cdot \\frac{d^2r}{d\\textcolor{#FF4455}{t^2}}",
+        step2: `<span class='diag-label' style='color:var(--red)'>[ T² CINEMÁTICO ]</span>
+La aceleración orbital es física real — describe curvaturas genuinas de trayectorias galácticas. Las tres pruebas confirman que el T² es real:<br>
+Prueba 1: solución unívoca positiva ✓ &nbsp; Prueba 2: persiste en SI y en naturales ✓ &nbsp; Prueba 3: solo aplica a movimiento orbital real ✓`,
+        step3: `<span class='diag-label' style='color:var(--blue)'>[ PASO 3b — TRADUCCIÓN ]</span>
+La curvatura orbital se expresa en fase cuántica. El resultado emergente genera el potencial logarítmico responsable de las curvas de rotación planas — sin materia oscura.`,
+        step4: "v^2 = r \\cdot \\omega_\\phi^2\\,\\frac{d^2r}{d\\phi^2}"
+    },
+    hubble: {
+        name: "Escala Cosmológica (a₀)",
+        t2type: "ESPURIO",
+        step1: "a_0 = c \\cdot H_0 \\implies \\frac{m}{s} \\cdot \\frac{1}{\\textcolor{#FF4455}{s}} \\implies \\frac{m}{\\textcolor{#FF4455}{s^2}}",
+        step2: `<span class='diag-label' style='color:var(--orange)'>[ T² ESPURIO — TRES PRUEBAS ]</span>
+Prueba 1: H₀ como 1/t en tiempo continuo genera ±t al despejar → Motor Absoluto viola ✗<br>
+Prueba 2: en unidades naturales (c=1) el T² colapsa → convención, no física ✗<br>
+Prueba 3: aplicado a universo estático produce aceleración espuria ✗<br>
+<strong>Veredicto: T² ESPURIO</strong> — H₀ no es inverso de tiempo continuo.`,
+        step3: `<span class='diag-label' style='color:var(--purple)'>[ PASO 3a — ELIMINACIÓN ]</span>
+H₀ es la frecuencia angular del horizonte (ω_H). La aceleración a₀ es la sombra cinemática de la velocidad topológica v₀ = c/2π. El 2π emerge como ciclo completo del Motor Absoluto.`,
+        step4: "a_0 = \\frac{cH_0}{2\\pi} = v_0 \\cdot H_0 \\qquad v_0 = \\frac{c}{2\\pi}"
+    },
+    rar: {
+        name: "Gravedad Emergente (MOND)",
+        t2type: "ESPURIO",
+        step1: "\\mu\\!\\left(\\frac{a}{a_0}\\right) \\frac{d^2r}{d\\textcolor{#FF4455}{t^2}} = a_N",
+        step2: `<span class='diag-label' style='color:var(--orange)'>[ T² ESPURIO — FUNCIÓN INTERPOLANTE ]</span>
+MOND modifica empíricamente la aceleración con una función μ inventada para ajustar datos. No se deriva de ningún principio. El T² aceleración hereda el mismo problema espurio de a_TIE: despejar t da ±t en cualquier régimen. Veredicto: T² ESPURIO.`,
+        step3: `<span class='diag-label' style='color:var(--blue)'>[ PASO 3a — DERIVACIÓN DEDUCTIVA ]</span>
+TIE no inventa funciones de interpolación. El Lagrangiano de fase produce analíticamente el potencial asintótico cuando ∇φ interfiere con a₀. La función emergente es √(a_N·(a_N+a₀)) — derivada, no postulada.`,
+        step4: "a_{\\text{TIE}} = \\sqrt{a_N(a_N + a_0)}"
+    },
+    emc2: {
+        name: "Energía de Existencia",
+        t2type: "ESPURIO",
+        step1: "E = m \\cdot c^{\\textcolor{#FF4455}{2}} \\implies \\text{kg}\\cdot\\frac{m^2}{\\textcolor{#FF4455}{s^2}}",
+        step2: `<span class='diag-label' style='color:var(--orange)'>[ T² ESPURIO — TRES PRUEBAS ]</span>
+Prueba 1: la partícula está en reposo — despejar t de c² da ±t, ninguna trayectoria real ✗<br>
+Prueba 2: en unidades naturales (c=1) el c² desaparece como factor numérico → convención ✗<br>
+Prueba 3: E=mc² se aplica a masa en reposo, pero c no viene de derivar su posición ✗<br>
+<strong>Veredicto: T² ESPURIO</strong>. La corrección es ontológica, no numérica.`,
+        step3: `<span class='diag-label' style='color:var(--purple)'>[ PASO 3a — CUANTIZACIÓN POR CICLO ]</span>
+Se reemplaza c² por el ciclo completo del Motor Absoluto (2π). La m en la ecuación es m_TIE = 2π·m_obs. Resultado: E_TIE = m_TIE·c²/2π = m_obs·c² — los 511 keV de aniquilación se preservan exactamente.`,
+        step4: "E_{\\text{TIE}} = m_{\\text{TIE}}\\frac{c^2}{2\\pi} = m_{\\text{obs}}\\,c^2"
+    },
+    masa: {
+        name: "Equivalencia de Masa",
+        t2type: "ESPURIO",
+        step1: "F = m_{\\text{obs}} \\frac{d^2x}{d\\textcolor{#FF4455}{t^2}}",
+        step2: `<span class='diag-label' style='color:var(--orange)'>[ T² ESPURIO — INERCIA CLÁSICA ]</span>
+La aceleración en F=ma hereda el T² espurio de la mecánica clásica. La inercia asume que la masa observada reacciona a un flujo de tiempo continuo uniforme. Prueba 1: ±t al despejar ✗. Prueba 2: desaparece en unidades naturales ✗.`,
+        step3: `<span class='diag-label' style='color:var(--purple)'>[ PASO 3a — CORRECCIÓN TOPOLÓGICA ]</span>
+La masa real de la infraestructura es 2π veces la masa observada. La física clásica mide solo 1/2π ≈ 15.9% de la masa real. El 84.1% restante es la fracción no contabilizada — la «materia oscura» sin partícula nueva.`,
+        step4: "m_{\\text{TIE}} = 2\\pi \\cdot m_{\\text{obs}} \\qquad 1 - \\frac{1}{2\\pi} = 84.1\\,\\%"
+    },
+    coulomb: {
+        name: "Ley de Coulomb",
+        t2type: "ESPURIO",
+        step1: "F_e = \\frac{1}{4\\pi\\epsilon_0} \\frac{q_1 q_2}{r^2} \\implies \\frac{\\text{kg}\\cdot m}{\\textcolor{#FF4455}{s^2}}",
+        step2: `<span class='diag-label' style='color:var(--orange)'>[ T² ESPURIO — FUERZA COMO ACELERACIÓN ]</span>
+El concepto de «fuerza» como empuje a distancia contiene un T² espurio heredado de F=ma. La definición SI de carga (q=I·t) añade otro T² artificial. Al despejar t en ambos: ±t ✗. En unidades Gaussianas la constante k_e desaparece ✗.`,
+        step3: `<span class='diag-label' style='color:var(--blue)'>[ PASO 3a/3b — CONVERSIÓN TOPOLÓGICA ]</span>
+Las fuerzas dejan de existir como entidades empujadoras. El EM es una deformación local de la fase de la infraestructura. La curvatura electromagnética es geométrica, sin T² residual.`,
+        step4: "\\frac{d^2r}{d\\phi^2} = \\frac{k_e q_1 q_2}{m\\,\\omega_\\phi^2\\,r^2}"
+    },
+    fuerte: {
+        name: "Fuerza Nuclear Fuerte",
+        t2type: "ESPURIO",
+        step1: "F_s = \\frac{g_s^2}{r^2}\\,e^{-r/\\lambda} \\implies m\\frac{d^2r}{d\\textcolor{#FF4455}{t^2}}",
+        step2: `<span class='diag-label' style='color:var(--orange)'>[ T² ESPURIO — YUKAWA CLÁSICO ]</span>
+El potencial de Yukawa introduce piones como portadores de fuerza en tiempo continuo. Hereda el T² espurio de F=ma. Prueba 1: ±t al despejar ✗. Prueba 2: desaparece en unidades naturales ✗. <strong>Veredicto: T² ESPURIO.</strong>`,
+        step3: `<span class='diag-label' style='color:var(--blue)'>[ PASO 3b — SATURACIÓN DE FASE ]</span>
+La fuerza fuerte se describe como saturación extrema de la curvatura de fase en distancias subatómicas (r ≈ λ_C). La escala de rango λ = ħ/(m_π·c) emerge directamente de la frecuencia de coherencia nuclear f_i.`,
+        step4: "\\frac{d^2r}{d\\phi^2} = \\frac{g_s^2}{m\\,\\omega_\\phi^2\\,r^2}\\,e^{-r/\\lambda}"
+    },
+    debil: {
+        name: "Decaimiento Débil (Fermi)",
+        t2type: "NATIVA",
+        step1: "\\Gamma = \\frac{2\\pi}{\\hbar}\\,|M|^2\\,\\rho(E) \\implies \\text{Hz}\\;(s^{-1})",
+        step2: `<span class='diag-label' style='color:var(--green)'>[ VALIDACIÓN NATIVA — SIN T² ]</span>
+La Regla de Oro de Fermi (Dirac 1927, Fermi 1934) no contiene el error del T². Fue derivada integrando el vacío mediante transformadas de Fourier — operación en frecuencia, no en tiempo continuo. El factor 2π/ħ ya es la firma del Motor Absoluto operando en ciclos completos. Ninguna cirugía necesaria.`,
+        step3: `<span class='diag-label' style='color:var(--green)'>[ VALIDACIÓN TIE NATIVA — 90 AÑOS ANTES ]</span>
+El factor 2π/ħ confirma que el decaimiento radiactivo ejecuta un ciclo perfecto de sincronía del Motor Absoluto. Esta estructura fue medida 90 años antes de que TIE existiera. Es la validación nativa más poderosa del Tratado: la física cuántica ya usaba el formalismo correcto sin saberlo.`,
+        step4: "\\Gamma = \\frac{2\\pi}{\\hbar}\\,|M|^2\\,\\rho(E) \\quad \\checkmark \\text{ NATIVA}"
+    },
+    geodesico: {
+        name: "Principio Geodésico Clásico",
+        t2type: "ESPURIO",
+        step1: "\\delta S = \\delta\\!\\int\\! L\\,d\\textcolor{#FF4455}{t} = 0",
+        step2: `<span class='diag-label' style='color:var(--orange)'>[ T² FUNDACIONAL — TIEMPO CONTINUO ]</span>
+La acción clásica minimiza la evolución sobre un flujo de tiempo continuo. El hamiltoniano genera el «problema del tiempo» en mecánica cuántica. Prueba 1: invertir la variación temporal da soluciones bidireccionales ✗. Prueba 2: en geometría simpléctica el tiempo aparece como coordenada artificial ✗.`,
+        step3: `<span class='diag-label' style='color:var(--purple)'>[ PASO 3a — SUSTITUCIÓN GEODÉSICA ]</span>
+El universo no minimiza el tiempo continuo. El Motor Absoluto optimiza la sincronía topológica de la fase a través de la infraestructura. La integral de acción en dt se reemplaza por variación de fase dφ — sin tiempo como variable fundamental.`,
+        step4: "\\delta\\!\\int\\!d\\phi = 0 \\qquad \\phi = \\frac{1}{\\hbar}\\!\\int\\!(E\\,dt - p\\,dx)"
+    }
+};
+
+function selectEq(id, btn) {
+    currentEq = id;
+    document.querySelectorAll('.eq-btn').forEach(b => b.className = 'eq-btn');
+    btn.className = id === 'debil' ? 'eq-btn active-fermi' : 'eq-btn active';
+
+    document.getElementById('status-target').textContent  = eqData[id].name;
+    document.getElementById('status-t2').textContent      = 'ESPERANDO';
+    document.getElementById('status-t2').style.color      = 'var(--dim)';
+    document.getElementById('status-verdict').textContent = 'PENDIENTE';
+    document.getElementById('status-verdict').style.color = 'var(--dim)';
+    document.getElementById('btn-run').disabled = false;
+    document.getElementById('btn-run').textContent = 'EJECUTAR BISTURÍ';
+
+    // Ocultar steps, mostrar placeholder
+    document.getElementById('placeholder').style.display = 'flex';
+    ['step-1','step-2','step-3','step-4'].forEach(s => {
+        const el = document.getElementById(s);
+        el.style.display = 'none'; el.classList.remove('visible');
+    });
+    document.getElementById('scanner-area').scrollTop = 0;
+}
+
+function runBisturi() {
+    if (!currentEq) return;
+    document.getElementById('btn-run').disabled = true;
+    document.getElementById('placeholder').style.display = 'none';
+
+    const data  = eqData[currentEq];
+    const laser = document.getElementById('scan-laser');
+    const isFermi = currentEq === 'debil';
+
+    laser.style.background  = isFermi ? 'var(--green)' : 'var(--blue)';
+    laser.style.boxShadow   = `0 0 12px ${isFermi ? 'var(--green)' : 'var(--blue)'}`;
+    laser.style.display = 'block';
+    laser.animate([{top:'0%'},{top:'100%'}],{duration:2400,easing:'linear',fill:'forwards'});
+
+    // Paso 1
+    setTimeout(() => {
+        const s1 = document.getElementById('step-1');
+        s1.style.display = 'block';
+        try { katex.render(data.step1, document.getElementById('math-step-1'), {displayMode:true, throwOnError:false}); } catch(e){}
+        requestAnimationFrame(()=>requestAnimationFrame(()=>s1.classList.add('visible')));
+        document.getElementById('status-t2').textContent   = isFermi ? 'SANO (NATIVA)' : 'T² ' + data.t2type;
+        document.getElementById('status-t2').style.color   = isFermi ? 'var(--green)' : data.t2type==='CINEMÁTICO' ? 'var(--red)' : 'var(--orange)';
+    }, 400);
+
+    // Paso 2
+    setTimeout(() => {
+        const s2 = document.getElementById('step-2');
+        s2.style.display = 'block';
+        document.getElementById('text-step-2').innerHTML = data.step2;
+        requestAnimationFrame(()=>requestAnimationFrame(()=>s2.classList.add('visible')));
+        autoScroll();
+    }, 1100);
+
+    // Paso 3
+    setTimeout(() => {
+        const s3 = document.getElementById('step-3');
+        s3.style.display = 'block';
+        document.getElementById('text-step-3').innerHTML = data.step3;
+        requestAnimationFrame(()=>requestAnimationFrame(()=>s3.classList.add('visible')));
+        document.getElementById('status-verdict').textContent = isFermi ? 'VALIDADA' : 'PURIFICADA';
+        document.getElementById('status-verdict').style.color = isFermi ? 'var(--green)' : 'var(--gold)';
+        autoScroll();
+    }, 1850);
+
+    // Paso 4
+    setTimeout(() => {
+        const s4 = document.getElementById('step-4');
+        s4.style.display = 'block';
+        try { katex.render(data.step4, document.getElementById('math-step-4'), {displayMode:true, throwOnError:false}); } catch(e){}
+        requestAnimationFrame(()=>requestAnimationFrame(()=>s4.classList.add('visible')));
+        laser.style.display = 'none';
+        document.getElementById('btn-run').disabled = false;
+        document.getElementById('btn-run').textContent = 'RE-EJECUTAR';
+        // contador
+        processedCount++;
+        document.getElementById('stat-count').textContent = processedCount;
+        document.getElementById('stat-count').style.color = 'var(--gold)';
+        autoScroll();
+    }, 2600);
+}
+
+function autoScroll() {
+    const area = document.getElementById('scanner-area');
+    area.scrollTo({ top: area.scrollHeight, behavior:'smooth' });
+}
+</script>
+</body>
+</html>

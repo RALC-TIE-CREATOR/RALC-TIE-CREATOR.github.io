@@ -351,7 +351,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 </div>
 
 <footer>
-  <div class="feq">\( v_{\text{TIE}}(r) = \sqrt{r\sqrt{a_N(a_N+a_0)}} \quad \cdot \quad v_{\text{flat}} = (GMa_0)^{1/4} \quad \cdot \quad \text{no dark matter} \)</div>
+  <div class="feq">\( v_{\text{TIE}}(r) = \sqrt{r\sqrt{a_N(a_N+a_0)}} \quad \cdot \quad v_{\text{flat}} = (GMa_0)^{1/4} \quad \cdot \quad (R \equiv 2\pi) \)</div>
   <div class="fcopy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
 </footer>
 
@@ -375,7 +375,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 })();
 
 const G=6.674e-11, MS=1.989e30, c=2.998e8;
-const H0si=70*1000/3.0857e22, a0=c*H0si/(2*Math.PI);
+const H0si=70*1000/3.0857e22, R_const=2*Math.PI, a0=c*H0si/R_const;
 const kpc=3.0857e19, km=1e3;
 
 function mEnc(r_kpc,mstar_1e10,mgas_1e9,rd){

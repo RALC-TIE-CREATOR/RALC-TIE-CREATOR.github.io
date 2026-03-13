@@ -115,7 +115,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   <p class="page-sub">GR predicts a linear horizon rₛ = 2GM/c² and a singularity at r=0. TIE predicts a horizon that scales as √M — millions of times larger than GR — and a singularity-free interior: only saturation of the infrastructure.</p>
 
   <div class="hero-eq">
-    <div>\( r_s^{\text{GR}} = \dfrac{2GM}{c^2} \qquad r_h^{\text{TIE}} = 1.27202\,\sqrt{\dfrac{GM}{a_0}} \)</div>
+    <div>\( r_s^{\text{GR}} = \dfrac{2GM}{c^2} \qquad r_h = \sqrt{\varphi} \sqrt{\dfrac{GM}{a_0}} \qquad a_0 = \dfrac{cH_0}{R} \)</div>
     <div class="hero-eq-badge">🟡 PENDING · ngEHT 2028+ · LUNAR 2030+</div>
   </div>
 
@@ -334,7 +334,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 </div>
 
 <footer>
-  <div class="feq">\( r_s^{\text{GR}} = \dfrac{2GM}{c^2} \quad\cdot\quad r_h^{\text{TIE}} = 1.27202\sqrt{\dfrac{GM}{a_0}} \quad\cdot\quad \text{no singularity} \)</div>
+  <div class="feq">\( r_s^{\text{GR}} = \dfrac{2GM}{c^2} \quad\cdot\quad r_h = \sqrt{\varphi}\sqrt{\dfrac{GM}{9_0}} \quad\cdot\quad (R \equiv 2\pi) \)</div>
   <div class="fcopy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
 </footer>
 
@@ -373,7 +373,8 @@ const c  = 2.998e8;
 const MS = 1.989e30;
 const km = 1e3;
 const H0si = 70 * 1000 / 3.0857e22;
-const a0 = c * H0si / (2 * Math.PI);
+  const R = 2 * Math.PI;
+  const a0 = c * H0si / R;
 
 const PRESETS = {
   m87:     { mass: 6.5e9   },

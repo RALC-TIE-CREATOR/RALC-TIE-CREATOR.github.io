@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TIE · Bullet Cluster · Gravitational Decoupling</title>
+    <title>TIE · Cúmulo Bala · Desacople Gravitacional</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -90,25 +90,25 @@
 <body>
 
 <nav>
-    <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
+    <a href="index.html" class="nav-logo">TIE / R@LC</a>
     <div class="nav-right">
-        <a href="bala.html" class="nav-lang">ES</a>
-        <a href="bala-en.html" class="nav-lang active">EN</a>
-        <a href="lab-en.html" class="nav-back">← LABORATORY</a>
+        <a href="bala.html" class="nav-lang active">ES</a>
+        <a href="bala-en.html" class="nav-lang">EN</a>
+        <a href="labs.html" class="nav-back">← LABORATORIO</a>
     </div>
 </nav>
 
 <div class="page-header">
-    <div class="page-label">H-10 · LIVE · COSMOLOGY · §10.7 OF THE TREATISE</div>
-    <h1>BULLET CLUSTER</h1>
-    <p class="page-desc">Baryonic gas collides and decelerates due to electromagnetic friction. The quantum phase superfluid ∇Φ — responsible for gravitational lensing — passes through without friction. No invisible dark matter needed: the decoupling is the signal of infrastructure.</p>
-    <div class="page-eq">v_superfluid = 0 (zero viscosity) &nbsp;·&nbsp; v_gas → 0 (EM friction) &nbsp;·&nbsp; ∇Φ TIE ≠ exotic matter</div>
+    <div class="page-label">CAPÍTULO 3 · EN VIVO · COSMOLOGÍA · DESACOPLE GRAVITACIONAL</div>
+    <h1>CÚMULO BALA</h1>
+    <p class="page-desc">El gas bariónico choca y frena por fricción electromagnética. El superfluido de fase ∇Φ — responsable del lensing gravitacional — se atraviesa sin rozamiento. No se necesita materia oscura invisible: el desacople es la señal de la infraestructura.</p>
+    <div class="page-eq">v_superfluid = 0 (viscosidad cero) &nbsp;·&nbsp; v_gas → 0 (fricción EM) &nbsp;·&nbsp; ∇Φ TIE ≠ materia exótica</div>
 </div>
 
 <div class="stats-bar">
-    <div class="stat"><div class="stat-number">0</div><div class="stat-label">Phase Viscosity</div></div>
-    <div class="stat"><div class="stat-number">∞</div><div class="stat-label">Φ Mean Free Path</div></div>
-    <div class="stat"><div class="stat-number">0</div><div class="stat-label">DM postulated</div></div>
+    <div class="stat"><div class="stat-number">0</div><div class="stat-label">Viscosidad Fase</div></div>
+    <div class="stat"><div class="stat-number">∞</div><div class="stat-label">Libre Recorrido Φ</div></div>
+    <div class="stat"><div class="stat-number">0</div><div class="stat-label">DM postulada</div></div>
     <div class="stat"><div class="stat-number" id="stat-time" style="color:var(--dim)">T+0.00</div><div class="stat-label">Myrs</div></div>
 </div>
 
@@ -116,55 +116,56 @@
     <div class="sidebar">
 
         <div class="panel">
-            <div class="panel-title">Collision State</div>
-            <div class="data-row">Simulated time <span class="data-val" id="val-time">T+0.00 Myrs</span></div>
-            <div class="data-row">Baryonic friction <span class="data-val" style="color:var(--red)">ACTIVE</span></div>
-            <div class="data-row">Phase viscosity <span class="data-val" style="color:var(--blue)">ZERO</span></div>
+            <div class="panel-title">Estado de la colisión</div>
+            <div class="data-row">Tiempo simulado <span class="data-val" id="val-time">T+0.00 Myrs</span></div>
+            <div class="data-row">Fricción bariónica <span class="data-val" style="color:var(--red)">ACTIVA</span></div>
+            <div class="data-row">Viscosidad de fase <span class="data-val" style="color:var(--blue)">CERO</span></div>
             <div class="data-row" style="border:none; padding-top:0.4rem;">
-                <span id="status-msg" style="color:var(--gold); font-size:0.7rem;">WAITING TO START...</span>
+                <span id="status-msg" style="color:var(--gold); font-size:0.7rem;">ESPERANDO INICIO...</span>
             </div>
         </div>
 
         <div class="panel">
-            <div class="panel-title">TIE Paradigm</div>
-            <p class="note">Ordinary matter (gas) interacts electromagnetically and decelerates. Quantum phase waves Φ (source of lensing) are superfluid — they pass through without friction. The decoupling between lensing and gas is evidence of infrastructure, not particle dark matter.</p>
+            <div class="panel-title">Paradigma TIE</div>
+            <p class="note">La materia ordinaria (gas) interactúa electromagnéticamente y frena. Las ondas solitarias de fase cuántica Φ (fuente del lensing) son superfluidas — se atraviesan sin fricción. El desacople entre lensing y gas es la evidencia de la infraestructura, no de materia oscura partícula.</p>
         </div>
 
         <div class="panel">
-            <div class="panel-title">Visual Layers</div>
+            <div class="panel-title">Capas visuales</div>
             <div class="toggle-row" onclick="toggleLayer('gas')">
-                <span>Baryonic gas (friction)</span>
+                <span>Gas bariónico (fricción)</span>
                 <div class="chk on" id="check-gas"></div>
             </div>
             <div class="toggle-row" onclick="toggleLayer('phase')">
-                <span>Quantum phase Φ (lensing)</span>
+                <span>Fase cuántica Φ (lensing)</span>
                 <div class="chk on" id="check-phase"></div>
             </div>
         </div>
 
         <div style="display:flex;flex-direction:column;gap:8px;margin-top:auto;">
-            <button class="btn btn-gold" id="btn-start" onclick="startSimulation()">[ START COLLISION ]</button>
-            <button class="btn btn-red"  onclick="resetSimulation()">[ RESET CAMERA ]</button>
+            <button class="btn btn-gold" id="btn-start" onclick="startSimulation()">[ INICIAR COLISIÓN ]</button>
+            <button class="btn btn-red"  onclick="resetSimulation()">[ REINICIAR CÁMARA ]</button>
         </div>
     </div>
 
     <div class="canvas-area">
         <div class="legend">
-            <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div> Baryonic plasma</div>
-            <div class="leg-item"><div class="leg-dot" style="border:2px solid var(--blue);background:transparent;"></div> Φ Superfluid (lensing)</div>
+            <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div> Plasma bariónico</div>
+            <div class="leg-item"><div class="leg-dot" style="border:2px solid var(--blue);background:transparent;"></div> Superfluido Φ (lensing)</div>
         </div>
         <canvas id="bulletCanvas"></canvas>
-        <div class="status-overlay" id="status-overlay">SYSTEM AT REST</div>
+        <div class="status-overlay" id="status-overlay">SISTEMA EN REPOSO</div>
+        <div style="position:absolute; bottom:40px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">REFERENCIA: CAPÍTULOS 3 Y 14</div>
     </div>
 </div>
 
 <footer>
     <div class="footer-nav">
-        <a href="lente-en.html">← Gravitational Lens</a>
-        <a href="campo-phi.html">φ Field →</a>
+        <a href="lente.html">← Lente Gravitacional</a>
+        <a href="campo-phi.html">Campo φ →</a>
     </div>
-    <div class="footer-eq">∇Φ = superfluid · gas = EM friction · decoupling = §10.7 TIE</div>
-    <div class="footer-credit">R@LC 2026 · MÉXICO · INDEPENDENT RESEARCHER</div>
+    <div class="footer-eq">∇Φ = superfluido · gas = fricción EM · desacople = CAP. 3 TIE</div>
+    <div class="footer-credit">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 
 <script>
@@ -191,10 +192,10 @@
         document.getElementById('val-time').textContent    = 'T+0.00 Myrs';
         document.getElementById('stat-time').textContent   = 'T+0.00';
         document.getElementById('stat-time').style.color   = 'var(--dim)';
-        document.getElementById('status-msg').textContent  = 'WAITING TO START...';
+        document.getElementById('status-msg').textContent  = 'ESPERANDO INICIO...';
         document.getElementById('status-msg').style.color  = 'var(--gold)';
-        document.getElementById('status-overlay').textContent = 'SYSTEM AT REST';
-        document.getElementById('btn-start').textContent   = '[ START COLLISION ]';
+        document.getElementById('status-overlay').textContent = 'SISTEMA EN REPOSO';
+        document.getElementById('btn-start').textContent   = '[ INICIAR COLISIÓN ]';
         document.getElementById('btn-start').style.opacity = '1';
         drawFrame();
     }
@@ -217,9 +218,9 @@
     function startSimulation() {
         if (isRunning) return;
         isRunning = true;
-        document.getElementById('status-msg').textContent  = 'COLLISION IN PROGRESS...';
-        document.getElementById('status-overlay').textContent = 'ANALYZING DYNAMICS...';
-        document.getElementById('btn-start').textContent   = '[ IN PROGRESS ]';
+        document.getElementById('status-msg').textContent  = 'COLISIÓN EN PROGRESO...';
+        document.getElementById('status-overlay').textContent = 'ANALIZANDO DINÁMICA...';
+        document.getElementById('btn-start').textContent   = '[ EN PROGRESO ]';
         document.getElementById('btn-start').style.opacity = '0.4';
         animate();
     }
@@ -252,18 +253,20 @@
 
         if (cluster1.phaseX > width * 0.82) {
             isRunning = false;
-            document.getElementById('status-msg').textContent  = 'GRAVITATIONAL DECOUPLING CONFIRMED.';
+            document.getElementById('status-msg').textContent  = 'DESACOPLE GRAVITACIONAL CONFIRMADO.';
             document.getElementById('status-msg').style.color  = 'var(--green)';
-            document.getElementById('status-overlay').textContent = '✓ GRAVITATIONAL DECOUPLING CONFIRMED — §10.7 TIE';
+            document.getElementById('status-overlay').textContent = '✓ DESACOPLE GRAVITACIONAL CONFIRMADO — CAP. 10.8 TIE';
         } else {
             animationId = requestAnimationFrame(animate);
         }
     }
 
     function updatePhysics() {
+        // Superfluido de fase: sin fricción
         cluster1.phaseX += cluster1.v;
         cluster2.phaseX += cluster2.v;
 
+        // Gas bariónico: fricción EM
         const dist = Math.abs(cluster1.x - cluster2.x);
         const cZone = 120;
         if (dist < cZone) {

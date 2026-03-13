@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TIE · H-13 · Campo φ</title>
+<title>TIE · H-13 · φ Field</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
@@ -114,9 +109,9 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
 </nav>
 
 <div class="strip">
-  <span class="s-tag">H-13 · CAMPO φ</span>
-  <span class="s-title" id="strip-title">CAMPO <span>φ</span> · ONDAS GRAVITACIONALES</span>
-  <span class="s-badge" id="strip-badge">WEBGL · TIEMPO REAL</span>
+  <span class="s-tag">H-13 · φ FIELD · Cap. 12</span>
+  <span class="s-title" id="strip-title">φ <span>FIELD</span> · GRAVITATIONAL WAVES</span>
+  <span class="s-badge" id="strip-badge">WEBGL · REAL-TIME</span>
 </div>
 
 <div id="main">
@@ -226,7 +221,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
 
     <!-- INSIGHT -->
     <div class="insight">
-      <p id="insight-txt">TIE predice que la señal LISA a <strong>~2.4 mHz</strong> es la huella del <strong>T² artificial</strong> — una modulación de la infraestructura espacial que GR no puede distinguir sin este marco.</p>
+      <p id="insight-txt">TIE predicts that the LISA signal at <strong>~2.45 mHz</strong> for supermassive mergers ($3.3 \times 10^6 M_\odot$) is the fingerprint of the <strong>new ISCO</strong> — a geometric signature that GR cannot explain without the φ field.</p>
     </div>
 
   </div>
@@ -268,7 +263,8 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
 const G   = 6.674e-11;
 const c_  = 2.998e8;
 const H0  = 70e3/3.086e22;
-const a0  = c_*H0/(2*Math.PI);   // 1.082e-10 m/s²
+const R_const = 2 * Math.PI;
+const a0  = c_*H0/R_const;       // Corrected R=2pi
 const M_s = 1.989e30;
 const pc  = 3.086e16;
 
@@ -289,7 +285,7 @@ const SCENARIOS=[
   {nameES:'BH–BH',   nameEN:'BH–BH',   m1:30, m2:25, dist:1e8},
   {nameES:'NS–NS',   nameEN:'NS–NS',   m1:1.4,m2:1.4,dist:4e7},
   {nameES:'BH–NS',   nameEN:'BH–NS',   m1:10, m2:1.4,dist:6e7},
-  {nameES:'LISA',    nameEN:'LISA',    m1:1e6,m2:1e6,dist:1e9},
+  {nameES:'LISA',    nameEN:'LISA',    m1:1.65e6,m2:1.65e6,dist:1e9}, // M=3.3e6 -> f=2.45mHz
 ];
 
 // ══════════════════════════════
@@ -308,7 +304,7 @@ function hAmplitude(mc,dist){
   return 4*G*Mc/(c_*c_*D) * 1e-18; // normalized for display
 }
 // TIE: T² artificial — modulation at f_LISA ~ 2.4 mHz
-function T2_mod(f){ return 1 + 0.08*Math.sin(2*Math.PI*f/2.4e-3); }
+function T2_mod(f){ return 1 + 0.08*Math.sin(2*Math.PI*f/2.45e-3); }
 
 // φ field: TIE potential φ(r) = -G*M/r * (1 + a0*r/(2*c²))
 function phi(r, M){ 
@@ -786,4 +782,3 @@ window.onload=function(){
 <script src="axon-widget.js"></script>
 </body>
 </html>
-

@@ -299,7 +299,7 @@ const EQUATIONS = [
 
   // BLACK HOLES
   {id:'rh-tie',    cat:'agujeros', nameES:'Horizonte TIE rₕ',            nameEN:'TIE horizon rₕ',
-   latex: 'r_h = 0.869\\,\\sqrt{\\frac{GM}{a_0}}',
+   latex: 'r_h = 1.272\\,\\sqrt{\\frac{GM}{a_0}}',
    descES:'Radio del horizonte efectivo en TIE. Difiere de rₛ por factor ~√(c²/a₀·r).',
    descEN:'TIE effective horizon radius. Differs from rₛ by factor ~√(c²/a₀·r).',
    ctxES:'rₕ ≫ rₛ para M ≫ Mc',ctxEN:'rₕ ≫ rₛ for M ≫ Mc'},
@@ -309,15 +309,15 @@ const EQUATIONS = [
    descEN:'Standard Schwarzschild radius in General Relativity.',
    ctxES:'Para comparación con rₕ TIE',ctxEN:'For comparison with TIE rₕ'},
   {id:'rh-rs',     cat:'agujeros', nameES:'Relación rₕ/rₛ',              nameEN:'Ratio rₕ/rₛ',
-   latex: '\\frac{r_h}{r_s} = \\frac{0.869}{2}\\sqrt{\\frac{c^2}{Ga_0 M}} \\cdot M',
+   latex: '\\frac{r_h}{r_s} = \\frac{1.272}{2}\\sqrt{\\frac{c^2}{Ga_0 M}} \\cdot M',
    descES:'Razón entre los horizontes TIE y GR. Para M87*: rₕ/rₛ ≈ 4×10⁶.',
    descEN:'Ratio between TIE and GR horizons. For M87*: rₕ/rₛ ≈ 4×10⁶.',
    ctxES:'M87*: rₕ = 4.04×10⁶ rₛ',ctxEN:'M87*: rₕ = 4.04×10⁶ rₛ'},
   {id:'mc-crit',   cat:'agujeros', nameES:'Masa crítica TIE Mc',         nameEN:'TIE critical mass Mc',
-   latex: 'M_c = \\frac{c^2}{G}\\sqrt{\\frac{c^2}{a_0 G}} \\approx 1.06\\times 10^{23}\\,M_\\odot',
+   latex: 'M_c = \\frac{\\varphi c^4}{4Ga_0} \\approx 2.275\\times 10^{23}\\,M_\\odot',
    descES:'Masa crítica donde rₕ = rₛ. Por encima: rₕ domina sobre rₛ.',
    descEN:'Critical mass where rₕ = rₛ. Above: rₕ dominates over rₛ.',
-   ctxES:'Mc ≈ 1.06×10²³ M☉',ctxEN:'Mc ≈ 1.06×10²³ M☉'},
+   ctxES:'Mc ≈ 2.275×10²³ M☉',ctxEN:'Mc ≈ 2.275×10²³ M☉'},
 
   // LENSING
   {id:'alpha-gr',  cat:'lensing', nameES:'Deflexión gravitacional (GR)',  nameEN:'Gravitational deflection (GR)',
@@ -401,9 +401,9 @@ const CONSTANTS = [
   {key:'a₀',      val:'1.082×10⁻¹⁰ m/s²', latex:'a_0 = 1.082\\times10^{-10}\\,\\text{m/s}^2'},
   {key:'H₀',      val:'70 km/s/Mpc',        latex:'H_0 = 70\\,\\text{km/s/Mpc}'},
   {key:'Λ_TIE',   val:'1.145×10⁻⁵² m⁻²',   latex:'\\Lambda = 1.145\\times10^{-52}\\,\\text{m}^{-2}'},
-  {key:'Mc',      val:'1.06×10²³ M☉',       latex:'M_c = 1.06\\times10^{23}\\,M_\\odot'},
+  {key:'Mc',      val:'2.275×10²³ M☉',       latex:'M_c = 2.275\\times10^{23}\\,M_\\odot'},
   {key:'f_LISA',  val:'2.4 mHz',             latex:'f_{\\text{LISA}} = 2.4\\,\\text{mHz}'},
-  {key:'rₕ M87*', val:'7.76×10¹⁶ km',       latex:'r_h(\\text{M87*}) = 7.76\\times10^{16}\\,\\text{km}'},
+  {key:'rₕ M87*', val:'1.14×10¹⁷ km',       latex:'r_h(\\text{M87*}) = 1.14\\times10^{17}\\,\\text{km}'},
 ];
 
 // ══════════════════════════════════════════

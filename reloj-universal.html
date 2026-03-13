@@ -108,7 +108,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 </nav>
 
 <div class="page">
-  <div class="page-tag">CAPÍTULO 6 · MOTOR ABSOLUTO · VISCOSIDAD GRAVITACIONAL</div>
+  <div class="page-tag">H-06 · MOTOR ABSOLUTO · TIEMPO LINEAL</div>
   <h1 class="page-title">EL MOTOR <span>ABSOLUTO</span></h1>
   <p class="page-sub">En TIE el tiempo no se curva — es lineal y absoluto en todo el universo. Lo que cambia es la velocidad a la que los relojes procesan paquetes ħ. Cerca de una masa, la infraestructura es más densa: mayor resistencia, menos paquetes por pulso, reloj más lento.</p>
 
@@ -121,7 +121,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   <div class="motor-box">
     <div class="motor-pulse"></div>
     <div class="motor-label">⚡ Motor Absoluto — pulso universal, idéntico en todo el cosmos</div>
-    <div class="motor-number" id="motor-cycles">2π × 0</div>
+    <div class="motor-number" id="motor-cycles">R × 0</div>
     <div class="motor-sub">ciclos totales · t₀ = carga de página · igual en la Tierra, en Andrómeda, junto a un agujero negro</div>
   </div>
 
@@ -279,20 +279,20 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 
   <!-- INSIGHT -->
   <div class="insight">
-    <span class="hi">ħ como píxel mínimo · 2π como ciclo completo</span><br>
+    <span class="hi">ħ como píxel mínimo · R como ciclo completo</span><br>
     En TIE, ħ es el <strong>cuanto de sincronía</strong>: el paquete mínimo de infraestructura que puede procesarse en un ciclo. Un reloj, para marcar un segundo, debe completar exactamente N de estos paquetes. En espacio libre la infraestructura es homogénea y el procesamiento es máximo. Cerca de una masa la densidad de sincronía sube: cada paquete cuesta más resistencia, el reloj completa menos ciclos por pulso del Motor Absoluto, y el tiempo <em>medido</em> parece más lento — aunque el Motor siga al mismo ritmo.
     <br><br>
     <span class="hi">La ilusión del tiempo curvo</span><br>
     GR interpreta esto como curvatura del espacio-tiempo — una herramienta matemática extremadamente efectiva. TIE propone algo más simple: <span class="bl">el tiempo no se curva, los relojes se ralentizan</span>. Esa diferencia tiene consecuencias en los extremos: TIE elimina las singularidades porque la densidad de sincronía tiene un máximo físico finito. GR predice densidades infinitas en r=0. Los números actuales no distinguen entre ambas — los agujeros negros del futuro lo harán.
     <br><br>
-    <span class="hi">"Una infraestructura · Un tiempo lineal · ħ como píxel · 2π como ciclo · Eso es todo el universo."</span>
+    <span class="hi">"Una infraestructura · Un tiempo lineal · ħ como píxel · R como ciclo · Eso es todo el universo."</span>
   </div>
 
   <div class="const-row">
     <div class="ci"><span class="cl">G = </span><span class="cv">6.674×10⁻¹¹ m³/kg·s²</span></div>
     <div class="ci"><span class="cl">c = </span><span class="cv">2.998×10⁸ m/s</span></div>
     <div class="ci"><span class="cl">ħ = </span><span class="cv">1.055×10⁻³⁴ J·s</span></div>
-    <div class="ci"><span class="cl">2π = </span><span class="cv">ciclo completo de sincronía</span></div>
+    <div class="ci"><span class="cl">R = </span><span class="cv">ciclo completo de sincronía</span></div>
   </div>
 
   <div class="nav-links">
@@ -302,7 +302,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 </div>
 
 <footer>
-  <div class="feq">\( \rho_{\text{sync}}(r) = \rho_\infty\!\left(1+|\Phi|/c^2\right) \;\cdot\; \text{ħ píxel} \;\cdot\; 2\pi \text{ ciclo} \;\cdot\; \text{Motor Absoluto} \)</div>
+  <div class="feq">\( \rho_{\text{sync}}(r) = \rho_\infty\!\left(1+|\Phi|/c^2\right) \;\cdot\; \text{ħ píxel} \;\cdot\; R \text{ ciclo} \;\cdot\; \text{Motor Absoluto} \)</div>
   <div class="fcopy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 
@@ -414,7 +414,7 @@ function tick(ts){
   const dt=(ts-lastTS)/1000; lastTS=ts;
   const r=rate(currentLoc);
   motorT+=dt; localT+=dt*r;
-  document.getElementById('motor-cycles').textContent='2π × '+Math.floor(motorT*100).toLocaleString('es');
+  document.getElementById('motor-cycles').textContent='R × '+Math.floor(motorT*100).toLocaleString('es');
   const extreme = ['neutron','bh3rs','bh15rs'].includes(currentLoc);
   document.getElementById('time-motor').textContent=fmtTime(motorT, extreme);
   document.getElementById('time-local').textContent=fmtTime(localT, extreme);

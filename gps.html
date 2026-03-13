@@ -143,7 +143,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 </nav>
 
 <div class="page">
-  <div class="page-tag">H-06 · CORRECCIÓN GPS · CAPÍTULO 6 TIE</div>
+  <div class="page-tag">H-06 · GPS CORRECTION · TIE TREATISE</div>
   <h1 class="page-title">CORRECCIÓN <span>GPS</span></h1>
   <p class="page-sub">El GPS corrige 45.9 μs/día porque los relojes en órbita van más rápido que en tierra. TIE reproduce esta predicción desde primeros principios — pero aquí las dos teorías convergen. La razón es física, no coincidencia.</p>
 
@@ -402,7 +402,8 @@ const MS  = 1.989e30;
 const km  = 1e3;
 const SPD = 86400; // seconds per day
 const H0si= 70*1000/3.0857e22;
-const a0  = c * H0si / (2*Math.PI);
+const R_const = 2 * Math.PI;
+const a0  = c * H0si / R_const; // R ≡ 2π
 
 const MASAS = {
   tierra: 5.972e24,
@@ -519,4 +520,3 @@ window.onload = () => {
 <script src="axon-widget.js"></script>
 </body>
 </html>
-

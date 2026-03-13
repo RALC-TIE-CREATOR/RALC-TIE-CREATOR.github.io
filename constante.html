@@ -126,12 +126,12 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 </nav>
 
 <div class="page">
-  <div class="page-tag">CAPÍTULO 6 Y 11 · Una H₀ · Dos escalas · Cero parámetros libres</div>
+  <div class="page-tag">H-08 · Constantes Fundamentales · Cap. 2 y 11</div>
   <h1 class="page-title">CONSTANTES <span>a₀ y Λ</span></h1>
   <p class="page-sub">La misma constante de Hubble genera a₀ (dinámica galáctica) y Λ (expansión cósmica). No son dos constantes ajustadas independientemente — son la misma infraestructura vista a distinta escala.</p>
 
   <div class="hero-eq">
-    <div>\( a_0 = \dfrac{c H_0}{2\pi} \qquad \Lambda_{\text{TIE}} = \dfrac{2 H_0^2}{c^2} \)</div>
+    <div>\( a_0 = \dfrac{cH_0}{R} \qquad \Lambda = \dfrac{2H_0^2}{c^2} \qquad (R \equiv 2\pi) \)</div>
     <div class="hero-eq-badge">✓ DERIVADAS DE H₀</div>
   </div>
 
@@ -159,14 +159,14 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="panel-title">Aceleración de transición a₀</div>
       <div class="big-val flash" id="a0-val">1.082×10⁻¹⁰</div>
       <div class="val-unit">m/s²</div>
-      <div class="val-eq">\( a_0 = \dfrac{c H_0}{2\pi} \)<br><br>
+      <div class="val-eq">\( a_0 = \dfrac{cH_0}{R} \)<br><br>
         Por debajo de a₀ la gravedad entra en régimen TIE — las estrellas en los bordes de las galaxias siempre están en este régimen.</div>
     </div>
     <div class="panel">
       <div class="panel-title">Constante cosmológica Λ TIE</div>
       <div class="big-val flash" id="lambda-val">1.145×10⁻⁵²</div>
       <div class="val-unit">m⁻²</div>
-      <div class="val-eq">\( \Lambda_{\text{TIE}} = \dfrac{2 H_0^2}{c^2} \)<br><br>
+      <div class="val-eq">\( \Lambda = \dfrac{2 H_0^2}{c^2} \)<br><br>
         Λ no es "energía oscura" — es la <strong>curvatura de fondo topológica</strong> de la infraestructura. Se deriva de H₀ sin parámetros ajustados.</div>
     </div>
   </div>
@@ -248,7 +248,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 </div>
 
 <footer>
-  <div class="feq">\( a_0 = \dfrac{c H_0}{2\pi} \quad\cdot\quad \Lambda_{\text{TIE}} = \dfrac{2 H_0^2}{c^2} \quad\cdot\quad \text{cero parámetros libres} \)</div>
+  <div class="feq">\( a_0 = \dfrac{cH_0}{R} \quad\cdot\quad \Lambda = \dfrac{2H_0^2}{c^2} \quad\cdot\quad (R \equiv 2\pi) \quad\cdot\quad \text{cero parámetros libres} \)</div>
   <div class="fcopy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 
@@ -302,7 +302,8 @@ function fmtExp(n) {
 function update() {
   const h0k  = parseFloat(document.getElementById('h0').value);
   const h0si = h0k * 1000 / Mpc;
-  const a0   = c * h0si / (2 * Math.PI);
+  const R = 2 * Math.PI;
+  const a0 = c * h0si / R;
   const lam  = 2 * h0si * h0si / (c * c);
   const err  = (lam - LAMBDA_PLANCK) / LAMBDA_PLANCK * 100;
   const errSigned = (err >= 0 ? '+' : '') + err.toFixed(1);

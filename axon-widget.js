@@ -51,20 +51,21 @@
 CONTEXTO ACTUAL: El usuario está en → ${pageName}
 Menciona esta herramienta cuando sea relevante para la conversación.
 
-CONSTANTES FUNDAMENTALES TIE:
+CONSTANTES FUNDAMENTALES TIE V12.0:
 • a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²  (H₀=70 km/s/Mpc)
 • v_flat = (G·M·a₀)^(1/4)  — sin materia oscura, 0 parámetros libres
-• rₕ = √(φGM/a₀) ≈ 1.272·√(GM/a₀)  — horizonte áureo TIE (u²+u−1=0)
-• Λ_TIE = 2H₀²/c² = 1.145×10⁻⁵² m⁻²  (error 5.0% vs Planck 2018: 1.0904×10⁻⁵²)
-• Mc ≈ 2.275×10²³ M☉         — masa crítica rₕ=rₛ
+• rₕ = 1.272·√(GM/a₀)      — horizonte TIE
+• Λ_TIE = 2H₀²/c² = 1.145×10⁻⁵² m⁻²
+• Mc ≈ 1.06×10²³ M☉         — masa crítica rₕ=rₛ
 • f_LISA = a₀/πc ≈ 2.4 mHz  — predicción para LISA 2035
-• M87*: rₕ = 5.92×10⁶ · rₛ
+• M87*: rₕ = 4.04×10⁶ · rₛ
 
-HERRAMIENTAS DISPONIBLES (ralc.mx/labs.html):
-H-01 constante.html · H-03 agujeros.html · H-04 curvas.html · H-05 sparc.html
-H-06 gps.html · H-07 lensing.html · H-08 2pi.html · H-09 materia-oscura.html
-H-10 reloj-universal.html · H-11 falsabilidad.html · H-13 campo-phi.html
-H-15 latex.html · H-16 api.html
+HERRAMIENTAS DEL LABORATORIO TIE (5 Módulos, https://ralc-tie-creator.github.io/index.html):
+LAB 01 - FUNDAMENTOS: H-03 (2π), H-04 (Bisturí), H-05 (Materia Oscura), H-08 (a₀ y Λ), H-17 (Jerarquía).
+LAB 02 - GALAXIAS: H-01 (Curvas), H-02 (SPARC), H-06 (RAR), H-21 (RMS Global).
+LAB 03 - GRAVEDAD: H-09 (Lente), H-11 (Agujeros Negros), H-12 (GPS), H-12.1 (Reloj).
+LAB 04 - COSMOLOGÍA: H-07 (Lensing 3D), H-10 (Cúmulo Bala), H-13 (Campo φ).
+LAB 05 - INVESTIGADORES: H-14 (Chat AI), H-15 (LaTeX), H-16 (API REST).
 
 INSTRUCCIONES:
 - Responde en español, conciso (eres un widget pequeño)
@@ -78,20 +79,21 @@ INSTRUCCIONES:
 CURRENT CONTEXT: User is on → ${pageName}
 Mention this tool when relevant to the conversation.
 
-TIE FUNDAMENTAL CONSTANTS:
+TIE FUNDAMENTAL CONSTANTS V12.0:
 • a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²  (H₀=70 km/s/Mpc)
 • v_flat = (G·M·a₀)^(1/4)  — no dark matter, 0 free parameters
-• rₕ = √(φGM/a₀) ≈ 1.272·√(GM/a₀)  — golden horizon TIE (u²+u−1=0)
-• Λ_TIE = 2H₀²/c² = 1.145×10⁻⁵² m⁻²  (error 5.0% vs Planck 2018: 1.0904×10⁻⁵²)
-• Mc ≈ 2.275×10²³ M☉         — critical mass rₕ=rₛ
+• rₕ = 1.272·√(GM/a₀)      — TIE horizon
+• Λ_TIE = 2H₀²/c² = 1.145×10⁻⁵² m⁻²
+• Mc ≈ 1.06×10²³ M☉         — critical mass rₕ=rₛ
 • f_LISA = a₀/πc ≈ 2.4 mHz  — LISA 2035 prediction
-• M87*: rₕ = 5.92×10⁶ · rₛ
+• M87*: rₕ = 4.04×10⁶ · rₛ
 
-AVAILABLE TOOLS (ralc.mx/labs-en.html):
-H-01 constant-en.html · H-03 black-holes-en.html · H-04 rotation-curves-en.html
-H-05 sparc-en.html · H-06 gps-en.html · H-07 lensing-en.html · H-08 2pi-en.html
-H-09 dark-matter-en.html · H-10 universal-clock-en.html · H-11 falsifiability-en.html
-H-13 campo-phi-en.html · H-15 latex-en.html · H-16 api-en.html
+TIE LABORATORY TOOLS (5 Modules, https://ralc-tie-creator.github.io/index-en.html):
+LAB 01 - FOUNDATIONS: H-03 (2π), H-04 (Scalpel), H-05 (Dark Matter), H-08 (a₀ & Λ), H-17 (Hierarchy).
+LAB 02 - GALAXIES: H-01 (Curves), H-02 (SPARC), H-06 (RAR), H-21 (Global RMS).
+LAB 03 - GRAVITY: H-09 (Lens), H-11 (Black Holes), H-12 (GPS), H-12.1 (Clock).
+LAB 04 - COSMOLOGY: H-07 (Lensing 3D), H-10 (Bullet Cluster), H-13 (φ Field).
+LAB 05 - RESEARCHERS: H-14 (AI Chat), H-15 (LaTeX), H-16 (REST API).
 
 INSTRUCTIONS:
 - Respond in English, concise (you are a small widget)
@@ -106,10 +108,10 @@ INSTRUCTIONS:
   const KEY_APIKEY  = 'axon_key';
   const KEY_HISTORY = 'axon_history';
 
-  function getKey()     { return sessionStorage.getItem(KEY_APIKEY) || ''; }
-  function setKey(k)    { sessionStorage.setItem(KEY_APIKEY, k); }
-  function getHistory() { try{ return JSON.parse(sessionStorage.getItem(KEY_HISTORY)||'[]'); }catch(e){ return []; } }
-  function saveHistory(h){ sessionStorage.setItem(KEY_HISTORY, JSON.stringify(h.slice(-20))); }
+  function getKey()     { return localStorage.getItem(KEY_APIKEY) || ''; }
+  function setKey(k)    { localStorage.setItem(KEY_APIKEY, k); }
+  function getHistory() { try{ return JSON.parse(localStorage.getItem(KEY_HISTORY)||'[]'); }catch(e){ return []; } }
+  function saveHistory(h){ localStorage.setItem(KEY_HISTORY, JSON.stringify(h.slice(-20))); }
 
   // ── Inject KaTeX if not present ───────────────────────
   function ensureKatex(cb){
@@ -248,7 +250,7 @@ INSTRUCTIONS:
     const k = getKey();
     if(k){
       keyBar.innerHTML = `<span style="font-size:.58rem;color:rgba(255,215,0,.4);letter-spacing:1px">${isEN?'KEY':'CLAVE'}: ••••••••${k.slice(-4)}</span><button id="axon-key-change" style="background:transparent;border:none;color:rgba(255,215,0,.4);font-family:'Space Mono',monospace;font-size:.58rem;cursor:pointer;margin-left:auto">${isEN?'change':'cambiar'}</button>`;
-      keyBar.querySelector('#axon-key-change').onclick = () => { sessionStorage.removeItem(KEY_APIKEY); renderKeyBar(); updateSend(); };
+      keyBar.querySelector('#axon-key-change').onclick = () => { localStorage.removeItem(KEY_APIKEY); renderKeyBar(); updateSend(); };
       send.disabled = false;
     } else {
       keyBar.innerHTML = `<input id="axon-key-input" placeholder="${T.keyph}" type="password"><button id="axon-key-save">${T.keysv}</button>`;
@@ -292,7 +294,7 @@ INSTRUCTIONS:
   closeBtn.onclick = () => { isOpen=false; panel.classList.remove('open'); };
 
   clearBtn.onclick = () => {
-    sessionStorage.removeItem(KEY_HISTORY);
+    localStorage.removeItem(KEY_HISTORY);
     msgs.innerHTML = `<div class="axon-welcome">${T.welcome}</div>`;
   };
 
@@ -378,8 +380,18 @@ INSTRUCTIONS:
     showTyping();
 
     const history = getHistory();
-    // Build messages array (last 20 turns)
-    const messages = history.slice(-20).slice(0,-1).map(m => ({role: m.role === 'assistant' ? 'model' : m.role, parts:[{text:m.content}]}));
+    // Ensure we start with a 'user' message to maintain valid alternating sequence
+    let startIndex = Math.max(0, history.length - 21);
+    if (startIndex > 0 && history[startIndex]?.role !== 'user') {
+      startIndex++; // push to the next 'user' message
+    }
+    const recentHistory = history.slice(startIndex, -1);
+    
+    // Build messages array
+    const messages = recentHistory.map(m => ({
+      role: m.role === 'assistant' || m.role === 'model' ? 'model' : 'user', 
+      parts:[{text: m.content || ''}]
+    }));
     messages.push({role:'user', parts:[{text}]});
 
     try{
@@ -446,4 +458,3 @@ INSTRUCTIONS:
   restoreHistory();
 
 })();
-

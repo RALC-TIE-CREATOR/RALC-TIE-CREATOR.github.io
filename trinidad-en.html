@@ -71,7 +71,7 @@
         /* Slider de progreso */
         .slider-wrap { display:flex; flex-direction:column; gap:6px; }
         .slider-wrap label { font-family:var(--mono); font-size:0.72rem; color:var(--blue); display:flex; justify-content:space-between; }
-        input[type=range] { -webkit-appearance:none; width:100%; background:rgba(91,200,245,0.12); height:3px; border-radius:2px; outline:none; }
+        input[type=range] { -webkit-appearance:none; appearance:none; width:100%; background:rgba(91,200,245,0.12); height:3px; border-radius:2px; outline:none; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; background:var(--blue); border-radius:50%; cursor:pointer; box-shadow:0 0 6px var(--blue); }
 
         .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.72rem; color:var(--dim); padding:0.22rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
@@ -202,10 +202,10 @@
 </nav>
 
 <div class="page-header">
-    <div class="page-label">H-18 · LIVE · THERMODYNAMICS · ENERGY TRINITY</div>
+    <div class="page-label">H-06 · ENERGY TRINITY · ABSOLUTE MOTOR</div>
     <h1>ENERGY TRINITY</h1>
     <p class="page-desc">The Absolute Motor redistributes energy between three ontological states. The total sum never varies. Select a scenario and move the slider to observe the transfer in real time.</p>
-    <div class="page-eq">E_total = E_existencia + U_tensión + K_cinética &nbsp;·&nbsp; E = m_TIE·c²/2π = m_obs·c²</div>
+    <div class="page-eq">E_{\text{total}} = E + U + K &nbsp;·&nbsp; E = m_{\text{TIE}}c^2/R = m_{\text{obs}}c^2 \quad (R \equiv 2\pi)</div>
 </div>
 
 <div class="stats-bar">
@@ -269,9 +269,9 @@
 
         <div class="panel">
             <div class="panel-title">Live values</div>
-            <div class="data-row">m_TIE electrón <span class="data-val">2π × m_e</span></div>
+            <div class="data-row">m_TIE electrón <span class="data-val">R × m_e</span></div>
             <div class="data-row">E_existence(t=0) <span class="data-val" style="color:var(--ce)">511.000 keV</span></div>
-            <div class="data-row">E_TIE = m_TIE·c²/2π <span class="data-val" style="color:var(--ce)">= m_obs·c² ✓</span></div>
+            <div class="data-row">E_TIE = m_TIE·c²/R <span class="data-val" style="color:var(--ce)">= m_obs·c² ✓</span></div>
             <div class="data-row">Energy transferred <span class="data-val" id="dv-trans">0.000 keV</span></div>
             <div class="data-row">Conservation <span class="data-val" id="dv-cons" style="color:var(--green)">PERFECT ✓</span></div>
         </div>
@@ -279,7 +279,7 @@
         <div class="panel">
             <div class="panel-title">Ontological note</div>
             <p class="note" id="scene-note">
-                Annihilation produces exactly 2×511 keV because E_TIE = m_TIE·c²/2π with m_TIE = 2π·m_e. The TIE correction is ontological — joules do not change, what changes is which fraction of the mass is physically real.
+                Annihilation produces exactly 2×511 keV because E_TIE = m_TIE·c²/R with m_TIE = R·m_e. The TIE correction is ontological — joules do not change, what changes is which fraction of the mass is physically real.
             </p>
         </div>
     </div>
@@ -303,7 +303,7 @@
                 <div class="tank-header">
                     <div class="tank-badge">E_EXISTENCE</div>
                     <div class="tank-name">Mass Energy</div>
-                    <div class="tank-eq">E = m_TIE · c² / 2π = m_obs · c²</div>
+                    <div class="tank-eq">E = m_{\text{TIE}} \cdot c^2 / R = m_{\text{obs}} \cdot c^2</div>
                 </div>
                 <div class="tank-body">
                     <div class="tank-grid"></div>
@@ -362,7 +362,7 @@
         <a href="bisturi.html">← Scalpel v2.0</a>
         <a href="jerarquia.html">Hierarchy T⁰/T¹/T² →</a>
     </div>
-    <div class="footer-eq">E_total = E + U + K &nbsp;·&nbsp; Absolute Motor conserves &nbsp;·&nbsp; E_TIE = m_obs·c² (Cap. 3)</div>
+    <div class="footer-eq">E_total = E + U + K &nbsp;·&nbsp; Absolute Motor conserves &nbsp;·&nbsp; E_TIE = m_obs·c² (R ≡ 2π)</div>
     <div class="footer-credit">R@LC 2026 · MÉXICO · INDEPENDENT RESEARCHER</div>
 </footer>
 
@@ -379,7 +379,7 @@ let progress = 0; // 0..100
 const SCENARIOS = {
     ann: {
         hint:  'e⁺e⁻ Annihilation: E_existence converts into two gamma photons.',
-        note:  'Annihilation produces exactly 2×511 keV because E_TIE = m_TIE·c²/2π with m_TIE = 2π·m_e. The correction is ontological: joules do not change, what changes is which fraction of the mass is physically real.',
+        note:  'Annihilation produces exactly 2×511 keV because E_TIE = m_TIE·c²/R with m_TIE = R·m_e. The correction is ontological: joules do not change, what changes is which fraction of the mass is physically real.',
         compute(t) {
             // E_existencia cae. Rad sube. U y K = 0.
             const E   = E_ELECTRON * (1 - t);
@@ -545,4 +545,3 @@ updateUI();
 </script>
 </body>
 </html>
-

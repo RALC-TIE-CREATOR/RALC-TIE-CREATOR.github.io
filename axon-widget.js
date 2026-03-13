@@ -54,11 +54,11 @@ Menciona esta herramienta cuando sea relevante para la conversación.
 CONSTANTES FUNDAMENTALES TIE:
 • a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²  (H₀=70 km/s/Mpc)
 • v_flat = (G·M·a₀)^(1/4)  — sin materia oscura, 0 parámetros libres
-• rₕ = 0.869·√(GM/a₀)      — horizonte TIE
-• Λ_TIE = 2H₀²/c² = 1.145×10⁻⁵² m⁻²
-• Mc ≈ 1.06×10²³ M☉         — masa crítica rₕ=rₛ
+• rₕ = √(φGM/a₀) ≈ 1.272·√(GM/a₀)  — horizonte áureo TIE (u²+u−1=0)
+• Λ_TIE = 2H₀²/c² = 1.145×10⁻⁵² m⁻²  (error 5.0% vs Planck 2018: 1.0904×10⁻⁵²)
+• Mc ≈ 2.275×10²³ M☉         — masa crítica rₕ=rₛ
 • f_LISA = a₀/πc ≈ 2.4 mHz  — predicción para LISA 2035
-• M87*: rₕ = 4.04×10⁶ · rₛ
+• M87*: rₕ = 5.92×10⁶ · rₛ
 
 HERRAMIENTAS DISPONIBLES (ralc.mx/labs.html):
 H-01 constante.html · H-03 agujeros.html · H-04 curvas.html · H-05 sparc.html
@@ -81,11 +81,11 @@ Mention this tool when relevant to the conversation.
 TIE FUNDAMENTAL CONSTANTS:
 • a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²  (H₀=70 km/s/Mpc)
 • v_flat = (G·M·a₀)^(1/4)  — no dark matter, 0 free parameters
-• rₕ = 0.869·√(GM/a₀)      — TIE horizon
-• Λ_TIE = 2H₀²/c² = 1.145×10⁻⁵² m⁻²
-• Mc ≈ 1.06×10²³ M☉         — critical mass rₕ=rₛ
+• rₕ = √(φGM/a₀) ≈ 1.272·√(GM/a₀)  — golden horizon TIE (u²+u−1=0)
+• Λ_TIE = 2H₀²/c² = 1.145×10⁻⁵² m⁻²  (error 5.0% vs Planck 2018: 1.0904×10⁻⁵²)
+• Mc ≈ 2.275×10²³ M☉         — critical mass rₕ=rₛ
 • f_LISA = a₀/πc ≈ 2.4 mHz  — LISA 2035 prediction
-• M87*: rₕ = 4.04×10⁶ · rₛ
+• M87*: rₕ = 5.92×10⁶ · rₛ
 
 AVAILABLE TOOLS (ralc.mx/labs-en.html):
 H-01 constant-en.html · H-03 black-holes-en.html · H-04 rotation-curves-en.html
@@ -379,7 +379,7 @@ INSTRUCTIONS:
 
     const history = getHistory();
     // Build messages array (last 20 turns)
-    const messages = history.slice(-20).slice(0,-1).map(m => ({role:m.role, parts:[{text:m.content}]}));
+    const messages = history.slice(-20).slice(0,-1).map(m => ({role: m.role === 'assistant' ? 'model' : m.role, parts:[{text:m.content}]}));
     messages.push({role:'user', parts:[{text}]});
 
     try{
@@ -446,3 +446,4 @@ INSTRUCTIONS:
   restoreHistory();
 
 })();
+

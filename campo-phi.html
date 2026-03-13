@@ -114,9 +114,9 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
 </nav>
 
 <div class="strip">
-  <span class="s-tag">CAPÍTULOS 12 Y 13 · CAMPO φ · POTENCIAL DE FASE</span>
+  <span class="s-tag">CAPÍTULOS 8 Y 12 · CAMPO φ · ONDAS DE FASE</span>
   <span class="s-title" id="strip-title">CAMPO <span>φ</span> · ONDAS GRAVITACIONALES</span>
-  <span class="s-badge" id="strip-badge">WEBGL · TIEMPO REAL</span>
+  <span class="s-badge" id="strip-badge">WEBGL · PUBLICACIÓN FINAL</span>
 </div>
 
 <div id="main">
@@ -268,7 +268,8 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
 const G   = 6.674e-11;
 const c_  = 2.998e8;
 const H0  = 70e3/3.086e22;
-const a0  = c_*H0/(2*Math.PI);   // 1.082e-10 m/s²
+const R   = 2 * Math.PI;       // Constante de RALC
+const a0  = c_*H0/R;           // 1.082e-10 m/s²
 const M_s = 1.989e30;
 const pc  = 3.086e16;
 
@@ -289,7 +290,7 @@ const SCENARIOS=[
   {nameES:'BH–BH',   nameEN:'BH–BH',   m1:30, m2:25, dist:1e8},
   {nameES:'NS–NS',   nameEN:'NS–NS',   m1:1.4,m2:1.4,dist:4e7},
   {nameES:'BH–NS',   nameEN:'BH–NS',   m1:10, m2:1.4,dist:6e7},
-  {nameES:'LISA',    nameEN:'LISA',    m1:1e6,m2:1e6,dist:1e9},
+  {nameES:'LISA',    nameEN:'LISA',    m1:1.65e6,m2:1.65e6,dist:1e9}, // M=3.3e6 -> f=2.45mHz
 ];
 
 // ══════════════════════════════
@@ -307,8 +308,8 @@ function hAmplitude(mc,dist){
   // h ~ (G*Mc/c²/D) * (G*Mc*omega/c³)^(2/3)  — simplified
   return 4*G*Mc/(c_*c_*D) * 1e-18; // normalized for display
 }
-// TIE: T² artificial — modulation at f_LISA ~ 2.4 mHz
-function T2_mod(f){ return 1 + 0.08*Math.sin(2*Math.PI*f/2.4e-3); }
+// TIE: T² artificial — fase detectable en coalescencia supermasiva ~ 2.45 mHz
+function T2_mod(f){ return 1 + 0.08*Math.sin(2*Math.PI*f/2.45e-3); }
 
 // φ field: TIE potential φ(r) = -G*M/r * (1 + a0*r/(2*c²))
 function phi(r, M){ 

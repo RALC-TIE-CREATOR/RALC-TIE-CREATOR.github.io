@@ -154,7 +154,7 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
 </nav>
 
 <div class="strip">
-  <span class="s-tag">H-16 · API REST</span>
+  <span class="s-tag">TECNOLOGÍA · API REST</span>
   <span class="s-title" id="strip-title">API <span>PÚBLICA</span> REST · TIE</span>
   <span class="s-badge">⚡ SIMULADA · OPENAPI</span>
 </div>
@@ -214,7 +214,7 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
     </div>
 
     <div class="insight">
-      <p id="insight-txt">La API usa <strong>física TIE v11.8 real</strong> — a₀=cH₀/2π, rₕ=0.869√(GM/a₀), sin materia oscura ni parámetros libres.</p>
+      <p id="insight-txt">La API usa <strong>física TIE v11.8 real</strong> — a₀=cH₀/2π, rₕ=1.272√(GM/a₀), sin materia oscura ni parámetros libres.</p>
     </div>
 
     <div class="i-card">
@@ -222,7 +222,7 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
       <div class="i-row"><span class="i-key">a₀</span><span class="i-val">1.082×10⁻¹⁰</span></div>
       <div class="i-row"><span class="i-key">H₀</span><span class="i-val">70 km/s/Mpc</span></div>
       <div class="i-row"><span class="i-key">Λ_TIE</span><span class="i-val">1.145×10⁻⁵²</span></div>
-      <div class="i-row"><span class="i-key">Mc</span><span class="i-val">1.06×10²³ M☉</span></div>
+      <div class="i-row"><span class="i-key">Mc</span><span class="i-val">2.275×10²³ M☉</span></div>
     </div>
   </div>
 </div>
@@ -270,7 +270,7 @@ const pc  = 3.086e16;
 const kpc = 3.086e19;
 
 function vFlat(M_msun){ return Math.pow(G * M_msun*M_s * a0, 0.25); }
-function rh(M_msun){ return 0.869 * Math.sqrt(G * M_msun*M_s / a0); }
+function rh(M_msun){ return 1.272 * Math.sqrt(G * M_msun*M_s / a0); }
 function rs(M_msun){ return 2*G*M_msun*M_s/(C*C); }
 function alphaDeflect(M_msun, b_pc){ return 4*G*M_msun*M_s/(C*C * b_pc*pc); }
 function rotCurve(M_msun, r_kpc){
@@ -317,7 +317,7 @@ const ENDPOINTS = [
     nameES:'Horizontes TIE / GR', nameEN:'TIE / GR Horizons',
     descES:'Calcula rₛ (Schwarzschild) y rₕ (TIE) para una masa dada. Retorna el ratio rₕ/rₛ.',
     descEN:'Computes rₛ (Schwarzschild) and rₕ (TIE) for a given mass. Returns rₕ/rₛ ratio.',
-    formula:'r_h = 0.869\\sqrt{\\frac{GM}{a_0}}, \\quad r_s = \\frac{2GM}{c^2}',
+    formula:'r_h = 1.272\\sqrt{\\frac{GM}{a_0}}, \\quad r_s = \\frac{2GM}{c^2}',
     params:[
       {name:'mass',  type:'float', req:true,  descES:'Masa en M☉',           descEN:'Mass in M☉',           ex:'6.5e9'},
       {name:'units', type:'string',req:false, descES:'Unidades salida: m|km|pc|ly (def: km)', descEN:'Output units: m|km|pc|ly (def: km)', ex:'km'},
@@ -654,8 +654,8 @@ function setLang(l){
   document.getElementById('ic-sdk-title').textContent='SDKs';
   document.getElementById('ic-const-title').textContent=l==='es'?'CONSTANTES':'CONSTANTS';
   document.getElementById('insight-txt').innerHTML=l==='es'
-    ?'La API usa <strong>física TIE v11.8 real</strong> — a₀=cH₀/2π, rₕ=0.869√(GM/a₀), sin materia oscura ni parámetros libres.'
-    :'The API uses <strong>real TIE v11.8 physics</strong> — a₀=cH₀/2π, rₕ=0.869√(GM/a₀), no dark matter or free parameters.';
+    ?'La API usa <strong>física TIE v11.8 real</strong> — a₀=cH₀/2π, rₕ=1.272√(GM/a₀), sin materia oscura ni parámetros libres.'
+    :'The API uses <strong>real TIE v11.8 physics</strong> — a₀=cH₀/2π, rₕ=1.272√(GM/a₀), no dark matter or free parameters.';
   // Tab labels
   document.getElementById('dts-params').textContent=l==='es'?'PARÁMETROS':'PARAMETERS';
   document.getElementById('dts-play').textContent='▶ '+(l==='es'?'EJECUTAR':'EXECUTE');

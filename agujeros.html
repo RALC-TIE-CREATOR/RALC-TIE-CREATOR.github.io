@@ -102,9 +102,6 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .nav-links a{font-family:var(--mono);font-size:.7rem;color:var(--dim);text-decoration:none;transition:color .2s;}
 .nav-links a:hover{color:var(--gold);}
 
-footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);margin-top:2rem;}
-footer .feq{font-family:var(--mono);font-size:.75rem;color:var(--gold);margin-bottom:.5rem;}
-footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;}
 </style>
 </head>
 <body>
@@ -120,12 +117,21 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 </nav>
 
 <div class="page">
-  <div class="page-tag">H-11 · Horizonte físico · Sin singularidad · Cap. X</div>
+  <div class="page-tag">CAPÍTULO 10 · Horizonte físico · Sin singularidad</div>
   <h1 class="page-title">AGUJEROS <span>NEGROS</span></h1>
   <p class="page-sub">GR predice un horizonte lineal rₛ = 2GM/c² y una singularidad en r=0. TIE predice un horizonte que escala como √M — millones de veces mayor que GR — y un interior sin singularidad: solo saturación de la infraestructura.</p>
 
+  <p class="theory-text">
+    Donde \(M_c = \frac{\varphi c^{4}}{4Ga_0} \approx 2.275\times10^{23}\,M_{\odot}\), la masa donde ambos horizontes se igualan. Por encima de este valor (como en cúmulos de galaxias o el universo mismo), rₛ empezaría a dominar, pero para todos los agujeros negros conocidos, rₕ es el horizonte relevante.
+  </p>
+
   <div class="hero-eq">
-    <div>\( r_s^{\text{GR}} = \dfrac{2GM}{c^2} \qquad r_h^{\text{TIE}} = \sqrt{\dfrac{\varphi\,GM}{a_0}} \approx 1.272\,\sqrt{\dfrac{GM}{a_0}} \)</div>
+    <div class="theory-formula">
+      \[ r_s^{\text{GR}} = \dfrac{2GM}{c^2} \]
+    </div>
+    <div class="theory-formula">
+      <div>\( r_h = \sqrt{\varphi} \sqrt{\dfrac{GM}{a_0}} \qquad a_0 = \dfrac{cH_0}{R} \)</div>
+    </div>
     <div class="hero-eq-badge">🟡 EN CONSTRUCCIÓN · ngEHT 2028+ · LUNAR 2030+</div>
   </div>
 
@@ -169,14 +175,14 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
         <div class="rc-note">Schwarzschild · escala lineal ∝ M</div>
       </div>
       <div class="rc tie">
-        <div class="rc-label">rₕ — Horizonte TIE</div>
+        <div class="rc-label">Radio rₕ (TIE)</div>
         <div class="rc-value flash" id="rh" style="color:var(--gold)">1.14×10¹⁷</div>
-        <div class="rc-unit">km</div>
-        <div class="rc-note">Infraestructura · escala ∝ √M</div>
+        <div class="rc-unit">kilómetros</div>
+        <div class="page-tag">H-11 · El Horizonte de Infraestructura · Cap. 10</div>
       </div>
       <div class="rc factor">
         <div class="rc-label">Factor rₕ / rₛ</div>
-        <div class="rc-value flash" id="factor" style="color:var(--green)">5.92×10⁶</div>
+        <div class="rc-value flash" id="factor" style="color:var(--green)">4.04×10⁶</div>
         <div class="rc-unit">veces más grande</div>
         <div class="rc-note">Diverge para M pequeñas · converge en Mc</div>
       </div>
@@ -210,7 +216,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="panel-title">Consistencia con EHT — ¿Por qué TIE no está refutado?</div>
 
     <div class="warning">
-      <span class="wt">DISTINCIÓN CRÍTICA:</span> El EHT no fotografía el horizonte — fotografía la <strong style="color:var(--text)">fotosfera de fotones</strong> (el radio donde la luz orbita circularmente). En GR esa fotosfera está en r_foto = 1.5·rₛ. En TIE, la fotosfera requiere derivación formal — es <strong style="color:var(--gold)">trabajo futuro del Cap. X</strong>. Por eso la existencia de rₕ ≫ rₛ no contradice las imágenes actuales.
+      <span class="wt">DISTINCIÓN CRÍTICA:</span> El EHT no fotografía el horizonte — fotografía la <strong style="color:var(--text)">fotosfera de fotones</strong> (el radio donde la luz orbita circularmente). En GR esa fotosfera está en r_foto = 1.5·rₛ. En TIE, la fotosfera requiere derivación formal — es <strong style="color:var(--gold)">trabajo futuro del Cap. 10</strong>. Por eso la existencia de rₕ ≫ rₛ no contradice las imágenes actuales.
     </div>
 
     <table class="eht-table">
@@ -242,7 +248,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     </table>
 
     <div style="font-family:var(--mono);font-size:.6rem;color:var(--dim);line-height:1.7;margin-bottom:1rem;">
-      Fuentes: EHT Collaboration 2019 (M87*), 2022 (Sgr A*) · Ref. libro Cap. X §10.7.3
+      Fuentes: EHT Collaboration 2019 (M87*), 2022 (Sgr A*) · Ref. libro Cap. 10 §10.7.3
     </div>
 
     <!-- NOTICIAS MARZO 2026 -->
@@ -281,7 +287,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   <!-- INSIGHT -->
   <div class="insight">
     <span class="hi">¿Por qué √M y no M?</span><br>
-    En GR el horizonte escala linealmente con la masa porque c² es la única constante de escala disponible: rₛ = 2GM/c². TIE añade a₀ como segunda constante de escala. La condición de horizonte \(a_{\text{TIE}}(r_h) = a_0\) produce la ecuación cuadrática \(u^2 + u - 1 = 0\) donde \(u = a_0/a_N\). Su solución positiva es \(u = 1/\varphi\) (con \(\varphi = (1+\sqrt{5})/2 \approx 1.6180\), la razón áurea), lo que conduce a \(r_h = \sqrt{\varphi\,GM/a_0} \approx 1.272\sqrt{GM/a_0}\). La raíz cuadrada no es una hipótesis — es la única forma dimensionalmente correcta de construir una longitud con G, M y a₀.
+    En GR el horizonte escala linealmente con la masa porque c² es la única constante de escala disponible: rₛ = 2GM/c². TIE añade a₀ como segunda constante de escala — y cuando combinas G, M y a₀ con dimensiones de longitud, la única combinación posible es \(\sqrt{GM/a_0}\). La raíz cuadrada no es una hipótesis — es la única forma dimensionalmente correcta de construir una longitud con esas tres cantidades.
     <br><br>
     <span class="hi">¿Qué es el interior sin singularidad?</span><br>
     En GR la densidad diverge en r=0 — la singularidad es una rotura matemática de la teoría. En TIE, cuando la densidad de paquetes-ħ supera la capacidad de la infraestructura, esta <span class="bl">se satura</span> — los paquetes quedan atrapados en ciclos de fase cerrados. No hay r=0 físico: el interior es una región de saturación con densidad finita máxima. La infraestructura no se rompe, se llena.
@@ -292,35 +298,35 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 
   <!-- TABLA LIBRO -->
   <div class="panel" style="margin-bottom:1.5rem;">
-    <div class="panel-title">Tabla de horizontes TIE — Cap. X §10.7.1</div>
+    <div class="panel-title">Tabla de horizontes TIE — Cap. 10 §10.7.1</div>
     <table class="eht-table">
       <tr><th>Sistema</th><th>M (M☉)</th><th>rₛ GR (km)</th><th>rₕ TIE (km)</th><th>Factor rₕ/rₛ</th></tr>
       <tr>
         <td>M87*</td>
         <td style="color:var(--dim)">6.5×10⁹</td>
         <td style="color:var(--blue)">1.92×10¹⁰</td>
-        <td style="color:var(--gold);font-weight:700">1.14×10¹⁷</td>
-        <td style="color:var(--green);font-weight:700">~5.92×10⁶ ×</td>
+         <td style="color:var(--gold);font-weight:700">1.14×10¹⁷</td>
+        <td style="color:var(--green);font-weight:700">~5.90×10⁶ ×</td>
       </tr>
       <tr>
         <td>Sgr A*</td>
         <td style="color:var(--dim)">4×10⁶</td>
         <td style="color:var(--blue)">1.18×10⁷</td>
-        <td style="color:var(--gold);font-weight:700">2.82×10¹⁵</td>
-        <td style="color:var(--green);font-weight:700">~2.4×10⁸ ×</td>
+         <td style="color:var(--gold);font-weight:700">2.82×10¹⁵</td>
+        <td style="color:var(--green);font-weight:700">~2.40×10⁸ ×</td>
       </tr>
       <tr>
         <td>NGC 1277</td>
         <td style="color:var(--dim)">2×10¹⁰</td>
-        <td style="color:var(--blue)">5.91×10¹⁰</td>
-        <td style="color:var(--gold);font-weight:700">1.99×10¹⁷</td>
-        <td style="color:var(--green);font-weight:700">~3.4×10⁶ ×</td>
+        <td style="color:var(--blue)">5.92×10¹⁰</td>
+         <td style="color:var(--gold);font-weight:700">1.99×10¹⁷</td>
+        <td style="color:var(--green);font-weight:700">~3.40×10⁶ ×</td>
       </tr>
       <tr>
         <td>Masa crítica Mc</td>
         <td style="color:var(--dim)">2.275×10²³</td>
-        <td style="color:var(--blue)">~6.7×10²³</td>
-        <td style="color:var(--gold);font-weight:700">~6.7×10²³</td>
+        <td style="color:var(--blue)">~6.7×10²⁰</td>
+        <td style="color:var(--gold);font-weight:700">~6.7×10²⁰</td>
         <td style="color:var(--dim)">1× (cruce)</td>
       </tr>
     </table>
@@ -329,11 +335,27 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     </div>
   </div>
 
+  <div class="panel">
+    <div class="panel-title">Diagnóstico TIE de la Singularidad — Cap. 10 §10.3</div>
+    <div class="rule-box">
+      <div class="rule-title">PROBLEMA: SINGULARIDAD EN GR</div>
+      <p class="rule-text">Al no tener una escala mínima de infraestructura ($\hbar$), GR permite que la masa se comprima hasta $r=0$, resultando en una densidad infinita ($\rho \rightarrow \infty$). Matemáticamente permitido, físicamente imposible.</p>
+    </div>
+    <div class="rule-box tie">
+      <div class="rule-title">SOLUCIÓN TIE: SATURACIÓN DE RED</div>
+      <p class="rule-text">La infraestructura tiene un límite de aceleración máxima: $a_0$. Cuando la gravedad local alcanza $a_0$, la red se satura ("bloqueo de fase"). El horizonte rₕ es el radio donde $a_{\text{TIE}} = a_0$. No hay singularidad, solo una región de saturación elástica.</p>
+    </div>
+  </div>
+
+  <p class="theory-text">
+    Donde \(M_c = \frac{\varphi C^{4}}{4Ga_0} \approx 2.275\times10^{23}\,M_{\odot}\), la masa donde ambos horizontes se igualan. Por encima de este valor (como en el universo mismo), rₛ empezaría a dominar, pero para todos los agujeros negros conocidos, rₕ es el horizonte gravitatorio relevante.
+  </p>
+
   <div class="const-row">
     <div class="ci"><span class="cl">G = </span><span class="cv">6.674×10⁻¹¹ m³/kg·s²</span></div>
-    <div class="ci"><span class="cl">c = </span><span class="cv">2.998×10⁸ m/s</span></div>
+    <div class="ci"><span class="cl">C = </span><span class="cv">2.998×10⁸ m/s</span></div>
     <div class="ci"><span class="cl">a₀ = </span><span class="cv">1.082×10⁻¹⁰ m/s²</span></div>
-    <div class="ci"><span class="cl">Mc = </span><span class="cv">2.275×10²³ M☉ — donde rₕ = rₛ</span></div>
+    <div class="ci"><span class="cl">Mc = </span><span class="cv">2.275×10²³ M☉</span></div>
   </div>
 
   <div class="nav-links">
@@ -344,7 +366,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 </div>
 
 <footer>
-  <div class="feq">\( r_s^{\text{GR}} = \dfrac{2GM}{c^2} \quad\cdot\quad r_h^{\text{TIE}} = \sqrt{\dfrac{\varphi\,GM}{a_0}} \approx 1.272\sqrt{\dfrac{GM}{a_0}} \quad\cdot\quad \text{sin singularidad} \)</div>
+  <div class="feq">\( r_s^{\text{GR}} = \dfrac{2GM}{c^2} \quad\cdot\quad r_h = \sqrt{\varphi}\sqrt{\dfrac{GM}{a_0}} \quad\cdot\quad (R \equiv 2\pi) \)</div>
   <div class="fcopy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 
@@ -382,11 +404,12 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 <!-- CALCULATOR -->
 <script>
 const G  = 6.674e-11;
-const c  = 2.998e8;
+const C  = 2.998e8; /* Changed c to C */
 const MS = 1.989e30;
 const km = 1e3;
 const H0si = 70 * 1000 / 3.0857e22;
-const a0 = c * H0si / (2 * Math.PI);
+const R = 2 * Math.PI;
+const a0 = C * H0si / R; /* Updated for RALC Constant */
 
 const PRESETS = {
   m87:     { name:'M87*',        mass: 6.5e9  },
@@ -415,25 +438,24 @@ function flash(id, val, color) {
 function calculate() {
   const Msun = parseFloat(document.getElementById('mass').value) || 0;
   const Mkg  = Msun * MS;
-  const rs   = 2 * G * Mkg / (c*c) / km;
-  const rh   = 1.272 * Math.sqrt(G * Mkg / a0) / km;
-  const fac  = rh / rs;
+  const r_s = (2 * G * Mkg) / (C * C) / km; /* Updated calculation and variable name */
+  const rh = 1.27202 * Math.sqrt(G * Mkg / a0) / km; // sqrt(phi) /* Updated calculation */
+  const ratio = rh / r_s; /* New variable */
 
-  flash('rs', fmtSci(rs), 'var(--blue)');
+  flash('rs', fmtSci(r_s), 'var(--blue)'); /* Used r_s */
   flash('rh', fmtSci(rh), 'var(--gold)');
-  flash('factor', fmtSci(fac), 'var(--green)');
+  flash('factor', fmtSci(ratio), 'var(--green)'); /* Used ratio */
 
-  // Scale bar — log scale for visibility
-  const logFac = Math.log10(fac);
-  const grPct  = Math.max(0.15, 100 / (fac > 1 ? fac : 1));  // GR bar width %
+  // Scale bar
+  const grPct  = Math.max(0.15, 100 / (ratio > 1 ? ratio : 1));  // GR bar width %
   const scaleGr = document.getElementById('scale-gr');
   scaleGr.style.width = Math.min(grPct, 3) + '%';
   // Note text
-  const note = fac > 1e3
-    ? `rₛ (azul) es invisible a esta escala — rₕ es ${fmtSci(fac)} veces mayor.`
-    : fac.toFixed(1) <= 1.1
+  const note = ratio > 1e3
+    ? `rₛ (azul) es invisible a esta escala — rₕ es ${fmtSci(ratio)} veces mayor.`
+    : ratio.toFixed(1) <= 1.1
     ? `rₕ ≈ rₛ — estás cerca de la masa crítica donde ambos horizontes coinciden.`
-    : `rₕ es ${fac.toFixed(0)} veces mayor que rₛ.`;
+    : `rₕ es ${ratio.toFixed(0)} veces mayor que rₛ.`;
   document.getElementById('scale-note').textContent = note;
 }
 
@@ -458,4 +480,3 @@ window.onload = () => {
 </script>
 </body>
 </html>
-

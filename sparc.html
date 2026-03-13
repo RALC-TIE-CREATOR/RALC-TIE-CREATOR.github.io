@@ -265,7 +265,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 </div>
 
 <footer>
-  <div class="feq">\( v_{\text{flat}} = (G M_{\text{bar}} \cdot a_0)^{1/4} \quad \cdot \quad a_0 = cH_0/2\pi \quad \cdot \quad 175 \text{ galaxias} \)</div>
+  <div class="feq">\( v_{\text{flat}} = (G M_{\text{bar}} \cdot a_0)^{1/4} \quad \cdot \quad a_0 = cH_0/R \quad \cdot \quad (R \equiv 2\pi) \)</div>
   <div class="fcopy">R@LC 2026 · SPARC · LELLI, MCGAUGH & SCHOMBERT 2016</div>
 </footer>
 
@@ -640,7 +640,7 @@ function updateChart(){
     // TIE prediction line
     const masses=[];
     for(let e=6;e<=12.5;e+=0.1) masses.push(Math.pow(10,e));
-    const G=6.674e-11,c=2.998e8,MS=1.989e30,H0si=70*1e3/3.0857e22,a0=c*H0si/(2*Math.PI);
+    const G=6.674e-11,c=2.998e8,MS=1.989e30,H0si=70*1e3/3.0857e22,R_const=2*Math.PI,a0=c*H0si/R_const;
     const vTIE=masses.map(m=>(G*m*MS*a0)**0.25/1e3);
     traces.push({x:masses,y:vTIE,mode:'lines',name:'TIE v=(GMa₀)¼',line:{color:'#FFD700',width:2,dash:'dash'},hoverinfo:'skip'});
     Plotly.react('chart',traces,{...plotLayout,xaxis:{...plotLayout.xaxis,type:'log',title:'Masa bariónica (M☉)'},yaxis:{...plotLayout.yaxis,type:'log',title:'v_flat (km/s)'}},{displayModeBar:false,responsive:true});

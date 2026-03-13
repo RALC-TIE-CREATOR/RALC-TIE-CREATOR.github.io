@@ -281,7 +281,7 @@
     <div class="page-label">CAPÍTULOS 8 Y 9 · EN VIVO · RELACIÓN DE ACELERACIÓN RADIAL</div>
     <h1>SIMULADOR RAR</h1>
     <p class="page-desc">La aceleración observada en galaxias como función de la aceleración bariónica. TIE predice la relación exacta de primeros principios — sin materia oscura, sin parámetros libres.</p>
-    <div class="page-eq">a_obs = √(a_bar · (a_bar + a₀)) &nbsp;·&nbsp; a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²</div>
+    <div class="page-eq">a_obs = √(a_bar · (a_bar + a₀)) &nbsp;·&nbsp; a₀ = cH₀/R = 1.082×10⁻¹⁰ m/s²</div>
 </div>
 
 <div class="stats-bar">
@@ -313,7 +313,7 @@
 
         <div class="panel">
             <div class="panel-title">Nota física</div>
-            <p class="note">El valor <span style="color:var(--gold)">a₀ = cH₀/2π</span> es una <em>predicción</em> derivada del Tratado TIE, no un ajuste. El valor empírico de MOND (1.2×10⁻¹⁰) es aproximado. TIE usa el valor exacto: <span style="color:var(--gold)">1.082×10⁻¹⁰ m/s²</span>.</p>
+            <p class="note">El valor <span style="color:var(--gold)">a₀ = cH₀/R</span> es una <em>predicción</em> derivada del Tratado TIE, no un ajuste. El valor empírico de MOND (1.2×10⁻¹⁰) es aproximado. TIE usa el valor exacto: <span style="color:var(--gold)">1.082×10⁻¹⁰ m/s²</span> (con R ≡ 2π).</p>
         </div>
 
         <button class="btn btn-red" onclick="resetSystem()" style="margin-top:auto;">[ REINICIAR SISTEMA ]</button>
@@ -332,13 +332,13 @@
         <a href="sparc.html">← Explorador SPARC</a>
         <a href="constante.html">a₀ y Λ →</a>
     </div>
-    <div class="footer-eq">a_obs = √(a_bar·(a_bar+a₀)) &nbsp;·&nbsp; a₀ = cH₀/2π &nbsp;·&nbsp; 0 parámetros libres</div>
+    <div class="footer-eq">a_obs = √(a_bar·(a_bar+a₀)) &nbsp;·&nbsp; a₀ = cH₀/R &nbsp;·&nbsp; 0 parámetros libres</div>
     <div class="footer-credit">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 
 <script>
     // ── CONSTANTES TIE (Cap. 2 — derivadas, no ajustadas) ──
-    const a0 = 1.082e-10; // m/s² — a₀ = cH₀/2π  (H₀=70 km/s/Mpc)
+    const a0 = 1.082e-10; // m/s² — a₀ = cH₀/R  (H₀=70 km/s/Mpc, R=2π)
 
     let chartInstance = null;
     let scatterData   = [];
@@ -479,3 +479,4 @@
 </script>
 </body>
 </html>
+

@@ -117,12 +117,12 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 </nav>
 
 <div class="page">
-  <div class="page-tag">H-08 · One H₀ · Two Scales · Zero Free Parameters</div>
+  <div class="page-tag">H-08 · Fundamental Constants · Cap. 2 and 11</div>
   <h1 class="page-title">CONSTANTS <span>a₀ and Λ</span></h1>
   <p class="page-sub">The same Hubble constant generates a₀ (galactic dynamics) and Λ (cosmic expansion). These are not two independently tuned constants — they are the same infrastructure seen at different scales.</p>
 
   <div class="hero-eq">
-    <div>\( a_0 = \dfrac{c H_0}{2\pi} \qquad \Lambda_{\text{TIE}} = \dfrac{2 H_0^2}{c^2} \)</div>
+    <div>\( a_0 = \dfrac{cH_0}{R} \qquad \Lambda = \dfrac{2H_0^2}{c^2} \qquad (R \equiv 2\pi) \)</div>
     <div class="hero-eq-badge">✓ DERIVED FROM H₀</div>
   </div>
 
@@ -150,7 +150,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="panel-title">Transition acceleration a₀</div>
       <div class="big-val flash" id="a0-val">1.082×10⁻¹⁰</div>
       <div class="val-unit">m/s²</div>
-      <div class="val-eq">\( a_0 = \dfrac{c H_0}{2\pi} \)<br><br>
+      <div class="val-eq">\( a_0 = \dfrac{cH_0}{R} \)<br><br>
         Below a₀ gravity enters TIE regime — stars at galactic outskirts always operate in this regime.</div>
     </div>
     <div class="panel">
@@ -238,7 +238,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 </div>
 
 <footer>
-  <div class="feq">\( a_0 = \dfrac{c H_0}{2\pi} \quad\cdot\quad \Lambda_{\text{TIE}} = \dfrac{2 H_0^2}{c^2} \quad\cdot\quad \text{zero free parameters} \)</div>
+  <div class="feq">\( a_0 = \dfrac{c H_0}{R} \quad\cdot\quad \Lambda_{\text{TIE}} = \dfrac{2 H_0^2}{c^2} \quad\cdot\quad (R \equiv 2\pi) \quad\cdot\quad \text{zero free parameters} \)</div>
   <div class="fcopy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
 </footer>
 
@@ -289,7 +289,8 @@ function fmtExp(n) {
 function update() {
   const h0k  = parseFloat(document.getElementById('h0').value);
   const h0si = h0k * 1000 / Mpc;
-  const a0   = c * h0si / (2 * Math.PI);
+  const R = 2 * Math.PI;
+  const a0si = c * h0si / R;
   const lam  = 2 * h0si * h0si / (c * c);
   const err  = (lam - LAMBDA_PLANCK) / LAMBDA_PLANCK * 100;
   const errSigned = (err >= 0 ? '+' : '') + err.toFixed(1);
@@ -299,7 +300,7 @@ function update() {
   document.getElementById('h0').style.setProperty('--pct', pct + '%');
 
   document.getElementById('h0-disp').textContent   = h0k.toFixed(1);
-  document.getElementById('a0-val').textContent     = fmtExp(a0);
+  document.getElementById('a0-val').textContent     = fmtExp(a0si);
   document.getElementById('lambda-val').textContent = fmtExp(lam);
   document.getElementById('lambda-comp').textContent= fmtExp(lam);
 
@@ -323,7 +324,7 @@ function update() {
   badge.className   = 'comp-badge ' + (Math.abs(err) < 10 ? 'green' : 'red');
 
   document.getElementById('h0-note').innerHTML =
-    `H₀=${h0k.toFixed(1)} → a₀=${fmtExp(a0)} m/s² · Λ=${fmtExp(lam)} m⁻² · error vs Planck: <span style="color:${errColor}">${errSigned}%</span>`;
+    `H₀=${h0k.toFixed(1)} → a₀=${fmtExp(a0si)} m/s² · Λ=${fmtExp(lam)} m⁻² · error vs Planck: <span style="color:${errColor}">${errSigned}%</span>`;
 
   const minH0 = (Math.sqrt(LAMBDA_PLANCK / 2) * c * Mpc / 1000).toFixed(1);
   document.getElementById('err-note').textContent =

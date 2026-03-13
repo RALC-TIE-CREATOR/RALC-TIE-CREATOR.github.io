@@ -115,7 +115,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   <p class="page-sub">GR predicts a linear horizon rₛ = 2GM/c² and a singularity at r=0. TIE predicts a horizon that scales as √M — millions of times larger than GR — and a singularity-free interior: only saturation of the infrastructure.</p>
 
   <div class="hero-eq">
-    <div>\( r_s^{\text{GR}} = \dfrac{2GM}{c^2} \qquad r_h^{\text{TIE}} = 0.869\,\sqrt{\dfrac{GM}{a_0}} \)</div>
+    <div>\( r_s^{\text{GR}} = \dfrac{2GM}{c^2} \qquad r_h^{\text{TIE}} = \sqrt{\dfrac{\varphi\,GM}{a_0}} \approx 1.272\,\sqrt{\dfrac{GM}{a_0}} \)</div>
     <div class="hero-eq-badge">🟡 PENDING · ngEHT 2028+ · LUNAR 2030+</div>
   </div>
 
@@ -160,19 +160,19 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       </div>
       <div class="rc tie">
         <div class="rc-label">rₕ — TIE horizon</div>
-        <div class="rc-value flash" id="rh" style="color:var(--gold)">7.76×10¹⁶</div>
+        <div class="rc-value flash" id="rh" style="color:var(--gold)">1.14×10¹⁷</div>
         <div class="rc-unit">km</div>
         <div class="rc-note">Infrastructure · scale ∝ √M</div>
       </div>
       <div class="rc factor">
         <div class="rc-label">Factor rₕ / rₛ</div>
-        <div class="rc-value flash" id="factor" style="color:var(--green)">4.04×10⁶</div>
+        <div class="rc-value flash" id="factor" style="color:var(--green)">5.92×10⁶</div>
         <div class="rc-unit">times larger</div>
         <div class="rc-note">Diverges for small M · converges at Mc</div>
       </div>
       <div class="rc">
         <div class="rc-label">Critical mass Mc</div>
-        <div class="rc-value" style="color:var(--dim);font-size:1.2rem;">1.06×10²³</div>
+        <div class="rc-value" style="color:var(--dim);font-size:1.2rem;">2.275×10²³</div>
         <div class="rc-unit">M☉ — where rₕ = rₛ</div>
         <div class="rc-note">Below Mc: TIE &gt; GR always</div>
       </div>
@@ -271,7 +271,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   <!-- INSIGHT -->
   <div class="insight">
     <span class="hi">Why √M and not M?</span><br>
-    In GR the horizon scales linearly with mass because c² is the only available scale constant: rₛ = 2GM/c². TIE adds a₀ as a second scale constant — and when you combine G, M and a₀ to build a length, the only dimensionally correct combination is \(\sqrt{GM/a_0}\). The square root is not a hypothesis — it is the only dimensionally valid way to construct a length from those three quantities.
+    In GR the horizon scales linearly with mass because c² is the only available scale constant: rₛ = 2GM/c². TIE adds a₀ as a second scale constant. The horizon condition \(a_{\text{TIE}}(r_h) = a_0\) yields the quadratic equation \(u^2 + u - 1 = 0\) where \(u = a_0/a_N\). Its positive solution is \(u = 1/\varphi\) (with \(\varphi = (1+\sqrt{5})/2 \approx 1.6180\), the golden ratio), leading to \(r_h = \sqrt{\varphi\,GM/a_0} \approx 1.272\sqrt{GM/a_0}\). The square root is not a hypothesis — it is the only dimensionally valid way to construct a length from G, M and a₀.
     <br><br>
     <span class="hi">What is the singularity-free interior?</span><br>
     In GR density diverges at r=0 — the singularity is a mathematical breakdown of the theory. In TIE, when the density of ħ-packets exceeds the infrastructure's capacity, the infrastructure <span class="bl">saturates</span> — packets become trapped in closed phase cycles. There is no physical r=0: the interior is a saturation region with a finite maximum density. The infrastructure does not break — it fills up.
@@ -289,28 +289,28 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
         <td>M87*</td>
         <td style="color:var(--dim)">6.5×10⁹</td>
         <td style="color:var(--blue)">1.92×10¹⁰</td>
-        <td style="color:var(--gold);font-weight:700">7.76×10¹⁶</td>
-        <td style="color:var(--green);font-weight:700">~4.04×10⁶ ×</td>
+        <td style="color:var(--gold);font-weight:700">1.14×10¹⁷</td>
+        <td style="color:var(--green);font-weight:700">~5.92×10⁶ ×</td>
       </tr>
       <tr>
         <td>Sgr A*</td>
         <td style="color:var(--dim)">4×10⁶</td>
         <td style="color:var(--blue)">1.18×10⁷</td>
-        <td style="color:var(--gold);font-weight:700">1.93×10¹⁵</td>
-        <td style="color:var(--green);font-weight:700">~1.63×10⁸ ×</td>
+        <td style="color:var(--gold);font-weight:700">2.82×10¹⁵</td>
+        <td style="color:var(--green);font-weight:700">~2.4×10⁸ ×</td>
       </tr>
       <tr>
         <td>NGC 1277</td>
         <td style="color:var(--dim)">2×10¹⁰</td>
-        <td style="color:var(--blue)">5.92×10¹⁰</td>
-        <td style="color:var(--gold);font-weight:700">1.36×10¹⁷</td>
-        <td style="color:var(--green);font-weight:700">~2.30×10⁶ ×</td>
+        <td style="color:var(--blue)">5.91×10¹⁰</td>
+        <td style="color:var(--gold);font-weight:700">1.99×10¹⁷</td>
+        <td style="color:var(--green);font-weight:700">~3.4×10⁶ ×</td>
       </tr>
       <tr>
         <td>Critical mass Mc</td>
-        <td style="color:var(--dim)">1.06×10²³</td>
-        <td style="color:var(--blue)">~3.1×10²⁰</td>
-        <td style="color:var(--gold);font-weight:700">~3.1×10²⁰</td>
+        <td style="color:var(--dim)">2.275×10²³</td>
+        <td style="color:var(--blue)">~6.7×10²³</td>
+        <td style="color:var(--gold);font-weight:700">~6.7×10²³</td>
         <td style="color:var(--dim)">1× (crossover)</td>
       </tr>
     </table>
@@ -323,7 +323,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="ci"><span class="cl">G = </span><span class="cv">6.674×10⁻¹¹ m³/kg·s²</span></div>
     <div class="ci"><span class="cl">c = </span><span class="cv">2.998×10⁸ m/s</span></div>
     <div class="ci"><span class="cl">a₀ = </span><span class="cv">1.082×10⁻¹⁰ m/s²</span></div>
-    <div class="ci"><span class="cl">Mc = </span><span class="cv">1.06×10²³ M☉</span></div>
+    <div class="ci"><span class="cl">Mc = </span><span class="cv">2.275×10²³ M☉ — where rₕ = rₛ</span></div>
   </div>
 
   <div class="nav-links">
@@ -334,7 +334,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 </div>
 
 <footer>
-  <div class="feq">\( r_s^{\text{GR}} = \dfrac{2GM}{c^2} \quad\cdot\quad r_h^{\text{TIE}} = 0.869\sqrt{\dfrac{GM}{a_0}} \quad\cdot\quad \text{no singularity} \)</div>
+  <div class="feq">\( r_s^{\text{GR}} = \dfrac{2GM}{c^2} \quad\cdot\quad r_h^{\text{TIE}} = \sqrt{\dfrac{\varphi\,GM}{a_0}} \approx 1.272\sqrt{\dfrac{GM}{a_0}} \quad\cdot\quad \text{no singularity} \)</div>
   <div class="fcopy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
 </footer>
 
@@ -380,7 +380,7 @@ const PRESETS = {
   sgra:    { mass: 4e6     },
   ngc1277: { mass: 2e10    },
   sol:     { mass: 1       },
-  critica: { mass: 1.06e23 },
+  critica: { mass: 2.275e23 },
 };
 
 function fmtSci(n) {
@@ -403,7 +403,7 @@ function calculate() {
   const Msun = parseFloat(document.getElementById('mass').value) || 0;
   const Mkg  = Msun * MS;
   const rs   = 2 * G * Mkg / (c*c) / km;
-  const rh   = 0.869 * Math.sqrt(G * Mkg / a0) / km;
+  const rh   = 1.272 * Math.sqrt(G * Mkg / a0) / km;
   const fac  = rh / rs;
 
   flash('rs', fmtSci(rs), 'var(--blue)');
@@ -442,3 +442,4 @@ window.onload = () => {
 </script>
 </body>
 </html>
+

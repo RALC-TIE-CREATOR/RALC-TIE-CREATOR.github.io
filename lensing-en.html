@@ -283,7 +283,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
 const G  = 6.674e-11;   // m³ kg⁻¹ s⁻²
 const c  = 2.998e8;     // m/s
 const H0 = 70e3/3.086e22; // s⁻¹
-const a0 = c*H0/(2*Math.PI); // 1.082e-10 m/s²
+const a0 = 1.082e-10;  // m/s²
 const M_sun = 1.989e30; // kg
 const pc = 3.086e16;    // m (1 parsec)
 const AU = 1.496e11;    // m
@@ -330,7 +330,7 @@ function getMass(){ return Math.pow(10, logM) * M_sun; }
 
 function getRs(M){ return 2*G*M/(c*c); } // Schwarzschild radius [m]
 
-function getRh(M){ return 0.869 * Math.sqrt(G*M/a0); } // TIE horizon [m]
+function getRh(M){ return 1.27202 * Math.sqrt(G*M/a0); } // TIE horizon [m]
 
 // Einstein ring radius in angular units [rad], assuming D_L = 1 Gpc, D_S = 2 Gpc
 function getThetaE_rad(M){

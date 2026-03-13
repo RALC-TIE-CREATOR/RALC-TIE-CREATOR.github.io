@@ -264,7 +264,7 @@
     <div class="page-label">H-17 · EN VIVO · ONTOLOGÍA · JERARQUÍA DIMENSIONAL</div>
     <h1>JERARQUÍA CÓSMICA T⁰ / T¹ / T²</h1>
     <p class="page-desc">La aceleración gravitacional no es una causa: es una sombra. TIE revela los tres niveles ontológicos de la realidad y la dirección causal correcta. Mueve H₀ y observa qué cambia — y qué permanece invariante.</p>
-    <div class="page-eq">∇φ₀ = mv₀/ħ &nbsp;(T⁰) &nbsp;→&nbsp; v₀ = c/2π &nbsp;(T¹) &nbsp;→&nbsp; a₀ = v₀·H₀ &nbsp;(T²)</div>
+    <div class="page-eq">∇φ₀ = mv₀/ħ &nbsp;(T⁰) &nbsp;→&nbsp; v₀ = c/R &nbsp;(T¹) &nbsp;→&nbsp; a₀ = v₀·H₀ &nbsp;(T²)</div>
 </div>
 
 <div class="stats-bar">
@@ -325,7 +325,7 @@
         <div class="panel">
             <div class="panel-title">Valores en vivo</div>
             <div class="data-row">∇φ₀ <span class="data-val" id="dv-grad" style="color:var(--purple)">--</span></div>
-            <div class="data-row">v₀ = c/2π <span class="data-val" style="color:var(--gold)">47,713 km/s</span></div>
+            <div class="data-row">v₀ = c/R <span class="data-val" style="color:var(--gold)">47,713 km/s</span></div>
             <div class="data-row">a₀ = v₀·H₀ <span class="data-val" id="dv-a0" style="color:var(--blue)">--</span></div>
             <div class="data-row">Λ_TIE = 2H₀²/c² <span class="data-val" id="dv-lambda" style="color:var(--dim)">--</span></div>
         </div>
@@ -334,7 +334,7 @@
             <div class="panel-title">Clave ontológica</div>
             <p class="note">
                 <span style="color:var(--purple)">T⁰</span> — geometría pura. No depende de H₀.<br>
-                <span style="color:var(--gold)">T¹</span> — velocidad topológica. <strong>INVARIANTE</strong>. c/2π nunca cambia.<br>
+                <span style="color:var(--gold)">T¹</span> — velocidad topológica. <strong>INVARIANTE</strong>. c/R nunca cambia.<br>
                 <span style="color:var(--blue)">T²</span> — sombra cinemática. Cambia con H₀.<br><br>
                 La física ortodoxa empieza por T² e inventa materia oscura. TIE empieza por T⁰ y la materia oscura desaparece.
             </p>
@@ -376,11 +376,11 @@
                 <span class="invariant-badge" id="inv-badge">INVARIANTE</span>
             </div>
             <div class="tier-body">
-                <div class="tier-eq">v₀ = c/2π</div>
+                <div class="tier-eq">v₀ = c/R</div>
                 <div class="tier-value-block">
                     <div class="tier-value" id="val-t1">47,713 km/s</div>
                     <div class="tier-unit">m / s &nbsp;·&nbsp; no depende de H₀</div>
-                    <div class="tier-interp">Acoplamiento del límite causal (c) con la geometría cíclica (2π). Nunca cambia.</div>
+                    <div class="tier-interp">Acoplamiento del límite causal (c) con la geometría cíclica (R). Nunca cambia.</div>
                 </div>
             </div>
         </div>
@@ -421,7 +421,7 @@
         <a href="constante.html">← a₀ y Λ</a>
         <a href="onto.html">Bisturí v2.0 →</a>
     </div>
-    <div class="footer-eq">∇φ₀ (T⁰) → v₀ = c/2π (T¹) → a₀ = v₀·H₀ (T²) &nbsp;·&nbsp; Capítulo 3 · Jerarquía Dimensional</div>
+    <div class="footer-eq">∇φ₀ (T⁰) → v₀ = c/R (T¹) → a₀ = v₀·H₀ (T²) &nbsp;·&nbsp; Capítulo 3 · Jerarquía Dimensional</div>
     <div class="footer-credit">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 
@@ -430,7 +430,8 @@
     const C    = 2.998e8;        // m/s
     const HBAR = 1.055e-34;      // J·s
     const MPC  = 3.0857e22;      // m
-    const V0   = C / (2 * Math.PI); // m/s — INVARIANTE
+    const R_const = 2 * Math.PI;
+    const V0   = C / R_const; // m/s — INVARIANTE
 
     const MASSES = {
         electron: { m: 9.109e-31, label: 'Electrón' },

@@ -235,8 +235,13 @@ const BOOK = "R@LC\nTeor\u00eda de la Infraestructura\nEspacial\n(TIE)\n\nUnific
 // STATE
 // ═══════════════════════════════════════════
 let lang = 'es';
-let apiKey = sessionStorage.getItem('tie_chat_key') || '';
-let history = [];  // [{role, text}]
+let apiKey = localStorage.getItem('axon_key') || '';
+let history = [];
+try {
+  history = JSON.parse(localStorage.getItem('axon_chat_history_full') || '[]');
+} catch(e) {
+  history = [];
+}
 let busy = false;
 
 // ═══════════════════════════════════════════
@@ -246,7 +251,7 @@ const T = {
   es: {
     back: '← LABORATORIO', backHref: 'labs.html',
     akH: 'Conecta tu <span>API Key</span>',
-    akP: 'Gemini AI con el tratado TIE v11.8 completo en contexto. La key vive solo en tu sesión.',
+    akP: 'Gemini AI con el tratado TIE v12.0 completo en contexto. La key vive solo en tu sesión.',
     s1: 'Ve a <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/apikey</a>',
     s2: 'Crea una API key gratuita (sin tarjeta de crédito)',
     s3: 'Pégala aquí abajo ↓',
@@ -257,7 +262,7 @@ const T = {
     placeholder: 'Pregunta sobre TIE...',
     footerTxt: 'Enter para enviar · Shift+Enter para nueva línea',
     btnClear: 'LIMPIAR',
-    statusReady: 'AXON · TIE v11.8 en contexto · listo',
+    statusReady: 'AXON · TIE v12.0 en contexto · listo',
     statusThink: '⏳ Pensando...',
     statusOk: id => `✓ Respuesta en ${id}ms`,
     statusErr: 'Error — revisa la consola (F12)',
@@ -276,7 +281,7 @@ const T = {
 PRINCIPIOS CLAVE:
 • a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²
 • v_flat = (G·M·a₀)^(1/4) — sin materia oscura, 0 parámetros libres
-• rₕ = 0.869·√(GM/a₀) — horizonte TIE
+• rₕ = 1.272·√(GM/a₀) — horizonte TIE
 • Λ_TIE = 2H₀²/c² = 1.145×10⁻⁵² m⁻²
 • H₀=70 km/s/Mpc · G=6.674×10⁻¹¹ · c=2.998×10⁸ m/s
 
@@ -287,65 +292,40 @@ INSTRUCCIONES:
 - Puedes calcular con las fórmulas si el usuario da números
 - Cuando el usuario mencione un cálculo específico, sugiere la herramienta del laboratorio correspondiente con su URL
 
-HERRAMIENTAS DEL LABORATORIO TIE (https://ralc.mx/labs.html):
-Cuando el usuario pregunte sobre cálculos o visualizaciones, menciona la herramienta correspondiente.
+HERRAMIENTAS DEL LABORATORIO TIE (https://ralc-tie-creator.github.io/index.html):
+El laboratorio está estructurado en 5 módulos temáticos. 
+Cuando el usuario pregunte sobre cálculos específicos, visualizar la teoría, o explorar evidencia, SUGIERE utilizar la herramienta correspondiente.
 
-H-01 · CONSTANTE COSMOLÓGICA
-URL: constante.html | Calcula Λ_TIE = 2H₀²/c² a partir de H₀. Compara con Λ_obs. Sin energía oscura.
-Fórmula: Λ_TIE = 2H₀²/c² = 1.145×10⁻⁵² m⁻²
+LAB 01 - FUNDAMENTOS (lab-fundamentos.html)
+H-03 · 2π: Demuestra por qué 2π es fundamental en TIE (ω₀ = H₀ = 2π/T_universo).
+H-04 · BISTURÍ: Elimina los T² espurios de la física estándar.
+H-05 · MATERIA OSCURA: TIE explica las curvas de rotación sin materia oscura.
+H-08 · a₀ y Λ: Relación de a₀ y la Constante cosmológica.
+H-17 · JERARQUÍA: La jerarquía dimensional T⁰→T¹→T².
 
-H-02 · MASA CRÍTICA
-URL: masa-critica.html | Calcula la masa crítica donde rₕ = rₛ. Mc ≈ 1.06×10²³ M☉.
+LAB 02 - GALAXIAS (lab-galaxias.html)
+H-01 · CURVAS DE ROTACIÓN: Genera v(r) TIE para galaxias. Sin materia oscura. v_flat = (GMa₀)^(1/4).
+H-02 · SPARC DATABASE: Compara TIE con 175 galaxias (Explorador SPARC).
+H-06 · RAR: Análisis RAR (Radial Acceleration Relation).
+H-21 · RMS GLOBAL: Test estadístico global.
 
-H-03 · AGUJEROS NEGROS
-URL: agujeros.html | Calcula rₛ (Schwarzschild) y rₕ (TIE) para cualquier masa. Muestra rₕ/rₛ.
-Fórmula: rₕ = 0.869·√(GM/a₀)
+LAB 03 - GRAVEDAD (lab-gravedad.html)
+H-09 · LENTE: Deflexión de fotones.
+H-11 · AGUJEROS NEGROS: Calcula rₛ y rₕ. rₕ = 1.272·√(GM/a₀).
+H-12 · GPS: Corrección TIE al GPS. Δτ_TIE = (a₀·r/2c²)·Δt.
+H-12.1 · RELOJ: Simulador de relojes en campos gravitacionales.
 
-H-04 · CURVAS DE ROTACIÓN
-URL: curvas.html | Genera v(r) TIE para galaxias. Sin materia oscura, 0 parámetros libres.
-Fórmula: v_flat = (GMa₀)^(1/4)
+LAB 04 - COSMOLOGÍA (lab-cosmologia.html)
+H-07 · LENSING GRAVITACIONAL (3D): Simulador WebGL del lensing TIE.
+H-10 · CÚMULO BALA: Desacople gravitacional sin materia oscura partícula.
+H-13 · CAMPO φ / ONDAS GRAVITACIONALES (3D): Simulador de coalescencia. Predicción f_LISA ~ 2.4 mHz.
 
-H-05 · SPARC DATABASE
-URL: sparc.html | Compara predicciones TIE con 175 galaxias de la base SPARC. σ=0.07 dex.
+LAB 05 - INVESTIGADORES (lab-investigadores.html)
+H-14 · AXON TIE CHAT: El chat con el tratado en contexto (eres tú).
+H-15 · GENERADOR LATEX: 24 ecuaciones TIE exportables en código LaTeX.
+H-16 · API REST PÚBLICA: 6 endpoints con física TIE real para consumo externo.
 
-H-06 · GPS Y RELOJES
-URL: gps.html | Corrección TIE al GPS. Desfase acumulativo del campo φ en órbita.
-Fórmula: Δτ_TIE = (a₀·r/2c²)·Δt
-
-H-08 · FACTOR 2π
-URL: 2pi.html | Demuestra por qué 2π es fundamental en TIE. ω₀ = H₀ = 2π/T_universo.
-
-H-09 · MATERIA OSCURA
-URL: materia-oscura.html | TIE explica las curvas de rotación sin materia oscura. Comparativa.
-
-H-10 · RELOJ UNIVERSAL
-URL: reloj-universal.html | T₀ = 2π/H₀ ≈ 87.9 Gyr. Período fundamental del universo.
-
-H-11 · FALSIFICABILIDAD
-URL: falsibilidad.html | Predicciones verificables de TIE: LISA ~2.4 mHz, rₕ en BHs, SPARC.
-
-H-12 · PAPERS
-URL: papers.html | Publicaciones y documentos de TIE. Referencia académica.
-
-H-07 · LENSING GRAVITACIONAL (3D)
-URL: lensing.html | Simulador WebGL del lensing TIE. Anillo de Einstein, rₕ vs rₛ, microlensing animado.
-Fórmula: α = 4GM/c²b · θ_E = √(4GM/c² · D_LS/D_L/D_S)
-
-H-13 · CAMPO φ / ONDAS GRAVITACIONALES (3D)
-URL: campo-phi.html | Simulador del campo φ TIE. Coalescencia de binarias, T² artificial, señal LISA.
-Predicción TIE: f_LISA = a₀/πc ≈ 2.4 mHz (detectable por LISA 2035)
-
-H-14 · AXON (TÚ ESTÁS AQUÍ)
-URL: chat.html | Chat con el tratado TIE v11.8 completo en contexto. Eso eres tú.
-
-H-15 · GENERADOR LATEX
-URL: latex.html | 24 ecuaciones TIE con código LaTeX listo. Exporta .tex y .md. Editor custom.
-
-H-16 · API REST PÚBLICA
-URL: api.html | 6 endpoints con física TIE real: curva de rotación, horizontes, lensing, v_flat, ondas GW, cosmología.
-Ejemplo: GET /v1/rotation-curve?mass=1e11&r_max=30
-
-TRATADO COMPLETO TIE v11.8:
+TRATADO COMPLETO TIE v12.0:
 `,
     sysPost: `\n\n---\nResponde en español. Usa LaTeX para ecuaciones.`,
   },
@@ -382,7 +362,7 @@ TRATADO COMPLETO TIE v11.8:
 KEY PRINCIPLES:
 • a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²
 • v_flat = (G·M·a₀)^(1/4) — no dark matter, 0 free parameters
-• rₕ = 0.869·√(GM/a₀) — TIE horizon
+• rₕ = 1.272·√(GM/a₀) — TIE horizon
 • Λ_TIE = 2H₀²/c² = 1.145×10⁻⁵² m⁻²
 • H₀=70 km/s/Mpc · G=6.674×10⁻¹¹ · c=2.998×10⁸ m/s
 
@@ -505,7 +485,7 @@ function connect() {
     return;
   }
   apiKey = k;
-  sessionStorage.setItem('tie_chat_key', k);
+  localStorage.setItem('axon_key', k);
   showChat();
 }
 function showChat() {
@@ -551,6 +531,7 @@ async function send() {
   // Add user bubble
   addBubble('user', text);
   history.push({role:'user', text});
+  localStorage.setItem('axon_chat_history_full', JSON.stringify(history));
 
   // Add loading bubble
   const botDiv = addBubble('bot', null, true);
@@ -564,7 +545,13 @@ async function send() {
     const systemText = t.sysPre + BOOK + t.sysPost;
 
     // Build Gemini contents array (history)
-    const contents = history.slice(0,-1).map(h => ({
+    let startIndex = Math.max(0, history.length - 21);
+    if (startIndex > 0 && history[startIndex]?.role !== 'user') {
+      startIndex++; // push to the next 'user' message
+    }
+    const recentHistory = history.slice(startIndex, -1);
+    
+    const contents = recentHistory.map(h => ({
       role: h.role === 'user' ? 'user' : 'model',
       parts: [{ text: h.text }]
     }));
@@ -602,6 +589,7 @@ async function send() {
     bubbleEl.innerHTML = renderMd(reply);
     renderKatex(bubbleEl);
     history.push({role:'model', text: reply});
+    localStorage.setItem('axon_chat_history_full', JSON.stringify(history));
 
     const elapsed = Date.now() - t0;
     setStatus(T[lang].statusOk(elapsed), 'ok');
@@ -613,11 +601,12 @@ async function send() {
     setStatus(T[lang].statusErr, 'error');
     showToast(err.message);
     history.pop();
+    localStorage.setItem('axon_chat_history_full', JSON.stringify(history)); // Persist history even after error pop
 
     // If key invalid, go back to key screen
     if (err.message.includes('API_KEY_INVALID') || err.message.includes('403') || err.message.includes('401')) {
       setTimeout(()=>{
-        sessionStorage.removeItem('tie_chat_key');
+        localStorage.removeItem('axon_key');
         document.getElementById('chat-screen').style.display='none';
         document.getElementById('api-screen').style.display='flex';
       }, 2500);

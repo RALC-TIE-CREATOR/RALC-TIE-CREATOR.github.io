@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TIE · H-03 · Calculadora Universal 2π</title>
+<title>TIE · H-03 · Calculadora Constante RALC (R)</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
@@ -501,13 +501,13 @@ footer .fcopy {
 
   <!-- HEADER -->
   <div class="page-tag">CAPÍTULO 3 · UNA ECUACIÓN · CERO PARÁMETROS</div>
-  <h1 class="page-title">CALCULADORA <span>2π</span></h1>
-  <p class="page-sub">Una sola fórmula predice la velocidad plana de cualquier galaxia del universo. Sin materia oscura. Sin parámetros libres.</p>
+  <h1 class="page-title">CALCULADORA <span>RALC (R)</span></h1>
+  <p class="page-sub">La constante \(R \equiv 2\pi\) de la infraestructura determina el ciclo de sincronía. Una sola fórmula predice la velocidad plana de cualquier galaxia. Cero parámetros.</p>
 
   <!-- HERO EQUATION -->
   <div class="hero-eq">
     <div class="hero-eq-main">
-      \( v_{\text{flat}} = \left(G \cdot M_{\text{tot}} \cdot a_0\right)^{1/4} \qquad a_0 = \dfrac{c H_0}{2\pi} \)
+      \( v_{\text{flat}} = \left(G \cdot M_{\text{tot}} \cdot a_0\right)^{1/4} \qquad a_0 = \dfrac{c H_0}{R} \)
     </div>
     <div class="hero-eq-badge">✓ VERIFICADO · 53 GALAXIAS SPARC</div>
   </div>
@@ -673,7 +673,7 @@ footer .fcopy {
 </div><!-- end page -->
 
 <footer>
-  <div class="feq">\( v_{\text{flat}} = (G \cdot M \cdot a_0)^{1/4} \quad \cdot \quad a_0 = cH_0/2\pi \)</div>
+  <div class="feq">\( v_{\text{flat}} = (G \cdot M \cdot a_0)^{1/4} \quad \cdot \quad a_0 = cH_0/R \quad \cdot \quad (R \equiv 2\pi) \)</div>
   <div class="fcopy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 
@@ -800,9 +800,11 @@ const CHART_NOTES = {
 let currentFilter = 'Todas';
 let chartMode = 'tie';
 
+const R_const = 2 * Math.PI;
+
 function getA0() {
   const H0 = parseFloat(document.getElementById('h0').value);
-  return 2.998e8 * (H0 * 1000 / 3.0857e22) / (2 * Math.PI);
+  return 2.998e8 * (H0 * 1000 / 3.0857e22) / R_const;
 }
 
 function updateH0() {

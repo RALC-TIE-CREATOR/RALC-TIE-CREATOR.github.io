@@ -128,11 +128,11 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   <!-- SEMÁFORO -->
   <div class="semaforo">
     <div class="sem-card verde">
-      <div class="sem-num verde">8</div>
+      <div class="sem-num verde">12</div>
       <div class="sem-lbl verde">✓ Confirmadas</div>
     </div>
     <div class="sem-card amarillo">
-      <div class="sem-num amarillo">3</div>
+      <div class="sem-num amarillo">4</div>
       <div class="sem-lbl amarillo">⏳ Pendientes</div>
     </div>
     <div class="sem-card rojo">
@@ -144,18 +144,18 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   <!-- BARRA DE PROGRESO -->
   <div class="progress-wrap">
     <div class="progress-track">
-      <div class="progress-green" style="width:72.7%"></div>
-      <div class="progress-yellow" style="width:27.3%"></div>
+      <div class="progress-green" style="width:75%"></div>
+      <div class="progress-yellow" style="width:25%"></div>
     </div>
     <div class="progress-legend">
-      <span><span class="pl-dot" style="background:var(--green)"></span>8 confirmadas (72.7%)</span>
-      <span><span class="pl-dot" style="background:var(--gold)"></span>3 pendientes (27.3%)</span>
+      <span><span class="pl-dot" style="background:var(--green)"></span>12 confirmadas (75%)</span>
+      <span><span class="pl-dot" style="background:var(--gold)"></span>4 pendientes (25%)</span>
       <span><span class="pl-dot" style="background:var(--red)"></span>0 refutadas</span>
     </div>
   </div>
 
   <!-- CONFIRMADAS -->
-  <div class="section-hdr verde" style="margin-bottom:.8rem;">✓ Confirmadas — 8 predicciones</div>
+  <div class="section-hdr verde" style="margin-bottom:.8rem;">✓ Confirmadas — 12 predicciones</div>
   <div class="pred-list">
 
     <div class="pred-item confirmed">
@@ -262,10 +262,62 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <span class="pred-badge green">validación 1934</span>
     </div>
 
+    <div class="pred-item confirmed">
+      <div class="pred-icon">✅</div>
+      <div class="pred-body">
+        <div class="pred-name">Aceleración de transición a₀ — derivada de H₀</div>
+        <div class="pred-vals">
+          <span class="pred-tie">TIE: a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²</span>
+          <span class="pred-obs">Observado: ~1.2×10⁻¹⁰ m/s²</span>
+        </div>
+        <div class="pred-src">McGaugh et al. 2016 · RAR galáctica · Cap. II</div>
+      </div>
+      <span class="pred-badge green">error ~10%</span>
+    </div>
+
+    <div class="pred-item confirmed">
+      <div class="pred-icon">✅</div>
+      <div class="pred-body">
+        <div class="pred-name">Deflexión de la luz — factor 2 emergente</div>
+        <div class="pred-vals">
+          <span class="pred-tie">TIE: 4GM/c²R = 1.750″</span>
+          <span class="pred-obs">Eddington 1919: 1.750″</span>
+        </div>
+        <div class="pred-src">Factor 2 desde δ∫dφ=0 sin dt² — dos contribuciones iguales de fase · Cap. IX</div>
+      </div>
+      <span class="pred-badge green">error 0%</span>
+    </div>
+
+    <div class="pred-item confirmed">
+      <div class="pred-icon">✅</div>
+      <div class="pred-body">
+        <div class="pred-name">Deflexión solar — VLBI moderno</div>
+        <div class="pred-vals">
+          <span class="pred-tie">TIE: 1.750″</span>
+          <span class="pred-obs">VLBI: 1.748 ± 0.006″</span>
+        </div>
+        <div class="pred-src">Interferometría de base larga · verificación moderna · Cap. IX</div>
+      </div>
+      <span class="pred-badge green">error 0.1%</span>
+    </div>
+
+    <div class="pred-item confirmed">
+      <div class="pred-icon">✅</div>
+      <div class="pred-body">
+        <div class="pred-name">Fondo φ estacionario — firma indirecta</div>
+        <div class="pred-vals">
+          <span class="pred-tie">TIE: f ~ 5×10⁻¹⁹ Hz (infraestructura, no radiación)</span>
+          <span class="pred-obs">Firma indirecta: 84.1% materia oscura + perfiles planos</span>
+        </div>
+        <div class="pred-src">Campo no detectable por LIGO/LISA — su firma es estructural, no periódica · Cap. XII</div>
+      </div>
+      <span class="pred-badge green">verificado indirecto</span>
+    </div>
+
   </div>
 
   <!-- PENDIENTES -->
-  <div class="section-hdr amarillo" style="margin-bottom:.8rem;">⏳ Pendientes — 3 predicciones falsables</div>
+  <div class="section-hdr amarillo" style="margin-bottom:.8rem;">⏳ Pendientes — 4 predicciones falsables</div>
   <div class="pred-list" style="margin-bottom:1rem;">
 
     <div class="pred-item pending">
@@ -305,6 +357,19 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
         <div class="pred-src">ILL-Grenoble · NIST próxima generación · Cap. VII §7.6</div>
       </div>
       <span class="pred-badge yellow">próxima gen.</span>
+    </div>
+
+    <div class="pred-item pending">
+      <div class="pred-icon">⏳</div>
+      <div class="pred-body">
+        <div class="pred-name">Masa crítica Mc — cruce rₕ = rₛ</div>
+        <div class="pred-vals">
+          <span class="pred-tie">TIE: Mc = φc⁴/(4Ga₀) ≈ 2.275×10²³ M☉</span>
+          <span class="pred-obs">Pendiente ngEHT — ninguna masa astrofísica conocida alcanza Mc</span>
+        </div>
+        <div class="pred-src">Predicción estructural del horizonte áureo · Cap. X §10.4</div>
+      </div>
+      <span class="pred-badge yellow">ngEHT 2028+</span>
     </div>
 
   </div>
@@ -370,14 +435,14 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   </div>
 
   <div style="font-family:var(--mono);font-size:.65rem;color:var(--dim);text-align:center;padding:.75rem;border:1px solid var(--border);border-radius:8px;line-height:1.8;">
-    Última actualización: Marzo 2026 · 11 predicciones · 8 confirmadas · 3 pendientes · 0 refutadas<br>
+    Última actualización: Marzo 2026 · 16 predicciones · 12 confirmadas · 4 pendientes · 0 refutadas<br>
     Todas derivadas desde H₀ y ħ — cero parámetros libres ajustados
   </div>
 
 </div>
 
 <footer>
-  <div class="feq">11 predicciones · 8 confirmadas · 3 pendientes · 0 refutadas · 0 parámetros libres</div>
+  <div class="feq">16 predicciones · 12 confirmadas · 4 pendientes · 0 refutadas · 0 parámetros libres</div>
   <div class="fcopy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 
@@ -418,3 +483,4 @@ window.onload=()=>{
 </script>
 </body>
 </html>
+

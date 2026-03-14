@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIE · Gravitational Lens · Light Deflection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold:   #FFD700; --blue:   #5BC8F5; --green:  #44FF88;
+            --red:    #FF4455; --purple: #a855f7;
+            --bg:     #000001; --bg2:    rgba(5,5,15,0.95);
+            --text:   #ffffff; --dim:    #a0a0b0;
+            --border: rgba(91,200,245,0.15);
+            --mono:   'Space Mono', monospace; --sans:   'Syne', sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:var(--bg); color:var(--text); font-family:var(--sans); height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+
+        nav { background:rgba(0,0,1,0.95); border-bottom:1px solid var(--border); padding:0.85rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+        .nav-logo { font-family:var(--mono); color:var(--gold); text-decoration:none; font-weight:700; font-size:0.85rem; letter-spacing:2px; }
+        .nav-right { display:flex; align-items:center; gap:1.5rem; }
+        .nav-lang  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; letter-spacing:1px; }
+        .nav-lang.active { color:var(--text); }
+        .nav-back  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; letter-spacing:1px; border:1px solid rgba(160,160,176,0.3); padding:0.35rem 0.75rem; transition:0.2s; }
+        .nav-back:hover { color:var(--blue); border-color:var(--blue); }
+
+        .page-header { padding:1.2rem 2rem 1rem; border-bottom:1px solid var(--border); flex-shrink:0; }
+        .page-label  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.3rem; }
+        .page-header h1 { font-family:var(--sans); font-size:1.6rem; font-weight:900; letter-spacing:1px; margin-bottom:0.25rem; }
+        .page-desc { font-size:0.85rem; color:var(--dim); max-width:700px; }
+        .page-eq   { font-family:var(--mono); font-size:0.8rem; color:var(--gold); margin-top:0.4rem; }
+
+        .stats-bar { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
+        .stat { padding:0.6rem 1.5rem; border-right:1px solid var(--border); text-align:center; }
+        .stat-number { font-family:var(--mono); font-size:1.1rem; font-weight:700; color:var(--gold); }
+        .stat-label  { font-family:var(--mono); font-size:0.6rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
+
+        .main-wrap { flex:1; display:flex; padding:1.25rem 1.5rem; gap:1.25rem; min-height:0; }
+
+        .sidebar { width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:1.25rem; overflow-y:auto; }
+        .sidebar::-webkit-scrollbar { width:3px; }
+        .sidebar::-webkit-scrollbar-thumb { background:var(--border); }
+
+        .panel { border:1px solid var(--border); background:var(--bg2); padding:1rem; }
+        .panel-title { font-family:var(--mono); font-size:0.7rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.4rem; margin-bottom:0.75rem; }
+
+        .mode-btn {
+            display: block; width:100%; text-align:left;
+            background: rgba(0,0,0,0.4); border: 1px solid var(--border);
+            color: var(--dim); padding: 0.65rem 0.9rem;
+            font-family: var(--mono); font-size: 0.75rem;
+            cursor: pointer; transition: 0.2s; margin-bottom: 6px; border-radius: 2px;
+        }
+        .mode-btn:hover { background:rgba(255,255,255,0.04); color:var(--text); }
+        .mode-btn.active-newton { border-color:var(--red);    color:var(--red);    background:rgba(255,68,85,0.06); }
+        .mode-btn.active-dm     { border-color:var(--purple); color:var(--purple); background:rgba(168,85,247,0.06); }
+        .mode-btn.active-tie    { border-color:var(--gold);   color:var(--gold);   background:rgba(255,215,0,0.06); }
+
+        .slider-wrap { display:flex; flex-direction:column; gap:6px; }
+        .slider-wrap label { font-family:var(--mono); font-size:0.72rem; color:var(--blue); display:flex; justify-content:space-between; }
+        input[type=range] { -webkit-appearance:none; width:100%; background:rgba(91,200,245,0.12); height:3px; border-radius:2px; outline:none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; background:var(--blue); border-radius:50%; cursor:pointer; }
+
+        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.75rem; color:var(--dim); padding:0.25rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+        .data-val { color:var(--text); font-weight:700; }
+        .note { font-family:var(--mono); font-size:0.7rem; color:var(--dim); line-height:1.6; }
+
+        .btn-fire {
+            width:100%; padding:0.85rem; font-family:var(--mono); font-size:0.8rem; font-weight:700;
+            letter-spacing:2px; text-transform:uppercase; cursor:pointer; border-radius:2px;
+            background: var(--blue); color:#000; border:none; transition:0.2s;
+        }
+        .btn-fire:hover { background:#fff; }
+
+        .canvas-area { flex:1; border:1px solid var(--border); background:var(--bg2); position:relative; overflow:hidden; min-width:0; }
+        canvas { width:100%; height:100%; display:block; }
+
+        .telemetry {
+            position:absolute; bottom:16px; right:16px;
+            background:rgba(0,0,0,0.85); border:1px solid var(--border);
+            padding:12px 16px; font-family:var(--mono); font-size:0.75rem; min-width:260px;
+        }
+        .tele-title { color:var(--blue); border-bottom:1px solid var(--border); padding-bottom:5px; margin-bottom:8px; font-size:0.7rem; letter-spacing:1px; }
+        .tele-row   { display:flex; justify-content:space-between; color:var(--dim); padding:2px 0; }
+        .tele-val   { color:var(--text); font-weight:700; min-width:150px; text-align:right; }
+
+        footer { border-top:1px solid var(--border); padding:0.65rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+        .footer-nav { display:flex; gap:2rem; }
+        .footer-nav a { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; transition:0.2s; }
+        .footer-nav a:hover { color:var(--blue); }
+        .footer-eq     { font-family:var(--mono); font-size:0.7rem; color:rgba(255,215,0,0.5); text-align:center; }
+        .footer-credit { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; }
+
+        @media (max-width:900px) { .main-wrap{flex-direction:column} .sidebar{width:100%} }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="nav-logo">TIE / R@LC</a>
+    <div class="nav-right">
+        <a href="lente.html" class="nav-lang">ES</a>
+        <a href="lente-en.html" class="nav-lang active">EN</a>
+        <a href="lab-en.html" class="nav-back">← LABORATORY</a>
+    </div>
+</nav>
+
+<div class="page-header">
+    <div class="page-label">H-09 · LIVE · GRAVITATIONAL OPTICS</div>
+    <h1>GRAVITATIONAL LENS</h1>
+    <p class="page-desc">Photon deflection simulator in three regimes. Compares the Newtonian prediction, the dark matter model, and the TIE logarithmic phase metric.</p>
+    <div class="page-eq">α = 4GM/c²b &nbsp;·&nbsp; a_TIE = √(a_N·(a_N + a₀)) &nbsp;·&nbsp; factor 2 = two equal TIE contributions</div>
+</div>
+
+<div class="stats-bar">
+    <div class="stat"><div class="stat-number">3</div><div class="stat-label">Models</div></div>
+    <div class="stat"><div class="stat-number">2×</div><div class="stat-label">Deflection Factor</div></div>
+    <div class="stat"><div class="stat-number">0</div><div class="stat-label">DM in TIE</div></div>
+    <div class="stat"><div class="stat-number" id="stat-angle" style="color:var(--dim)">--</div><div class="stat-label">Angle α</div></div>
+</div>
+
+<div class="main-wrap">
+    <div class="sidebar">
+
+        <div class="panel">
+            <div class="panel-title">Physics Engine</div>
+            <p class="note" style="margin-bottom:0.65rem;">Select which spatial metric governs the curvature of light.</p>
+            <button class="mode-btn" id="btn-newton" onclick="setPhysics('newton',this)">1. Classical physics — visible mass only</button>
+            <button class="mode-btn" id="btn-dm"     onclick="setPhysics('dm',this)">2. ΛCDM — with dark matter halo</button>
+            <button class="mode-btn active-tie" id="btn-tie" onclick="setPhysics('tie',this)">3. TIE — logarithmic phase potential</button>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Impact Parameter</div>
+            <div class="slider-wrap">
+                <label>Distance to center (b) <span id="val-b">150 kpc</span></label>
+                <input type="range" id="slider-b" min="50" max="350" value="150" oninput="updateB(this.value)">
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Field State</div>
+            <div class="data-row">Galactic mass <span class="data-val">10¹¹ M☉</span></div>
+            <div class="data-row">Dark matter <span class="data-val" id="val-dm">0 %</span></div>
+            <div class="data-row">Metric <span class="data-val" id="val-metric">TIE Logarithmic</span></div>
+            <div class="data-row">Active engine <span class="data-val" id="val-motor" style="color:var(--gold)">TIE</span></div>
+            <div class="data-row">Potential <span class="data-val" id="val-pot">√(a_N·(a_N+a₀))</span></div>
+        </div>
+
+        <button class="btn-fire" onclick="firePhoton()">FIRE PHOTON</button>
+    </div>
+
+    <div class="canvas-area" id="canvas-container">
+        <canvas id="lensingCanvas"></canvas>
+        <div class="telemetry">
+            <div class="tele-title">OPTICAL TELEMETRY</div>
+            <div class="tele-row">Engine <span class="tele-val" id="tele-motor">TIE Phase</span></div>
+            <div class="tele-row">Potential Φ <span class="tele-val" id="tele-pot">∝ ln(r)</span></div>
+            <div class="tele-row">Angle α <span class="tele-val" id="tele-angle">0.000°</span></div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-nav">
+        <a href="gps.html">← GPS Correction</a>
+        <a href="bala-en.html">Bullet Cluster →</a>
+    </div>
+    <div class="footer-eq">α_TIE = 4GM/c²b &nbsp;·&nbsp; emergent factor 2 &nbsp;·&nbsp; no dark matter</div>
+    <div class="footer-credit">R@LC 2026 · MÉXICO · INDEPENDENT RESEARCHER</div>
+</footer>
+
+<script>
+    const canvas = document.getElementById('lensingCanvas');
+    const ctx    = canvas.getContext('2d');
+
+    let width, height, cx, cy;
+    let physicsMode = 'tie';
+    let bParam = 150;
+    let photon = null, trail = [], animationId = null;
+
+    const G    = 1;
+    const M    = 1500;
+    const M_DM = M * (2 * Math.PI - 1);
+    const a0   = 0.8;
+    const c_sim = 8;
+
+    function resize() {
+        width  = canvas.parentElement.clientWidth;
+        height = canvas.parentElement.clientHeight;
+        canvas.width  = width;
+        canvas.height = height;
+        cx = width/2; cy = height/2;
+        drawStatic();
+    }
+    window.addEventListener('resize', resize);
+
+    function updateB(val) {
+        bParam = parseInt(val);
+        document.getElementById('val-b').textContent = `${bParam} kpc`;
+        if (!photon) drawStatic();
+    }
+
+    function setPhysics(mode, btn) {
+        physicsMode = mode;
+        document.querySelectorAll('.mode-btn').forEach(b => b.className = 'mode-btn');
+        if (mode === 'newton') {
+            btn.classList.add('active-newton');
+            document.getElementById('val-dm').textContent     = '0 %';
+            document.getElementById('val-metric').textContent = 'Newtonian 1/r';
+            document.getElementById('val-motor').textContent  = 'Classical';
+            document.getElementById('val-motor').style.color  = 'var(--red)';
+            document.getElementById('val-pot').textContent    = 'GM/r²';
+            document.getElementById('tele-motor').textContent = 'Classical Physics';
+            document.getElementById('tele-pot').textContent   = '∝ 1/r';
+        } else if (mode === 'dm') {
+            btn.classList.add('active-dm');
+            document.getElementById('val-dm').textContent     = '+528% (added)';
+            document.getElementById('val-metric').textContent = 'Isothermal halo';
+            document.getElementById('val-motor').textContent  = 'ΛCDM';
+            document.getElementById('val-motor').style.color  = 'var(--purple)';
+            document.getElementById('val-pot').textContent    = 'Halo+visible';
+            document.getElementById('tele-motor').textContent = 'Standard ΛCDM';
+            document.getElementById('tele-pot').textContent   = 'Hidden halo';
+        } else {
+            btn.classList.add('active-tie');
+            document.getElementById('val-dm').textContent     = '0 %';
+            document.getElementById('val-metric').textContent = 'TIE Logarithmic';
+            document.getElementById('val-motor').textContent  = 'TIE';
+            document.getElementById('val-motor').style.color  = 'var(--gold)';
+            document.getElementById('val-pot').textContent    = '√(a_N·(a_N+a₀))';
+            document.getElementById('tele-motor').textContent = 'TIE Phase';
+            document.getElementById('tele-pot').textContent   = '∝ ln(r)';
+        }
+        if (!photon) drawStatic();
+    }
+
+    function calculateAcceleration(r) {
+        const aN = (G * M) / (r * r);
+        if (physicsMode === 'newton') return aN;
+        if (physicsMode === 'dm') {
+            const aDM = (G * M_DM) / (r*r + 10000);
+            return aN + aDM;
+        }
+        return Math.sqrt(aN * (aN + a0));
+    }
+
+    function firePhoton() {
+        if (animationId) cancelAnimationFrame(animationId);
+        photon = { x:0, y: cy - bParam, vx: c_sim, vy: 0 };
+        trail  = [];
+        document.getElementById('tele-angle').textContent = 'Calculating...';
+        document.getElementById('stat-angle').textContent = '...';
+        animate();
+    }
+
+    function animate() {
+        const dx = cx - photon.x;
+        const dy = cy - photon.y;
+        const r  = Math.sqrt(dx*dx + dy*dy);
+
+        if (r > 10) {
+            const a_total  = calculateAcceleration(r);
+            const a_photon = a_total * 2.0;
+            photon.vx += (dx/r) * a_photon;
+            photon.vy += (dy/r) * a_photon;
+            const vMag = Math.sqrt(photon.vx*photon.vx + photon.vy*photon.vy);
+            photon.vx = (photon.vx/vMag) * c_sim;
+            photon.vy = (photon.vy/vMag) * c_sim;
+        }
+
+        trail.push({ x: photon.x, y: photon.y });
+        photon.x += photon.vx;
+        photon.y += photon.vy;
+
+        drawStatic();
+
+        ctx.beginPath();
+        ctx.moveTo(trail[0].x, trail[0].y);
+        for (let i = 1; i < trail.length; i++) ctx.lineTo(trail[i].x, trail[i].y);
+        ctx.strokeStyle = physicsMode==='newton' ? 'var(--red)' : physicsMode==='dm' ? 'var(--purple)' : 'var(--gold)';
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = ctx.strokeStyle; ctx.shadowBlur = 12;
+        ctx.stroke(); ctx.shadowBlur = 0;
+
+        ctx.beginPath();
+        ctx.arc(photon.x, photon.y, 3.5, 0, Math.PI*2);
+        ctx.fillStyle = '#fff'; ctx.fill();
+
+        const angleDeg = Math.atan2(photon.vy, photon.vx) * 180 / Math.PI;
+        const fmt = Math.abs(angleDeg).toFixed(3).padStart(7,'0');
+        document.getElementById('tele-angle').textContent = `${fmt}°`;
+        document.getElementById('stat-angle').textContent = `${fmt}°`;
+        document.getElementById('stat-angle').style.color = 'var(--gold)';
+
+        if (photon.x < width && photon.y < height && photon.y > 0) {
+            animationId = requestAnimationFrame(animate);
+        }
+    }
+
+    function drawStatic() {
+        ctx.clearRect(0, 0, width, height);
+        ctx.beginPath();
+        for (let i = 50; i < Math.min(width, height); i += 60) ctx.arc(cx, cy, i, 0, Math.PI*2);
+        ctx.strokeStyle = 'rgba(91,200,245,0.04)';
+        ctx.lineWidth = 1; ctx.stroke();
+        if (physicsMode === 'dm') {
+            const g = ctx.createRadialGradient(cx,cy,10,cx,cy,280);
+            g.addColorStop(0,'rgba(168,85,247,0.35)');
+            g.addColorStop(1,'transparent');
+            ctx.fillStyle = g;
+            ctx.beginPath(); ctx.arc(cx,cy,280,0,Math.PI*2); ctx.fill();
+        }
+        const cg = ctx.createRadialGradient(cx,cy,2,cx,cy,22);
+        cg.addColorStop(0,'#ffffff'); cg.addColorStop(0.3,'#FFD700'); cg.addColorStop(1,'transparent');
+        ctx.fillStyle = cg;
+        ctx.beginPath(); ctx.arc(cx,cy,28,0,Math.PI*2); ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(0, cy-bParam); ctx.lineTo(width, cy-bParam);
+        ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+        ctx.setLineDash([4,4]); ctx.stroke(); ctx.setLineDash([]);
+    }
+
+    resize();
+    setPhysics('tie', document.getElementById('btn-tie'));
+</script>
+</body>
+</html>

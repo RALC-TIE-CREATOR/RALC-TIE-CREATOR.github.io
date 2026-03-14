@@ -149,7 +149,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <span>74.0 · SH0ES Cefeidas</span>
     </div>
     <div style="margin-top:.75rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);line-height:1.8;" id="h0-note">
-      H₀=70 → a₀=1.082×10⁻¹⁰ m/s² · Λ=1.145×10⁻⁵² m⁻² · error vs Planck: <span id="note-err" style="color:var(--green)">3.5%</span>
+      H₀=70 → a₀=1.082×10⁻¹⁰ m/s² · Λ=1.145×10⁻⁵² m⁻² · error vs Planck: <span id="note-err" style="color:var(--green)">5.0%</span>
     </div>
   </div>
 
@@ -178,7 +178,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 
       <div class="comp-card obs-card">
         <div class="comp-source b">Planck 2018</div>
-        <div class="comp-value b">1.106×10⁻⁵²</div>
+        <div class="comp-value b">1.0904×10⁻⁵²</div>
         <div class="val-unit" style="margin-bottom:.6rem;">m⁻²</div>
         <div class="comp-badge green">REFERENCIA</div>
         <div class="comp-note">Medición CMB<br>más precisa disponible.<br>Valor observado.</div>
@@ -188,7 +188,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
         <div class="comp-source g">TIE</div>
         <div class="comp-value g" id="lambda-comp">1.145×10⁻⁵²</div>
         <div class="val-unit" style="margin-bottom:.6rem;">m⁻²</div>
-        <div class="comp-badge green" id="tie-badge">ERROR: 3.5%</div>
+        <div class="comp-badge green" id="tie-badge">ERROR: 5.0%</div>
         <div class="comp-note">Derivada de H₀=70.<br>Sin ajuste.<br>Cero parámetros libres.</div>
       </div>
 
@@ -207,7 +207,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   <div class="error-meter">
     <div class="em-header">
       <span class="em-label">Error TIE vs Planck (Λ) — con signo</span>
-      <span class="em-val" id="err-val" style="color:var(--green)">+3.5%</span>
+      <span class="em-val" id="err-val" style="color:var(--green)">+5.0%</span>
     </div>
     <!-- Barra centrada — izquierda=subestima, derecha=sobreestima -->
     <div style="position:relative;height:10px;background:rgba(255,255,255,.05);border-radius:5px;margin:.5rem 0;overflow:hidden;">
@@ -237,7 +237,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="ci"><span class="cl">c = </span><span class="cv">2.998×10⁸ m/s</span></div>
     <div class="ci"><span class="cl">H₀(Planck) = </span><span class="cv">67.4 km/s/Mpc</span></div>
     <div class="ci"><span class="cl">H₀(SH0ES) = </span><span class="cv">73.0 km/s/Mpc</span></div>
-    <div class="ci"><span class="cl">Λ(Planck) = </span><span class="cv">1.106×10⁻⁵² m⁻²</span></div>
+    <div class="ci"><span class="cl">Λ(Planck) = </span><span class="cv">1.0904×10⁻⁵² m⁻²</span></div>
   </div>
 
   <div class="nav-links">
@@ -286,7 +286,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 <script>
 const c = 2.998e8;
 const Mpc = 3.0857e22;
-const LAMBDA_PLANCK = 1.106e-52;
+const LAMBDA_PLANCK = 1.0904e-52;
 
 function fmtExp(n) {
   // Render e.g. 1.082×10⁻¹⁰

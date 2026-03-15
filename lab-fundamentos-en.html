@@ -15,28 +15,36 @@
 body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
 #galaxy-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.35;}
 nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
+
+.nav-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
 .nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
+
 /* ESTILO PARA EL BOTÓN ORCID */
-         .orcid-link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            color: #A6CE39;
-            text-decoration: none;
-            border: 1px solid rgba(166, 206, 57, 0.3);
-            padding: 4px 12px;
-            border-radius: 2px;
-            transition: 0.3s;
-            letter-spacing: 1px;
-        }
-        .orcid-link:hover {
-            background: rgba(166, 206, 57, 0.1);
-            box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);
-            color: #fff;
-        }
-  
+.orcid-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: #A6CE39;
+    text-decoration: none;
+    border: 1px solid rgba(166, 206, 57, 0.3);
+    padding: 4px 12px;
+    border-radius: 2px;
+    transition: 0.3s;
+    letter-spacing: 1px;
+}
+.orcid-link:hover {
+    background: rgba(166, 206, 57, 0.1);
+    box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);
+    color: #fff;
+}
+
 .nav-center{display:flex;gap:.5rem;}
 .lang-link{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;transition:all .2s;}
 .lang-link.active{color:#000;background:var(--gold);}
@@ -50,21 +58,41 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .page-title span{color:var(--purple);}
 .page-sub{font-family:var(--mono);font-size:.8rem;color:var(--dim);max-width:640px;line-height:1.6;margin-bottom:.75rem;}
 .page-eq{font-family:var(--mono);font-size:.78rem;color:var(--gold);margin-bottom:2.5rem;}
+
+/* ACCENT BAR */
+.accent-bar{height:3px;background:linear-gradient(90deg,var(--purple),transparent);margin-bottom:2.5rem;border-radius:2px;}
+
+/* STATS */
 .stats-bar{display:flex;gap:2rem;flex-wrap:wrap;background:var(--bg2);border:1px solid rgba(187,136,255,0.2);border-radius:16px;padding:1rem 1.5rem;backdrop-filter:blur(8px);margin-bottom:2.5rem;}
 .stat{text-align:center;}
 .stat-n{font-family:var(--mono);font-size:1.5rem;font-weight:700;line-height:1;}
 .stat-l{font-family:var(--mono);font-size:.58rem;color:var(--dim);letter-spacing:1px;margin-top:.15rem;}
+
+/* SECTION */
 .section-label{font-family:var(--mono);font-size:.65rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:.75rem;}
 .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* TOOLS GRID */
 .tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem;margin-bottom:2.5rem;}
+
+/* TOOL CARD */
 .tool-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-decoration:none;color:inherit;transition:all .25s;display:flex;flex-direction:column;gap:.75rem;backdrop-filter:blur(8px);position:relative;overflow:hidden;}
 .tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .25s;}
 .tool-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.4);}
 .tool-card:hover::before{opacity:1;}
-.tc-purple{--cc:var(--purple);}.tc-purple:hover{border-color:rgba(187,136,255,.35);}.tc-purple::before{background:var(--purple);}
-.tc-gold{--cc:var(--gold);}.tc-gold:hover{border-color:rgba(255,215,0,.35);}.tc-gold::before{background:var(--gold);}
-.tc-blue{--cc:var(--blue);}.tc-blue:hover{border-color:rgba(91,200,245,.35);}.tc-blue::before{background:var(--blue);}
-.tc-green{--cc:var(--green);}.tc-green:hover{border-color:rgba(68,255,136,.3);}.tc-green::before{background:var(--green);}
+.tc-purple{--cc:var(--purple);}
+.tc-purple:hover{border-color:rgba(187,136,255,.35);}
+.tc-purple::before{background:var(--purple);}
+.tc-gold{--cc:var(--gold);}
+.tc-gold:hover{border-color:rgba(255,215,0,.35);}
+.tc-gold::before{background:var(--gold);}
+.tc-blue{--cc:var(--blue);}
+.tc-blue:hover{border-color:rgba(91,200,245,.35);}
+.tc-blue::before{background:var(--blue);}
+.tc-green{--cc:var(--green);}
+.tc-green:hover{border-color:rgba(68,255,136,.3);}
+.tc-green::before{background:var(--green);}
+
 .tc-header{display:flex;justify-content:space-between;align-items:flex-start;}
 .tc-id{font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cc,var(--purple));}
 .tc-badge{font-family:var(--mono);font-size:.5rem;padding:.15rem .45rem;border-radius:100px;letter-spacing:1px;}
@@ -78,10 +106,13 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .tc-tag{font-family:var(--mono);font-size:.55rem;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;padding:.1rem .4rem;}
 .tc-link{font-family:var(--mono);font-size:.65rem;color:var(--cc,var(--purple));transition:transform .2s;white-space:nowrap;}
 .tool-card:hover .tc-link{transform:translateX(4px);}
+
+/* LAB NAV */
 .lab-nav{display:flex;justify-content:space-between;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.85rem 1.5rem;margin-top:1rem;}
 .lab-nav a{font-family:var(--mono);font-size:.7rem;color:var(--dim);text-decoration:none;transition:color .2s;}
 .lab-nav a:hover{color:var(--gold);}
 .lab-nav-center{font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:2px;}
+
 footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);margin-top:2rem;}
 footer .feq{font-family:var(--mono);font-size:.8rem;color:var(--gold);margin-bottom:.5rem;}
 footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;}
@@ -90,33 +121,34 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 <body>
 <canvas id="galaxy-canvas"></canvas>
 <nav>
-  <div style="display:flex; align-items:center; gap:20px;">
-    <a href="index.html" class="nav-logo">TIE / R@LC</a>
-    
-    <!-- INYECCIÓN DEL PASAPORTE ORCID -->
-    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
-      <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
-         <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
-      </svg>
-      0009-0008-4935-9010
-    </a>
+  <div class="nav-logo-container">
+      <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
+      
+      <!-- ORCID PASSPORT INJECTION -->
+      <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verify Author Identity on ORCID">
+        <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
+           <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
+        </svg>
+        0009-0008-4935-9010
+      </a>
   </div>
+
   <div class="nav-center">
     <a href="lab-fundamentos.html" class="lang-link inactive">ES</a>
     <a href="lab-fundamentos-en.html" class="lang-link active">EN</a>
   </div>
-  <a href="lab-en.html" class="nav-back">← LABORATORY</a>
+  <a href="labs.html" class="nav-back">← LABORATORY</a>
 </nav>
 
 <div class="page">
-  <div class="page-tag">⚛ Laboratory 01 · 5 tools · 2 new</div>
-  <h1 class="page-title">FOUN<span>DATIONS</span></h1>
-  <p class="page-sub">The ontological core of the TIE Treatise. The dimensional hierarchy T⁰→T¹→T², the R factor (RALC Constant), the derived acceleration a₀, and the Scalpel that eliminates spurious T² from standard physics.</p>
+  <div class="page-tag">⚛ Laboratory 01 · 6 tools · 3 new</div>
+  <h1 class="page-title">FOUNDA<span>TIONS</span></h1>
+  <p class="page-sub">The ontological core of the TIE Treatise. The dimensional hierarchy T⁰→T¹→T², the R factor (RALC's Constant), the derived a₀ acceleration, and the Scalpel that eliminates spurious T² from standard physics.</p>
   <div class="page-eq">\( \nabla\phi_0 = mv_0/\hbar \quad(\text{T}^0) \;\to\; v_0 = c/R \quad(\text{T}^1) \;\to\; a_0 = v_0 H_0 \quad(\text{T}^2) \)</div>
 
   <div class="stats-bar">
-    <div class="stat"><div class="stat-n" style="color:var(--purple)">5</div><div class="stat-l">TOOLS</div></div>
-    <div class="stat"><div class="stat-n" style="color:var(--gold)">2</div><div class="stat-l">NEW ★</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--purple)">6</div><div class="stat-l">TOOLS</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--gold)">3</div><div class="stat-l">NEW ★</div></div>
     <div class="stat"><div class="stat-n" style="color:var(--green)">0</div><div class="stat-l">FREE PARAMETERS</div></div>
     <div class="stat"><div class="stat-n" style="color:var(--blue)">84.1%</div><div class="stat-l">DARK MATTER = 1−1/R</div></div>
   </div>
@@ -124,31 +156,45 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   <div class="section-label" style="color:var(--purple)">★ New tools</div>
   <div class="tools-grid">
 
-    <a href="jerarquia-en.html" class="tool-card tc-purple">
+    <a href="jerarquia.html" class="tool-card tc-purple">
       <div class="tc-header">
         <span class="tc-id">H-17</span>
         <span class="tc-badge new">★ NEW</span>
       </div>
       <div class="tc-name">Cosmic Hierarchy T⁰/T¹/T²</div>
       <div class="tc-eq">\( \nabla\phi_0 \to v_0 = c/R \to a_0 = v_0 H_0 \)</div>
-      <div class="tc-desc">Gravitational acceleration is not a cause: it is a shadow. Move the H₀ slider (67–74 km/s/Mpc) and observe what changes (T²) and what remains invariant (T¹ = c/R). The causal mode inverts the orthodox pyramid. shows why dark matter is needed.</div>
+      <div class="tc-desc">Gravitational acceleration is not a cause: it is a shadow. Move the H₀ slider (67–74 km/s/Mpc) and observe what changes (T²) and what remains invariant (T¹ = c/R). The causal mode inverts the orthodox pyramid and shows why dark matter is needed.</div>
       <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">H₀ slider</span><span class="tc-tag">T¹ invariant</span><span class="tc-tag">Causal mode</span><span class="tc-tag">4 masses</span></div>
-        <span class="tc-link">→ RUN</span>
+        <div class="tc-tags"><span class="tc-tag">H₀ Slider</span><span class="tc-tag">T¹ Invariant</span><span class="tc-tag">Causal Mode</span><span class="tc-tag">4 masses</span></div>
+        <span class="tc-link">→ EXECUTE</span>
       </div>
     </a>
 
-    <a href="onto-en.html" class="tool-card tc-gold">
+    <a href="onto.html" class="tool-card tc-gold">
       <div class="tc-header">
         <span class="tc-id">H-04</span>
         <span class="tc-badge new">★ NEW</span>
       </div>
       <div class="tc-name">TIE Scalpel v2.0</div>
-      <div class="tc-eq">\( \delta\!\int\!d\phi = 0 \;\cdot\; \text{T}^2_\text{espurio} \to \times R \;\cdot\; \text{NATIVE} \)</div>
-      <div class="tc-desc">The Ontological Translator. 10 equations from standard physics under the Dual Diagnosis: three tests classify each T² as spurious or kinematic. 4-step pipeline with the purified TIE equation at the end. Fermi's Golden Rule validates as native.</div>
+      <div class="tc-eq">\( \delta\!\int\!d\phi = 0 \;\cdot\; \text{T}^2_\text{spurious} \to \times R \;\cdot\; \text{NATIVE} \)</div>
+      <div class="tc-desc">The Ontological Translator. 10 standard physics equations under Dual Diagnosis: three tests classify each T² as spurious or kinematic. 4-step pipeline with the purified TIE equation at the end. Fermi's Rule is validated as native.</div>
       <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">10 equations</span><span class="tc-tag">Dual Diagnosis</span><span class="tc-tag">4-step pipeline</span><span class="tc-tag">Fermi native</span></div>
-        <span class="tc-link">→ RUN</span>
+        <div class="tc-tags"><span class="tc-tag">10 Equations</span><span class="tc-tag">Dual Diagnosis</span><span class="tc-tag">4-step Pipeline</span><span class="tc-tag">Native Fermi</span></div>
+        <span class="tc-link">→ EXECUTE</span>
+      </div>
+    </a>
+
+    <a href="trinidad.html" class="tool-card tc-gold">
+      <div class="tc-header">
+        <span class="tc-id">H-18</span>
+        <span class="tc-badge new">★ NEW</span>
+      </div>
+      <div class="tc-name">Energetic Trinity</div>
+      <div class="tc-eq">\( E_{\text{total}} = E + U + K \;\cdot\; E = m_{\text{obs}}c^2 \)</div>
+      <div class="tc-desc">The Absolute Motor redistributes energy among three ontological states: existence, tension, and kinetic. Four scenarios (e⁺e⁻ annihilation, free fall, atomic emission, escape velocity). The total sum never varies — exact conservation in real time.</div>
+      <div class="tc-footer">
+        <div class="tc-tags"><span class="tc-tag">4 Scenarios</span><span class="tc-tag">Absolute Motor</span><span class="tc-tag">Conservation</span><span class="tc-tag">Ch. 3</span></div>
+        <span class="tc-link">→ EXECUTE</span>
       </div>
     </a>
 
@@ -157,54 +203,54 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   <div class="section-label" style="color:var(--dim)">Existing tools</div>
   <div class="tools-grid">
 
-    <a href="2pi-en.html" class="tool-card tc-purple">
+    <a href="2pi.html" class="tool-card tc-purple">
       <div class="tc-header">
         <span class="tc-id">H-03</span>
         <span class="tc-badge live">LIVE</span>
       </div>
       <div class="tc-name">R Calculator</div>
       <div class="tc-eq">\( m_\text{TIE} = R \cdot m_\text{obs} \)</div>
-      <div class="tc-desc">The R factor connects the observed mass with the real infrastructure mass. Select from 55 SPARC galaxies, filter by morphological type and adjust H₀ with a slider. Graph v_flat vs mass with interactive Plotly.</div>
+      <div class="tc-desc">The R factor connects the observed mass with the real mass of the infrastructure. Select from 55 SPARC galaxies, filter by morphological type, and adjust H₀ with the slider. v_flat vs mass chart with interactive Plotly.</div>
       <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">55 galaxies</span><span class="tc-tag">H₀ slider</span><span class="tc-tag">Plotly</span></div>
-        <span class="tc-link">→ RUN</span>
+        <div class="tc-tags"><span class="tc-tag">55 Galaxies</span><span class="tc-tag">H₀ Slider</span><span class="tc-tag">Plotly</span></div>
+        <span class="tc-link">→ EXECUTE</span>
       </div>
     </a>
 
-    <a href="dark-matter-en.html" class="tool-card tc-blue">
+    <a href="materia-oscura.html" class="tool-card tc-blue">
       <div class="tc-header">
         <span class="tc-id">H-05</span>
         <span class="tc-badge live">LIVE</span>
       </div>
       <div class="tc-name">Dark Matter</div>
       <div class="tc-eq">\( 1 - 1/R = 84.1\% \)</div>
-      <div class="tc-desc">Converter from observable mass to real TIE mass. Dark matter is not a particle — it is the unaccounted fraction of infrastructure. Animated bar 15.9% / 84.1% with 4 mass units. Zero parameters, universal.</div>
+      <div class="tc-desc">Observable to real TIE mass converter. Dark matter is not a particle — it is the unaccounted fraction of the infrastructure. Animated bar 15.9% / 84.1% with 4 mass units. Zero parameters, universal.</div>
       <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">0 parameters</span><span class="tc-tag">Universal</span><span class="tc-tag">Animation</span></div>
-        <span class="tc-link">→ RUN</span>
+        <div class="tc-tags"><span class="tc-tag">0 Parameters</span><span class="tc-tag">Universal</span><span class="tc-tag">Animation</span></div>
+        <span class="tc-link">→ EXECUTE</span>
       </div>
     </a>
 
-    <a href="constant-en.html" class="tool-card tc-green">
+    <a href="constante.html" class="tool-card tc-green">
       <div class="tc-header">
         <span class="tc-id">H-08</span>
         <span class="tc-badge live">LIVE</span>
       </div>
       <div class="tc-name">a₀ and Λ — TIE Constants</div>
       <div class="tc-eq">\( a_0 = cH_0/R \;\cdot\; \Lambda = 2H_0^2/c^2 \)</div>
-      <div class="tc-desc">H₀ slider from 67 to 74 km/s/Mpc. Computes a₀, Λ and transition radius in real time. 5.0% error vs Planck 2018 — against the 10¹²⁰ orders of QFT. Dual-axis chart Planck vs SH0ES.</div>
+      <div class="tc-desc">H₀ slider from 67 to 74 km/s/Mpc. Calculates a₀, Λ, and transition radius in real time. 5.0% error vs Planck 2018 — compared to the 10¹²⁰ orders of QFT. Dual-axis chart Planck vs SH0ES.</div>
       <div class="tc-footer">
-        <div class="tc-tags"><span class="tc-tag">Planck vs SH0ES</span><span class="tc-tag">Λ without Λ</span><span class="tc-tag">Dual axis</span></div>
-        <span class="tc-link">→ RUN</span>
+        <div class="tc-tags"><span class="tc-tag">Planck vs SH0ES</span><span class="tc-tag">Λ without Λ</span><span class="tc-tag">Dual Axis</span></div>
+        <span class="tc-link">→ EXECUTE</span>
       </div>
     </a>
 
   </div>
 
   <div class="lab-nav">
-    <a href="lab-en.html">← Laboratory hub</a>
+    <a href="labs.html">← Labs Hub</a>
     <span class="lab-nav-center">LAB 01 · FOUNDATIONS</span>
-    <a href="lab-galaxias-en.html">Lab 02 — Galaxies →</a>
+    <a href="lab-galaxias.html">Lab 02 — Galaxies →</a>
   </div>
 </div>
 

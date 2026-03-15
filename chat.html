@@ -333,12 +333,12 @@ async function send() {
   document.getElementById('btn-send').disabled = true;
   busy = true;
 
-  // Add user bubble
+  // Agrega burbuja del usuario
   addBubble('user', text);
   history.push({role:'user', text});
   localStorage.setItem('axon_chat_history_full', JSON.stringify(history));
 
-  // Add loading bubble
+  // Agrega burbuja de carga de AXON
   const botDiv = addBubble('bot', null, true);
   const bubbleEl = botDiv.querySelector('.bubble');
 
@@ -349,10 +349,10 @@ async function send() {
     const t = T[lang];
     const systemText = t.sysPre + BOOK + t.sysPost;
 
-    // Build Gemini contents array (history)
+    // Construye el historial para Gemini
     let startIndex = Math.max(0, history.length - 21);
     if (startIndex > 0 && history[startIndex]?.role !== 'user') {
-      startIndex++; // push to the next 'user' message
+      startIndex++;
     }
     const recentHistory = history.slice(startIndex, -1);
     
@@ -382,7 +382,7 @@ async function send() {
     const reply = data?.reply;
     if (!reply) throw new Error('Respuesta vacía de Vercel');
 
-    // Render reply
+    // Renderiza la respuesta
     bubbleEl.innerHTML = renderMd(reply);
     renderKatex(bubbleEl);
     history.push({role:'model', text: reply});
@@ -410,5 +410,5 @@ async function send() {
 // RENDER
 // ═══════════════════════════════════════════
 function renderMd(text) {
-  // Code blocks first
+  // Bloques de código
   text = text.replace(/

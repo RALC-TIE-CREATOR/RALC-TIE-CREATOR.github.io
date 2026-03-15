@@ -1,11 +1,25 @@
 {
-  "rewrites": [
+  "redirects": [
     {
       "source": "/api/:path*",
-      "destination": "/api/:path*"
+      "has": [
+        {
+          "type": "host",
+          "value": "ralc-tie-creator-github-io.vercel.app"
+        }
+      ],
+      "destination": "/api/:path*",
+      "permanent": false
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!api|gateway.html).*)",
+      "destination": "https://ralc-tie-creator.github.io/",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
       "destination": "/gateway.html"
     }
   ]

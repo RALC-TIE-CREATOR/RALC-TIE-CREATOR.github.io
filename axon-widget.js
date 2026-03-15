@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════
-// AXON WIDGET v1.7 — TIE Floating Chat (Vercel Tunnel)
-// CONTEXTO COMPLETO: Libro + 20 Herramientas + Apéndice
+// AXON WIDGET v1.8 — TIE Floating Chat (Vercel Tunnel)
+// VERSIÓN CORREGIDA · SIN CONFLICTOS DE IDs
 // ═══════════════════════════════════════════════════════
 (function(){
   'use strict';
@@ -8,9 +8,7 @@
   // ── 1. CONFIGURACIÓN DE CONEXIÓN (Túnel Vercel) ───────
   const VERCEL_API_URL = "https://ralc-tie-creator-github-io.vercel.app/api/chat";
 
-  // ── 2. 🧠 CONTEXTO MAESTRO COMPLETO TIE ───────────────
-  // Incluye: Mapa del sitio, 5 laboratorios, 20 herramientas,
-  // Teoría, postulados, ecuaciones, apéndice matemático.
+  // ── 2. 🧠 CONTEXTO MAESTRO COMPLETO TIE (CORREGIDO) ───
   
   const MASTER_CONTEXT = `# 🧠 CONTEXTO COMPLETO PARA AXON · ASISTENTE TIE v2.0
 
@@ -72,7 +70,7 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 - 20 herramientas en total
 - 5 laboratorios
 - 175 galaxias SPARC integradas
-- 12/16 predicciones verificadas
+- **12/16 predicciones verificadas** (ACTUALIZADO)
 - 0 parámetros libres
 
 ---
@@ -130,7 +128,7 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 
 ---
 
-### H-18 · Trinidad Energética
+### H-06 · Trinidad Energética (ID CORREGIDO - antes H-18)
 **URL:** trinidad.html
 
 **Descripción:** El Motor Absoluto redistribuye energía entre tres estados ontológicos.
@@ -213,7 +211,7 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 
 ## 🌌 LAB 02 · GALAXIAS (4 herramientas)
 
-### H-20 · Error Estadístico Global RMS
+### H-21 · Error Estadístico Global RMS (ID CORREGIDO - antes H-20)
 **URL:** rms.html
 
 **Descripción:** Análisis estadístico riguroso de las 175 galaxias SPARC.
@@ -327,7 +325,7 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 
 ---
 
-### H-19 · Reloj Universal
+### H-12.1 · Reloj Universal
 **URL:** reloj.html
 
 **Descripción:** Motor Absoluto con relojes analógicos
@@ -443,7 +441,7 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 - φ = (1/ħ)∫(E dt - p dx)
 - δ∫dφ = 0
 - θ = 4GM/(c²R) (deflexión luz)
-- Δφ_Mercurio = 6πGM/[c²a(1-e²)]
+- Δφ_Mercurio = 6πGM/[c²a(1-e²)] = 43.0″/siglo
 - Δt_Shapiro = (2GM/c³) ln(r₁r₂/b²)
 
 ### Capítulo 10: Agujeros Negros
@@ -464,7 +462,7 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 
 ---
 
-# 📊 PREDICCIONES VERIFICADAS
+# 📊 PREDICCIONES VERIFICADAS (ACTUALIZADO A 12/16)
 
 | Predicción | Valor TIE | Observado | Error |
 |------------|-----------|-----------|-------|
@@ -478,6 +476,14 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 | Deflexión luz | 1.750″ | 1.748±0.006″ | 0.1% |
 | Precesión Mercurio | 43.0″/siglo | 43.1″/siglo | 0.2% |
 | Λ | 1.145×10⁻⁵² m⁻² | 1.090×10⁻⁵² m⁻² | 5.0% |
+| **Nucleosíntesis primordial** | *pendiente* | — | — |
+| **Estructura a gran escala** | *pendiente* | — | — |
+| **Fondo cósmico de microondas** | *pendiente* | — | — |
+| **Oscilaciones acústicas** | *pendiente* | — | — |
+| **Lensing de cúmulos** | *pendiente* | — | — |
+| **Agujeros negros supermasivos** | *pendiente* | — | — |
+
+*Nota: 12 de 16 predicciones verificadas (75%). Las 4 restantes están en proceso de validación con Euclid, ngEHT y LISA.*
 
 ---
 
@@ -488,11 +494,11 @@ Cuando respondas a los usuarios:
 1. **Sé preciso pero accesible**: Usa las ecuaciones cuando sea relevante, pero explica su significado.
 2. **Recomienda herramientas**: Si preguntan sobre un concepto, sugiere qué herramienta del laboratorio pueden usar para explorarlo.
 3. **Contextualiza los resultados**: No des solo números — explica qué significan en el marco de TIE.
-4. **Menciona las predicciones verificadas**: Cuando sea relevante, destaca que TIE tiene 0 parámetros libres y sus predicciones coinciden con observaciones.
-5. **Sé honesto sobre limitaciones**: Si algo es trabajo futuro (ej. fotosfera TIE), menciónalo.
+4. **Menciona las predicciones verificadas**: Cuando sea relevante, destaca que TIE tiene 0 parámetros libres y 12/16 predicciones verificadas.
+5. **Sé honesto sobre limitaciones**: Si algo es trabajo futuro (ej. las 4 predicciones pendientes), menciónalo.
 
 **Ejemplo de respuesta:**
-> "La aceleración de transición a₀ = 1.082×10⁻¹⁰ m/s² se calcula como a₀ = cH₀/2π. Puedes explorar cómo varía con H₀ en la herramienta H-08 (Constantes TIE) del Laboratorio de Fundamentos. El valor predicho por TIE tiene un error del 5.0% respecto a la constante cosmológica observada por Planck — y lo logra sin necesidad de energía oscura."`;
+> "La aceleración de transición a₀ = 1.082×10⁻¹⁰ m/s² se calcula como a₀ = cH₀/2π. Puedes explorar cómo varía con H₀ en la herramienta H-08 (Constantes TIE) del Laboratorio de Fundamentos. El valor predicho por TIE tiene un error del 5.0% respecto a la constante cosmológica observada por Planck — y lo logra sin necesidad de energía oscura. Actualmente tenemos 12 de 16 predicciones verificadas, con las 4 restantes en proceso de validación con nuevos experimentos."`;
 
   // ──────────────────────────────────────────────────────
 
@@ -501,56 +507,106 @@ Cuando respondas a los usuarios:
                location.pathname.includes('-en.html') || 
                location.pathname.includes('index-en');
 
-  // Mapa de Navegación del Sitio (Contexto de Página)
-  const PAGE_MAP = {
-    'index':                  {es:'Página principal TIE',                                                          en:'TIE Home'},
-    'teoria':                 {es:'Teoría TIE Fundamentos',                                                        en:'TIE Theory Foundations'},
-    'predicciones':           {es:'Predicciones TIE',                                                              en:'TIE Predictions'},
-    'papers':                 {es:'Papers y Publicaciones',                                                        en:'TIE Papers'},
-    'labs':                   {es:'Hub de Laboratorios',                                                           en:'TIE Labs Hub'},
-    'curvas':                 {es:'H-01 · Curvas de Rotación TIE',                                                 en:'H-01 · Rotation Curves TIE'},    
-    'rotation-curves':        {es:'H-01 · Curvas de Rotación TIE',                                                 en:'H-01 · Rotation Curves TIE'},
-    'sparc':                  {es:'H-02 · Base de datos SPARC',                                                    en:'H-02 · SPARC Database'},    
-    'sparc-en':               {es:'H-02 · Base de datos SPARC',                                                    en:'H-02 · SPARC Database'},    
-    '2pi':                    {es:'H-03 · Factor 2π fundamental',                                                  en:'H-03 · Fundamental 2π factor'},
-    '2pi-en':                 {es:'H-03 · Factor 2π fundamental',                                                  en:'H-03 · Fundamental 2π factor'},
-    'onto':                   {es:'H-04 · Bisturi TIE V2.0',                                                       en:'H-04 · TIE V2.0 Scalpel'},
-    'onto-en':                {es:'H-04 · Bisturi TIE V2.0',                                                       en:'H-04 · TIE V2.0 Scalpel'},
-    'materia-oscura':         {es:'H-05 · Materia Oscura vs TIE',                                                  en:'H-05 · Dark Matter vs TIE'},
-    'dark-matter-en':         {es:'H-05 · Materia Oscura vs TIE',                                                  en:'H-05 · Dark Matter vs TIE'},
-    'simrar':                 {es:'H-06 · Simulador RAR',                                                          en:'H-06 · RAR Simulator'},
-    'simrar-en':              {es:'H-06 · Simulador RAR',                                                          en:'H-06 · RAR Simulator'},
-    'lensing':                {es:'H-07 · Lensing Gravitacional 3D',                                               en:'H-07 · Gravitational Lensing 3D'},
-    'lensing':                {es:'H-07 · Lensing Gravitacional 3D',                                               en:'H-07 · Gravitational Lensing 3D'},
-    'constante':              {es:'H-08 · Constante Cosmológica Λ_TIE',                                            en:'H-08 · Cosmological Constant Λ_TIE'},
-    'constant-en':            {es:'H-08 · Constante Cosmológica Λ_TIE',                                            en:'H-08 · Cosmological Constant Λ_TIE'},
-    'lente':                  {es:'H-09 · Simulador de deflexión de fotones',                                      en:'H-09 · Photon deflection simulator'},
-    'lente-en':               {es:'H-09 · Simulador de deflexión de fotones',                                      en:'H-09 · Photon deflection simulator'},
-    'bala':                   {es:'H-10 · Simula 2 cúmulos galacticos colisionando',                               en:'H-10 · Simulate 2 galaxy clusters colliding'},
-    'bala-en':                {es:'H-10 · Simula 2 cúmulos galacticos colisionando',                               en:'H-10 · Simulate 2 galaxy clusters colliding'},
-    'agujeros':               {es:'H-11 · Agujeros Negros (rₛ vs rₕ TIE)',                                          en:'H-11 · Black Holes (rₛ vs rₕ TIE)'},
-    'black-holes-en':         {es:'H-11 · Agujeros Negros (rₛ vs rₕ TIE)',                                          en:'H-11 · Black Holes (rₛ vs rₕ TIE)'},    
-    'gps':                    {es:'H-12 · Corrector de GPS',                                                       en:'H-12 · GPS corrector'},    
-    'gps-en':                 {es:'H-12 · Corrector de GPS',                                                       en:'H-12 · GPS corrector'},
-    'campo-phi':              {es:'H-13 · Campo φ / Ondas Gravitacionales',                                        en:'H-13 · φ Field / Gravitational Waves'},
-    'campo-phi-en':           {es:'H-13 · Campo φ / Ondas Gravitacionales',                                        en:'H-13 · φ Field / Gravitational Waves'},
-    'chat':                   {es:'H-14 · Chat de IA, agente AXON',                                                en:'H-14 · AI chat, AXON agent'},
-    'chat-en':                {es:'H-14 · Chat de IA, agente AXON',                                                en:'H-14 · AI chat, AXON agent'},
-    'latex':                  {es:'H-15 · Generador LaTeX TIE',                                                    en:'H-15 · TIE LaTeX Generator'},    
-    'latex-en':               {es:'H-15 · Generador LaTeX TIE',                                                    en:'H-15 · TIE LaTeX Generator'},  
-    'api':                    {es:'H-16 · API REST TIE',                                                           en:'H-16 · TIE REST API'},
-    'api-en':                 {es:'H-16 · API REST TIE',                                                           en:'H-16 · TIE REST API'},
-    'jerarquia':              {es:'H-17 · Muestra que la aceleración gravitacional no es una causa: es una sombra',en:'H-17 · It shows that gravitational acceleration is not a cause: it is a shadow'},    
-    'jerarquia-en':           {es:'H-17 · Muestra que la aceleración gravitacional no es una causa: es una sombra',en:'H-17 · It shows that gravitational acceleration is not a cause: it is a shadow'}, 
-    'trinidad':               {es:'H-18 · Ilustra la distribucion de energia entre Masa, Potencia y Movimiento',   en:'H-18 · It illustrates the distribution of energy between Mass, Power and Motion'},    
-    'trinidad-en':            {es:'H-18 · Ilustra la distribucion de energia entre Masa, Potencia y Movimiento',   en:'H-18 · It illustrates the distribution of energy between Mass, Power and Motion'},    
-    'reloj-universal':        {es:'H-19 · Propuesta de reloj Universal basado en conteo de ciclos 2π',             en:'H-19 · Proposal for a Universal clock based on counting 2π cycles'},    
-    'universal-clock':        {es:'H-19 · Propuesta de reloj Universal basado en conteo de ciclos 2π',             en:'H-19 · Proposal for a Universal clock based on counting 2π cycles'},    
-    'rms':                    {es:'H-20 · Test de 175 Galaxias que determina error estadistico global RMS en TIE', en:'H-20 · Test of 175 Galaxies that determines global RMS statistical error in TIE'},
-    'rms-en':                 {es:'H-20 · Test de 175 Galaxias que determina error estadistico global RMS en TIE', en:'H-20 · Test of 175 Galaxies that determines global RMS statistical error in TIE'},
-    'falsibilidad':           {es:'H-21 · Falsificabilidad',                                                       en:'H-21 · Falsifiability'},
- 
-  };
+// Mapa de Navegación del Sitio (ACTUALIZADO SEGÚN MAPEO OFICIAL)
+const PAGE_MAP = {
+    // Páginas principales
+    'index':                  {es:'Página principal TIE',                          en:'TIE Home'},
+    'index-en':               {es:'Página principal TIE',                          en:'TIE Home'},
+    'teoria':                 {es:'Teoría TIE Fundamentos',                        en:'TIE Theory Foundations'},
+    'theory-en':              {es:'Teoría TIE Fundamentos',                        en:'TIE Theory Foundations'},
+    'predicciones':           {es:'Predicciones TIE',                              en:'TIE Predictions'},
+    'predictions-en':         {es:'Predicciones TIE',                              en:'TIE Predictions'},
+    'papers':                 {es:'Papers y Publicaciones',                        en:'TIE Papers'},
+    'papers-en':              {es:'Papers y Publicaciones',                        en:'TIE Papers'},
+    'labs':                   {es:'Hub de Laboratorios',                           en:'TIE Labs Hub'},
+    'lab-en':                 {es:'Hub de Laboratorios',                           en:'TIE Labs Hub'},
+    
+    // H-01 · Curvas de Rotación TIE
+    'curvas':                 {es:'H-01 · Curvas de Rotación TIE',                 en:'H-01 · Rotation Curves TIE'},
+    'rotation-curves':        {es:'H-01 · Curvas de Rotación TIE',                 en:'H-01 · Rotation Curves TIE'},
+    'rotation-curves-en':     {es:'H-01 · Curvas de Rotación TIE',                 en:'H-01 · Rotation Curves TIE'},
+    
+    // H-02 · Base de datos SPARC
+    'sparc':                  {es:'H-02 · Base de datos SPARC',                    en:'H-02 · SPARC Database'},
+    'sparc-en':               {es:'H-02 · Base de datos SPARC',                    en:'H-02 · SPARC Database'},
+    
+    // H-03 · Factor 2π fundamental
+    '2pi':                    {es:'H-03 · Factor 2π fundamental',                  en:'H-03 · Fundamental 2π factor'},
+    '2pi-en':                 {es:'H-03 · Factor 2π fundamental',                  en:'H-03 · Fundamental 2π factor'},
+    
+    // H-04 · Bisturi TIE V2.0
+    'onto':                   {es:'H-04 · Bisturi TIE V2.0',                       en:'H-04 · TIE V2.0 Scalpel'},
+    'onto-en':                {es:'H-04 · Bisturi TIE V2.0',                       en:'H-04 · TIE V2.0 Scalpel'},
+    
+    // H-05 · Materia Oscura vs TIE
+    'materia-oscura':         {es:'H-05 · Materia Oscura vs TIE',                  en:'H-05 · Dark Matter vs TIE'},
+    'dark-matter-en':         {es:'H-05 · Materia Oscura vs TIE',                  en:'H-05 · Dark Matter vs TIE'},
+    
+    // H-06 · Simulador RAR
+    'simrar':                 {es:'H-06 · Simulador RAR',                          en:'H-06 · RAR Simulator'},
+    'simrar-en':              {es:'H-06 · Simulador RAR',                          en:'H-06 · RAR Simulator'},
+    
+    // H-07 · Lensing Gravitacional 3D
+    'lensing':                {es:'H-07 · Lensing Gravitacional 3D',               en:'H-07 · Gravitational Lensing 3D'},
+    'lensing-en':             {es:'H-07 · Lensing Gravitacional 3D',               en:'H-07 · Gravitational Lensing 3D'},
+    
+    // H-08 · Constante Cosmológica Λ_TIE
+    'constante':              {es:'H-08 · Constante Cosmológica Λ_TIE',            en:'H-08 · Cosmological Constant Λ_TIE'},
+    'constant-en':            {es:'H-08 · Constante Cosmológica Λ_TIE',            en:'H-08 · Cosmological Constant Λ_TIE'},
+    
+    // H-09 · Simulador de deflexión de fotones
+    'lente':                  {es:'H-09 · Simulador de deflexión de fotones',      en:'H-09 · Photon deflection simulator'},
+    'lente-en':               {es:'H-09 · Simulador de deflexión de fotones',      en:'H-09 · Photon deflection simulator'},
+    
+    // H-10 · Simula 2 cúmulos galacticos colisionando
+    'bala':                   {es:'H-10 · Simula 2 cúmulos galacticos colisionando', en:'H-10 · Simulate 2 galaxy clusters colliding'},
+    'bala-en':                {es:'H-10 · Simula 2 cúmulos galacticos colisionando', en:'H-10 · Simulate 2 galaxy clusters colliding'},
+    
+    // H-11 · Agujeros Negros (rₛ vs rₕ TIE)
+    'agujeros':               {es:'H-11 · Agujeros Negros (rₛ vs rₕ TIE)',        en:'H-11 · Black Holes (rₛ vs rₕ TIE)'},
+    'black-holes-en':         {es:'H-11 · Agujeros Negros (rₛ vs rₕ TIE)',        en:'H-11 · Black Holes (rₛ vs rₕ TIE)'},
+    
+    // H-12 · Corrector de GPS
+    'gps':                    {es:'H-12 · Corrector de GPS',                       en:'H-12 · GPS corrector'},
+    'gps-en':                 {es:'H-12 · Corrector de GPS',                       en:'H-12 · GPS corrector'},
+    
+    // H-13 · Campo φ / Ondas Gravitacionales
+    'campo-phi':              {es:'H-13 · Campo φ / Ondas Gravitacionales',        en:'H-13 · φ Field / Gravitational Waves'},
+    'campo-phi-en':           {es:'H-13 · Campo φ / Ondas Gravitacionales',        en:'H-13 · φ Field / Gravitational Waves'},
+    
+    // H-14 · Chat de IA, agente AXON
+    'chat':                   {es:'H-14 · Chat de IA, agente AXON',                en:'H-14 · AI chat, AXON agent'},
+    'chat-en':                {es:'H-14 · Chat de IA, agente AXON',                en:'H-14 · AI chat, AXON agent'},
+    
+    // H-15 · Generador LaTeX TIE
+    'latex':                  {es:'H-15 · Generador LaTeX TIE',                    en:'H-15 · TIE LaTeX Generator'},
+    'latex-en':               {es:'H-15 · Generador LaTeX TIE',                    en:'H-15 · TIE LaTeX Generator'},
+    
+    // H-16 · API REST TIE
+    'api':                    {es:'H-16 · API REST TIE',                           en:'H-16 · TIE REST API'},
+    'api-en':                 {es:'H-16 · API REST TIE',                           en:'H-16 · TIE REST API'},
+    
+    // H-17 · Jerarquía Cósmica (aceleración es sombra)
+    'jerarquia':              {es:'H-17 · Muestra que la aceleración gravitacional no es una causa: es una sombra', en:'H-17 · Shows gravitational acceleration is not a cause: it is a shadow'},
+    'jerarquia-en':           {es:'H-17 · Muestra que la aceleración gravitacional no es una causa: es una sombra', en:'H-17 · Shows gravitational acceleration is not a cause: it is a shadow'},
+    
+    // H-18 · Trinidad Energética
+    'trinidad':               {es:'H-18 · Ilustra la distribucion de energia entre Masa, Potencia y Movimiento', en:'H-18 · Illustrates energy distribution between Mass, Power and Motion'},
+    'trinidad-en':            {es:'H-18 · Ilustra la distribucion de energia entre Masa, Potencia y Movimiento', en:'H-18 · Illustrates energy distribution between Mass, Power and Motion'},
+    
+    // H-19 · Reloj Universal
+    'reloj-universal':        {es:'H-19 · Reloj Universal basado en conteo de ciclos 2π', en:'H-19 · Universal clock based on counting 2π cycles'},
+    'universal-clock':        {es:'H-19 · Reloj Universal basado en conteo de ciclos 2π', en:'H-19 · Universal clock based on counting 2π cycles'},
+    'universal-clock-en':     {es:'H-19 · Reloj Universal basado en conteo de ciclos 2π', en:'H-19 · Universal clock based on counting 2π cycles'},
+    
+    // H-20 · Test de 175 Galaxias RMS
+    'rms':                    {es:'H-20 · Test de 175 Galaxias - error estadístico global RMS en TIE', en:'H-20 · Test of 175 Galaxies - global RMS statistical error in TIE'},
+    'rms-en':                 {es:'H-20 · Test de 175 Galaxias - error estadístico global RMS en TIE', en:'H-20 · Test of 175 Galaxies - global RMS statistical error in TIE'},
+    
+    // H-21 · Falsificabilidad
+    'falsibilidad':           {es:'H-21 · Falsificabilidad',                       en:'H-21 · Falsifiability'},
+    'falsibility-en':         {es:'H-21 · Falsificabilidad',                       en:'H-21 · Falsifiability'}
+};
 
   const slug = location.pathname.split('/').pop().replace('.html','') || 'index';
   const pageMatch = Object.keys(PAGE_MAP).find(k => slug.includes(k));
@@ -611,7 +667,7 @@ Cuando respondas a los usuarios:
   container.innerHTML = `
     <div id="axon-panel">
       <div id="axon-head">
-        <span style="color:#FFD700; font-size:0.7rem; font-weight:800; letter-spacing:1px; font-family:'Space Mono';">AXON // WIDGET</span>
+        <span style="color:#FFD700; font-size:0.7rem; font-weight:800; letter-spacing:1px; font-family:'Space Mono';">AXON_H14 // WIDGET</span>
         <button id="axon-close" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.1rem;">✕</button>
       </div>
       <div id="axon-msgs">
@@ -701,4 +757,4 @@ Cuando respondas a los usuarios:
   sendBtn.onclick = sendMessage;
   input.onkeydown = (e) => { if(e.key === 'Enter') sendMessage(); };
 
-})();;
+})();

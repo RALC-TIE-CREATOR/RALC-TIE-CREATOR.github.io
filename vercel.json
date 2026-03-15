@@ -9,7 +9,15 @@
       "destination": "/gateway.html"
     },
     {
-      "source": "/((?!api|gateway.html).*)",
+      "source": "/axon-widget.js",
+      "destination": "/axon-widget.js"
+    },
+    {
+      "source": "/((?!api|gateway.html|.*\\..*).*)",
+      "destination": "/gateway.html"
+    },
+    {
+      "source": "/(.*)\\.html",
       "destination": "/gateway.html"
     }
   ]

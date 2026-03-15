@@ -13,31 +13,71 @@
 
   // ── Detect current page context ──────────────────────
   const PAGE_MAP = {
-    'constante':       {es:'H-01 · Constante Cosmológica Λ_TIE',       en:'H-01 · Cosmological Constant Λ_TIE'},
-    'constant-en':     {es:'H-01 · Constante Cosmológica Λ_TIE',       en:'H-01 · Cosmological Constant Λ_TIE'},
-    'agujeros':        {es:'H-03 · Agujeros Negros (rₛ vs rₕ TIE)',    en:'H-03 · Black Holes (rₛ vs rₕ TIE)'},
-    'black-holes-en':  {es:'H-03 · Agujeros Negros',                   en:'H-03 · Black Holes (rₛ vs rₕ TIE)'},
-    'curvas':          {es:'H-04 · Curvas de Rotación TIE',            en:'H-04 · Rotation Curves TIE'},
-    'rotation-curves': {es:'H-04 · Curvas de Rotación TIE',            en:'H-04 · Rotation Curves TIE'},
-    'sparc':           {es:'H-05 · Base de datos SPARC',               en:'H-05 · SPARC Database'},
-    'gps':             {es:'H-06 · GPS y Relojes TIE',                 en:'H-06 · GPS & Clocks TIE'},
-    'universal-clock': {es:'H-10 · Reloj Universal T₀',               en:'H-10 · Universal Clock T₀'},
-    '2pi':             {es:'H-08 · Factor 2π fundamental',             en:'H-08 · Fundamental 2π factor'},
-    'materia-oscura':  {es:'H-09 · Materia Oscura vs TIE',            en:'H-09 · Dark Matter vs TIE'},
-    'dark-matter-en':  {es:'H-09 · Materia Oscura vs TIE',            en:'H-09 · Dark Matter vs TIE'},
-    'falsabilidad':    {es:'H-11 · Falsificabilidad TIE',              en:'H-11 · TIE Falsifiability'},
-    'falsifiability':  {es:'H-11 · Falsificabilidad TIE',              en:'H-11 · TIE Falsifiability'},
-    'papers':          {es:'H-12 · Papers TIE',                        en:'H-12 · TIE Papers'},
-    'lensing':         {es:'H-07 · Lensing Gravitacional 3D',          en:'H-07 · Gravitational Lensing 3D'},
-    'campo-phi':       {es:'H-13 · Campo φ / Ondas Gravitacionales',   en:'H-13 · φ Field / Gravitational Waves'},
-    'latex':           {es:'H-15 · Generador LaTeX TIE',               en:'H-15 · TIE LaTeX Generator'},
-    'api':             {es:'H-16 · API REST TIE',                      en:'H-16 · TIE REST API'},
-    'labs':            {es:'Laboratorio TIE',                          en:'TIE Laboratory'},
-    'teoria':          {es:'Teoría TIE',                               en:'TIE Theory'},
-    'theory-en':       {es:'Teoría TIE',                               en:'TIE Theory'},
-    'predicciones':    {es:'Predicciones TIE',                         en:'TIE Predictions'},
-    'predictions-en':  {es:'Predicciones TIE',                         en:'TIE Predictions'},
-    'index':           {es:'Página principal TIE',                     en:'TIE Home'},
+  'index':                  {es:'Página principal TIE',                                                          en:'TIE Home'},
+  'index-en':               {es:'Página principal TIE',                                                          en:'TIE Home'},    
+  'teoria':                 {es:'Teoría TIE',                                                                    en:'TIE Theory'},
+  'theory-en':              {es:'Teoría TIE',                                                                    en:'TIE Theory'},    
+  'predicciones':           {es:'Predicciones TIE',                                                              en:'TIE Predictions'},
+  'predictions-en':         {es:'Predicciones TIE',                                                              en:'TIE Predictions'},    
+  'papers':                 {es:'Papers y Publicaciones TIE',                                                    en:'TIE Papers and Publications'},
+  'papers-en':              {es:'Papers y Publicaciones TIE',                                                    en:'TIE Papers and Publications'},    
+  'GitHub':                 {es:'Enlace a GitHub de TIE',                                                        en:'TIE GitHub Link'},    
+  'labs':                   {es:'Laboratorio TIE',                                                               en:'TIE Laboratory'},    
+  'lab-en':                 {es:'Laboratorio TIE',                                                               en:'TIE Laboratory'},
+  'labs':                   {es:'Laboratorio TIE',                                                               en:'TIE Laboratory'},    
+  'lab-fundamentos':        {es:'Laboratorio para conocer los fundamentos de TIE',                               en:'Laboratory to learn the fundamentals of TIE'},
+  'lab-fundamentos-en':     {es:'Laboratorio para conocer los fundamentos de TIE',                               en:'Laboratory to learn the fundamentals of TIE'},    
+  'lab-galaxias':           {es:'Laboratorio con herramientas de explotación Galactica',                         en:'Laboratory with Galactica exploitation tools'},
+  'lab-galaxias-en':        {es:'Laboratorio con herramientas de explotación Galactica',                         en:'Laboratory with Galactica exploitation tools'},
+  'labs-gravedad':          {es:'Laboratorio con el que puedes experimentar con la gravedad TIE',                en:'Laboratory where you can experiment with TIE gravity'},    
+  'labs-gravedad-en':       {es:'Laboratorio con el que puedes experimentar con la gravedad TIE',                en:'Laboratory where you can experiment with TIE gravity'},    
+  'labs-cosmologia':        {es:'Laboratorio donde podrás simular y observar eventos cosmologicos con TIE',      en:'Laboratory where you can simulate and observe cosmological events with TIE'},    
+  'labs-cosmologia':        {es:'Laboratorio donde podrás simular y observar eventos cosmologicos con TIE',      en:'Laboratory where you can simulate and observe cosmological events with TIE'}, 
+  'labs-investigadores':    {es:'Laboratorio que contiene herramientas para facilitar tu investigación con TIE', en:'Laboratory containing tools to facilitate your research with TIE'},    
+  'labs-investigadores-en': {es:'Laboratorio que contiene herramientas para facilitar tu investigación con TIE', en:'Laboratory containing tools to facilitate your research with TIE'}, 
+  'Falsabilidad':           {es:'Muestra las formas en que TIE puede ser refutada',                              en:'It shows the ways in which TIE can be refuted'},    
+  'Falsifiability-en':      {es:'Muestra las formas en que TIE puede ser refutada',                              en:'It shows the ways in which TIE can be refuted'}, 
+  'curvas':                 {es:'H-01 · Curvas de Rotación TIE',                                                 en:'H-01 · Rotation Curves TIE'},    
+  'rotation-curves':        {es:'H-01 · Curvas de Rotación TIE',                                                 en:'H-01 · Rotation Curves TIE'},
+  'sparc':                  {es:'H-02 · Base de datos SPARC',                                                    en:'H-02 · SPARC Database'},    
+  'sparc-en':               {es:'H-02 · Base de datos SPARC',                                                    en:'H-02 · SPARC Database'},    
+  '2pi':                    {es:'H-03 · Factor 2π fundamental',                                                  en:'H-03 · Fundamental 2π factor'},
+  '2pi-en':                 {es:'H-03 · Factor 2π fundamental',                                                  en:'H-03 · Fundamental 2π factor'},
+  'onto':                   {es:'H-04 · Bisturi TIE V2.0',                                                       en:'H-04 · TIE V2.0 Scalpel'},
+  'onto-en':                {es:'H-04 · Bisturi TIE V2.0',                                                       en:'H-04 · TIE V2.0 Scalpel'},
+  'materia-oscura':         {es:'H-05 · Materia Oscura vs TIE',                                                  en:'H-05 · Dark Matter vs TIE'},
+  'dark-matter-en':         {es:'H-05 · Materia Oscura vs TIE',                                                  en:'H-05 · Dark Matter vs TIE'},
+  'simrar':                 {es:'H-06 · Simulador RAR',                                                          en:'H-06 · RAR Simulator'},
+  'simrar-en':              {es:'H-06 · Simulador RAR',                                                          en:'H-06 · RAR Simulator'},
+  'lensing':                {es:'H-07 · Lensing Gravitacional 3D',                                               en:'H-07 · Gravitational Lensing 3D'},
+  'lensing':                {es:'H-07 · Lensing Gravitacional 3D',                                               en:'H-07 · Gravitational Lensing 3D'},
+  'constante':              {es:'H-08 · Constante Cosmológica Λ_TIE',                                            en:'H-08 · Cosmological Constant Λ_TIE'},
+  'constant-en':            {es:'H-08 · Constante Cosmológica Λ_TIE',                                            en:'H-08 · Cosmological Constant Λ_TIE'},
+  'lente':                  {es:'H-09 · Simulador de deflexión de fotones',                                      en:'H-09 · Photon deflection simulator'},
+  'lente-en':               {es:'H-09 · Simulador de deflexión de fotones',                                      en:'H-09 · Photon deflection simulator'},
+  'bala':                   {es:'H-10 · Simula 2 cúmulos galacticos colisionando',                               en:'H-10 · Simulate 2 galaxy clusters colliding'},
+  'bala-en':                {es:'H-10 · Simula 2 cúmulos galacticos colisionando',                               en:'H-10 · Simulate 2 galaxy clusters colliding'},
+  'agujeros':               {es:'H-11 · Agujeros Negros (rₛ vs rₕ TIE)',                                          en:'H-11 · Black Holes (rₛ vs rₕ TIE)'},
+  'black-holes-en':         {es:'H-11 · Agujeros Negros (rₛ vs rₕ TIE)',                                          en:'H-11 · Black Holes (rₛ vs rₕ TIE)'},    
+  'gps':                    {es:'H-12 · Corrector de GPS',                                                       en:'H-12 · GPS corrector'},    
+  'gps-en':                 {es:'H-12 · Corrector de GPS',                                                       en:'H-12 · GPS corrector'},
+  'campo-phi':              {es:'H-13 · Campo φ / Ondas Gravitacionales',                                        en:'H-13 · φ Field / Gravitational Waves'},
+  'campo-phi-en':           {es:'H-13 · Campo φ / Ondas Gravitacionales',                                        en:'H-13 · φ Field / Gravitational Waves'},
+  'chat':                   {es:'H-14 · Chat de IA, agente AXON',                                                en:'H-14 · AI chat, AXON agent'},
+  'chat-en':                {es:'H-14 · Chat de IA, agente AXON',                                                en:'H-14 · AI chat, AXON agent'},
+  'latex':                  {es:'H-15 · Generador LaTeX TIE',                                                    en:'H-15 · TIE LaTeX Generator'},    
+  'latex-en':               {es:'H-15 · Generador LaTeX TIE',                                                    en:'H-15 · TIE LaTeX Generator'},  
+  'api':                    {es:'H-16 · API REST TIE',                                                           en:'H-16 · TIE REST API'},
+  'api-en':                 {es:'H-16 · API REST TIE',                                                           en:'H-16 · TIE REST API'},
+  'jerarquia':              {es:'H-17 · Muestra que la aceleración gravitacional no es una causa: es una sombra',en:'H-17 · It shows that gravitational acceleration is not a cause: it is a shadow'},    
+  'jerarquia-en':           {es:'H-17 · Muestra que la aceleración gravitacional no es una causa: es una sombra',en:'H-17 · It shows that gravitational acceleration is not a cause: it is a shadow'}, 
+  'trinidad':               {es:'H-18 · Ilustra la distribucion de energia entre Masa, Potencia y Movimiento',   en:'H-18 · It illustrates the distribution of energy between Mass, Power and Motion'},    
+  'trinidad-en':            {es:'H-18 · Ilustra la distribucion de energia entre Masa, Potencia y Movimiento',   en:'H-18 · It illustrates the distribution of energy between Mass, Power and Motion'},    
+  'reloj-universal':        {es:'H-19 · Propuesta de reloj Universal basado en conteo de ciclos 2π',             en:'H-19 · Proposal for a Universal clock based on counting 2π cycles'},    
+  'universal-clock':        {es:'H-19 · Propuesta de reloj Universal basado en conteo de ciclos 2π',             en:'H-19 · Proposal for a Universal clock based on counting 2π cycles'},    
+  'rms':                    {es:'H-20 · Test de 175 Galaxias que determina error estadistico global RMS en TIE', en:'H-20 · Test of 175 Galaxies that determines global RMS statistical error in TIE'},
+  'rms-en':                 {es:'H-20 · Test de 175 Galaxias que determina error estadistico global RMS en TIE', en:'H-20 · Test of 175 Galaxies that determines global RMS statistical error in TIE'},
+ 
   };
   const slug = location.pathname.split('/').pop().replace('.html','') || 'index';
   const pageKey = Object.keys(PAGE_MAP).find(k => slug.includes(k)) || null;
@@ -60,10 +100,10 @@ CONSTANTES FUNDAMENTALES TIE V12.0:
 • f_LISA = a₀/πc ≈ 2.4 mHz  — predicción para LISA 2035
 • M87*: rₕ = 4.04×10⁶ · rₛ
 
-HERRAMIENTAS DEL LABORATORIO TIE (5 Módulos, https://ralc-tie-creator.github.io/index.html):
-LAB 01 - FUNDAMENTOS: H-03 (2π), H-04 (Bisturí), H-05 (Materia Oscura), H-08 (a₀ y Λ), H-17 (Jerarquía).
-LAB 02 - GALAXIAS: H-01 (Curvas), H-02 (SPARC), H-06 (RAR), H-21 (RMS Global).
-LAB 03 - GRAVEDAD: H-09 (Lente), H-11 (Agujeros Negros), H-12 (GPS), H-12.1 (Reloj).
+HERRAMIENTAS DENTRO DE CADA LABORATORIO DE TIE (5 Laboratorios, https://ralc-tie-creator.github.io/labs.html):
+LAB 01 - FUNDAMENTOS: H-03 (2π), H-04 (Bisturí V2.0 TIE), H-05 (Materia Oscura), H-08 (a₀ y Λ), H-17 (Jerarquía), H-18 (Trinidad).
+LAB 02 - GALAXIAS: H-01 (Curvas), H-02 (SPARC), H-06 (RAR), H-20 (RMS Global).
+LAB 03 - GRAVEDAD: H-09 (Lente), H-11 (Agujeros Negros), H-12 (GPS), H-19 (Reloj).
 LAB 04 - COSMOLOGÍA: H-07 (Lensing 3D), H-10 (Cúmulo Bala), H-13 (Campo φ).
 LAB 05 - INVESTIGADORES: H-14 (Chat AI), H-15 (LaTeX), H-16 (API REST).
 
@@ -88,10 +128,10 @@ TIE FUNDAMENTAL CONSTANTS V12.0:
 • f_LISA = a₀/πc ≈ 2.4 mHz  — LISA 2035 prediction
 • M87*: rₕ = 4.04×10⁶ · rₛ
 
-TIE LABORATORY TOOLS (5 Modules, https://ralc-tie-creator.github.io/index-en.html):
+TIE LABORATORY TOOLS (5 Modules, https://ralc-tie-creator.github.io/lab-en.html):
 LAB 01 - FOUNDATIONS: H-03 (2π), H-04 (Scalpel), H-05 (Dark Matter), H-08 (a₀ & Λ), H-17 (Hierarchy).
-LAB 02 - GALAXIES: H-01 (Curves), H-02 (SPARC), H-06 (RAR), H-21 (Global RMS).
-LAB 03 - GRAVITY: H-09 (Lens), H-11 (Black Holes), H-12 (GPS), H-12.1 (Clock).
+LAB 02 - GALAXIES: H-01 (Curves), H-02 (SPARC), H-06 (RAR), H-20 (Global RMS).
+LAB 03 - GRAVITY: H-09 (Lens), H-11 (Black Holes), H-12 (GPS), H-19 (Clock).
 LAB 04 - COSMOLOGY: H-07 (Lensing 3D), H-10 (Bullet Cluster), H-13 (φ Field).
 LAB 05 - RESEARCHERS: H-14 (AI Chat), H-15 (LaTeX), H-16 (REST API).
 

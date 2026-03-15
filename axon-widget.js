@@ -2,7 +2,7 @@
 // AXON WIDGET v1.8 — TIE Floating Chat (Vercel Tunnel)
 // VERSIÓN CORREGIDA · SIN CONFLICTOS DE IDs
 // ═══════════════════════════════════════════════════════
-(function(){ 
+(function(){
   'use strict';
 
   // ── 1. CONFIGURACIÓN DE CONEXIÓN (Túnel Vercel) ───────
@@ -381,7 +381,6 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 ---
 
 # 📚 APÉNDICE MATEMÁTICO COMPLETO
-
 ## Constantes Fundamentales
 | Símbolo | Nombre | Valor | Origen |
 |---------|--------|-------|--------|
@@ -624,11 +623,19 @@ const PAGE_MAP = {
   // Estilos visuales del Widget
   const style = document.createElement('style');
   style.textContent = `
-    #axon-widget {position: fixed; bottom: 20px; right: 20px; z-index: 9999; font-family: 'Syne', sans-serif; }
-    #axon-bubble {width: 55px; height: 55px; background: #FFD700; border-radius: 50%;display: flex; align-items: center; justify-content: center; cursor: pointer;
-
-      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4); transition: 0.3s; border: 2px solid #000;}
+    #axon-widget { position: fixed; bottom: 20px; right: 20px; z-index: 9999; font-family: 'Syne', sans-serif; }
+    #axon-bubble { 
+      width: 55px; height: 55px; background: #FFD700; border-radius: 50%; 
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4); transition: 0.3s; border: 2px solid #000;
+    }
     #axon-bubble:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6); }
+    #axon-panel { 
+      display: none; position: absolute; bottom: 70px; right: 0; width: 340px; 
+      height: 480px; background: rgba(5, 5, 15, 0.98); border: 1px solid rgba(91, 200, 245, 0.3);
+      border-radius: 12px; flex-direction: column; overflow: hidden; backdrop-filter: blur(10px);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.7); animation: axFadeIn 0.3s ease-out;
+    }
     #axon-head { 
       background: rgba(255, 215, 0, 0.1); padding: 12px; 
       border-bottom: 1px solid rgba(255, 215, 0, 0.15); 
@@ -659,7 +666,7 @@ const PAGE_MAP = {
   container.innerHTML = `
     <div id="axon-panel">
       <div id="axon-head">
-        <span style="color:#FFD700; font-size:0.7rem; font-weight:800; letter-spacing:1px; font-family:'Space Mono';">AXON // WIDGET</span>
+        <span style="color:#FFD700; font-size:0.7rem; font-weight:800; letter-spacing:1px; font-family:'Space Mono';">AXON_H14 // WIDGET</span>
         <button id="axon-close" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.1rem;">✕</button>
       </div>
       <div id="axon-msgs">

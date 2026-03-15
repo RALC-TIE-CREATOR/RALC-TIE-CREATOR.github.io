@@ -719,17 +719,12 @@ const PAGE_MAP = {
     const loadingMsg = appendMessage('bot', '...', true);
 
     try {
-      const response = await fetch(VERCEL_API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [...chatHistory, { role: 'user', parts: [{ text: text }] }],
-          systemInstruction: { parts: [{ text: `CONTEXTO_PAGINA_ACTUAL: ${currentPage}\n\n` + MASTER_CONTEXT }] }
-        })
-      });
+      const response = await fetch(GEMINI_URL, {method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts: [{ text: MASTER_CONTEXT + "\n\nUsuario: " + text }] }] }) });
 
       const data = await response.json();
-      loadingMsg.classList.remove('ax-loader');
+
+      const reply = data.candidates[0].content.parts[0].text;
 
       if (!response.ok) throw new Error(data.error || "Fallo de Túnel");
 

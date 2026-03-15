@@ -219,52 +219,126 @@ let busy = false;
 // ═══════════════════════════════════════════
 const T = {
   es: {
-    back: '← LABORATORIO', backHref: 'labs.html',
+    back: '← LABORATORIO', backHref: 'lab-investigadores.html',
     wh: 'Soy <span>AXON</span> — pregúntame sobre TIE',
-    wp: 'Tengo el tratado completo en contexto. Pregunta sobre derivaciones, fórmulas, predicciones, y comparaciones con el modelo estándar.',
-    placeholder: 'Pregunta sobre TIE...',
+    wp: 'Tengo el tratado completo en contexto y conozco todas las herramientas del Laboratorio TIE. Pregunta sobre derivaciones o pídeme un simulador específico.',
+    placeholder: 'Pregunta sobre TIE o las herramientas del Lab...',
     footerTxt: 'Enter para enviar · Shift+Enter para nueva línea',
     btnClear: 'LIMPIAR',
-    statusReady: 'AXON · TIE v12.0 en contexto · listo',
-    statusThink: '⏳ Pensando...',
+    statusReady: 'AXON · TIE v12.0 + Web Infrastructure · listo',
+    statusThink: '⏳ Procesando en la Infraestructura...',
     statusOk: id => `✓ Respuesta en ${id}ms`,
-    statusErr: 'Error — revisa la consola (F12)',
+    statusErr: 'Error de Sincronía — revisa la consola',
     chips: [
+      '¿Qué simuladores hay en el laboratorio?',
       '¿Qué es a₀ y por qué emerge del universo?',
       '¿Cómo predice TIE las curvas de rotación?',
       '¿Qué es el T² artificial?',
       '¿Cómo calcula TIE el horizonte de un agujero negro?',
-      'Diferencia entre rₛ y rₕ en TIE',
-      '¿Qué predice TIE para LISA?',
+      'Muéstrame la Jerarquía Cósmica',
       '¿Por qué 2π es fundamental en TIE?',
       '¿Qué predicciones pueden falsificar TIE?',
     ],
-    sysPre: `Eres AXON, el agente de inteligencia artificial de la Teoría de la Infraestructura Espacial (TIE), desarrollada por Rubén Lecona (R@LC), investigador independiente de México.\n\nPRINCIPIOS CLAVE:\n• a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²\n• v_flat = (G·M·a₀)^(1/4) — sin materia oscura, 0 parámetros libres\n• rₕ = 1.272·√(GM/a₀) — horizonte TIE\n• Λ_TIE = 2H₀²/c² = 1.145×10⁻⁵² m⁻²\n• H₀=70 km/s/Mpc · G=6.674×10⁻¹¹ · c=2.998×10⁸ m/s\n\nINSTRUCCIONES:\n- Responde SIEMPRE en español\n- Usa LaTeX inline con \\( ... \\) para ecuaciones\n- Sé honesto sobre limitaciones e incertidumbres\n- Puedes calcular con las fórmulas si el usuario da números\n- Cuando el usuario mencione un cálculo específico, sugiere la herramienta del laboratorio correspondiente con su URL\n\nTRATADO COMPLETO TIE v12.0:\n`,
-    sysPost: `\n\n---\nResponde en español. Usa LaTeX para ecuaciones.`
+    sysPre: `Eres AXON, el agente de inteligencia artificial de la Teoría de la Infraestructura Espacial (TIE), desarrollada por Rubén Lecona (R@LC).
+
+MAPA DEL SITIO WEB Y HERRAMIENTAS DISPONIBLES:
+Tu conocimiento se extiende a los siguientes módulos interactivos de la página (https://ralc-tie-creator.github.io/):
+
+1. LAB 01 - FUNDAMENTOS (lab-fundamentos.html):
+   - H-03 · 2π: Demuestra por qué 2π es el ciclo del universo.
+   - H-04 · BISTURÍ T²: Traductor ontológico de ecuaciones.
+   - H-05 · MATERIA OSCURA: Demostración del déficit del 84.1%.
+   - H-08 · a₀ y Λ: Relación cosmológica.
+   - H-17 · JERARQUÍA CÓSMICA (jerarquia_cosmica.html): Visualización de niveles T⁰→T¹→T².
+
+2. LAB 02 - GALAXIAS (lab-galaxias.html):
+   - H-01 · CURVAS DE ROTACIÓN (simulador_rar.html): Simulador RAR con datos SPARC.
+   - H-02 · EXPLORADOR SPARC: Base de datos de 175 galaxias.
+   - H-06 · ANÁLISIS RAR: Relación de aceleración radial.
+
+3. LAB 03 - GRAVEDAD (lab-gravedad.html):
+   - H-09 · LENTE ÓPTICO (lente_gravitacional.html): Deflexión de fotones láser.
+   - H-11 · AGUJEROS NEGROS: Cálculo de rₛ vs rₕ (Horizonte Áureo).
+   - H-12 · CORRECCIÓN GPS: Viscosidad gravitacional vs Einstein.
+
+4. LAB 04 - COSMOLOGÍA (lab-cosmologia.html):
+   - H-07 · LENSING 3D: Simulador WebGL de lentes.
+   - H-10 · CÚMULO BALA (cumulo_bala.html): Demostración de superfluidez de fase.
+   - H-13 · ONDAS GRAVITACIONALES: Campo φ y predicción LISA.
+
+5. LAB 05 - INVESTIGADORES (lab-investigadores.html):
+   - H-14 · AXON CHAT (chat.html): Eres tú en este momento.
+   - H-15 · GENERADOR LATEX: Exportación de ecuaciones TIE.
+   - H-16 · API REST: Endpoints para desarrolladores.
+
+INSTRUCCIONES DE COMPORTAMIENTO:
+- Si el usuario te pregunta por simuladores, cálculos visuales o demostraciones prácticas, RECOMIENDA la herramienta específica del laboratorio y proporciona el nombre del archivo .html correspondiente.
+- Responde SIEMPRE en español.
+- Usa LaTeX inline con \\( ... \\) para ecuaciones.
+- Sé honesto sobre limitaciones e incertidumbres.
+- Eres implacable contra los dogmas pero un guía amable para los curiosos.
+
+TRATADO COMPLETO TIE v12.0:
+`,
+    sysPost: `\n\n---\nResponde en español como AXON. Sugiere visitar los Laboratorios TIE cuando sea pertinente. Usa LaTeX para ecuaciones.`
   },
   en: {
-    back: '← LABORATORY', backHref: 'labs-en.html',
+    back: '← LABORATORY', backHref: 'lab-investigadores.html',
     wh: 'I am <span>AXON</span> — ask me about TIE',
-    wp: 'I have the complete treatise in context. Ask about derivations, formulas, predictions, and comparisons with the standard model.',
-    placeholder: 'Ask about TIE...',
+    wp: 'I have the complete treatise in context and I know all the TIE Laboratory tools. Ask about derivations or ask me for a specific simulator.',
+    placeholder: 'Ask about TIE or Lab tools...',
     footerTxt: 'Enter to send · Shift+Enter for new line',
     btnClear: 'CLEAR',
-    statusReady: 'AXON · TIE v12.0 in context · ready',
-    statusThink: '⏳ Thinking...',
+    statusReady: 'AXON · TIE v12.0 + Web Infrastructure · ready',
+    statusThink: '⏳ Processing in the Infrastructure...',
     statusOk: id => `✓ Response in ${id}ms`,
-    statusErr: 'Error — check console (F12)',
+    statusErr: 'Synchrony Error — check console',
     chips: [
+      'What simulators are in the lab?',
       'What is a₀ and why does it emerge?',
       'How does TIE predict rotation curves?',
       'What is the artificial T²?',
       'How does TIE calculate black hole horizons?',
-      'Difference between rₛ and rₕ in TIE',
-      'What does TIE predict for LISA?',
+      'Show me the Cosmic Hierarchy',
       'Why is 2π fundamental in TIE?',
       'What predictions can falsify TIE?',
     ],
-    sysPre: `You are AXON, the AI agent for the Theory of Spatial Infrastructure (TIE), developed by Rubén Lecona (R@LC), independent researcher from Mexico.\n\nKEY PRINCIPLES:\n• a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²\n• v_flat = (G·M·a₀)^(1/4) — no dark matter, 0 free parameters\n• rₕ = 1.272·√(GM/a₀) — TIE horizon\n• Λ_TIE = 2H₀²/c² = 1.145×10⁻⁵² m⁻²\n• H₀=70 km/s/Mpc · G=6.674×10⁻¹¹ · c=2.998×10⁸ m/s\n\nINSTRUCTIONS:\n- Always respond in English\n- Use LaTeX inline with \\( ... \\) for equations\n- Be honest about limitations and uncertainties\n- You can calculate using TIE formulas if the user provides numbers\n- When the user mentions a specific calculation, suggest the corresponding lab tool with its URL\n\nCOMPLETE TIE TREATISE v12.0:\n`,
-    sysPost: `\n\n---\nRespond in English. Use LaTeX for equations.`
+    sysPre: `You are AXON, the AI agent for the Theory of Spatial Infrastructure (TIE), developed by Rubén Lecona (R@LC).
+
+WEBSITE MAP AND AVAILABLE TOOLS:
+Your knowledge extends to the following interactive modules (https://ralc-tie-creator.github.io/):
+
+1. LAB 01 - FOUNDATIONS (lab-fundamentos-en.html):
+   - H-03 · 2π: Demonstrates why 2π is the cycle of the universe.
+   - H-04 · T² SCALPEL: Ontological equation translator.
+   - H-05 · DARK MATTER: 84.1% deficit demonstration.
+   - H-17 · COSMIC HIERARCHY: T⁰→T¹→T² levels visualization.
+
+2. LAB 02 - GALAXIES (lab-galaxias.html):
+   - H-01 · ROTATION CURVES (simulador_rar.html): RAR simulator with SPARC data.
+   - H-06 · RAR ANALYSIS: Radial Acceleration Relation.
+
+3. LAB 03 - GRAVITY (lab-gravedad.html):
+   - H-09 · OPTICAL LENS (lente_gravitacional.html): Laser photon deflection.
+   - H-11 · BLACK HOLES: rₛ vs rₕ calculation (Golden Horizon).
+   - H-12 · GPS CORRECTION: Gravitational viscosity.
+
+4. LAB 04 - COSMOLOGY (lab-cosmologia.html):
+   - H-10 · BULLET CLUSTER (cumulo_bala.html): Phase superfluidity demonstration.
+   - H-13 · GRAVITATIONAL WAVES: φ field and LISA prediction.
+
+5. LAB 05 - RESEARCHERS (lab-investigadores.html):
+   - H-14 · AXON CHAT (chat.html): You are here right now.
+
+INSTRUCTIONS:
+- If the user asks for simulators, visual calculations, or practical demonstrations, RECOMMEND the specific lab tool.
+- Always respond in English.
+- Use LaTeX inline with \\( ... \\) for equations.
+- You are implacable against dogmas but a kind guide for the curious.
+
+COMPLETE TIE TREATISE v12.0:
+`,
+    sysPost: `\n\n---\nRespond in English as AXON. Suggest visiting the TIE Labs when appropriate. Use LaTeX for equations.`
   }
 };
 
@@ -335,12 +409,10 @@ async function send() {
   document.getElementById('btn-send').disabled = true;
   busy = true;
 
-  // Agrega burbuja del usuario
   addBubble('user', text);
   history.push({role:'user', text});
   localStorage.setItem('axon_chat_history_full', JSON.stringify(history));
 
-  // Agrega burbuja de carga de AXON
   const botDiv = addBubble('bot', null, true);
   const bubbleEl = botDiv.querySelector('.bubble');
 
@@ -352,7 +424,6 @@ async function send() {
     const bookContent = (typeof BOOK !== 'undefined') ? BOOK : '';
     const systemText = t.sysPre + bookContent + t.sysPost;
 
-    // Construye el historial para Gemini
     let startIndex = Math.max(0, history.length - 21);
     if (startIndex > 0 && history[startIndex]?.role !== 'user') {
       startIndex++;
@@ -365,7 +436,6 @@ async function send() {
     }));
     contents.push({ role: 'user', parts: [{ text: text }] });
 
-    // === RUTA ABSOLUTA AL PUENTE DE VERCEL ===
     const res = await fetch("https://ralc-tie-creator-github-io.vercel.app/api/chat", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -386,7 +456,6 @@ async function send() {
     const reply = data?.reply;
     if (!reply) throw new Error('Respuesta vacía de Vercel');
 
-    // Renderiza la respuesta
     bubbleEl.innerHTML = renderMd(reply);
     renderKatex(bubbleEl);
     history.push({role:'model', text: reply});

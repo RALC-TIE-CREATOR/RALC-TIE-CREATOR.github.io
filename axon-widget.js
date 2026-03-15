@@ -659,7 +659,7 @@ const PAGE_MAP = {
   container.innerHTML = `
     <div id="axon-panel">
       <div id="axon-head">
-        <span style="color:#FFD700; font-size:0.7rem; font-weight:800; letter-spacing:1px; font-family:'Space Mono';">AXON_H14 // WIDGET</span>
+        <span style="color:#FFD700; font-size:0.7rem; font-weight:800; letter-spacing:1px; font-family:'Space Mono';">AXON // WIDGET</span>
         <button id="axon-close" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.1rem;">✕</button>
       </div>
       <div id="axon-msgs">

@@ -6,7 +6,7 @@
   'use strict';
 
   // ── 1. CONFIGURACIÓN DE CONEXIÓN (Túnel Vercel) ───────
-  const VERCEL_API_URL = "https://ralc-tie-creator-github-io/api/chat";
+  const VERCEL_API_URL = "https://ralc-tie-creator-github-io/api/chat.js";
 
   // ── 2. 🧠 CONTEXTO MAESTRO COMPLETO TIE (CORREGIDO) ───
   

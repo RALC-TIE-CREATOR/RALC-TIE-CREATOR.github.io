@@ -624,18 +624,31 @@ const PAGE_MAP = {
   // Estilos visuales del Widget
   const style = document.createElement('style');
   style.textContent = `
-    #axon-widget { position: fixed; bottom: 20px; right: 20px; z-index: 9999; font-family: 'Syne', sans-serif; }
-    #axon-bubble { 
-      width: 55px; height: 55px; background: #FFD700; border-radius: 50%; 
-      display: flex; align-items: center; justify-content: center; cursor: pointer;
-      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4); transition: 0.3s; border: 2px solid #000;
+    #axon-widget { 
+      position: fixed; 
+      bottom: 20px; 
+      right: 20px; 
+      z-index: 9999; 
+      font-family: 'Syne', sans-serif;
     }
-    #axon-bubble:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6); }
-    #axon-panel { 
-      display: none; position: absolute; bottom: 70px; right: 0; width: 340px; 
-      height: 480px; background: rgba(5, 5, 15, 0.98); border: 1px solid rgba(91, 200, 245, 0.3);
-      border-radius: 12px; flex-direction: column; overflow: hidden; backdrop-filter: blur(10px);
-      box-shadow: 0 10px 40px rgba(0,0,0,0.7); animation: axFadeIn 0.3s ease-out;
+    #axon-bubble { 
+      width: 60px; /* Un poco más grande para que se vea el detalle del casco */
+      height: 60px; 
+      background: #000; /* Fondo negro profundo */
+      border-radius: 50%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      cursor: pointer;
+      overflow: hidden; /* CRÍTICO: Esto recorta la imagen en círculo perfecto */
+      border: 2px solid #5BC8F5; /* Azul Stark/TIE */
+      box-shadow: 0 4px 20px rgba(91, 200, 245, 0.4); /* Brillo azulado */
+      transition: 0.3s;
+    }
+    #axon-bubble:hover { 
+      transform: scale(1.1); 
+      box-shadow: 0 6px 25px rgba(91, 200, 245, 0.7); 
+      border-color: #fff; /* El borde brilla al pasar el mouse */
     }
     #axon-head { 
       background: rgba(255, 215, 0, 0.1); padding: 12px; 
@@ -679,7 +692,7 @@ const PAGE_MAP = {
       </div>
     </div>
     <div id="axon-bubble">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      <img src="AXON FACE 2.png" style="width: 100%; height: 100%; object-fit: cover;">
     </div>
   `;
   document.body.appendChild(container);

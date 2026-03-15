@@ -671,7 +671,7 @@ const PAGE_MAP = {
       </div>
     </div>
     <div id="axon-bubble">
-      <img src="AXON FACE 2.png" style="width: 100%; height: 100%; object-fit: cover;">
+      <img src="AXON FACE 2.png" style="width: 100%; height: 100%; object-fit: cover; display: block;">
     </div>
   `;
   document.body.appendChild(container);

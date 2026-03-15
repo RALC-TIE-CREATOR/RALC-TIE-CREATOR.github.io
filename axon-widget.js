@@ -2,7 +2,7 @@
 // AXON WIDGET v1.8 — TIE Floating Chat (Vercel Tunnel)
 // VERSIÓN CORREGIDA · SIN CONFLICTOS DE IDs
 // ═══════════════════════════════════════════════════════
-(function(){
+(function(){ 
   'use strict';
 
   // ── 1. CONFIGURACIÓN DE CONEXIÓN (Túnel Vercel) ───────

@@ -6,7 +6,7 @@
   'use strict';
 
   // ── 1. CONFIGURACIÓN DE CONEXIÓN (Túnel Vercel) ───────
-  const VERCEL_API_URL = "https://ralc-tie-creator-github-io.vercel.app/api/chat";
+  const VERCEL_API_URL = "https://ralc-tie-creator-github-io/api/chat";
 
   // ── 2. 🧠 CONTEXTO MAESTRO COMPLETO TIE (CORREGIDO) ───
   
@@ -678,7 +678,7 @@ const PAGE_MAP = {
       </div>
     </div>
     <div id="axon-bubble">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      <img src="AXON FACE 2.png" style="width: 100%; height: 100%; object-fit: cover;">
     </div>
   `;
   document.body.appendChild(container);

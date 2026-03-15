@@ -72,7 +72,7 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 - 20 herramientas en total
 - 5 laboratorios
 - 175 galaxias SPARC integradas
-- 8/11 predicciones verificadas
+- 12/16 predicciones verificadas
 - 0 parámetros libres
 
 ---
@@ -130,7 +130,7 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 
 ---
 
-### H-06 · Trinidad Energética
+### H-18 · Trinidad Energética
 **URL:** trinidad.html
 
 **Descripción:** El Motor Absoluto redistribuye energía entre tres estados ontológicos.
@@ -213,7 +213,7 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 
 ## 🌌 LAB 02 · GALAXIAS (4 herramientas)
 
-### H-21 · Error Estadístico Global RMS
+### H-20 · Error Estadístico Global RMS
 **URL:** rms.html
 
 **Descripción:** Análisis estadístico riguroso de las 175 galaxias SPARC.
@@ -327,7 +327,7 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 
 ---
 
-### H-12.1 · Reloj Universal
+### H-19 · Reloj Universal
 **URL:** reloj.html
 
 **Descripción:** Motor Absoluto con relojes analógicos

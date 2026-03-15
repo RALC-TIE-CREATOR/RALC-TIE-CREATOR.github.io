@@ -119,7 +119,9 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
   <div style="display:flex; align-items:center; gap:20px;">
     <a href="index.html" class="nav-logo">TIE / R@LC</a>
     <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
-      <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39"><path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/></svg>
+      <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
+         <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
+      </svg>
       0009-0008-4935-9010
     </a>
   </div>
@@ -347,7 +349,9 @@ async function send() {
 
   try {
     const t = T[lang];
-    const systemText = t.sysPre + BOOK + t.sysPost;
+    // Asegurar que BOOK existe (si el usuario olvidó declararla, evita error catastrófico)
+    const bookContent = (typeof BOOK !== 'undefined') ? BOOK : '';
+    const systemText = t.sysPre + bookContent + t.sysPost;
 
     // Construye el historial para Gemini
     let startIndex = Math.max(0, history.length - 21);
@@ -372,15 +376,32 @@ async function send() {
       })
     });
 
-    const data = await res.json();
-
+    // SISTEMA AVANZADO DE DIAGNÓSTICO DE ERRORES:
     if (!res.ok) {
-      const msg = data?.error || `HTTP ${res.status}`;
-      throw new Error(msg);
+      let errorDesc = `Error HTTP ${res.status}`;
+      
+      if (res.status === 404) {
+          errorDesc = "ERROR 404 (Aduana no encontrada): Jefe, estás probando en GitHub Pages (.github.io). La aduana ahora solo funciona entrando desde tu enlace de Vercel (.vercel.app).";
+      } else if (res.status === 504) {
+          errorDesc = "ERROR 504 (Timeout Vercel): El tratado TIE es tan masivo que Vercel cortó la conexión a los 10 segundos antes de que Gemini terminara de procesar.";
+      } else if (res.status === 500) {
+          errorDesc = "ERROR 500 (Fallo Interno): Algo reventó en el archivo api/chat.js en Vercel.";
+      }
+      
+      // Intentar extraer detalles si es JSON
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+          try {
+              const errData = await res.json();
+              errorDesc += " Detalles: " + (errData.error || errData.message);
+          } catch(e) {}
+      }
+      throw new Error(errorDesc);
     }
 
+    const data = await res.json();
     const reply = data?.reply;
-    if (!reply) throw new Error('Respuesta vacía de Vercel');
+    if (!reply) throw new Error('Conexión exitosa, pero Vercel devolvió una respuesta en blanco.');
 
     // Renderiza la respuesta
     bubbleEl.innerHTML = renderMd(reply);
@@ -394,16 +415,109 @@ async function send() {
 
   } catch(err) {
     console.error('TIE Chat error:', err);
-    bubbleEl.innerHTML = `<span style="color:var(--red)">⚠ ${err.message}</span>`;
+    // Mostrar error gigante y claro en la burbuja del bot
+    bubbleEl.innerHTML = `<span style="color:var(--red); font-weight:bold; font-family:var(--mono); font-size:0.85rem;">⚠ ALERTA DE SISTEMA:<br><br>${err.message}</span>`;
     setStatus(T[lang].statusErr, 'error');
     showToast(err.message);
-    history.pop();
+    history.pop(); // Sacar el mensaje del usuario que no se pudo procesar
     localStorage.setItem('axon_chat_history_full', JSON.stringify(history));
   }
 
   busy = false;
   document.getElementById('btn-send').disabled = false;
   document.getElementById('inp').focus();
+}
+
+// ═══════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════
+function renderMd(text) {
+  text = text.replace(/\`\`\`[\w\s]*?\n([\s\S]*?)\`\`\`/g, (_,c)=>`<pre style="background:rgba(0,0,0,0.3);padding:1rem;margin:1rem 0;font-family:var(--mono);font-size:0.8rem;overflow-x:auto;"><code>${esc(c.trim())}</code></pre>`);
+  text = text.replace(/`([^`\n]+)`/g,'<code>$1</code>');
+  text = text.replace(/^### (.+)$/gm,'<h3>$1</h3>');
+  text = text.replace(/^## (.+)$/gm,'<h2>$1</h2>');
+  text = text.replace(/^# (.+)$/gm,'<h1>$1</h1>');
+  text = text.replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>');
+  text = text.replace(/\*([^*\n]+)\*/g,'<em>$1</em>');
+  text = text.replace(/^[ \t]*[-*\u2022] (.+)$/gm,'<li>$1</li>');
+  text = text.replace(/(<li>[\s\S]+?<\/li>)/g,'<ul>$1</ul>');
+  
+  const paragraphs = text.split(/\n\n+/);
+  return paragraphs.map(p => {
+    if(p.trim().startsWith('<')) return p;
+    return `<p style="margin-bottom:1rem;">${p.replace(/\n/g,'<br>')}</p>`;
+  }).join('');
+}
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function renderKatex(el){
+  try{
+    renderMathInElement(el,{
+      delimiters:[
+        {left:'\\(',right:'\\)',display:false},
+        {left:'\\[',right:'\\]',display:true},
+        {left:'$$',right:'$$',display:true},
+        {left:'$',right:'$',display:false},
+      ],
+      throwOnError:false
+    });
+  }catch(e){}
+}
+
+// ═══════════════════════════════════════════
+// DOM HELPERS
+// ═══════════════════════════════════════════
+function addBubble(role, text, loading=false) {
+  const msgs = document.getElementById('msgs');
+  const div = document.createElement('div');
+  div.className = `msg ${role==='user'?'user':'bot'}`;
+  const av = document.createElement('div');
+  av.className = 'avatar';
+  av.textContent = role==='user' ? 'TÚ' : 'AXON';
+  const bub = document.createElement('div');
+  bub.className = 'bubble';
+  if (loading) {
+    bub.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
+  } else {
+    bub.innerHTML = renderMd(text);
+    setTimeout(()=>renderKatex(bub),50);
+  }
+  div.appendChild(av);
+  div.appendChild(bub);
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+function setStatus(txt, type='') {
+  const el = document.getElementById('status-bar');
+  if(el) {
+    el.textContent = txt;
+    el.className = 'status-bar' + (type ? ' '+type : '');
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if(t) {
+    t.textContent = '⚠ ' + msg.slice(0,120);
+    t.style.display = 'block';
+    setTimeout(()=>t.style.display='none', 4000);
+  }
+}
+
+function clearChat() {
+  history = [];
+  const msgs = document.getElementById('msgs');
+  if(msgs) {
+    msgs.innerHTML = `
+      <div class="welcome" id="welcome">
+        <h3 id="wh"></h3>
+        <p id="wp"></p>
+        <div class="chips" id="chips"></div>
+      </div>`;
+    setLang(lang);
+  }
+  localStorage.removeItem('axon_chat_history_full');
 }
 
 // ═══════════════════════════════════════════

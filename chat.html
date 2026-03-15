@@ -349,7 +349,6 @@ async function send() {
 
   try {
     const t = T[lang];
-    // Asegurar que BOOK existe (si el usuario olvidó declararla, evita error catastrófico)
     const bookContent = (typeof BOOK !== 'undefined') ? BOOK : '';
     const systemText = t.sysPre + bookContent + t.sysPost;
 
@@ -366,8 +365,8 @@ async function send() {
     }));
     contents.push({ role: 'user', parts: [{ text: text }] });
 
-    // === LLAMADA AL PUENTE DE VERCEL ===
-    const res = await fetch("/api/chat", {
+    // === RUTA ABSOLUTA AL PUENTE DE VERCEL ===
+    const res = await fetch("https://ralc-tie-creator-github-io.vercel.app/api/chat", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -376,32 +375,16 @@ async function send() {
       })
     });
 
-    // SISTEMA AVANZADO DE DIAGNÓSTICO DE ERRORES:
     if (!res.ok) {
       let errorDesc = `Error HTTP ${res.status}`;
-      
-      if (res.status === 404) {
-          errorDesc = "ERROR 404 (Aduana no encontrada): Jefe, estás probando en GitHub Pages (.github.io). La aduana ahora solo funciona entrando desde tu enlace de Vercel (.vercel.app).";
-      } else if (res.status === 504) {
-          errorDesc = "ERROR 504 (Timeout Vercel): El tratado TIE es tan masivo que Vercel cortó la conexión a los 10 segundos antes de que Gemini terminara de procesar.";
-      } else if (res.status === 500) {
-          errorDesc = "ERROR 500 (Fallo Interno): Algo reventó en el archivo api/chat.js en Vercel.";
-      }
-      
-      // Intentar extraer detalles si es JSON
-      const contentType = res.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-          try {
-              const errData = await res.json();
-              errorDesc += " Detalles: " + (errData.error || errData.message);
-          } catch(e) {}
-      }
+      if (res.status === 404) errorDesc = "ERROR 404: Ruta API no encontrada.";
+      else if (res.status === 504) errorDesc = "ERROR 504: Timeout en Vercel.";
       throw new Error(errorDesc);
     }
 
     const data = await res.json();
     const reply = data?.reply;
-    if (!reply) throw new Error('Conexión exitosa, pero Vercel devolvió una respuesta en blanco.');
+    if (!reply) throw new Error('Respuesta vacía de Vercel');
 
     // Renderiza la respuesta
     bubbleEl.innerHTML = renderMd(reply);
@@ -415,11 +398,10 @@ async function send() {
 
   } catch(err) {
     console.error('TIE Chat error:', err);
-    // Mostrar error gigante y claro en la burbuja del bot
-    bubbleEl.innerHTML = `<span style="color:var(--red); font-weight:bold; font-family:var(--mono); font-size:0.85rem;">⚠ ALERTA DE SISTEMA:<br><br>${err.message}</span>`;
+    bubbleEl.innerHTML = `<span style="color:var(--red); font-weight:bold;">⚠ ALERTA DE SISTEMA: ${err.message}</span>`;
     setStatus(T[lang].statusErr, 'error');
     showToast(err.message);
-    history.pop(); // Sacar el mensaje del usuario que no se pudo procesar
+    history.pop();
     localStorage.setItem('axon_chat_history_full', JSON.stringify(history));
   }
 

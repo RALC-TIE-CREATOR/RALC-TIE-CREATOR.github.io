@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TIE ·  H-10 · Cúmulo Bala · Desacople Gravitacional</title>
+    <title>TIE · H-10 · Cúmulo Bala · Desacople Gravitacional</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,8 +19,7 @@
 
         nav { background:rgba(0,0,1,0.95); border-bottom:1px solid var(--border); padding:0.85rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
         .nav-logo { font-family:var(--mono); color:var(--gold); text-decoration:none; font-weight:700; font-size:0.85rem; letter-spacing:2px; }
-        /* ESTILO PARA EL BOTÓN ORCID */
-         .orcid-link {
+        .orcid-link {
             display: flex;
             align-items: center;
             gap: 8px;
@@ -74,11 +73,12 @@
         .chk { width:14px; height:14px; border:1px solid var(--gold); position:relative; display:inline-block; flex-shrink:0; }
         .chk.on::after { content:''; position:absolute; top:2px;left:2px;right:2px;bottom:2px; background:var(--gold); }
 
-        .btn { width:100%; padding:0.75rem 1rem; font-family:var(--mono); font-size:0.75rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border-radius:2px; transition:0.2s; }
+        .btn { width:100%; padding:0.75rem 1rem; font-family:var(--mono); font-size:0.75rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border-radius:2px; transition:0.2s; border:none; }
         .btn-gold { background:transparent; color:var(--gold); border:1px solid rgba(255,215,0,0.3); }
         .btn-gold:hover { background:rgba(255,215,0,0.08); border-color:var(--gold); }
         .btn-red  { background:transparent; color:var(--red);  border:1px solid rgba(255,68,85,0.3); }
         .btn-red:hover  { background:rgba(255,68,85,0.08);  border-color:var(--red); }
+        .btn:disabled { opacity:0.3; cursor:not-allowed; }
 
         .canvas-area { flex:1; border:1px solid var(--border); background:#00000a; position:relative; overflow:hidden; min-width:0; min-height:0; }
         canvas { width:100%; height:100%; display:block; }
@@ -87,6 +87,7 @@
             position:absolute; top:16px; left:16px;
             background:rgba(0,0,0,0.8); border:1px solid var(--border);
             padding:10px 14px; font-family:var(--mono); font-size:0.72rem;
+            z-index:10;
         }
         .leg-item { display:flex; align-items:center; gap:8px; color:var(--dim); margin-bottom:4px; }
         .leg-dot  { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
@@ -96,6 +97,7 @@
             font-family:var(--mono); font-size:0.75rem; color:var(--dim);
             background:rgba(0,0,0,0.7); border:1px solid var(--border);
             padding:6px 14px; white-space:nowrap;
+            z-index:10;
         }
 
         footer { border-top:1px solid var(--border); padding:0.65rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
@@ -112,29 +114,26 @@
 
 <nav>
     <div style="display:flex; align-items:center; gap:20px;">
-    <a href="index.html" class="nav-logo">TIE / R@LC</a>
-    
-    <!-- INYECCIÓN DEL PASAPORTE ORCID -->
-    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
-      <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
-         <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
-      </svg>
-      0009-0008-4935-9010
-    </a>
-  </div>
-  <div style="display:flex;gap:.5rem;">
-    <a href="bala.html" style="font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:var(--gold);">ES</a>
-    <a href="bala-en.html" style="font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:var(--dim);border:1px solid var(--border);">EN</a>
-  </div>
-        <a href="lab-cosmologia.html" class="nav-back">← LABORATORIO</a>
+        <a href="index.html" class="nav-logo">TIE / R@LC</a>
+        <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
+            <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
+                <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
+            </svg>
+            0009-0008-4935-9010
+        </a>
     </div>
+    <div style="display:flex;gap:.5rem;">
+        <a href="bala.html" style="font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:var(--gold);">ES</a>
+        <a href="bala-en.html" style="font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:var(--dim);border:1px solid var(--border);">EN</a>
+    </div>
+    <a href="lab-cosmologia.html" class="nav-back">← LABORATORIO</a>
 </nav>
 
 <div class="page-header">
-    <div class="page-label">CAPÍTULO 3 · EN VIVO · COSMOLOGÍA · DESACOPLE GRAVITACIONAL</div>
+    <div class="page-label">H-10 · CAPÍTULO 10.8 · COSMOLOGÍA · DESACOPLE GRAVITACIONAL</div>
     <h1>CÚMULO BALA</h1>
     <p class="page-desc">El gas bariónico choca y frena por fricción electromagnética. El superfluido de fase ∇Φ — responsable del lensing gravitacional — se atraviesa sin rozamiento. No se necesita materia oscura invisible: el desacople es la señal de la infraestructura.</p>
-    <div class="page-eq">v_superfluid = 0 (viscosidad cero) &nbsp;·&nbsp; v_gas → 0 (fricción EM) &nbsp;·&nbsp; ∇Φ TIE ≠ materia exótica</div>
+    <div class="page-eq">η_Φ = 0 (viscosidad cero) &nbsp;·&nbsp; v_gas → 0 (fricción EM) &nbsp;·&nbsp; ∇Φ TIE ≠ materia exótica</div>
 </div>
 
 <div class="stats-bar">
@@ -146,12 +145,11 @@
 
 <div class="main-wrap">
     <div class="sidebar">
-
         <div class="panel">
             <div class="panel-title">Estado de la colisión</div>
             <div class="data-row">Tiempo simulado <span class="data-val" id="val-time">T+0.00 Myrs</span></div>
-            <div class="data-row">Fricción bariónica <span class="data-val" style="color:var(--red)">ACTIVA</span></div>
-            <div class="data-row">Viscosidad de fase <span class="data-val" style="color:var(--blue)">CERO</span></div>
+            <div class="data-row">Fricción bariónica <span class="data-val" style="color:var(--red)" id="friccion-estado">ACTIVA</span></div>
+            <div class="data-row">Viscosidad de fase <span class="data-val" style="color:var(--blue)" id="viscosidad-estado">CERO</span></div>
             <div class="data-row" style="border:none; padding-top:0.4rem;">
                 <span id="status-msg" style="color:var(--gold); font-size:0.7rem;">ESPERANDO INICIO...</span>
             </div>
@@ -176,90 +174,158 @@
 
         <div style="display:flex;flex-direction:column;gap:8px;margin-top:auto;">
             <button class="btn btn-gold" id="btn-start" onclick="startSimulation()">[ INICIAR COLISIÓN ]</button>
-            <button class="btn btn-red"  onclick="resetSimulation()">[ REINICIAR CÁMARA ]</button>
+            <button class="btn btn-red"  onclick="resetSimulation()">[ REINICIAR ]</button>
         </div>
     </div>
 
     <div class="canvas-area">
         <div class="legend">
-            <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div> Plasma bariónico</div>
-            <div class="leg-item"><div class="leg-dot" style="border:2px solid var(--blue);background:transparent;"></div> Superfluido Φ (lensing)</div>
+            <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div> Plasma bariónico (frena)</div>
+            <div class="leg-item"><div class="leg-dot" style="border:2px solid var(--blue);background:transparent;"></div> Superfluido Φ (atraviesa)</div>
         </div>
         <canvas id="bulletCanvas"></canvas>
         <div class="status-overlay" id="status-overlay">SISTEMA EN REPOSO</div>
-        <div style="position:absolute; bottom:40px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">REFERENCIA: CAPÍTULOS 3 Y 14</div>
+        <div style="position:absolute; bottom:40px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">REFERENCIA: CAPÍTULO 10.8 · CÚMULO BALA</div>
     </div>
 </div>
 
 <footer>
     <div class="footer-nav">
-        <a href="lente.html">← Lente Gravitacional</a>
-        <a href="campo-phi.html">Campo φ →</a>
+        <a href="lente.html">← H-09 Lente</a>
+        <a href="campo-phi.html">H-13 Campo φ →</a>
     </div>
-    <div class="footer-eq">∇Φ = superfluido · gas = fricción EM · desacople = CAP. 3 TIE</div>
-    <div class="footer-credit">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+    <div class="footer-eq">∇Φ = superfluido · gas = fricción EM · desacople = CAP. 10.8 TIE</div>
+    <div class="footer-credit">R@LC 2026 · MÉXICO · H-10 · CÚMULO BALA</div>
 </footer>
 
 <script>
+    // ============================================
+    // CONFIGURACIÓN Y ESTADO
+    // ============================================
     const canvas = document.getElementById('bulletCanvas');
-    const ctx    = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d');
     let width, height, animationId, time = 0;
-    let isRunning = false, showGas = true, showPhase = true;
-    let cluster1 = { x:0, phaseX:0, v:0, particles:[], color:'#FF4455' };
-    let cluster2 = { x:0, phaseX:0, v:0, particles:[], color:'#FF8800' };
+    let isRunning = false;
+    let showGas = true;
+    let showPhase = true;
+    
+    // Clusters
+    let cluster1 = { 
+        x:0, phaseX:0, v:2.5, 
+        particles: [], 
+        color:'#FF4455',
+        originalX: 0
+    };
+    let cluster2 = { 
+        x:0, phaseX:0, v:-2.5, 
+        particles: [], 
+        color:'#FF8800',
+        originalX: 0
+    };
 
+    // ============================================
+    // INICIALIZACIÓN
+    // ============================================
     function resize() {
-        width  = canvas.parentElement.clientWidth;
-        height = canvas.parentElement.clientHeight;
-        canvas.width = width; canvas.height = height;
+        const container = canvas.parentElement;
+        width = container.clientWidth;
+        height = container.clientHeight;
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Recalcular posiciones base
+        if (width > 0 && height > 0) {
+            cluster1.originalX = width * 0.15;
+            cluster2.originalX = width * 0.85;
+            setupSimulation();
+        }
     }
-    window.addEventListener('resize', () => { resize(); if (!isRunning && time===0) setupSimulation(); });
-
-    function setupSimulation() {
-        cluster1.x = cluster1.phaseX = width * 0.15; cluster1.v =  2.5;
-        cluster2.x = cluster2.phaseX = width * 0.85; cluster2.v = -2.5;
-        cluster1.particles = generateParticles(cluster1.x, height/2, cluster1.color);
-        cluster2.particles = generateParticles(cluster2.x, height/2, cluster2.color);
-        time = 0;
-        document.getElementById('val-time').textContent    = 'T+0.00 Myrs';
-        document.getElementById('stat-time').textContent   = 'T+0.00';
-        document.getElementById('stat-time').style.color   = 'var(--dim)';
-        document.getElementById('status-msg').textContent  = 'ESPERANDO INICIO...';
-        document.getElementById('status-msg').style.color  = 'var(--gold)';
-        document.getElementById('status-overlay').textContent = 'SISTEMA EN REPOSO';
-        document.getElementById('btn-start').textContent   = '[ INICIAR COLISIÓN ]';
-        document.getElementById('btn-start').style.opacity = '1';
-        drawFrame();
-    }
+    
+    window.addEventListener('resize', resize);
 
     function generateParticles(cx, cy, colorBase) {
         const parts = [];
-        for (let i = 0; i < 600; i++) {
-            const r = Math.abs(randGauss(0,38));
-            const t = Math.random() * 2 * Math.PI;
-            parts.push({ ox:r*Math.cos(t), oy:r*Math.sin(t),
-                         vx:(Math.random()-0.5)*0.45, vy:(Math.random()-0.5)*0.45,
-                         color:colorBase });
+        for (let i = 0; i < 300; i++) { // Reducido para mejor rendimiento
+            const angle = Math.random() * 2 * Math.PI;
+            const radius = Math.abs(randGauss(0, 35));
+            parts.push({
+                ox: radius * Math.cos(angle),
+                oy: radius * Math.sin(angle),
+                vx: (Math.random() - 0.5) * 0.4,
+                vy: (Math.random() - 0.5) * 0.4,
+                color: colorBase
+            });
         }
         return parts;
     }
+
     function randGauss(mean, std) {
-        return std * Math.sqrt(-2*Math.log(1-Math.random())) * Math.cos(2*Math.PI*Math.random()) + mean;
+        let u = 0, v = 0;
+        while(u === 0) u = Math.random();
+        while(v === 0) v = Math.random();
+        return mean + std * Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
     }
 
+    function setupSimulation() {
+        if (width === 0 || height === 0) return;
+        
+        // Posiciones iniciales
+        cluster1.x = cluster1.phaseX = width * 0.15;
+        cluster2.x = cluster2.phaseX = width * 0.85;
+        cluster1.v = 2.5;
+        cluster2.v = -2.5;
+        
+        // Generar partículas
+        cluster1.particles = generateParticles(cluster1.x, height/2, cluster1.color);
+        cluster2.particles = generateParticles(cluster2.x, height/2, cluster2.color);
+        
+        // Resetear tiempo y UI
+        time = 0;
+        isRunning = false;
+        
+        // Actualizar UI
+        document.getElementById('val-time').textContent = 'T+0.00 Myrs';
+        document.getElementById('stat-time').textContent = 'T+0.00';
+        document.getElementById('stat-time').style.color = 'var(--dim)';
+        document.getElementById('status-msg').textContent = 'ESPERANDO INICIO...';
+        document.getElementById('status-msg').style.color = 'var(--gold)';
+        document.getElementById('status-overlay').textContent = 'SISTEMA EN REPOSO';
+        document.getElementById('friccion-estado').textContent = 'ACTIVA';
+        document.getElementById('viscosidad-estado').textContent = 'CERO';
+        document.getElementById('friccion-estado').style.color = 'var(--red)';
+        document.getElementById('viscosidad-estado').style.color = 'var(--blue)';
+        
+        const btn = document.getElementById('btn-start');
+        btn.textContent = '[ INICIAR COLISIÓN ]';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        
+        drawFrame();
+    }
+
+    // ============================================
+    // CONTROLES
+    // ============================================
     function startSimulation() {
         if (isRunning) return;
         isRunning = true;
-        document.getElementById('status-msg').textContent  = 'COLISIÓN EN PROGRESO...';
+        
+        document.getElementById('status-msg').textContent = 'COLISIÓN EN PROGRESO...';
         document.getElementById('status-overlay').textContent = 'ANALIZANDO DINÁMICA...';
-        document.getElementById('btn-start').textContent   = '[ EN PROGRESO ]';
-        document.getElementById('btn-start').style.opacity = '0.4';
+        
+        const btn = document.getElementById('btn-start');
+        btn.textContent = '[ EN PROGRESO ]';
+        btn.disabled = true;
+        
         animate();
     }
 
     function resetSimulation() {
         isRunning = false;
-        cancelAnimationFrame(animationId);
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
         setupSimulation();
     }
 
@@ -274,96 +340,174 @@
         if (!isRunning) drawFrame();
     }
 
-    function animate() {
-        updatePhysics();
-        drawFrame();
-        time += 0.05;
-        const tStr = `T+${time.toFixed(2)} Myrs`;
-        document.getElementById('val-time').textContent  = tStr;
-        document.getElementById('stat-time').textContent = `T+${time.toFixed(2)}`;
-        document.getElementById('stat-time').style.color = 'var(--gold)';
-
-        if (cluster1.phaseX > width * 0.82) {
-            isRunning = false;
-            document.getElementById('status-msg').textContent  = 'DESACOPLE GRAVITACIONAL CONFIRMADO.';
-            document.getElementById('status-msg').style.color  = 'var(--green)';
-            document.getElementById('status-overlay').textContent = '✓ DESACOPLE GRAVITACIONAL CONFIRMADO — CAP. 10.8 TIE';
-        } else {
-            animationId = requestAnimationFrame(animate);
-        }
-    }
-
+    // ============================================
+    // FÍSICA
+    // ============================================
     function updatePhysics() {
-        // Superfluido de fase: sin fricción
+        // Actualizar fase (sin fricción)
         cluster1.phaseX += cluster1.v;
         cluster2.phaseX += cluster2.v;
 
-        // Gas bariónico: fricción EM
+        // Calcular distancia entre centros
         const dist = Math.abs(cluster1.x - cluster2.x);
-        const cZone = 120;
-        if (dist < cZone) {
-            cluster1.v *= 0.95; cluster2.v *= 0.95;
-            const sf = (cZone - dist) * 0.005;
-            cluster1.particles.forEach(p => { p.vy += p.oy > 0 ? sf : -sf; });
-            cluster2.particles.forEach(p => { p.vy += p.oy > 0 ? sf : -sf; });
+        const collisionZone = 150; // Zona de interacción
+
+        // Si están cerca, aplicar fricción al gas
+        if (dist < collisionZone) {
+            // Fricción electromagnética
+            cluster1.v *= 0.98;
+            cluster2.v *= 0.98;
+            
+            // Perturbación en partículas
+            const strength = (collisionZone - dist) * 0.008;
+            cluster1.particles.forEach(p => { 
+                p.vy += (p.oy > 0 ? strength : -strength);
+            });
+            cluster2.particles.forEach(p => { 
+                p.vy += (p.oy > 0 ? strength : -strength);
+            });
+            
+            // Actualizar UI
+            document.getElementById('friccion-estado').textContent = 'FRENANDO';
         }
-        cluster1.x += cluster1.v; cluster2.x += cluster2.v;
-        cluster1.particles.forEach(p => { p.ox += p.vx; p.oy += p.vy; });
-        cluster2.particles.forEach(p => { p.ox += p.vx; p.oy += p.vy; });
+
+        // Actualizar posiciones del gas
+        cluster1.x += cluster1.v;
+        cluster2.x += cluster2.v;
+
+        // Mover partículas
+        cluster1.particles.forEach(p => {
+            p.ox += p.vx;
+            p.oy += p.vy;
+        });
+        cluster2.particles.forEach(p => {
+            p.ox += p.vx;
+            p.oy += p.vy;
+        });
     }
 
+    // ============================================
+    // RENDERIZADO
+    // ============================================
     function drawFrame() {
-        ctx.fillStyle = 'rgba(0,0,1,0.28)';
+        // Limpiar canvas con efecto de estela
+        ctx.fillStyle = 'rgba(0,0,1,0.15)';
         ctx.fillRect(0, 0, width, height);
-        ctx.globalCompositeOperation = 'lighter';
-
+        
+        // Dibujar fase (superfluido)
         if (showPhase) {
-            drawSoliton(cluster1.phaseX, height/2);
-            drawSoliton(cluster2.phaseX, height/2);
-            ctx.fillStyle = 'rgba(91,200,245,0.7)';
-            ctx.font = "12px 'Space Mono'";
+            drawSoliton(cluster1.phaseX, height/2, cluster1.color);
+            drawSoliton(cluster2.phaseX, height/2, cluster2.color);
+            
+            ctx.fillStyle = 'rgba(91,200,245,0.9)';
+            ctx.font = "bold 14px 'Space Mono'";
             ctx.textAlign = 'center';
-            ctx.fillText('∇Φ', cluster1.phaseX, height/2 - 88);
-            ctx.fillText('∇Φ', cluster2.phaseX, height/2 - 88);
+            ctx.shadowColor = 'rgba(91,200,245,0.5)';
+            ctx.shadowBlur = 10;
+            ctx.fillText('∇Φ', cluster1.phaseX, height/2 - 60);
+            ctx.fillText('∇Φ', cluster2.phaseX, height/2 - 60);
+            ctx.shadowBlur = 0;
         }
+        
+        // Dibujar gas
         if (showGas) {
             drawGas(cluster1.x, height/2, cluster1.particles);
             drawGas(cluster2.x, height/2, cluster2.particles);
         }
-        ctx.globalCompositeOperation = 'source-over';
     }
 
-    function drawSoliton(x, y) {
-        ctx.beginPath(); ctx.arc(x, y, 68, 0, Math.PI*2);
-        ctx.lineWidth = 2.5;
-        ctx.strokeStyle = 'rgba(91,200,245,0.45)';
-        ctx.shadowColor  = 'rgba(91,200,245,0.4)'; ctx.shadowBlur = 18;
-        ctx.stroke(); ctx.shadowBlur = 0;
-        ctx.beginPath(); ctx.arc(x, y, 68, 0, Math.PI*2);
-        ctx.fillStyle = 'rgba(91,200,245,0.04)'; ctx.fill();
+    function drawSoliton(x, y, color) {
+        // Círculo exterior
         ctx.beginPath();
-        ctx.moveTo(x-9,y); ctx.lineTo(x+9,y);
-        ctx.moveTo(x,y-9); ctx.lineTo(x,y+9);
-        ctx.strokeStyle = 'rgba(255,255,255,0.45)'; ctx.lineWidth = 1; ctx.stroke();
+        ctx.arc(x, y, 70, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(91,200,245,0.4)';
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = 'rgba(91,200,245,0.3)';
+        ctx.shadowBlur = 15;
+        ctx.stroke();
+        
+        // Relleno tenue
+        ctx.beginPath();
+        ctx.arc(x, y, 70, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(91,200,245,0.03)';
+        ctx.shadowBlur = 0;
+        ctx.fill();
+        
+        // Cruz central
+        ctx.beginPath();
+        ctx.moveTo(x - 12, y);
+        ctx.lineTo(x + 12, y);
+        ctx.moveTo(x, y - 12);
+        ctx.lineTo(x, y + 12);
+        ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
     }
 
     function drawGas(gx, gy, particles) {
         particles.forEach(p => {
-            const px = gx + p.ox, py = gy + p.oy;
-            const heat = Math.max(0, 1 - Math.abs(p.ox)/50);
-            ctx.beginPath(); ctx.arc(px, py, 1.5, 0, Math.PI*2);
+            const px = gx + p.ox;
+            const py = gy + p.oy;
+            
+            // Ignorar partículas fuera del canvas
+            if (px < 0 || px > width || py < 0 || py > height) return;
+            
+            // Efecto de calentamiento en zona de colisión
+            const distToCenter = Math.abs(px - width/2);
+            const heat = Math.max(0, 1 - distToCenter / 300);
+            
+            ctx.beginPath();
+            ctx.arc(px, py, 1.8, 0, Math.PI * 2);
+            
             if (heat > 0.7 && isRunning) {
                 ctx.fillStyle = '#ffffff';
-                ctx.shadowColor = '#FFD700'; ctx.shadowBlur = 8;
+                ctx.shadowColor = '#FFD700';
+                ctx.shadowBlur = 10;
             } else {
                 ctx.fillStyle = p.color;
-                ctx.shadowColor = p.color; ctx.shadowBlur = 4;
+                ctx.shadowColor = p.color;
+                ctx.shadowBlur = 6;
             }
-            ctx.fill(); ctx.shadowBlur = 0;
+            ctx.fill();
         });
+        ctx.shadowBlur = 0;
     }
 
-    resize(); setupSimulation();
+    // ============================================
+    // ANIMACIÓN
+    // ============================================
+    function animate() {
+        if (!isRunning) return;
+        
+        updatePhysics();
+        drawFrame();
+        
+        time += 0.03;
+        const tStr = `T+${time.toFixed(2)} Myrs`;
+        document.getElementById('val-time').textContent = tStr;
+        document.getElementById('stat-time').textContent = tStr;
+        document.getElementById('stat-time').style.color = 'var(--gold)';
+
+        // Verificar si alcanzaron el desacople
+        if (cluster1.phaseX > width * 0.8 && cluster2.phaseX < width * 0.2) {
+            isRunning = false;
+            document.getElementById('status-msg').textContent = '✓ DESACOPLE GRAVITACIONAL CONFIRMADO';
+            document.getElementById('status-msg').style.color = 'var(--green)';
+            document.getElementById('status-overlay').textContent = '✓ DESACOPLE GRAVITACIONAL — CAP. 10.8 TIE';
+            document.getElementById('friccion-estado').textContent = 'COMPLETADA';
+            return;
+        }
+        
+        animationId = requestAnimationFrame(animate);
+    }
+
+    // ============================================
+    // INICIALIZACIÓN
+    // ============================================
+    resize();
+    window.addEventListener('load', () => {
+        setTimeout(resize, 100); // Asegurar dimensiones correctas
+    });
 </script>
 </body>
 </html>

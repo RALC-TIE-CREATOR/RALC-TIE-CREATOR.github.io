@@ -624,12 +624,10 @@ const PAGE_MAP = {
   // Estilos visuales del Widget
   const style = document.createElement('style');
   style.textContent = `
-    #axon-widget { position: fixed; bottom: 20px; right: 20px; z-index: 9999; font-family: 'Syne', sans-serif; }
-    #axon-bubble { 
-      width: 55px; height: 55px; background: #FFD700; border-radius: 50%; 
-      display: flex; align-items: center; justify-content: center; cursor: pointer;
-      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4); transition: 0.3s; border: 2px solid #000;
-    }
+    #axon-widget {position: fixed; bottom: 20px; right: 20px; z-index: 9999; font-family: 'Syne', sans-serif; }
+    #axon-bubble {width: 55px; height: 55px; background: #FFD700; border-radius: 50%;display: flex; align-items: center; justify-content: center; cursor: pointer;
+
+      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4); transition: 0.3s; border: 2px solid #000;}
     #axon-bubble:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6); }
     #axon-head { 
       background: rgba(255, 215, 0, 0.1); padding: 12px; 

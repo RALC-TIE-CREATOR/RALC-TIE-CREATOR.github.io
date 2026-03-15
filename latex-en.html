@@ -135,7 +135,16 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
 <canvas id="bg-canvas"></canvas>
 
 <nav>
-  <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
+  <div style="display:flex; align-items:center; gap:20px;">
+    <a href="index.html" class="nav-logo">TIE / R@LC</a>
+    <!-- INYECCIÓN DEL PASAPORTE ORCID -->
+    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
+      <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
+         <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
+      </svg>
+      0009-0008-4935-9010
+    </a>
+  </div>
   <div class="nav-center">
     <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ES</button>
     <button class="lang-btn inactive" id="btn-en" onclick="setLang('en')">EN</button>

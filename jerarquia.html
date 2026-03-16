@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TIE ·   H-17 · Jerarquía Cósmica · T⁰ / T¹ / T²</title>
+    <title>TIE · H-17 · Jerarquía Cósmica · T⁰ / T¹ / T²</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
             --gold:   #FFD700;
@@ -32,95 +36,129 @@
             overflow: hidden;
         }
 
+        /* GALAXY BACKGROUND */
+        #galaxy-canvas {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120vw;
+            height: 120vh;
+            min-width: 1200px;
+            min-height: 1200px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.45;
+        }
+
         /* ── NAV ── */
         nav {
+            position: relative; z-index: 10;
             background: rgba(0,0,1,0.95);
             border-bottom: 1px solid var(--border);
             padding: 0.85rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-shrink: 0;        }
+            flex-shrink: 0;
+        }
         .nav-logo { font-family:var(--mono); color:var(--gold); text-decoration:none; font-weight:700; font-size:0.85rem; letter-spacing:2px; }
         /* ESTILO PARA EL BOTÓN ORCID */
         .orcid-link {display: flex;align-items: center;gap: 8px;font-family: var(--mono);font-size: 0.75rem;color: #A6CE39;text-decoration: none;border: 1px solid rgba(166, 206, 57, 0.3);padding: 4px 12px;border-radius: 2px;transition: 0.3s;letter-spacing: 1px;}
         .orcid-link:hover {background: rgba(166, 206, 57, 0.1);box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);color: #fff;}
         
         .nav-right { display:flex; align-items:center; gap:1.5rem; }
-        .nav-lang  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; letter-spacing:1px; }
-        .nav-lang.active { color:var(--text); }
+        .lang-btn  { font-family:var(--mono); font-size:0.7rem; font-weight:700; letter-spacing:2px; padding:0.25rem 0.6rem; border-radius:4px; cursor:pointer; border:none; transition:all .2s; }
+        .lang-btn.active { color:#000; background:var(--gold); }
+        .lang-btn.inactive { color:var(--dim); border:1px solid var(--border); background:transparent; }
+        .lang-btn.inactive:hover { color:var(--gold); border-color:var(--gold); }
         .nav-back  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; border:1px solid rgba(160,160,176,0.3); padding:0.35rem 0.75rem; transition:0.2s; letter-spacing:1px; }
         .nav-back:hover { color:var(--blue); border-color:var(--blue); }
 
         /* ── HEADER ── */
-        .page-header { padding:1.1rem 2rem 0.9rem; border-bottom:1px solid var(--border); flex-shrink:0; }
-        .page-label  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.3rem; }
-        .page-header h1 { font-size:1.6rem; font-weight:900; letter-spacing:1px; margin-bottom:0.2rem; }
-        .page-desc { font-size:0.85rem; color:var(--dim); max-width:700px; }
-        .page-eq   { font-family:var(--mono); font-size:0.78rem; color:var(--gold); margin-top:0.35rem; }
+        .page-header { 
+            position: relative; z-index: 10;
+            padding:1.1rem 2rem 0.9rem; border-bottom:1px solid var(--border); flex-shrink:0; 
+        }
+        .page-label  { font-family:var(--mono); font-size:0.75rem; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.3rem; }
+        .page-header h1 { font-size:1.9rem; font-weight:900; letter-spacing:1px; margin-bottom:0.2rem; }
+        .page-desc { font-size:0.95rem; color:var(--dim); max-width:700px; }
+        .page-eq   { font-family:var(--mono); font-size:0.85rem; color:var(--gold); margin-top:0.35rem; }
+        .page-eq .katex { font-size:0.9rem; }
 
         /* ── STATS ── */
-        .stats-bar { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
-        .stat { padding:0.55rem 1.5rem; border-right:1px solid var(--border); text-align:center; }
-        .stat-number { font-family:var(--mono); font-size:1.05rem; font-weight:700; color:var(--gold); }
-        .stat-label  { font-family:var(--mono); font-size:0.58rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
+        .stats-bar { 
+            position: relative; z-index: 10;
+            display:flex; border-bottom:1px solid var(--border); flex-shrink:0; 
+        }
+        .stat { padding:0.6rem 1.5rem; border-right:1px solid var(--border); text-align:center; }
+        .stat-number { font-family:var(--mono); font-size:1.2rem; font-weight:700; color:var(--gold); }
+        .stat-label  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
 
-        /* ── MAIN ── */
-        .main-wrap { flex:1; display:flex; padding:1.25rem 1.5rem; gap:1.5rem; min-height:0; overflow:hidden; }
+        /* ── MAIN THREE-COLUMN LAYOUT ── */
+        .main-wrap { 
+            position: relative; z-index: 10;
+            flex:1; display:flex; padding:1.25rem 1.5rem; gap:1.5rem; min-height:0; overflow:hidden; 
+        }
 
-        /* ── SIDEBAR ── */
-        .sidebar { width:300px; flex-shrink:0; display:flex; flex-direction:column; gap:1.1rem; overflow-y:auto; }
-        .sidebar::-webkit-scrollbar { width:3px; }
-        .sidebar::-webkit-scrollbar-thumb { background:var(--border); }
+        /* ── LEFT COLUMN (controles) ── */
+        .left-col { width:280px; flex-shrink:0; display:flex; flex-direction:column; gap:1.1rem; overflow-y:auto; }
+        .left-col::-webkit-scrollbar { width:3px; }
+        .left-col::-webkit-scrollbar-thumb { background:var(--border); }
 
-        .panel { border:1px solid var(--border); background:var(--bg2); padding:1rem; }
-        .panel-title { font-family:var(--mono); font-size:0.68rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.4rem; margin-bottom:0.8rem; }
+        /* ── RIGHT COLUMN (valores en vivo + clave ontológica) ── */
+        .right-col { width:280px; flex-shrink:0; display:flex; flex-direction:column; gap:1.1rem; overflow-y:auto; }
+        .right-col::-webkit-scrollbar { width:3px; }
+        .right-col::-webkit-scrollbar-thumb { background:var(--border); }
 
-        .slider-wrap { display:flex; flex-direction:column; gap:6px; }
-        .slider-wrap label { font-family:var(--mono); font-size:0.72rem; color:var(--blue); display:flex; justify-content:space-between; }
+        .panel { border:1px solid var(--border); background:var(--bg2); padding:1.1rem; backdrop-filter:blur(8px); }
+        .panel-title { font-family:var(--mono); font-size:0.75rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.4rem; margin-bottom:0.8rem; }
+
+        .slider-wrap { display:flex; flex-direction:column; gap:8px; }
+        .slider-wrap label { font-family:var(--mono); font-size:0.8rem; color:var(--blue); display:flex; justify-content:space-between; }
         input[type=range] {
             -webkit-appearance:none; appearance:none; width:100%;
-            background:rgba(91,200,245,0.12); height:3px; border-radius:2px; outline:none;
+            background:rgba(91,200,245,0.12); height:4px; border-radius:2px; outline:none;
         }
         input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance:none; appearance:none; width:14px; height:14px;
+            -webkit-appearance:none; appearance:none; width:16px; height:16px;
             background:var(--blue); border-radius:50%; cursor:pointer;
-            box-shadow: 0 0 6px var(--blue);
+            box-shadow: 0 0 8px var(--blue);
         }
 
-        .mass-btns { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+        .mass-btns { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
         .mass-btn {
             background:rgba(0,0,0,0.4); border:1px solid var(--border);
-            color:var(--dim); padding:0.55rem 0.5rem;
-            font-family:var(--mono); font-size:0.65rem; cursor:pointer;
+            color:var(--dim); padding:0.6rem 0.5rem;
+            font-family:var(--mono); font-size:0.7rem; cursor:pointer;
             transition:0.2s; text-align:center; border-radius:2px;
         }
         .mass-btn:hover { background:rgba(91,200,245,0.05); color:var(--text); }
         .mass-btn.active { border-color:var(--blue); color:var(--blue); background:rgba(91,200,245,0.07); }
 
-        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.72rem; color:var(--dim); padding:0.22rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.8rem; color:var(--dim); padding:0.3rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
         .data-val { color:var(--text); font-weight:700; }
 
-        .note { font-family:var(--mono); font-size:0.68rem; color:var(--dim); line-height:1.6; }
+        .note { font-family:var(--mono); font-size:0.75rem; color:var(--dim); line-height:1.7; }
 
-        /* ── CAUSAL DIR TOGGLE ── */
-        .causal-toggle { display:flex; gap:6px; }
+        /* ── CAUSAL TOGGLE ── */
+        .causal-toggle { display:flex; gap:8px; }
         .causal-btn {
-            flex:1; padding:0.55rem; font-family:var(--mono); font-size:0.65rem;
+            flex:1; padding:0.6rem; font-family:var(--mono); font-size:0.7rem;
             font-weight:700; cursor:pointer; border-radius:2px; transition:0.2s;
             text-align:center; border:1px solid var(--border); background:transparent; color:var(--dim);
         }
         .causal-btn.active-tie    { border-color:var(--gold);  color:var(--gold);  background:rgba(255,215,0,0.07); }
         .causal-btn.active-ortho  { border-color:var(--red);   color:var(--red);   background:rgba(255,68,85,0.07); }
 
-        /* ── CASCADE ── */
+        /* ── CASCADE ── (tamaños ajustados: un poco más grandes que original pero no tanto como antes) */
         .cascade-area {
             flex:1; display:flex; flex-direction:column;
             justify-content:center; align-items:center;
             gap:0; position:relative; min-width:0;
         }
 
-        /* Tier cards */
+        /* Tier cards — con tamaños ajustados (entre original y aumentado) */
         .tier {
             width:100%; max-width:680px;
             border:1px solid var(--border);
@@ -128,6 +166,7 @@
             padding:1.1rem 1.4rem;
             position:relative;
             transition: border-color 0.35s, box-shadow 0.35s;
+            backdrop-filter:blur(8px);
         }
         .tier-t0 { border-color: rgba(168,85,247,0.5); }
         .tier-t1 { border-color: rgba(255,215,0,0.5); background:rgba(10,8,0,0.97); }
@@ -152,17 +191,17 @@
 
         .tier-header { display:flex; align-items:center; gap:0.9rem; margin-bottom:0.6rem; }
         .tier-badge {
-            font-family:var(--mono); font-size:0.65rem; font-weight:700;
+            font-family:var(--mono); font-size:0.68rem; font-weight:700;
             padding:3px 9px; border-radius:2px; letter-spacing:1px; flex-shrink:0;
         }
         .badge-t0 { background:rgba(168,85,247,0.2); color:var(--purple); border:1px solid rgba(168,85,247,0.4); }
         .badge-t1 { background:rgba(255,215,0,0.15);  color:var(--gold);   border:1px solid rgba(255,215,0,0.4); }
         .badge-t2 { background:rgba(91,200,245,0.12); color:var(--blue);   border:1px solid rgba(91,200,245,0.35); }
 
-        .tier-name { font-family:var(--mono); font-size:0.75rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; }
+        .tier-name { font-family:var(--mono); font-size:0.78rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; }
 
         .invariant-badge {
-            margin-left:auto; font-family:var(--mono); font-size:0.6rem;
+            margin-left:auto; font-family:var(--mono); font-size:0.62rem;
             color:var(--gold); border:1px solid rgba(255,215,0,0.35);
             padding:2px 8px; letter-spacing:1px;
             opacity:0; transition: opacity 0.3s;
@@ -172,24 +211,26 @@
         .tier-body { display:flex; align-items:center; gap:1.5rem; }
 
         .tier-eq {
-            font-family:var(--mono); font-size:1.05rem; font-weight:700;
+            font-family:var(--mono); font-size:1.1rem; font-weight:700;
             color:var(--text); flex-shrink:0;
         }
+        .tier-eq .katex { font-size:1.1rem; }
         .tier-t0 .tier-eq { color:var(--purple); }
-        .tier-t1 .tier-eq { color:var(--gold); font-size:1.2rem; }
+        .tier-t1 .tier-eq { color:var(--gold); font-size:1.25rem; }
+        .tier-t1 .tier-eq .katex { font-size:1.25rem; }
         .tier-t2 .tier-eq { color:var(--blue); }
 
         .tier-value-block { flex:1; }
         .tier-value {
-            font-family:var(--mono); font-size:1.4rem; font-weight:700;
+            font-family:var(--mono); font-size:1.5rem; font-weight:700;
             transition: color 0.3s;
         }
         .tier-t0 .tier-value { color:var(--purple); }
         .tier-t1 .tier-value { color:var(--gold); }
         .tier-t2 .tier-value { color:var(--blue); }
 
-        .tier-unit  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); margin-top:2px; }
-        .tier-interp { font-size:0.78rem; color:var(--dim); margin-top:4px; line-height:1.4; }
+        .tier-unit  { font-family:var(--mono); font-size:0.68rem; color:var(--dim); margin-top:2px; }
+        .tier-interp { font-size:0.82rem; color:var(--dim); margin-top:4px; line-height:1.4; }
 
         /* ── CONNECTOR ARROWS ── */
         .connector {
@@ -205,7 +246,7 @@
         .conn-label {
             position:absolute; left:50%; transform:translateX(-50%);
             top:50%; transform:translate(-50%,-50%);
-            font-family:var(--mono); font-size:0.62rem; color:var(--dim);
+            font-family:var(--mono); font-size:0.65rem; color:var(--dim);
             background:var(--bg); padding:0 8px; white-space:nowrap;
             letter-spacing:1px;
         }
@@ -242,17 +283,26 @@
         .causal-ortho ~ .ortho-warning { display:block; }
 
         /* ── FOOTER ── */
-        footer { border-top:1px solid var(--border); padding:0.65rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+        footer { 
+            position: relative; z-index: 10;
+            border-top:1px solid var(--border); padding:0.65rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; 
+        }
         .footer-nav { display:flex; gap:2rem; }
         .footer-nav a { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; transition:0.2s; }
         .footer-nav a:hover { color:var(--blue); }
         .footer-eq     { font-family:var(--mono); font-size:0.7rem; color:rgba(255,215,0,0.5); text-align:center; }
+        .footer-eq .katex { font-size:0.7rem; }
         .footer-credit { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; }
 
-        @media (max-width:900px) { .main-wrap{flex-direction:column;overflow-y:auto} .sidebar{width:100%} }
+        @media (max-width:1000px) { 
+            .main-wrap{flex-direction:column;overflow-y:auto} 
+            .left-col, .right-col{width:100%} 
+        }
     </style>
 </head>
 <body>
+
+<canvas id="galaxy-canvas"></canvas>
 
 <nav>
     <div style="display:flex; align-items:center; gap:20px;">
@@ -262,14 +312,14 @@
        <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
        <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
        </svg>
-      0009-0008-4935-9010
+       0009-0008-4935-9010
     </a>
   </div>
   
   <!-- SELECTOR DE IDIOMA -->
   <div style="display:flex;gap:.4rem;">
-    <a href="jerarquia.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">ES</a>
-    <a href="jerarquia-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">EN</a>
+    <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ES</button>
+    <button class="lang-btn inactive" id="btn-en" onclick="setLang('en')">EN</button>
   </div>
     
     <a href="lab-fundamentos.html" class="nav-back">← LABORATORIO</a>
@@ -280,7 +330,7 @@
     <div class="page-label">H-17 · EN VIVO · ONTOLOGÍA · JERARQUÍA DIMENSIONAL</div>
     <h1>JERARQUÍA CÓSMICA T⁰ / T¹ / T²</h1>
     <p class="page-desc">La aceleración gravitacional no es una causa: es una sombra. TIE revela los tres niveles ontológicos de la realidad y la dirección causal correcta. Mueve H₀ y observa qué cambia — y qué permanece invariante.</p>
-    <div class="page-eq">∇φ₀ = mv₀/ħ &nbsp;(T⁰) &nbsp;→&nbsp; v₀ = c/R &nbsp;(T¹) &nbsp;→&nbsp; a₀ = v₀·H₀ &nbsp;(T²)</div>
+    <div class="page-eq">\( \nabla\varphi_0 = mv_0/\hbar \) &nbsp;(T⁰) &nbsp;→&nbsp; \( v_0 = c/R \) &nbsp;(T¹) &nbsp;→&nbsp; \( a_0 = v_0 \cdot H_0 \) &nbsp;(T²)</div>
 </div>
 
 <div class="stats-bar">
@@ -304,8 +354,8 @@
 
 <div class="main-wrap">
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
+    <!-- LEFT COLUMN - CONTROLES -->
+    <div class="left-col">
 
         <div class="panel">
             <div class="panel-title">Parámetro de Hubble</div>
@@ -313,7 +363,7 @@
                 <label>H₀ <span id="lbl-h0">70.0 km/s/Mpc</span></label>
                 <input type="range" id="sl-h0" min="67" max="74" step="0.1" value="70.0" oninput="onH0Change(this.value)">
             </div>
-            <div style="margin-top:0.65rem;">
+            <div style="margin-top:0.7rem;">
                 <div class="data-row">Planck 2018 <span class="data-val" style="color:var(--blue)">67.4</span></div>
                 <div class="data-row">SH0ES 2022  <span class="data-val" style="color:var(--red)">73.0</span></div>
                 <div class="data-row">TIE (este tratado) <span class="data-val" style="color:var(--gold)">70.0</span></div>
@@ -323,42 +373,23 @@
         <div class="panel">
             <div class="panel-title">Masa de referencia (T⁰)</div>
             <div class="mass-btns">
-                <button class="mass-btn active" id="mb-electron" onclick="selectMass('electron',this)">Electrón<br><span style="color:var(--dim);font-size:0.6rem">9.11×10⁻³¹ kg</span></button>
-                <button class="mass-btn" id="mb-proton"   onclick="selectMass('proton',this)">Protón<br><span style="color:var(--dim);font-size:0.6rem">1.67×10⁻²⁷ kg</span></button>
-                <button class="mass-btn" id="mb-sol"      onclick="selectMass('sol',this)">Sol<br><span style="color:var(--dim);font-size:0.6rem">1.99×10³⁰ kg</span></button>
-                <button class="mass-btn" id="mb-galaxia"  onclick="selectMass('galaxia',this)">Galaxia<br><span style="color:var(--dim);font-size:0.6rem">10¹¹ M☉</span></button>
+                <button class="mass-btn active" id="mb-electron" onclick="selectMass('electron',this)">Electrón<br><span style="color:var(--dim);font-size:0.65rem">9.11×10⁻³¹ kg</span></button>
+                <button class="mass-btn" id="mb-proton"   onclick="selectMass('proton',this)">Protón<br><span style="color:var(--dim);font-size:0.65rem">1.67×10⁻²⁷ kg</span></button>
+                <button class="mass-btn" id="mb-sol"      onclick="selectMass('sol',this)">Sol<br><span style="color:var(--dim);font-size:0.65rem">1.99×10³⁰ kg</span></button>
+                <button class="mass-btn" id="mb-galaxia"  onclick="selectMass('galaxia',this)">Galaxia<br><span style="color:var(--dim);font-size:0.65rem">10¹¹ M☉</span></button>
             </div>
         </div>
 
         <div class="panel">
             <div class="panel-title">Dirección causal</div>
             <div class="causal-toggle">
-                <button class="causal-btn active-tie" id="cb-tie"   onclick="setCausal('tie')">↓ TIE<br><span style="font-size:0.6rem">T⁰ → T¹ → T²</span></button>
-                <button class="causal-btn" id="cb-ortho" onclick="setCausal('ortho')">↑ ORTODOXA<br><span style="font-size:0.6rem">T² ← postulado</span></button>
+                <button class="causal-btn active-tie" id="cb-tie"   onclick="setCausal('tie')">↓ TIE<br><span style="font-size:0.65rem">T⁰ → T¹ → T²</span></button>
+                <button class="causal-btn" id="cb-ortho" onclick="setCausal('ortho')">↑ ORTODOXA<br><span style="font-size:0.65rem">T² ← postulado</span></button>
             </div>
         </div>
-
-        <div class="panel">
-            <div class="panel-title">Valores en vivo</div>
-            <div class="data-row">∇φ₀ <span class="data-val" id="dv-grad" style="color:var(--purple)">--</span></div>
-            <div class="data-row">v₀ = c/R <span class="data-val" style="color:var(--gold)">47,713 km/s</span></div>
-            <div class="data-row">a₀ = v₀·H₀ <span class="data-val" id="dv-a0" style="color:var(--blue)">--</span></div>
-            <div class="data-row">Λ_TIE = 2H₀²/c² <span class="data-val" id="dv-lambda" style="color:var(--dim)">--</span></div>
-        </div>
-
-        <div class="panel">
-            <div class="panel-title">Clave ontológica</div>
-            <p class="note">
-                <span style="color:var(--purple)">T⁰</span> — geometría pura. No depende de H₀.<br>
-                <span style="color:var(--gold)">T¹</span> — velocidad topológica. <strong>INVARIANTE</strong>. c/R nunca cambia.<br>
-                <span style="color:var(--blue)">T²</span> — sombra cinemática. Cambia con H₀.<br><br>
-                La física ortodoxa empieza por T² e inventa materia oscura. TIE empieza por T⁰ y la materia oscura desaparece.
-            </p>
-        </div>
-
     </div>
 
-    <!-- CASCADE -->
+    <!-- CENTER COLUMN - CASCADE (tamaños ajustados) -->
     <div class="cascade-area" id="cascade">
 
         <!-- T⁰ -->
@@ -368,7 +399,7 @@
                 <span class="tier-name">Gradiente de Fase — Geometría Pura</span>
             </div>
             <div class="tier-body">
-                <div class="tier-eq">∇φ₀ = mv₀/ħ</div>
+                <div class="tier-eq">\( \nabla\varphi_0 = mv_0/\hbar \)</div>
                 <div class="tier-value-block">
                     <div class="tier-value" id="val-t0">4.12×10¹¹</div>
                     <div class="tier-unit">rad / m</div>
@@ -392,7 +423,7 @@
                 <span class="invariant-badge" id="inv-badge">INVARIANTE</span>
             </div>
             <div class="tier-body">
-                <div class="tier-eq">v₀ = c/R</div>
+                <div class="tier-eq">\( v_0 = c/R \)</div>
                 <div class="tier-value-block">
                     <div class="tier-value" id="val-t1">47,713 km/s</div>
                     <div class="tier-unit">m / s &nbsp;·&nbsp; no depende de H₀</div>
@@ -415,7 +446,7 @@
                 <span class="tier-name">Aceleración Aparente — Artefacto Cinemático</span>
             </div>
             <div class="tier-body">
-                <div class="tier-eq">a₀ = v₀ · H₀</div>
+                <div class="tier-eq">\( a_0 = v_0 \cdot H_0 \)</div>
                 <div class="tier-value-block">
                     <div class="tier-value" id="val-t2">1.082×10⁻¹⁰</div>
                     <div class="tier-unit">m / s² &nbsp;·&nbsp; cambia con H₀</div>
@@ -430,6 +461,27 @@
         </div>
 
     </div>
+
+    <!-- RIGHT COLUMN - VALORES EN VIVO + CLAVE ONTOLÓGICA -->
+    <div class="right-col">
+        <div class="panel">
+            <div class="panel-title">Valores en vivo</div>
+            <div class="data-row">\( \nabla\varphi_0 \) <span class="data-val" id="dv-grad" style="color:var(--purple)">--</span></div>
+            <div class="data-row">v₀ = c/R <span class="data-val" style="color:var(--gold)">47,713 km/s</span></div>
+            <div class="data-row">a₀ = v₀·H₀ <span class="data-val" id="dv-a0" style="color:var(--blue)">--</span></div>
+            <div class="data-row">Λ_TIE = 2H₀²/c² <span class="data-val" id="dv-lambda" style="color:var(--dim)">--</span></div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Clave ontológica</div>
+            <p class="note">
+                <span style="color:var(--purple)">T⁰</span> — geometría pura. No depende de H₀.<br>
+                <span style="color:var(--gold)">T¹</span> — velocidad topológica. <strong>INVARIANTE</strong>. c/R nunca cambia.<br>
+                <span style="color:var(--blue)">T²</span> — sombra cinemática. Cambia con H₀.<br><br>
+                La física ortodoxa empieza por T² e inventa materia oscura. TIE empieza por T⁰ y la materia oscura desaparece.
+            </p>
+        </div>
+    </div>
 </div>
 
 <footer>
@@ -437,10 +489,64 @@
         <a href="constante.html">← a₀ y Λ</a>
         <a href="onto.html">Bisturí v2.0 →</a>
     </div>
-    <div class="footer-eq">∇φ₀ (T⁰) → v₀ = c/R (T¹) → a₀ = v₀·H₀ (T²) &nbsp;·&nbsp; Capítulo 3 · Jerarquía Dimensional</div>
+    <div class="footer-eq">\( \nabla\varphi_0 (T^0) \rightarrow v_0 = c/R (T^1) \rightarrow a_0 = v_0 \cdot H_0 (T^2) \) · Capítulo 3 · Jerarquía Dimensional</div>
     <div class="footer-credit">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+    <div style="margin-top:0.3rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">
+        <a href="index.html" style="color:inherit; text-decoration:none;">INICIO</a> · 
+        <a href="labs.html" style="color:inherit; text-decoration:none;">LAB</a> · 
+        <a href="papers.html" style="color:inherit; text-decoration:none;">PAPERS</a> · 
+        <a href="predicciones.html" style="color:inherit; text-decoration:none;">PREDICCIONES</a> · 
+        <a href="teoria.html" style="color:inherit; text-decoration:none;">TEORÍA</a> · 
+        <a href="https://github.com/ralc-tie-creator" target="_blank" style="color:inherit; text-decoration:none;">GITHUB</a>
+    </div>
 </footer>
 
+<!-- THREE.JS GALAXY BACKGROUND -->
+<script>
+(function(){
+  const canvas = document.getElementById('galaxy-canvas');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  function resize(){
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.updateProjectionMatrix();
+  }
+  resize(); window.addEventListener('resize', resize);
+  camera.position.set(0, 4, 6); camera.lookAt(0, 0, 0);
+
+  const N = 60000, pos = new Float32Array(N*3), col = new Float32Array(N*3);
+  const cIn = new THREE.Color('#FFD700'), cOut = new THREE.Color('#1a1a4e');
+  for(let i=0; i<N; i++){
+    const r = Math.random()*5, b = (i%5)/5 * Math.PI*2, s = r*1.2;
+    const rx = Math.pow(Math.random(),2.5) * (Math.random()<0.5?1:-1) * 0.4 * r;
+    const ry = Math.pow(Math.random(),2.5) * (Math.random()<0.5?1:-1) * 0.12 * r;
+    const rz = Math.pow(Math.random(),2.5) * (Math.random()<0.5?1:-1) * 0.4 * r;
+    pos[i*3]   = Math.cos(b+s)*r + rx;
+    pos[i*3+1] = ry;
+    pos[i*3+2] = Math.sin(b+s)*r + rz;
+    const mixed = new THREE.Color().lerpColors(cIn, cOut, r/5);
+    col[i*3]   = mixed.r;
+    col[i*3+1] = mixed.g;
+    col[i*3+2] = mixed.b;
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  const mat = new THREE.PointsMaterial({ size:0.007, sizeAttenuation:true, depthWrite:false, blending:THREE.AdditiveBlending, vertexColors:true });
+  scene.add(new THREE.Points(geo, mat));
+
+  (function animate(){
+    requestAnimationFrame(animate);
+    scene.rotation.y += 0.0005;
+    renderer.render(scene, camera);
+  })();
+})();
+</script>
+
+<!-- JERARQUIA SIMULATION -->
 <script>
     // ── CONSTANTES FÍSICAS ──
     const C    = 2.998e8;        // m/s
@@ -499,7 +605,7 @@
         document.getElementById('val-t1').textContent = `${v0_kms.toFixed(0).toLocaleString('es-MX')} km/s`;
         document.getElementById('val-t2').textContent = formatSci(a0);
 
-        // Sidebar
+        // Sidebar (right column)
         document.getElementById('dv-grad').textContent   = formatSci(grad_phi) + ' rad/m';
         document.getElementById('dv-a0').textContent     = formatSci(a0) + ' m/s²';
         document.getElementById('dv-lambda').textContent = formatSci(lambda_tie) + ' m⁻²';
@@ -570,7 +676,22 @@
     }
 
     // Init
-    update();
+    window.onload = () => {
+        update();
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: '\\(', right: '\\)', display: false },
+                { left: '\\[', right: '\\]', display: true },
+            ],
+            throwOnError: false,
+        });
+    };
+
+    // Language switching function (placeholder)
+    function setLang(l) {
+        document.getElementById('btn-es').className = l === 'es' ? 'lang-btn active' : 'lang-btn inactive';
+        document.getElementById('btn-en').className = l === 'en' ? 'lang-btn active' : 'lang-btn inactive';
+    }
 </script>
 <script src="axon-widget.js"></script>
 </body>

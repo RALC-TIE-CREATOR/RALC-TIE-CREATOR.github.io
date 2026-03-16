@@ -108,32 +108,34 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 .chart-title{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
 .galaxy-info{font-family:var(--mono);font-size:.65rem;color:var(--dim);}
 
-/* RESULT CARDS */
+/* RESULT CARDS - TAMAÑOS AUMENTADOS */
 .results-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.25rem;}
 @media(max-width:700px){.results-grid{grid-template-columns:repeat(2,1fr);}}
-.result-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:.85rem;text-align:center;}
+.result-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem 0.5rem;text-align:center;}
 .result-card.hi{border-color:rgba(255,215,0,.35);}
-.rc-label{font-family:var(--mono);font-size:.58rem;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:.35rem;}
-.rc-value{font-family:var(--mono);font-size:1.5rem;font-weight:700;color:var(--gold);line-height:1;}
-.rc-unit{font-family:var(--mono);font-size:.58rem;color:var(--dim);margin-top:.15rem;}
+.rc-label{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:.35rem;}
+.rc-value{font-family:var(--mono);font-size:1.7rem;font-weight:700;color:var(--gold);line-height:1;}
+.rc-unit{font-family:var(--mono);font-size:.65rem;color:var(--dim);margin-top:.15rem;}
 
 /* COMPARE */
 .compare-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.25rem;backdrop-filter:blur(8px);}
-.compare-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.65rem;}
-.compare-table th{color:var(--dim);font-weight:400;text-align:left;padding:.4rem .6rem;border-bottom:1px solid var(--border);}
-.compare-table td{padding:.4rem .6rem;border-bottom:1px solid rgba(91,200,245,.07);}
+.compare-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.7rem;}
+.compare-table th{color:var(--dim);font-weight:400;text-align:left;padding:.5rem .6rem;border-bottom:1px solid var(--border);}
+.compare-table td{padding:.5rem .6rem;border-bottom:1px solid rgba(91,200,245,.07);}
 .compare-table .gold{color:var(--gold);font-weight:700;}
 .compare-table .blue{color:var(--blue);}
 .compare-table .highlight td{background:rgba(255,215,0,.04);}
 
 /* INSIGHT */
-.insight-box{background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:1rem 1.25rem;font-size:.82rem;line-height:1.7;margin-bottom:1.25rem;}
+.insight-box{background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:1rem 1.25rem;font-size:.85rem;line-height:1.7;margin-bottom:1.25rem;}
 .insight-box .hi{color:var(--gold);font-weight:700;}
 
-.const-row{display:flex;flex-wrap:wrap;gap:.75rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.75rem 1.25rem;backdrop-filter:blur(8px);margin-top:1.25rem;}
-.ci{font-family:var(--mono);font-size:.65rem;}
+/* CONSTANTS ROW - TAMAÑO AUMENTADO */
+.const-row{display:flex;flex-wrap:wrap;gap:.75rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.9rem 1.4rem;backdrop-filter:blur(8px);margin-top:1.25rem;}
+.ci{font-family:var(--mono);font-size:.75rem;}
 .ci .cl{color:var(--dim);}
 .ci .cv{color:var(--gold);font-weight:700;}
+
 .nav-links{display:flex;justify-content:center;gap:2rem;margin-top:2rem;flex-wrap:wrap;}
 .nav-links a{font-family:var(--mono);font-size:.7rem;color:var(--dim);text-decoration:none;transition:color .2s;}
 .nav-links a:hover{color:var(--gold);}
@@ -326,7 +328,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <!-- RIGHT COLUMN -->
     <div style="display:flex;flex-direction:column;gap:1.25rem;">
 
-      <!-- RESULT CARDS -->
+      <!-- RESULT CARDS - TAMAÑOS AUMENTADOS -->
       <div class="results-grid">
         <div class="result-card hi">
           <div class="rc-label">v_flat TIE</div>
@@ -378,6 +380,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
         <span class="hi">¿Por qué la curva se aplana?</span> En Newtoniana pura (sin a₀), la velocidad cae como 1/√r más allá de la masa visible — la curva roja discontinua. TIE modifica la aceleración: \( a_{\text{TIE}} = \sqrt{a_N(a_N+a_0)} \). Para r ≫ rₜ, domina el término con a₀ y la velocidad se vuelve constante: <span class="hi">v_flat = (GMa₀)^(1/4)</span>. Sin materia oscura. Sin parámetros libres.
       </div>
 
+      <!-- CONSTANTS ROW - TAMAÑO AUMENTADO -->
       <div class="const-row">
         <div class="ci"><span class="cl">a₀ = </span><span class="cv">1.082×10⁻¹⁰ m/s²</span></div>
         <div class="ci"><span class="cl">H₀ = </span><span class="cv">70 km/s/Mpc</span></div>
@@ -397,6 +400,14 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 <footer>
   <div class="feq">\( v_{\text{TIE}}(r) = \sqrt{r\sqrt{a_N(a_N+a_0)}} \quad \cdot \quad v_{\text{flat}} = (GMa_0)^{1/4} \quad \cdot \quad (R \equiv 2\pi) \)</div>
   <div class="fcopy">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+  <div style="margin-top:0.3rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">
+    <a href="index.html" style="color:inherit; text-decoration:none;">INICIO</a> · 
+    <a href="labs.html" style="color:inherit; text-decoration:none;">LAB</a> · 
+    <a href="papers.html" style="color:inherit; text-decoration:none;">PAPERS</a> · 
+    <a href="predicciones.html" style="color:inherit; text-decoration:none;">PREDICCIONES</a> · 
+    <a href="teoria.html" style="color:inherit; text-decoration:none;">TEORÍA</a> · 
+    <a href="https://github.com/ralc-tie-creator" target="_blank" style="color:inherit; text-decoration:none;">GITHUB</a>
+  </div>
 </footer>
 
 <script>

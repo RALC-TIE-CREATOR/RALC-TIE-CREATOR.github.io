@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TIE ·  H-04 · Bisturí v2.0 · Traductor Ontológico</title>
+    <title>TIE · Bisturí v2.0 · Traductor Ontológico</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -21,13 +21,33 @@
 
         nav { background:rgba(0,0,1,0.95); border-bottom:1px solid var(--border); padding:0.85rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
         .nav-logo { font-family:var(--mono); color:var(--gold); text-decoration:none; font-weight:700; font-size:0.85rem; letter-spacing:2px; }
+        
         /* ESTILO PARA EL BOTÓN ORCID */
-        .orcid-link {display: flex;align-items: center;gap: 8px;font-family: var(--mono);font-size: 0.75rem;color: #A6CE39;text-decoration: none;border: 1px solid rgba(166, 206, 57, 0.3);padding: 4px 12px;border-radius: 2px;transition: 0.3s;letter-spacing: 1px;}
-        .orcid-link:hover {background: rgba(166, 206, 57, 0.1);box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);color: #fff;}
+        .orcid-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: #A6CE39;
+            text-decoration: none;
+            border: 1px solid rgba(166, 206, 57, 0.3);
+            padding: 4px 12px;
+            border-radius: 2px;
+            transition: 0.3s;
+            letter-spacing: 1px;
+        }
+        .orcid-link:hover {
+            background: rgba(166, 206, 57, 0.1);
+            box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);
+            color: #fff;
+        }
         
         .nav-right { display:flex; align-items:center; gap:1.5rem; }
-        .nav-lang  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; letter-spacing:1px; }
-        .nav-lang.active { color:var(--text); }
+        .lang-btn  { font-family:var(--mono); font-size:0.7rem; font-weight:700; letter-spacing:2px; padding:0.25rem 0.6rem; border-radius:4px; cursor:pointer; border:none; transition:all .2s; }
+        .lang-btn.active { color:#000; background:var(--gold); }
+        .lang-btn.inactive { color:var(--dim); border:1px solid var(--border); background:transparent; }
+        .lang-btn.inactive:hover { color:var(--gold); border-color:var(--gold); }
         .nav-back  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; letter-spacing:1px; border:1px solid rgba(160,160,176,0.3); padding:0.35rem 0.75rem; transition:0.2s; }
         .nav-back:hover { color:var(--blue); border-color:var(--blue); }
 
@@ -44,13 +64,13 @@
 
         .main-wrap { flex:1; display:flex; padding:1.25rem 1.5rem; gap:1.25rem; min-height:0; }
 
-        /* ── SIDEBAR ── */
-        .sidebar { width:340px; flex-shrink:0; display:flex; flex-direction:column; gap:0; overflow-y:auto; border:1px solid var(--border); background:var(--bg2); }
-        .sidebar::-webkit-scrollbar { width:3px; }
-        .sidebar::-webkit-scrollbar-thumb { background:var(--border); }
+        /* ── LEFT COLUMN (equations) ── */
+        .left-col { width:280px; flex-shrink:0; display:flex; flex-direction:column; gap:0; overflow-y:auto; border:1px solid var(--border); background:var(--bg2); }
+        .left-col::-webkit-scrollbar { width:3px; }
+        .left-col::-webkit-scrollbar-thumb { background:var(--border); }
 
-        .sidebar-title { font-family:var(--mono); font-size:0.7rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding:0.85rem 1rem 0.5rem; position:sticky; top:0; background:var(--bg2); z-index:10; }
-        .sidebar-desc  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); padding:0.5rem 1rem 0.75rem; line-height:1.5; border-bottom:1px solid var(--border); }
+        .left-title { font-family:var(--mono); font-size:0.7rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding:0.85rem 1rem 0.5rem; position:sticky; top:0; background:var(--bg2); z-index:10; }
+        .left-desc  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); padding:0.5rem 1rem 0.75rem; line-height:1.5; border-bottom:1px solid var(--border); }
 
         .eq-btn {
             display:block; width:100%; text-align:left;
@@ -66,18 +86,30 @@
         .eq-btn.active-fermi { background:rgba(68,255,136,0.06); color:var(--green); border-left:2px solid var(--green); }
         .eq-btn .btn-label { font-size:0.65rem; color:inherit; opacity:0.7; letter-spacing:1px; text-transform:uppercase; }
 
-        .sidebar-status { padding:0.75rem 1rem; border-top:1px solid var(--border); margin-top:auto; }
-        .status-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.72rem; color:var(--dim); padding:0.2rem 0; }
+        /* ── RIGHT COLUMN (control panel) ── */
+        .right-col { width:280px; flex-shrink:0; display:flex; flex-direction:column; gap:1.25rem; overflow-y:auto; }
+        .right-col::-webkit-scrollbar { width:3px; }
+        .right-col::-webkit-scrollbar-thumb { background:var(--border); }
+
+        .panel { border:1px solid var(--border); background:var(--bg2); padding:1rem; }
+        .panel-title { font-family:var(--mono); font-size:0.75rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.4rem; margin-bottom:0.8rem; }
+        .status-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.8rem; color:var(--dim); padding:0.4rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+        .status-row:last-child { border-bottom:none; }
         .status-val { color:var(--text); font-weight:700; }
 
         .btn-run {
-            margin:0.75rem 1rem 1rem;
-            padding:0.8rem; font-family:var(--mono); font-size:0.8rem; font-weight:700;
+            width:100%; padding:0.9rem; font-family:var(--mono); font-size:0.8rem; font-weight:700;
             letter-spacing:2px; text-transform:uppercase; cursor:pointer;
             background:var(--gold); color:#000; border:none; border-radius:2px; transition:0.2s;
         }
         .btn-run:hover   { background:#fff; }
         .btn-run:disabled{ background:var(--dim); color:#555; cursor:not-allowed; }
+
+        .count-display {
+            font-family:var(--mono); font-size:0.8rem; color:var(--gold); text-align:center;
+            background:rgba(255,215,0,0.08); border:1px solid rgba(255,215,0,0.2);
+            padding:0.5rem; border-radius:4px;
+        }
 
         /* ── PIPELINE ── */
         .pipeline {
@@ -136,31 +168,26 @@
         .footer-eq     { font-family:var(--mono); font-size:0.7rem; color:rgba(255,215,0,0.5); text-align:center; }
         .footer-credit { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; }
 
-        @media (max-width:900px) { .main-wrap{flex-direction:column} .sidebar{width:100%;max-height:300px} }
+        @media (max-width:1000px) { .main-wrap{flex-direction:column} .left-col, .right-col{width:100%;max-height:300px} }
     </style>
 </head>
 <body>
 
 <nav>
     <div style="display:flex; align-items:center; gap:20px;">
-    <a href="index.html" class="nav-logo">TIE / R@LC</a>
-    
-    <!-- INYECCIÓN DEL PASAPORTE ORCID -->
-    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
-      <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
-         <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
-      </svg>
-      0009-0008-4935-9010
-    </a>
-  </div>
-  
-  <!-- SELECTOR DE IDIOMA -->
-  <div style="display:flex;gap:.4rem;">
-    <a href="onto.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">ES</a>
-    <a href="onto-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">EN</a>
-  </div>
-    
-    <a href="lab-fundamentos.html" class="nav-back">← LABORATORIO</a>
+        <a href="index.html" class="nav-logo">TIE / R@LC</a>
+        <!-- INYECCIÓN DEL PASAPORTE ORCID -->
+        <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
+            <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
+                <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
+            </svg>
+            0009-0008-4935-9010
+        </a>
+    </div>
+    <div class="nav-right">
+        <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ES</button>
+        <button class="lang-btn inactive" id="btn-en" onclick="setLang('en')">EN</button>
+        <a href="labs.html" class="nav-back">← LABORATORIO</a>
     </div>
 </nav>
 
@@ -180,10 +207,10 @@
 
 <div class="main-wrap">
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <div class="sidebar-title">Seleccionar ecuación</div>
-        <div class="sidebar-desc">Las 10 fórmulas fundamentales. Aplica el Bisturí y observa la traducción ontológica.</div>
+    <!-- LEFT COLUMN - EQUATION LIST -->
+    <div class="left-col">
+        <div class="left-title">Seleccionar ecuación</div>
+        <div class="left-desc">Las 10 fórmulas fundamentales. Aplica el Bisturí y observa la traducción ontológica.</div>
 
         <button class="eq-btn" onclick="selectEq('base',this)">
             <span class="btn-label">1 · Aceleración base</span>
@@ -225,16 +252,9 @@
             <span class="btn-label">10 · Principio geodésico clásico</span>
             <span id="tex-btn-10"></span>
         </button>
-
-        <div class="sidebar-status">
-            <div class="status-row">Objetivo <span class="status-val" id="status-target">--</span></div>
-            <div class="status-row">T² <span class="status-val" id="status-t2" style="color:var(--dim)">PENDIENTE</span></div>
-            <div class="status-row">Veredicto <span class="status-val" id="status-verdict" style="color:var(--dim)">PENDIENTE</span></div>
-        </div>
-        <button class="btn-run" id="btn-run" onclick="runBisturi()" disabled>EJECUTAR BISTURÍ</button>
     </div>
 
-    <!-- PIPELINE -->
+    <!-- CENTER COLUMN - PIPELINE -->
     <div class="pipeline" id="scanner-area">
         <div class="laser" id="scan-laser"></div>
 
@@ -259,6 +279,34 @@
             <div class="math-box" id="math-step-4"></div>
         </div>
     </div>
+
+    <!-- RIGHT COLUMN - CONTROL PANEL -->
+    <div class="right-col">
+        <!-- BOTÓN EJECUTAR BISTURÍ ARRIBA -->
+        <button class="btn-run" id="btn-run" onclick="runBisturi()" disabled>EJECUTAR BISTURÍ</button>
+
+        <!-- CUADRO DE ESTADO (Objetivo, T², Veredicto) -->
+        <div class="panel">
+            <div class="panel-title">ESTADO DE LA ECUACIÓN</div>
+            <div class="status-row">
+                <span>Objetivo</span>
+                <span class="status-val" id="status-target">--</span>
+            </div>
+            <div class="status-row">
+                <span>T²</span>
+                <span class="status-val" id="status-t2" style="color:var(--dim)">PENDIENTE</span>
+            </div>
+            <div class="status-row">
+                <span>Veredicto</span>
+                <span class="status-val" id="status-verdict" style="color:var(--dim)">PENDIENTE</span>
+            </div>
+        </div>
+
+        <!-- CONTADOR DE PROCESADAS (opcional) -->
+        <div class="count-display">
+            <span>Procesadas: </span><span id="stat-count-display">0</span>/10
+        </div>
+    </div>
 </div>
 
 <footer>
@@ -268,6 +316,14 @@
     </div>
     <div class="footer-eq">Bisturí TIE · δ∫dφ = 0 &nbsp;·&nbsp; Capítulo 1 y Apéndice §A.7</div>
     <div class="footer-credit">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+    <div style="margin-top:0.3rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">
+        <a href="index.html" style="color:inherit; text-decoration:none;">INICIO</a> · 
+        <a href="labs.html" style="color:inherit; text-decoration:none;">LAB</a> · 
+        <a href="papers.html" style="color:inherit; text-decoration:none;">PAPERS</a> · 
+        <a href="predicciones.html" style="color:inherit; text-decoration:none;">PREDICCIONES</a> · 
+        <a href="teoria.html" style="color:inherit; text-decoration:none;">TEORÍA</a> · 
+        <a href="https://github.com/ralc-tie-creator" target="_blank" style="color:inherit; text-decoration:none;">GITHUB</a>
+    </div>
 </footer>
 
 <script>
@@ -486,6 +542,7 @@ function runBisturi() {
         processedCount++;
         document.getElementById('stat-count').textContent = processedCount;
         document.getElementById('stat-count').style.color = 'var(--gold)';
+        document.getElementById('stat-count-display').textContent = processedCount;
         autoScroll();
     }, 2600);
 }
@@ -494,7 +551,12 @@ function autoScroll() {
     const area = document.getElementById('scanner-area');
     area.scrollTo({ top: area.scrollHeight, behavior:'smooth' });
 }
+
+// Función para cambio de idioma (placeholder)
+function setLang(l) {
+    document.getElementById('btn-es').className = l === 'es' ? 'lang-btn active' : 'lang-btn inactive';
+    document.getElementById('btn-en').className = l === 'en' ? 'lang-btn active' : 'lang-btn inactive';
+}
 </script>
-<script src="axon-widget.js"></script>
 </body>
 </html>

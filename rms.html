@@ -33,57 +33,60 @@
         .orcid-link:hover {background: rgba(166, 206, 57, 0.1);box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);color: #fff;}
         
         .nav-right { display:flex; align-items:center; gap:1.5rem; }
-        .nav-lang  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; letter-spacing:1px; }
-        .nav-lang.active { color:var(--text); }
+        .lang-link  { font-family:var(--mono); font-size:0.7rem; font-weight:700; letter-spacing:2px; padding:0.25rem 0.6rem; border-radius:4px; text-decoration:none; transition:all .2s; }
+        .lang-link.active { color:#000; background:var(--gold); }
+        .lang-link.inactive { color:var(--dim); border:1px solid var(--border); background:transparent; }
+        .lang-link.inactive:hover { color:var(--gold); border-color:var(--gold); }
         .nav-back  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; border:1px solid rgba(160,160,176,0.3); padding:0.35rem 0.75rem; transition:0.2s; letter-spacing:1px; }
         .nav-back:hover { color:var(--blue); border-color:var(--blue); }
 
-        /* ── HEADER ── */
+        /* ── HEADER (TAMAÑO ORIGINAL) ── */
         .page-header { padding:1.1rem 2rem 0.9rem; border-bottom:1px solid var(--border); flex-shrink:0; }
         .page-label  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.3rem; }
         .page-header h1 { font-size:1.6rem; font-weight:900; letter-spacing:1px; margin-bottom:0.2rem; }
         .page-desc { font-size:0.85rem; color:var(--dim); max-width:720px; }
         .page-eq   { font-family:var(--mono); font-size:0.78rem; color:var(--gold); margin-top:0.35rem; }
 
-        /* ── STATS ── */
+        /* ── STATS BAR (TAMAÑO ORIGINAL) ── */
         .stats-bar { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
         .stat { padding:0.55rem 1.4rem; border-right:1px solid var(--border); text-align:center; min-width:0; }
         .stat-number { font-family:var(--mono); font-size:1.1rem; font-weight:700; color:var(--gold); transition:color 0.3s; }
         .stat-label  { font-family:var(--mono); font-size:0.58rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
 
         /* ── MAIN ── */
-        .main-wrap { flex:1; display:flex; padding:1.1rem 1.4rem; gap:1.2rem; min-height:0; overflow:hidden; }
+        .main-wrap { flex:1; display:flex; padding:1.2rem 1.5rem; gap:1.2rem; min-height:0; overflow:hidden; }
 
-        /* ── SIDEBAR ── */
-        .sidebar { width:290px; flex-shrink:0; display:flex; flex-direction:column; gap:1rem; overflow-y:auto; }
+        /* ── SIDEBAR (TAMAÑOS AUMENTADOS) ── */
+        .sidebar { width:300px; flex-shrink:0; display:flex; flex-direction:column; gap:1rem; overflow-y:auto; }
         .sidebar::-webkit-scrollbar { width:3px; }
         .sidebar::-webkit-scrollbar-thumb { background:var(--border); }
 
-        .panel { border:1px solid var(--border); background:var(--bg2); padding:0.9rem; }
-        .panel-title { font-family:var(--mono); font-size:0.68rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.38rem; margin-bottom:0.75rem; }
+        .panel { border:1px solid var(--border); background:var(--bg2); padding:1rem; }
+        .panel-title { font-family:var(--mono); font-size:0.72rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.4rem; margin-bottom:0.75rem; }
+
+        /* Botón calcular arriba */
+        .btn-calc { width:100%; padding:0.8rem; font-family:var(--mono); font-size:0.8rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; cursor:pointer; background:var(--gold); color:#000; border:none; border-radius:2px; transition:0.2s; margin-bottom:0.5rem; }
+        .btn-calc:hover { background:#fff; }
 
         /* checkboxes de filtro */
-        .filter-row { display:flex; align-items:center; justify-content:space-between; font-family:var(--mono); font-size:0.72rem; color:var(--dim); padding:0.28rem 0; cursor:pointer; user-select:none; }
+        .filter-row { display:flex; align-items:center; justify-content:space-between; font-family:var(--mono); font-size:0.75rem; color:var(--dim); padding:0.3rem 0; cursor:pointer; user-select:none; }
         .filter-row:hover { color:var(--text); }
-        .chk { width:13px; height:13px; border:1px solid var(--gold); position:relative; display:inline-block; flex-shrink:0; }
+        .chk { width:14px; height:14px; border:1px solid var(--gold); position:relative; display:inline-block; flex-shrink:0; }
         .chk.on::after { content:''; position:absolute; top:2px;left:2px;right:2px;bottom:2px; background:var(--gold); }
-        .filter-count { font-size:0.62rem; color:var(--dim); margin-left:4px; }
+        .filter-count { font-size:0.65rem; color:var(--dim); margin-left:4px; }
 
         /* quality toggle */
         .q-btns { display:flex; gap:5px; }
-        .q-btn { flex:1; padding:0.45rem; font-family:var(--mono); font-size:0.68rem; font-weight:700; cursor:pointer; border-radius:2px; transition:0.2s; text-align:center; background:transparent; border:1px solid var(--border); color:var(--dim); }
+        .q-btn { flex:1; padding:0.5rem; font-family:var(--mono); font-size:0.7rem; font-weight:700; cursor:pointer; border-radius:2px; transition:0.2s; text-align:center; background:transparent; border:1px solid var(--border); color:var(--dim); }
         .q-btn:hover { background:rgba(255,255,255,0.04); }
         .q-btn.on { border-color:var(--blue); color:var(--blue); background:rgba(91,200,245,0.08); }
 
-        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.72rem; color:var(--dim); padding:0.22rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.75rem; color:var(--dim); padding:0.3rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
         .data-val { color:var(--text); font-weight:700; }
 
-        .note { font-family:var(--mono); font-size:0.67rem; color:var(--dim); line-height:1.6; }
+        .note { font-family:var(--mono); font-size:0.7rem; color:var(--dim); line-height:1.7; }
 
-        .btn-calc { width:100%; padding:0.8rem; font-family:var(--mono); font-size:0.78rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; cursor:pointer; background:var(--gold); color:#000; border:none; border-radius:2px; transition:0.2s; }
-        .btn-calc:hover { background:#fff; }
-
-        /* ── CHART AREA ── */
+        /* ── CHARTS AREA (TAMAÑO ORIGINAL) ── */
         .charts-area { flex:1; display:flex; flex-direction:column; gap:1rem; min-width:0; min-height:0; }
 
         /* Fila superior: métricas clave */
@@ -115,7 +118,7 @@
         /* placeholder */
         .placeholder { display:flex; align-items:center; justify-content:center; height:100%; font-family:var(--mono); font-size:0.78rem; color:rgba(160,160,176,0.4); text-align:center; line-height:2; letter-spacing:1px; }
 
-        /* ── FOOTER ── */
+        /* ── FOOTER (TAMAÑO ORIGINAL) ── */
         footer { border-top:1px solid var(--border); padding:0.65rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
         .footer-nav { display:flex; gap:2rem; }
         .footer-nav a { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; transition:0.2s; }
@@ -169,8 +172,11 @@
 
 <div class="main-wrap">
 
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR (TAMAÑOS AUMENTADOS) -->
     <div class="sidebar">
+
+        <!-- BOTÓN CALCULAR ARRIBA -->
+        <button class="btn-calc" onclick="runAnalysis()">CALCULAR ESTADÍSTICAS</button>
 
         <div class="panel">
             <div class="panel-title">Tipo morfológico</div>
@@ -185,9 +191,9 @@
         <div class="panel">
             <div class="panel-title">Calidad de datos (Q)</div>
             <div class="q-btns">
-                <button class="q-btn on" id="qb-1" onclick="toggleQ(1)">Q=1<br><span style="font-size:0.58rem;color:var(--dim)">alta</span></button>
-                <button class="q-btn on" id="qb-2" onclick="toggleQ(2)">Q=2<br><span style="font-size:0.58rem;color:var(--dim)">media</span></button>
-                <button class="q-btn on" id="qb-3" onclick="toggleQ(3)">Q=3<br><span style="font-size:0.58rem;color:var(--dim)">baja</span></button>
+                <button class="q-btn on" id="qb-1" onclick="toggleQ(1)">Q=1<br><span style="font-size:0.6rem;color:var(--dim)">alta</span></button>
+                <button class="q-btn on" id="qb-2" onclick="toggleQ(2)">Q=2<br><span style="font-size:0.6rem;color:var(--dim)">media</span></button>
+                <button class="q-btn on" id="qb-3" onclick="toggleQ(3)">Q=3<br><span style="font-size:0.6rem;color:var(--dim)">baja</span></button>
             </div>
             <p class="note" style="margin-top:0.6rem;">Q=1: perfil plano claro. Q=3: datos escasos o ruidosos.</p>
         </div>
@@ -207,11 +213,9 @@
             <div class="panel-title">Nota metodológica</div>
             <p class="note">TIE usa <span style="color:var(--gold)">a₀ = cH₀/R = 1.082×10⁻¹⁰ m/s²</span> como único parámetro derivado (no ajustado). ΛCDM NFW usa 2 parámetros libres por galaxia (ρ₀, r_s). Newton puro no tiene parámetros.</p>
         </div>
-
-        <button class="btn-calc" onclick="runAnalysis()">CALCULAR ESTADÍSTICAS</button>
     </div>
 
-    <!-- CHARTS AREA -->
+    <!-- CHARTS AREA (TAMAÑO ORIGINAL) -->
     <div class="charts-area">
 
         <!-- Métricas clave -->

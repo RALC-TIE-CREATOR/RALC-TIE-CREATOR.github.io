@@ -17,10 +17,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
 .nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
 
-/* ESTILO PARA EL BOTÓN ORCID */
+/* ORCID BUTTON STYLE */
 .orcid-link {display: flex;align-items: center;gap: 8px;font-family: var(--mono);font-size: 0.75rem;color: #A6CE39;text-decoration: none;border: 1px solid rgba(166, 206, 57, 0.3);padding: 4px 12px;border-radius: 2px;transition: 0.3s;letter-spacing: 1px;}
 .orcid-link:hover {background: rgba(166, 206, 57, 0.1);box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);color: #fff;}
-
+  
 .nav-center{display:flex;gap:.5rem;}
 .lang-link{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;transition:all .2s;}
 .lang-link.active{color:#000;background:var(--gold);}
@@ -28,6 +28,59 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .lang-link.inactive:hover{color:var(--gold);border-color:var(--gold);}
 .nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;transition:color .2s;}
 .nav-back:hover{color:var(--gold);}
+
+/* ECOSYSTEM LINKS */
+.ecosistema-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 2rem 0 1rem;
+  flex-wrap: wrap;
+}
+
+.ecosistema-link {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--dim);
+  text-decoration: none;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid rgba(255,215,0,0.2);
+  border-radius: 40px;
+  transition: 0.3s;
+  letter-spacing: 2px;
+}
+
+.ecosistema-link:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 15px rgba(255,215,0,0.2);
+}
+
+.ecosistema-link.lab {
+  background: rgba(91,200,245,0.1);
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.ecosistema-link.lab:hover {
+  background: var(--blue);
+  color: #000;
+  border-color: var(--blue);
+}
+
+/* Style for current page (non-clickable, highlighted) */
+.ecosistema-current {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--blue);
+  padding: 0.5rem 1.5rem;
+  border: 1px solid var(--blue);
+  border-radius: 40px;
+  letter-spacing: 2px;
+  background: rgba(91,200,245,0.1);
+  cursor: default;
+  box-shadow: 0 0 15px rgba(91,200,245,0.2);
+}
+
 .page{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:7rem 2rem 4rem;}
 .page-tag{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:.75rem;}
 .page-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;letter-spacing:-2px;margin-bottom:.5rem;}
@@ -98,7 +151,7 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .door-orange .door-enter{color:var(--orange);}
 .door:hover .door-enter{transform:translateX(4px);}
 
-/* FALSIF BANNER */
+/* FALSIFIABILITY BANNER */
 .falsif-banner{display:flex;align-items:center;gap:1.25rem;background:linear-gradient(135deg,rgba(255,68,85,.08) 0%,rgba(255,215,0,.05) 100%);border:1px solid rgba(255,68,85,.3);border-radius:16px;padding:1.25rem 1.75rem;margin-bottom:2.5rem;text-decoration:none;color:inherit;transition:all .3s;backdrop-filter:blur(8px);}
 .falsif-banner:hover{border-color:rgba(255,68,85,.6);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,68,85,.12);}
 .fb-icon{font-size:2rem;flex-shrink:0;}
@@ -122,16 +175,16 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 <nav>
   <div style="display:flex; align-items:center; gap:20px;">
     <a href="index.html" class="nav-logo">TIE / R@LC</a>
-    <!-- INYECCIÓN DEL PASAPORTE ORCID -->
-    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
+    <!-- ORCID BADGE -->
+    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verify Author Identity on ORCID">
       <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
-         <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
+        <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
       </svg>
       0009-0008-4935-9010
     </a>
   </div>
   
-  <!-- SELECTOR DE IDIOMA -->
+  <!-- LANGUAGE SELECTOR -->
   <div style="display:flex;gap:.4rem;">
     <a href="labs.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">ES</a>
     <a href="lab-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">EN</a>
@@ -143,17 +196,27 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 <div class="page">
   <div class="page-tag">INFRASTRUCTURE LABORATORY</div>
   <h1 class="page-title">VERIFICATION <span>TOOLS</span></h1>
-  <p class="page-sub">20 interactive modules organized in 5 thematic laboratories. No faith. Just numbers.</p>
+  <p class="page-sub">20 interactive modules organized in 5 thematic labs. No faith. Just numbers.</p>
+
+  <!-- ECOSYSTEM NAVIGATION BAR -->
+  <div class="ecosistema-links">
+    <a href="index.html" class="ecosistema-link">← MAIN PAGE</a>
+    <span class="ecosistema-current">⚡ TIE LABORATORY</span>
+    <a href="https://github.com/ralc-tie-creator" target="_blank" class="ecosistema-link">🔧 GITHUB</a>
+    <a href="papers.html" class="ecosistema-link">📄 PAPERS</a>
+    <a href="predictions-en.html" class="ecosistema-link">✓ PREDICTIONS</a>
+    <a href="theory-en.html" class="ecosistema-link">📘 THEORY</a>
+  </div>
 
   <div class="stats-bar">
     <div class="stat"><div class="stat-n">20</div><div class="stat-l">TOOLS</div></div>
-    <div class="stat"><div class="stat-n" style="color:var(--green)">5</div><div class="stat-l">LABORATORIES</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--green)">5</div><div class="stat-l">LABS</div></div>
     <div class="stat"><div class="stat-n" style="color:var(--gold)">175</div><div class="stat-l">SPARC GALAXIES</div></div>
     <div class="stat"><div class="stat-n" style="color:var(--green)">12/16</div><div class="stat-l">PREDICTIONS ✓</div></div>
     <div class="stat"><div class="stat-n" style="color:var(--blue)">0</div><div class="stat-l">FREE PARAMETERS</div></div>
   </div>
 
-  <div class="section-label" style="color:var(--gold)">🚪 Five laboratories · Choose your entry</div>
+  <div class="section-label" style="color:var(--gold)">🚪 Five laboratories · Choose your door</div>
 
   <!-- ROW 1: 3 doors -->
   <div class="doors-grid">
@@ -164,19 +227,19 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
         <span class="door-count-badge">6 tools</span>
       </div>
       <div class="door-icon">⚛</div>
-      <div class="door-name">FOUNDATIONS</div>
+      <div class="door-name">FUNDAMENTALS</div>
       <div class="door-subtitle">What the TIE Treatise IS</div>
-      <p class="door-desc">The ontological core. The dimensional hierarchy T⁰→T¹→T², the R factor, the real infrastructure mass, the derived acceleration a₀, and the Scalpel that eliminates spurious T² from standard physics.</p>
+      <p class="door-desc">The ontological core (Ch. 1-3). The dimensional hierarchy T⁰→T¹→T², the R factor (RALC Constant), the real mass of the infrastructure, the acceleration a₀ derived from H₀, and the TIE Scalpel.</p>
       <div class="door-chips">
         <span class="chip">H-03 · 2π</span>
         <span class="chip">H-05 · Dark Matter</span>
-        <span class="chip">H-08 · a₀ &amp; Λ</span>
+        <span class="chip">H-08 · a₀ and Λ</span>
         <span class="chip new">H-17 · Hierarchy ★</span>
         <span class="chip new">H-04 · Scalpel ★</span>
         <span class="chip new">H-18 · Trinity ★</span>
       </div>
       <div class="door-footer">
-        <span class="door-tools-count">2 new tools</span>
+        <span class="door-tools-count">3 new tools</span>
         <span class="door-enter">ENTER →</span>
       </div>
     </a>
@@ -189,7 +252,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="door-icon">🌌</div>
       <div class="door-name">GALAXIES</div>
       <div class="door-subtitle">Direct galactic evidence</div>
-      <p class="door-desc">175 galaxies from the SPARC catalog against the TIE prediction. Rotation curves, RAR and the global RMS statistical test — σ = 0.067 dex with zero free parameters.</p>
+      <p class="door-desc">Verification in galaxies (Ch. 2 and 3). The 175 galaxies of the SPARC catalog against the TIE prediction. Rotation curves, RAR, and the global RMS statistical test — σ = 0.067 dex with zero free parameters.</p>
       <div class="door-chips">
         <span class="chip">H-01 · Curves</span>
         <span class="chip">H-02 · SPARC Explorer</span>
@@ -210,7 +273,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="door-icon">⏱</div>
       <div class="door-name">GRAVITY</div>
       <div class="door-subtitle">Relativity and spacetime</div>
-      <p class="door-desc">TIE vs General Relativity. GPS correction, clocks in gravitational fields, black holes (rₕ ≫ rₛ), and photon deflection with the emergent factor 2 from the logarithmic potential.</p>
+      <p class="door-desc">TIE vs General Relativity (Ch. 6 and 10). GPS correction, clocks in gravitational fields, the Absolute Engine, black holes with horizon radius √φ (Ch. 10), and photon deflection without dark mass.</p>
       <div class="door-chips">
         <span class="chip">H-11 · Black Holes</span>
         <span class="chip">H-12 · GPS</span>
@@ -225,7 +288,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 
   </div>
 
-  <!-- ROW 2: 2 doors centered -->
+  <!-- ROW 2: 2 centered doors -->
   <div class="doors-row2">
 
     <a href="lab-cosmologia-en.html" class="door door-green">
@@ -236,7 +299,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="door-icon">🔭</div>
       <div class="door-name">COSMOLOGY</div>
       <div class="door-subtitle">Universal scale</div>
-      <p class="door-desc">Λ constant without dark energy, φ field with LISA signal at 2.4 mHz, 3D lensing, and the Bullet Cluster — gravitational decoupling without particle dark matter.</p>
+      <p class="door-desc">Universal scale (Ch. 11 and 12). Constant Λ without dark energy, φ field with LISA coalescence signal at 2.45 mHz (Ch. 12), 3D lensing, and the Bullet Cluster — gravitational decoupling without dark matter.</p>
       <div class="door-chips">
         <span class="chip">H-07 · 3D Lensing</span>
         <span class="chip">H-13 · φ Field</span>
@@ -256,11 +319,11 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="door-icon">🤖</div>
       <div class="door-name">RESEARCHERS</div>
       <div class="door-subtitle">Technical tools</div>
-      <p class="door-desc">Public REST API for all TIE calculations, LaTeX generator with the complete equation catalog, and AI chat with the full Treatise in context.</p>
+      <p class="door-desc">Public REST API for all TIE calculations, LaTeX generator with complete equation catalog, and AI chat with the full Treatise in context.</p>
       <div class="door-chips">
         <span class="chip">H-14 · TIE AI Chat</span>
         <span class="chip">H-15 · LaTeX</span>
-        <span class="chip">H-16 · REST API</span>
+        <span class="chip">H-16 · API REST</span>
       </div>
       <div class="door-footer">
         <span class="door-tools-count">3 active tools</span>
@@ -271,12 +334,12 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   </div>
 
   <!-- FALSIFIABILITY BANNER -->
-  <a href="falsabilidad.html" class="falsif-banner">
+  <a href="falsifiability.html" class="falsif-banner">
     <div class="fb-icon">⚠️</div>
     <div class="fb-body">
-      <div class="fb-tag">Popper criterion · Falsifiable science</div>
+      <div class="fb-tag">Popper's criterion · Falsifiable science</div>
       <div class="fb-title">How to prove TIE is wrong</div>
-      <div class="fb-sub">4 quantitative falsification criteria · 8 confirmed predictions · 3 pending ngEHT/LISA/Euclid · Scientific changelog</div>
+      <div class="fb-sub">4 quantitative falsification criteria · 8 confirmed predictions · 3 pending from ngEHT/LISA/Euclid · Scientific changelog</div>
     </div>
     <div class="fb-arrow">→ VIEW</div>
   </a>
@@ -285,7 +348,15 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 
 <footer>
   <div class="feq">\( a_0 = cH_0/R \quad \cdot \quad \Lambda = 2H_0^2/c^2 \quad \cdot \quad m_{\text{TIE}} = R\,m_{\text{obs}} \quad \cdot \quad (R \equiv 2\pi) \)</div>
-  <div class="fcopy">R@LC 2026 · MÉXICO · INDEPENDENT RESEARCHER</div>
+  <div class="fcopy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
+  <div style="margin-top:1rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">
+    <a href="index.html" style="color:inherit; text-decoration:none;">HOME</a> · 
+    <span style="color:var(--blue);">LAB</span> · 
+    <a href="papers.html" style="color:inherit; text-decoration:none;">PAPERS</a> · 
+    <a href="predictions-en.html" style="color:inherit; text-decoration:none;">PREDICTIONS</a> · 
+    <a href="theory-en.html" style="color:inherit; text-decoration:none;">THEORY</a> · 
+    <a href="https://github.com/ralc-tie-creator" target="_blank" style="color:inherit; text-decoration:none;">GITHUB</a>
+  </div>
 </footer>
 
 <script>

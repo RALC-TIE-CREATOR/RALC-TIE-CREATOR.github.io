@@ -24,26 +24,26 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 nav{position:relative;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.85rem 2rem;background:rgba(0,0,1,0.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);flex-shrink:0;}
 .nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
 /* ESTILO PARA EL BOTÓN ORCID */
-         .orcid-link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            color: #A6CE39;
-            text-decoration: none;
-            border: 1px solid rgba(166, 206, 57, 0.3);
-            padding: 4px 12px;
-            border-radius: 2px;
-            transition: 0.3s;
-            letter-spacing: 1px;
-        }
-        .orcid-link:hover {
-            background: rgba(166, 206, 57, 0.1);
-            box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);
-            color: #fff;
-        }
-  
+.orcid-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: #A6CE39;
+    text-decoration: none;
+    border: 1px solid rgba(166, 206, 57, 0.3);
+    padding: 4px 12px;
+    border-radius: 2px;
+    transition: 0.3s;
+    letter-spacing: 1px;
+}
+.orcid-link:hover {
+    background: rgba(166, 206, 57, 0.1);
+    box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);
+    color: #fff;
+}
+
 .nav-center{display:flex;gap:.5rem;align-items:center;}
 .lang-btn{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;cursor:pointer;border:none;transition:all .2s;}
 .lang-btn.active{color:#000;background:var(--gold);}
@@ -54,87 +54,86 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
 
 /* STRIP */
 .strip{position:relative;z-index:10;background:rgba(0,0,1,0.8);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;flex-wrap:wrap;gap:.4rem;}
-.s-tag{font-family:var(--mono);font-size:.6rem;color:var(--cyan);letter-spacing:3px;}
-.s-title{font-family:var(--sans);font-size:.95rem;font-weight:800;letter-spacing:-.5px;}
+.s-tag{font-family:var(--mono);font-size:.7rem;color:var(--cyan);letter-spacing:3px;}
+.s-title{font-family:var(--sans);font-size:1.1rem;font-weight:800;letter-spacing:-.5px;}
 .s-title span{color:var(--cyan);}
-.s-badge{font-family:var(--mono);font-size:.58rem;color:var(--orange);background:rgba(255,140,66,.08);border:1px solid rgba(255,140,66,.25);border-radius:4px;padding:.18rem .55rem;letter-spacing:1px;}
+.s-badge{font-family:var(--mono);font-size:.68rem;color:var(--orange);background:rgba(255,140,66,.08);border:1px solid rgba(255,140,66,.25);border-radius:4px;padding:.18rem .55rem;letter-spacing:1px;}
 
-/* MAIN */
+/* MAIN - REORGANIZADO CON TRES COLUMNAS */
 #main{position:relative;z-index:10;flex:1;display:flex;overflow:hidden;min-height:0;}
 
-/* VIS COLUMN */
+/* LEFT CONTROLS COLUMN */
+#ctrl-col{width:320px;flex-shrink:0;display:flex;flex-direction:column;gap:.8rem;padding:1rem;overflow-y:auto;scrollbar-width:none;}
+#ctrl-col::-webkit-scrollbar{display:none;}
+
+/* RIGHT INFO COLUMN */
+#info-col{width:320px;flex-shrink:0;display:flex;flex-direction:column;gap:.8rem;padding:1rem;overflow-y:auto;scrollbar-width:none;}
+#info-col::-webkit-scrollbar{display:none;}
+
+/* VISUALIZATION COLUMN (CENTRAL) */
 #vis-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem;min-width:0;position:relative;}
+
 #canvas-wrap{position:relative;display:inline-block;}
 #lens-canvas{display:block;border-radius:12px;border:1px solid rgba(0,212,255,0.2);box-shadow:0 0 40px rgba(0,212,255,0.08);cursor:crosshair;}
 #canvas-labels{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
-.c-label{position:absolute;font-family:var(--mono);font-size:.58rem;color:var(--cyan);letter-spacing:1px;opacity:0.7;white-space:nowrap;}
+.c-label{position:absolute;font-family:var(--mono);font-size:.68rem;color:var(--cyan);letter-spacing:1px;opacity:0.8;white-space:nowrap;text-shadow:0 0 4px rgba(0,0,0,0.8);}
 
 /* MICROLENSING CHART */
-#mlchart-wrap{width:100%;max-width:480px;margin-top:.6rem;background:rgba(0,0,1,0.5);border:1px solid var(--border);border-radius:8px;padding:.5rem .75rem;display:none;}
-#mlchart-title{font-family:var(--mono);font-size:.6rem;color:var(--cyan);letter-spacing:2px;margin-bottom:.3rem;}
-#mlchart{display:block;width:100%;height:60px;}
+#mlchart-wrap{width:100%;max-width:480px;margin-top:.8rem;background:rgba(0,0,1,0.5);border:1px solid var(--border);border-radius:8px;padding:.6rem .8rem;display:none;}
+#mlchart-title{font-family:var(--mono);font-size:.7rem;color:var(--cyan);letter-spacing:2px;margin-bottom:.4rem;}
+#mlchart{display:block;width:100%;height:70px;}
 
-/* CONTROLS COLUMN */
-#ctrl-col{width:300px;flex-shrink:0;display:flex;flex-direction:column;gap:.7rem;padding:1rem 1rem 1rem .5rem;overflow-y:auto;scrollbar-width:none;}
-#ctrl-col::-webkit-scrollbar{display:none;}
-
-.card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:.85rem;}
-.card-title{font-family:var(--mono);font-size:.6rem;color:var(--cyan);letter-spacing:3px;margin-bottom:.65rem;}
+/* CARDS */
+.card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem;}
+.card-title{font-family:var(--mono);font-size:.75rem;color:var(--cyan);letter-spacing:3px;margin-bottom:.8rem;}
 
 /* PRESETS */
-.presets{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;}
-.preset-btn{background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.2);border-radius:6px;color:var(--dim);font-family:var(--mono);font-size:.6rem;letter-spacing:1px;padding:.4rem .5rem;cursor:pointer;transition:all .2s;text-align:center;}
+.presets{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;}
+.preset-btn{background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.2);border-radius:6px;color:var(--dim);font-family:var(--mono);font-size:.7rem;letter-spacing:1px;padding:.5rem .6rem;cursor:pointer;transition:all .2s;text-align:center;}
 .preset-btn:hover,.preset-btn.active{background:rgba(0,212,255,.12);border-color:var(--cyan);color:var(--cyan);}
 
 /* SLIDER */
-.slider-row{display:flex;flex-direction:column;gap:.35rem;}
-.slider-label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.62rem;color:var(--dim);}
-.slider-label span{color:var(--text);}
-input[type=range]{width:100%;appearance:none;height:4px;background:rgba(0,212,255,.15);border-radius:2px;outline:none;cursor:pointer;}
-input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;border-radius:50%;background:var(--cyan);cursor:pointer;box-shadow:0 0 6px rgba(0,212,255,.6);}
+.slider-row{display:flex;flex-direction:column;gap:.5rem;}
+.slider-label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.75rem;color:var(--dim);}
+.slider-label span{color:var(--text);font-size:.8rem;}
+input[type=range]{width:100%;appearance:none;height:5px;background:rgba(0,212,255,.15);border-radius:2px;outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:16px;height:16px;border-radius:50%;background:var(--cyan);cursor:pointer;box-shadow:0 0 8px rgba(0,212,255,.6);}
 
-/* VALUES */
-.val-grid{display:flex;flex-direction:column;gap:.4rem;}
-.val-row{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(255,255,255,.05);padding-bottom:.35rem;}
+/* VALUES GRID */
+.val-grid{display:flex;flex-direction:column;gap:.6rem;}
+.val-row{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:.4rem;}
 .val-row:last-child{border:none;padding:0;}
-.val-key{font-family:var(--mono);font-size:.62rem;color:var(--dim);}
-.val-num{font-family:var(--mono);font-size:.7rem;color:var(--text);}
-.val-num.highlight{color:var(--cyan);}
-.val-num.gold{color:var(--gold);}
-.val-num.orange{color:var(--orange);}
+.val-key{font-family:var(--mono);font-size:.75rem;color:var(--dim);}
+.val-num{font-family:var(--mono);font-size:.8rem;color:var(--text);}
+.val-num.highlight{color:var(--cyan);font-weight:bold;}
+.val-num.gold{color:var(--gold);font-weight:bold;}
+.val-num.orange{color:var(--orange);font-weight:bold;}
 
 /* TOGGLES */
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:.2rem 0;}
-.toggle-label{font-family:var(--mono);font-size:.62rem;color:var(--dim);}
-.toggle{position:relative;width:36px;height:18px;cursor:pointer;}
-.toggle input{opacity:0;width:0;height:0;}
-.toggle-track{position:absolute;inset:0;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.25);border-radius:9px;transition:all .2s;}
-.toggle input:checked + .toggle-track{background:rgba(0,212,255,.25);border-color:var(--cyan);}
-.toggle-thumb{position:absolute;top:2px;left:2px;width:12px;height:12px;background:var(--dim);border-radius:50%;transition:all .2s;}
-.toggle input:checked ~ .toggle-thumb,.toggle input:checked + .toggle-track + .toggle-thumb{background:var(--cyan);left:20px;}
-
-/* Trick for toggle thumb positioning */
-.tog-wrap{position:relative;width:36px;height:18px;}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:.3rem 0;}
+.toggle-label{font-family:var(--mono);font-size:.75rem;color:var(--dim);}
+.tog-wrap{position:relative;width:40px;height:20px;}
 .tog-wrap input{position:absolute;opacity:0;width:100%;height:100%;cursor:pointer;z-index:2;}
-.tog-track{position:absolute;inset:0;background:rgba(255,255,255,.05);border:1px solid rgba(0,212,255,.2);border-radius:9px;transition:all .25s;}
-.tog-knob{position:absolute;top:2px;left:2px;width:12px;height:12px;background:var(--dim);border-radius:50%;transition:all .25s;}
-.tog-wrap input:checked ~ .tog-track{background:rgba(0,212,255,.2);border-color:var(--cyan);}
-.tog-wrap input:checked ~ .tog-knob{left:20px;background:var(--cyan);}
+.tog-track{position:absolute;inset:0;background:rgba(255,255,255,.08);border:1px solid rgba(0,212,255,.25);border-radius:10px;transition:all .25s;}
+.tog-knob{position:absolute;top:2px;left:2px;width:14px;height:14px;background:var(--dim);border-radius:50%;transition:all .25s;}
+.tog-wrap input:checked ~ .tog-track{background:rgba(0,212,255,.25);border-color:var(--cyan);}
+.tog-wrap input:checked ~ .tog-knob{left:22px;background:var(--cyan);}
 
 /* INSIGHT BOX */
-.insight{background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.15);border-left:3px solid var(--cyan);border-radius:0 8px 8px 0;padding:.65rem .75rem;}
-.insight p{font-family:var(--mono);font-size:.62rem;color:var(--dim);line-height:1.7;}
-.insight strong{color:var(--cyan);}
+.insight{background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.15);border-left:3px solid var(--cyan);border-radius:0 8px 8px 0;padding:.8rem .9rem;}
+.insight p{font-family:var(--mono);font-size:.75rem;color:var(--dim);line-height:1.7;}
+.insight strong{color:var(--cyan);font-size:.8rem;}
 
-/* ANIMATE BTN */
-.btn-anim{width:100%;background:rgba(255,140,66,.08);border:1px solid rgba(255,140,66,.3);border-radius:8px;color:var(--orange);font-family:var(--mono);font-size:.68rem;letter-spacing:2px;padding:.55rem;cursor:pointer;transition:all .2s;}
+/* ANIMATE BUTTON */
+.btn-anim{width:100%;background:rgba(255,140,66,.08);border:1px solid rgba(255,140,66,.3);border-radius:8px;color:var(--orange);font-family:var(--mono);font-size:.8rem;letter-spacing:2px;padding:.7rem;cursor:pointer;transition:all .2s;margin-bottom:.6rem;}
 .btn-anim:hover{background:rgba(255,140,66,.16);border-color:var(--orange);}
 .btn-anim.running{color:var(--red);border-color:var(--red);background:rgba(255,68,85,.08);}
 
-@media(max-width:700px){
+/* MEDIA QUERIES */
+@media(max-width:1000px){
   #main{flex-direction:column;}
-  #ctrl-col{width:100%;flex-direction:row;flex-wrap:wrap;padding:.75rem;gap:.5rem;}
-  .card{flex:1;min-width:140px;}
+  #ctrl-col, #info-col{width:100%;flex-direction:row;flex-wrap:wrap;padding:.75rem;gap:.5rem;}
+  .card{flex:1;min-width:160px;}
 }
 </style>
 </head>
@@ -157,8 +156,8 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
   
   <!-- SELECTOR DE IDIOMA -->
   <div style="display:flex;gap:.4rem;">
-    <a href="lensing.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">ES</a>
-    <a href="lensing-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">EN</a>
+    <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ES</button>
+    <button class="lang-btn inactive" id="btn-en" onclick="setLang('en')">EN</button>
   </div>
   
   <a href="lab-cosmologia.html" class="nav-back" id="lnk-back">← LABORATORIO</a>
@@ -171,7 +170,65 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
 </div>
 
 <div id="main">
-  <!-- VISUALIZATION -->
+  <!-- LEFT COLUMN - CONTROLES -->
+  <div id="ctrl-col">
+    <!-- BOTÓN ANIMAR EN LA PARTE SUPERIOR -->
+    <button class="btn-anim" id="btn-anim" onclick="toggleAnim()">▶ ANIMAR MICROLENSING</button>
+    
+    <!-- PRESETS - TIPO DE OBJETO -->
+    <div class="card">
+      <div class="card-title" id="lbl-preset">TIPO DE OBJETO</div>
+      <div class="presets">
+        <button class="preset-btn" id="p0" onclick="applyPreset(0)"><span id="p0t">⭐ ESTRELLA</span></button>
+        <button class="preset-btn active" id="p1" onclick="applyPreset(1)"><span id="p1t">⚫ AG. NEGRO</span></button>
+        <button class="preset-btn" id="p2" onclick="applyPreset(2)"><span id="p2t">🌀 GALAXIA</span></button>
+        <button class="preset-btn" id="p3" onclick="applyPreset(3)"><span id="p3t">🔮 CÚMULO</span></button>
+      </div>
+    </div>
+
+    <!-- MASA DEL OBJETO -->
+    <div class="card">
+      <div class="card-title" id="lbl-masa">MASA DEL OBJETO</div>
+      <div class="slider-row">
+        <div class="slider-label"><span id="lbl-log">log₁₀(M/M☉)</span><span id="mass-display">10</span></div>
+        <input type="range" id="mass-slider" min="0" max="15" step="0.05" value="10" oninput="onMassSlider()">
+        <div class="slider-label"><span id="lbl-mlo">1 M☉</span><span id="lbl-mhi">10¹⁵ M☉</span></div>
+      </div>
+    </div>
+
+    <!-- VISUALIZACIÓN - TOGGLES -->
+    <div class="card">
+      <div class="card-title" id="lbl-vis">VISUALIZACIÓN</div>
+      <div style="display:flex;flex-direction:column;gap:.65rem;">
+        <div class="toggle-row">
+          <span class="toggle-label" id="tog-rays-lbl">Mostrar rayos de luz</span>
+          <div class="tog-wrap">
+            <input type="checkbox" id="tog-rays" onchange="redraw()">
+            <div class="tog-track"></div>
+            <div class="tog-knob"></div>
+          </div>
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-label" id="tog-ring-lbl">Anillo de Einstein</span>
+          <div class="tog-wrap">
+            <input type="checkbox" id="tog-ring" checked onchange="redraw()">
+            <div class="tog-track"></div>
+            <div class="tog-knob"></div>
+          </div>
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-label" id="tog-rh-lbl">Mostrar rₕ TIE</span>
+          <div class="tog-wrap">
+            <input type="checkbox" id="tog-rh" checked onchange="redraw()">
+            <div class="tog-track"></div>
+            <div class="tog-knob"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTRAL COLUMN - VISUALIZACIÓN -->
   <div id="vis-col">
     <div id="canvas-wrap">
       <canvas id="lens-canvas" width="480" height="480"></canvas>
@@ -183,31 +240,9 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
     </div>
   </div>
 
-  <!-- CONTROLS -->
-  <div id="ctrl-col">
-
-    <!-- PRESETS -->
-    <div class="card">
-      <div class="card-title" id="lbl-preset">TIPO DE OBJETO</div>
-      <div class="presets">
-        <button class="preset-btn" id="p0" onclick="applyPreset(0)"><span id="p0t">⭐ ESTRELLA</span></button>
-        <button class="preset-btn active" id="p1" onclick="applyPreset(1)"><span id="p1t">⚫ AG. NEGRO</span></button>
-        <button class="preset-btn" id="p2" onclick="applyPreset(2)"><span id="p2t">🌀 GALAXIA</span></button>
-        <button class="preset-btn" id="p3" onclick="applyPreset(3)"><span id="p3t">🔮 CÚMULO</span></button>
-      </div>
-    </div>
-
-    <!-- MASS SLIDER -->
-    <div class="card">
-      <div class="card-title" id="lbl-masa">MASA DEL OBJETO</div>
-      <div class="slider-row">
-        <div class="slider-label"><span id="lbl-log">log₁₀(M/M☉)</span><span id="mass-display">10</span></div>
-        <input type="range" id="mass-slider" min="0" max="15" step="0.05" value="10" oninput="onMassSlider()">
-        <div class="slider-label"><span id="lbl-mlo">1 M☉</span><span id="lbl-mhi">10¹⁵ M☉</span></div>
-      </div>
-    </div>
-
-    <!-- COMPUTED VALUES -->
+  <!-- RIGHT COLUMN - INFORMACIÓN -->
+  <div id="info-col">
+    <!-- PARÁMETROS CALCULADOS -->
     <div class="card">
       <div class="card-title" id="lbl-vals">PARÁMETROS CALCULADOS</div>
       <div class="val-grid">
@@ -235,48 +270,18 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;b
           <span class="val-key" id="k-alpha">α máx deflexión</span>
           <span class="val-num" id="v-alpha">—</span>
         </div>
-      </div>
-    </div>
-
-    <!-- TOGGLES -->
-    <div class="card">
-      <div class="card-title" id="lbl-vis">VISUALIZACIÓN</div>
-      <div style="display:flex;flex-direction:column;gap:.55rem;">
-        <div class="toggle-row">
-          <span class="toggle-label" id="tog-rays-lbl">Mostrar rayos de luz</span>
-          <div class="tog-wrap">
-            <input type="checkbox" id="tog-rays" onchange="redraw()">
-            <div class="tog-track"></div>
-            <div class="tog-knob"></div>
-          </div>
-        </div>
-        <div class="toggle-row">
-          <span class="toggle-label" id="tog-ring-lbl">Anillo de Einstein</span>
-          <div class="tog-wrap">
-            <input type="checkbox" id="tog-ring" checked onchange="redraw()">
-            <div class="tog-track"></div>
-            <div class="tog-knob"></div>
-          </div>
-        </div>
-        <div class="toggle-row">
-          <span class="toggle-label" id="tog-rh-lbl">Mostrar rₕ TIE</span>
-          <div class="tog-wrap">
-            <input type="checkbox" id="tog-rh" checked onchange="redraw()">
-            <div class="tog-track"></div>
-            <div class="tog-knob"></div>
-          </div>
+        <div class="val-row">
+          <span class="val-key">Régimen</span>
+          <span class="val-num" id="v-regime">Galáctico</span>
         </div>
       </div>
     </div>
 
-    <!-- ANIMATE -->
-    <button class="btn-anim" id="btn-anim" onclick="toggleAnim()">▶ ANIMAR MICROLENSING</button>
-
-    <!-- INSIGHT -->
+    <!-- INTERPRETACIÓN TIE -->
     <div class="insight">
       <p id="insight-txt">En TIE, para masas galácticas <strong>rₕ ≫ rₛ</strong> — el horizonte efectivo es mucho mayor que en GR. Esto explica el lensing observado <strong>sin materia oscura ni parámetros libres</strong>.</p>
+      <p style="font-family:var(--mono);font-size:.7rem;color:var(--cyan);margin-top:.6rem;">a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²</p>
     </div>
-
   </div>
 </div>
 
@@ -407,7 +412,7 @@ function lensImages(bx, by, tE){
 }
 
 // ════════════════════════════════════════════
-// DRAW
+// DRAW - VERSIÓN MEJORADA CON RAYOS MÁS VISIBLES
 // ════════════════════════════════════════════
 const lc  = document.getElementById('lens-canvas');
 const ctx = lc.getContext('2d');
@@ -452,14 +457,35 @@ function redraw(mlStar=null){
     drawStar(imgs.plus.x,  imgs.plus.y,  s_plus,  b_plus,  st.hue, glow);
     drawStar(imgs.minus.x, imgs.minus.y, s_minus, b_minus, st.hue, false);
 
-    // Light rays
-    if(showRays && Math.random()<0.12){
+    // LIGHT RAYS - MEJORADOS: color blanco/amarillo, mayor opacidad y grosor
+    if(showRays && Math.random()<0.15){
       ctx.beginPath();
       ctx.moveTo(CX+st.bx, CY+st.by);
       ctx.quadraticCurveTo(CX, CY, imgs.plus.x, imgs.plus.y);
-      ctx.strokeStyle='rgba(0,212,255,0.06)'; ctx.lineWidth=0.8; ctx.stroke();
+      
+      // Usar color blanco/amarillo con opacidad variable según distancia
+      const dist = Math.sqrt(Math.pow(imgs.plus.x - CX - st.bx, 2) + Math.pow(imgs.plus.y - CY - st.by, 2));
+      const opacity = Math.min(0.25, 0.1 + dist/500);
+      
+      ctx.strokeStyle = `rgba(255, 220, 150, ${opacity})`;
+      ctx.lineWidth = 1.2;
+      ctx.shadowColor = 'rgba(255, 200, 100, 0.3)';
+      ctx.shadowBlur = 3;
+      ctx.stroke();
+      
+      // Añadir un segundo rayo más fino para el camino negativo (si existe)
+      ctx.beginPath();
+      ctx.moveTo(CX+st.bx, CY+st.by);
+      ctx.quadraticCurveTo(CX, CY, imgs.minus.x, imgs.minus.y);
+      ctx.strokeStyle = `rgba(255, 220, 150, ${opacity*0.6})`;
+      ctx.lineWidth = 0.9;
+      ctx.stroke();
     }
   }
+  
+  // Resetear sombras
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
 
   // Microlensing animated source star
   if(mlStar){
@@ -477,13 +503,13 @@ function redraw(mlStar=null){
   if(showRing){
     const grad = ctx.createRadialGradient(CX,CY,tE-2,CX,CY,tE+2);
     grad.addColorStop(0,'rgba(0,212,255,0)');
-    grad.addColorStop(0.5,'rgba(0,212,255,0.35)');
+    grad.addColorStop(0.5,'rgba(0,212,255,0.4)');
     grad.addColorStop(1,'rgba(0,212,255,0)');
-    ctx.strokeStyle=grad; ctx.lineWidth=3;
+    ctx.strokeStyle=grad; ctx.lineWidth=4;
     ctx.beginPath(); ctx.arc(CX,CY,tE,0,Math.PI*2); ctx.stroke();
     // Dashed thin ring
-    ctx.setLineDash([4,8]); ctx.lineWidth=0.8;
-    ctx.strokeStyle='rgba(0,212,255,0.18)';
+    ctx.setLineDash([4,8]); ctx.lineWidth=1;
+    ctx.strokeStyle='rgba(0,212,255,0.25)';
     ctx.beginPath(); ctx.arc(CX,CY,tE,0,Math.PI*2); ctx.stroke();
     ctx.setLineDash([]);
   }
@@ -501,14 +527,14 @@ function redraw(mlStar=null){
 
     if(rh_px > rs_px + 1){
       ctx.beginPath(); ctx.arc(CX,CY,rh_px,0,Math.PI*2);
-      ctx.setLineDash([3,6]); ctx.lineWidth=1;
-      ctx.strokeStyle='rgba(255,215,0,0.4)'; ctx.stroke();
+      ctx.setLineDash([3,6]); ctx.lineWidth=1.5;
+      ctx.strokeStyle='rgba(255,215,0,0.5)'; ctx.stroke();
       ctx.setLineDash([]);
     }
     // Schwarzschild
     if(rs_px > 1){
       ctx.beginPath(); ctx.arc(CX,CY,rs_px,0,Math.PI*2);
-      ctx.strokeStyle='rgba(255,68,85,0.5)'; ctx.lineWidth=1; ctx.stroke();
+      ctx.strokeStyle='rgba(255,68,85,0.6)'; ctx.lineWidth=1.2; ctx.stroke();
     }
   }
 
@@ -526,14 +552,31 @@ function redraw(mlStar=null){
   dark.addColorStop(1,'rgba(20,8,0,0.8)');
   ctx.fillStyle=dark; ctx.beginPath(); ctx.arc(CX,CY,lensR,0,Math.PI*2); ctx.fill();
 
+  // Update regime in right panel
+  updateRegime();
+
   // Canvas labels
   updateLabels(tE);
+}
+
+function updateRegime() {
+  const M = getMass();
+  const rs = getRs(M);
+  const rh = getRh(M);
+  const ratio = rh/rs;
+  
+  let regime = '';
+  if (logM < 5) regime = 'Estelar';
+  else if (logM < 9) regime = 'Agujero Negro';
+  else if (logM < 13) regime = 'Galáctico';
+  else regime = 'Cúmulo';
+  
+  document.getElementById('v-regime').textContent = regime;
 }
 
 function updateLabels(tE){
   const wrap = document.getElementById('canvas-labels');
   wrap.innerHTML='';
-  const W=480,H=480;
   const addLabel=(txt,x,y)=>{
     const d=document.createElement('div');
     d.className='c-label'; d.textContent=txt;
@@ -642,37 +685,37 @@ function runAnim(){
 function drawMLChart(){
   const mc = document.getElementById('mlchart');
   const mw = mc.parentElement.clientWidth - 24;
-  mc.width  = mw; mc.height = 60;
+  mc.width  = mw; mc.height = 70;
   const mx = mc.getContext('2d');
-  mx.clearRect(0,0,mw,60);
+  mx.clearRect(0,0,mw,70);
 
   if(mlHistory.length < 2) return;
   const maxMu = Math.max(...mlHistory, 5);
   const pts = mlHistory.length;
   const scaleX = mw / (pts-1);
-  const scaleY = 50 / maxMu;
+  const scaleY = 60 / maxMu;
 
   // Grid line at mu=1
-  mx.strokeStyle='rgba(255,255,255,0.08)'; mx.lineWidth=1;
-  mx.beginPath(); mx.moveTo(0,58-1*scaleY); mx.lineTo(mw,58-1*scaleY); mx.stroke();
+  mx.strokeStyle='rgba(255,255,255,0.12)'; mx.lineWidth=1;
+  mx.beginPath(); mx.moveTo(0,68-1*scaleY); mx.lineTo(mw,68-1*scaleY); mx.stroke();
 
   // Curve
   const grad = mx.createLinearGradient(0,0,mw,0);
-  grad.addColorStop(0,'rgba(0,212,255,0.3)');
+  grad.addColorStop(0,'rgba(0,212,255,0.4)');
   grad.addColorStop(0.5,'rgba(0,212,255,1)');
-  grad.addColorStop(1,'rgba(0,212,255,0.3)');
+  grad.addColorStop(1,'rgba(0,212,255,0.4)');
   mx.beginPath();
   mlHistory.forEach((m,i)=>{
-    const x=i*scaleX, y=58-m*scaleY;
+    const x=i*scaleX, y=68-m*scaleY;
     i===0 ? mx.moveTo(x,y) : mx.lineTo(x,y);
   });
-  mx.strokeStyle=grad; mx.lineWidth=1.8; mx.stroke();
+  mx.strokeStyle=grad; mx.lineWidth=2.2; mx.stroke();
 
   // Current mu label
   const cur = mlHistory[mlHistory.length-1];
   mx.fillStyle='rgba(0,212,255,0.9)';
-  mx.font='9px Space Mono,monospace';
-  mx.fillText(`μ = ${cur.toFixed(2)}`, mw-60, 12);
+  mx.font='10px Space Mono,monospace';
+  mx.fillText(`μ = ${cur.toFixed(2)}`, mw-70, 15);
 }
 
 // ════════════════════════════════════════════
@@ -701,7 +744,7 @@ function applyPreset(i){
 // ════════════════════════════════════════════
 const TL = {
   es:{
-    back:'← LABORATORIO', backHref:'labs.html',
+    back:'← LABORATORIO', backHref:'lab-cosmologia.html',
     stripTitle:'LENSING <span>GRAVITACIONAL</span>',
     badge:'TRES.JS · TIEMPO REAL',
     lbl_preset:'TIPO DE OBJETO',
@@ -718,7 +761,7 @@ const TL = {
     presets:['⭐ ESTRELLA','⚫ AG. NEGRO','🌀 GALAXIA','🔮 CÚMULO'],
   },
   en:{
-    back:'← LABORATORY', backHref:'labs-en.html',
+    back:'← LABORATORY', backHref:'lab-cosmologia-en.html',
     stripTitle:'GRAVITATIONAL <span>LENSING</span>',
     badge:'THREE.JS · REAL-TIME',
     lbl_preset:'OBJECT TYPE',

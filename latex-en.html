@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TIE · H-15 · Generador LaTeX</title>
+<title>TIE · H-15 · LaTeX Generator</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
@@ -22,11 +22,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 
 nav{position:relative;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.85rem 2rem;background:rgba(0,0,1,0.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);flex-shrink:0;}
 .nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
-.nav-center{display:flex;gap:.5rem;}
-/* ESTILO PARA EL BOTÓN ORCID */
+/* ORCID BUTTON STYLE */
 .orcid-link {display: flex;align-items: center;gap: 8px;font-family: var(--mono);font-size: 0.75rem;color: #A6CE39;text-decoration: none;border: 1px solid rgba(166, 206, 57, 0.3);padding: 4px 12px;border-radius: 2px;transition: 0.3s;letter-spacing: 1px;}
 .orcid-link:hover {background: rgba(166, 206, 57, 0.1);box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);color: #fff;}
-  
+
+.nav-center{display:flex;gap:.5rem;}
 .lang-btn{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;cursor:pointer;border:none;transition:all .2s;}
 .lang-btn.active{color:#000;background:var(--gold);}
 .lang-btn.inactive{color:var(--dim);border:1px solid var(--border);background:transparent;}
@@ -35,94 +35,94 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
 .nav-back:hover{color:var(--lime);}
 
 .strip{position:relative;z-index:10;background:rgba(0,0,1,0.8);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;flex-wrap:wrap;gap:.4rem;}
-.s-tag{font-family:var(--mono);font-size:.6rem;color:var(--lime);letter-spacing:3px;}
-.s-title{font-family:var(--sans);font-size:.95rem;font-weight:800;letter-spacing:-.5px;}
+.s-tag{font-family:var(--mono);font-size:.7rem;color:var(--lime);letter-spacing:3px;}
+.s-title{font-family:var(--sans);font-size:1.1rem;font-weight:800;letter-spacing:-.5px;}
 .s-title span{color:var(--lime);}
-.s-badge{font-family:var(--mono);font-size:.58rem;color:var(--orange);background:rgba(255,140,66,.08);border:1px solid rgba(255,140,66,.25);border-radius:4px;padding:.18rem .55rem;letter-spacing:1px;}
+.s-badge{font-family:var(--mono);font-size:.68rem;color:var(--orange);background:rgba(255,140,66,.08);border:1px solid rgba(255,140,66,.25);border-radius:4px;padding:.18rem .55rem;letter-spacing:1px;}
 
 /* LAYOUT */
 #main{position:relative;z-index:10;flex:1;display:flex;overflow:hidden;min-height:0;}
 
 /* LEFT: equation catalog */
-#catalog-col{width:260px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid var(--border);overflow:hidden;}
-#cat-search-wrap{padding:.7rem .8rem;border-bottom:1px solid var(--border);flex-shrink:0;}
-#cat-search{width:100%;background:rgba(10,14,25,.8);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:.7rem;padding:.5rem .75rem;outline:none;transition:border-color .2s;}
+#catalog-col{width:280px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid var(--border);overflow:hidden;}
+#cat-search-wrap{padding:.8rem .9rem;border-bottom:1px solid var(--border);flex-shrink:0;}
+#cat-search{width:100%;background:rgba(10,14,25,.8);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:.75rem;padding:.6rem .8rem;outline:none;transition:border-color .2s;}
 #cat-search:focus{border-color:var(--lime);}
 #cat-search::placeholder{color:var(--dim);}
-#cat-filters{display:flex;gap:.3rem;padding:.5rem .8rem;border-bottom:1px solid var(--border);flex-wrap:wrap;flex-shrink:0;}
-.cat-filter{font-family:var(--mono);font-size:.58rem;letter-spacing:1px;padding:.2rem .5rem;border-radius:12px;cursor:pointer;border:1px solid var(--border);color:var(--dim);background:transparent;transition:all .2s;}
+#cat-filters{display:flex;gap:.4rem;padding:.6rem .9rem;border-bottom:1px solid var(--border);flex-wrap:wrap;flex-shrink:0;}
+.cat-filter{font-family:var(--mono);font-size:.65rem;letter-spacing:1px;padding:.25rem .6rem;border-radius:12px;cursor:pointer;border:1px solid var(--border);color:var(--dim);background:transparent;transition:all .2s;}
 .cat-filter.active{background:rgba(170,255,0,.12);border-color:var(--lime);color:var(--lime);}
 .cat-filter:hover:not(.active){color:var(--text);}
-#eq-list{flex:1;overflow-y:auto;padding:.5rem .5rem;display:flex;flex-direction:column;gap:.3rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+#eq-list{flex:1;overflow-y:auto;padding:.6rem .6rem;display:flex;flex-direction:column;gap:.4rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
 
-.eq-item{background:var(--bg3);border:1px solid transparent;border-radius:8px;padding:.55rem .7rem;cursor:pointer;transition:all .18s;}
+.eq-item{background:var(--bg3);border:1px solid transparent;border-radius:8px;padding:.65rem .8rem;cursor:pointer;transition:all .18s;}
 .eq-item:hover{border-color:rgba(170,255,0,.2);background:rgba(170,255,0,.04);}
 .eq-item.selected{border-color:var(--lime);background:rgba(170,255,0,.08);}
-.eq-item-name{font-family:var(--sans);font-size:.72rem;font-weight:700;color:var(--text);margin-bottom:.25rem;}
-.eq-item-cat{font-family:var(--mono);font-size:.55rem;color:var(--dim);letter-spacing:1px;margin-bottom:.3rem;}
+.eq-item-name{font-family:var(--sans);font-size:.8rem;font-weight:700;color:var(--text);margin-bottom:.3rem;}
+.eq-item-cat{font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:1px;margin-bottom:.35rem;}
 .eq-item-preview{overflow:hidden;}
-.eq-item-preview .katex{font-size:.75em;}
+.eq-item-preview .katex{font-size:.85em;}
 
 /* CENTER: preview + code */
 #preview-col{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
 
 #preview-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;gap:1.5rem;min-height:0;}
-.preview-card{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:2rem 2.5rem;width:100%;max-width:560px;text-align:center;}
+.preview-card{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:2rem 2.5rem;width:100%;max-width:600px;text-align:center;}
 .preview-card .katex-display{margin:0;}
-.preview-card .katex{font-size:1.6em;}
-.preview-name{font-family:var(--sans);font-size:1rem;font-weight:800;margin-bottom:.35rem;color:var(--gold);}
-.preview-desc{font-family:var(--mono);font-size:.65rem;color:var(--dim);line-height:1.7;max-width:460px;margin:0 auto .25rem;}
-.preview-context{font-family:var(--mono);font-size:.62rem;color:rgba(170,255,0,.7);margin-top:.3rem;}
+.preview-card .katex{font-size:1.8em;}
+.preview-name{font-family:var(--sans);font-size:1.1rem;font-weight:800;margin-bottom:.4rem;color:var(--gold);}
+.preview-desc{font-family:var(--mono);font-size:.7rem;color:var(--dim);line-height:1.7;max-width:500px;margin:0 auto .3rem;}
+.preview-context{font-family:var(--mono);font-size:.65rem;color:rgba(170,255,0,.7);margin-top:.4rem;}
 
 /* TABS */
 .code-tabs{display:flex;border-top:1px solid var(--border);flex-shrink:0;}
-.code-tab{flex:1;font-family:var(--mono);font-size:.62rem;letter-spacing:1px;padding:.5rem;background:transparent;border:none;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+.code-tab{flex:1;font-family:var(--mono);font-size:.68rem;letter-spacing:1px;padding:.6rem;background:transparent;border:none;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
 .code-tab.active{color:var(--lime);border-bottom-color:var(--lime);}
 .code-tab:hover:not(.active){color:var(--text);}
 
 /* CODE BOX */
-#code-area{flex-shrink:0;padding:.75rem;background:rgba(0,0,1,.6);border-top:1px solid var(--border);}
-.code-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;}
-.code-label{font-family:var(--mono);font-size:.58rem;color:var(--dim);letter-spacing:2px;}
-.code-actions{display:flex;gap:.4rem;}
-.btn-copy{background:rgba(170,255,0,.08);border:1px solid rgba(170,255,0,.25);border-radius:6px;color:var(--lime);font-family:var(--mono);font-size:.6rem;letter-spacing:1px;padding:.25rem .65rem;cursor:pointer;transition:all .2s;}
+#code-area{flex-shrink:0;padding:.8rem;background:rgba(0,0,1,.6);border-top:1px solid var(--border);}
+.code-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;}
+.code-label{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;}
+.code-actions{display:flex;gap:.5rem;}
+.btn-copy{background:rgba(170,255,0,.08);border:1px solid rgba(170,255,0,.25);border-radius:6px;color:var(--lime);font-family:var(--mono);font-size:.65rem;letter-spacing:1px;padding:.3rem .7rem;cursor:pointer;transition:all .2s;}
 .btn-copy:hover{background:rgba(170,255,0,.18);}
 .btn-copy.copied{color:#000;background:var(--lime);border-color:var(--lime);}
-#code-box{background:rgba(0,0,0,.7);border:1px solid rgba(170,255,0,.1);border-radius:8px;padding:.65rem .85rem;font-family:var(--mono);font-size:.72rem;color:rgba(170,255,0,.9);line-height:1.6;word-break:break-all;max-height:90px;overflow-y:auto;white-space:pre-wrap;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+#code-box{background:rgba(0,0,0,.7);border:1px solid rgba(170,255,0,.1);border-radius:8px;padding:.7rem .9rem;font-family:var(--mono);font-size:.75rem;color:rgba(170,255,0,.9);line-height:1.6;word-break:break-all;max-height:100px;overflow-y:auto;white-space:pre-wrap;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
 
 /* RIGHT: custom + export */
-#right-col{width:250px;flex-shrink:0;display:flex;flex-direction:column;gap:.6rem;padding:.8rem;overflow-y:auto;border-left:1px solid var(--border);scrollbar-width:none;}
+#right-col{width:270px;flex-shrink:0;display:flex;flex-direction:column;gap:.7rem;padding:.9rem;overflow-y:auto;border-left:1px solid var(--border);scrollbar-width:none;}
 #right-col::-webkit-scrollbar{display:none;}
 
-.r-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.75rem;}
-.r-title{font-family:var(--mono);font-size:.58rem;color:var(--lime);letter-spacing:3px;margin-bottom:.6rem;}
+.r-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.8rem;}
+.r-title{font-family:var(--mono);font-size:.65rem;color:var(--lime);letter-spacing:3px;margin-bottom:.7rem;}
 
 /* CUSTOM EDITOR */
-#custom-input{width:100%;background:rgba(0,0,0,.6);border:1px solid var(--border);border-radius:7px;color:var(--lime);font-family:var(--mono);font-size:.7rem;padding:.5rem .65rem;resize:none;height:70px;outline:none;transition:border-color .2s;scrollbar-width:none;}
+#custom-input{width:100%;background:rgba(0,0,0,.6);border:1px solid var(--border);border-radius:7px;color:var(--lime);font-family:var(--mono);font-size:.75rem;padding:.6rem .7rem;resize:none;height:80px;outline:none;transition:border-color .2s;scrollbar-width:none;}
 #custom-input:focus{border-color:var(--lime);}
-#custom-preview{background:rgba(0,0,0,.4);border:1px solid rgba(170,255,0,.08);border-radius:7px;padding:.6rem;min-height:42px;text-align:center;margin:.4rem 0;}
-.btn-insert{width:100%;background:rgba(170,255,0,.08);border:1px solid rgba(170,255,0,.2);border-radius:6px;color:var(--lime);font-family:var(--mono);font-size:.62rem;letter-spacing:1px;padding:.4rem;cursor:pointer;transition:all .2s;margin-top:.3rem;}
+#custom-preview{background:rgba(0,0,0,.4);border:1px solid rgba(170,255,0,.08);border-radius:7px;padding:.7rem;min-height:50px;text-align:center;margin:.5rem 0;}
+.btn-insert{width:100%;background:rgba(170,255,0,.08);border:1px solid rgba(170,255,0,.2);border-radius:6px;color:var(--lime);font-family:var(--mono);font-size:.68rem;letter-spacing:1px;padding:.5rem;cursor:pointer;transition:all .2s;margin-top:.4rem;}
 .btn-insert:hover{background:rgba(170,255,0,.18);}
 
 /* EXPORT BLOCK */
-.export-btns{display:flex;flex-direction:column;gap:.35rem;}
-.export-btn{background:rgba(255,140,66,.06);border:1px solid rgba(255,140,66,.2);border-radius:6px;color:var(--orange);font-family:var(--mono);font-size:.62rem;letter-spacing:1px;padding:.4rem .6rem;cursor:pointer;transition:all .2s;text-align:left;}
+.export-btns{display:flex;flex-direction:column;gap:.4rem;}
+.export-btn{background:rgba(255,140,66,.06);border:1px solid rgba(255,140,66,.2);border-radius:6px;color:var(--orange);font-family:var(--mono);font-size:.68rem;letter-spacing:1px;padding:.5rem .7rem;cursor:pointer;transition:all .2s;text-align:left;}
 .export-btn:hover{background:rgba(255,140,66,.15);}
 
 /* CONSTANTS CHEATSHEET */
-.const-grid{display:flex;flex-direction:column;gap:.3rem;}
-.const-row{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(255,255,255,.04);padding-bottom:.25rem;}
+.const-grid{display:flex;flex-direction:column;gap:.4rem;}
+.const-row{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(255,255,255,.04);padding-bottom:.3rem;}
 .const-row:last-child{border:none;padding:0;}
-.const-key{font-family:var(--mono);font-size:.6rem;color:var(--dim);}
-.const-val{font-family:var(--mono);font-size:.6rem;color:var(--gold);cursor:pointer;transition:color .2s;}
+.const-key{font-family:var(--mono);font-size:.65rem;color:var(--dim);}
+.const-val{font-family:var(--mono);font-size:.65rem;color:var(--gold);cursor:pointer;transition:color .2s;}
 .const-val:hover{color:var(--lime);}
 
 /* TOAST */
-.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:rgba(170,255,0,.15);border:1px solid rgba(170,255,0,.4);border-radius:8px;padding:.45rem 1rem;font-family:var(--mono);font-size:.68rem;color:var(--lime);z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:rgba(170,255,0,.15);border:1px solid rgba(170,255,0,.4);border-radius:8px;padding:.5rem 1.2rem;font-family:var(--mono);font-size:.7rem;color:var(--lime);z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;}
 .toast.show{opacity:1;}
 
 @media(max-width:900px){
-  #catalog-col{width:200px;}
+  #catalog-col{width:220px;}
   #right-col{display:none;}
 }
 @media(max-width:600px){
@@ -137,27 +137,27 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
 <nav>
   <div style="display:flex; align-items:center; gap:20px;">
     <a href="index.html" class="nav-logo">TIE / R@LC</a>
-    <!-- INYECCIÓN DEL PASAPORTE ORCID -->
-    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
+    <!-- ORCID BADGE -->
+    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verify Author Identity on ORCID">
       <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
-         <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
+      <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
       </svg>
       0009-0008-4935-9010
     </a>
   </div>
   
-  <!-- SELECTOR DE IDIOMA -->
+  <!-- LANGUAGE SELECTOR -->
   <div style="display:flex;gap:.4rem;">
-    <a href="latex.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">ES</a>
-    <a href="latex-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">EN</a>
+    <button class="lang-btn inactive" id="btn-es" onclick="setLang('es')">ES</button>
+    <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
   </div>
   
-  <a href="lab-en.html" class="nav-back" id="lnk-back">← LABORATORY</a>
+  <a href="labs-en.html" class="nav-back" id="lnk-back">← LABORATORY</a>
 </nav>
 
 <div class="strip">
-  <span class="s-tag">H-15 · GENERADOR LATEX</span>
-  <span class="s-title" id="strip-title">GENERADOR <span>LaTeX</span></span>
+  <span class="s-tag">H-15 · LATEX GENERATOR</span>
+  <span class="s-title" id="strip-title"><span>LaTeX</span> GENERATOR</span>
   <span class="s-badge" id="strip-badge">TIE v11.8 · KATEX</span>
 </div>
 
@@ -166,7 +166,7 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
   <!-- CATALOG -->
   <div id="catalog-col">
     <div id="cat-search-wrap">
-      <input type="text" id="cat-search" placeholder="Buscar ecuación..." oninput="filterEqs()">
+      <input type="text" id="cat-search" placeholder="Search equation..." oninput="filterEqs()">
     </div>
     <div id="cat-filters"></div>
     <div id="eq-list"></div>
@@ -177,7 +177,7 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
     <div id="preview-area">
       <div>
         <div class="preview-name" id="prev-name">—</div>
-        <div class="preview-desc" id="prev-desc">Selecciona una ecuación del catálogo</div>
+        <div class="preview-desc" id="prev-desc">Select an equation from the catalog</div>
         <div class="preview-context" id="prev-ctx"></div>
       </div>
       <div class="preview-card" id="prev-render"></div>
@@ -192,13 +192,13 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
 
     <div id="code-area">
       <div class="code-header">
-        <span class="code-label" id="code-label">CÓDIGO LATEX</span>
+        <span class="code-label" id="code-label">LATEX CODE</span>
         <div class="code-actions">
-          <button class="btn-copy" id="btn-copy" onclick="copyCode()"><span id="btn-copy-lbl">COPIAR</span></button>
-          <button class="btn-copy" onclick="copyAll()" id="btn-copyall" style="background:rgba(91,200,245,.08);border-color:rgba(91,200,245,.25);color:var(--blue)"><span id="btn-copyall-lbl">COPIAR TODO</span></button>
+          <button class="btn-copy" id="btn-copy" onclick="copyCode()"><span id="btn-copy-lbl">COPY</span></button>
+          <button class="btn-copy" onclick="copyAll()" id="btn-copyall" style="background:rgba(91,200,245,.08);border-color:rgba(91,200,245,.25);color:var(--blue)"><span id="btn-copyall-lbl">COPY ALL</span></button>
         </div>
       </div>
-      <div id="code-box">— Selecciona una ecuación —</div>
+      <div id="code-box">— Select an equation —</div>
     </div>
   </div>
 
@@ -207,25 +207,25 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
 
     <!-- CUSTOM -->
     <div class="r-card">
-      <div class="r-title" id="r-custom-title">ECUACIÓN CUSTOM</div>
-      <textarea id="custom-input" placeholder="\frac{a_0}{R} = \frac{cH_0}{R^2}" oninput="previewCustom()"></textarea>
+      <div class="r-title" id="r-custom-title">CUSTOM EQUATION</div>
+      <textarea id="custom-input" placeholder="\frac{a_0}{2\pi} = \frac{cH_0}{4\pi^2}" oninput="previewCustom()"></textarea>
       <div id="custom-preview"></div>
-      <button class="btn-insert" onclick="insertCustom()" id="btn-insert">↑ AGREGAR AL CÓDIGO</button>
+      <button class="btn-insert" onclick="insertCustom()" id="btn-insert">↑ ADD TO CODE</button>
     </div>
 
     <!-- EXPORT -->
     <div class="r-card">
-      <div class="r-title" id="r-export-title">EXPORTAR</div>
+      <div class="r-title" id="r-export-title">EXPORT</div>
       <div class="export-btns">
-        <button class="export-btn" onclick="exportTex()" id="btn-export-tex">📄 DESCARGAR .tex</button>
-        <button class="export-btn" onclick="exportMd()"  id="btn-export-md" >📝 DESCARGAR .md</button>
-        <button class="export-btn" onclick="copyAll()"   id="btn-export-copy" style="color:var(--lime);border-color:rgba(170,255,0,.2);background:rgba(170,255,0,.05)">📋 COPIAR SELECCIÓN</button>
+        <button class="export-btn" onclick="exportTex()" id="btn-export-tex">📄 DOWNLOAD .tex</button>
+        <button class="export-btn" onclick="exportMd()"  id="btn-export-md" >📝 DOWNLOAD .md</button>
+        <button class="export-btn" onclick="copyAll()"   id="btn-export-copy" style="color:var(--lime);border-color:rgba(170,255,0,.2);background:rgba(170,255,0,.05)">📋 COPY SELECTION</button>
       </div>
     </div>
 
     <!-- CONSTANTS -->
     <div class="r-card">
-      <div class="r-title" id="r-const-title">CONSTANTES TIE</div>
+      <div class="r-title" id="r-const-title">TIE CONSTANTS</div>
       <div class="const-grid" id="const-grid"></div>
     </div>
 
@@ -325,11 +325,11 @@ const EQUATIONS = [
    ctxES:'Para comparación con rₕ TIE',ctxEN:'For comparison with TIE rₕ'},
   {id:'rh-rs',     cat:'agujeros', nameES:'Relación rₕ/rₛ',              nameEN:'Ratio rₕ/rₛ',
    latex: '\\frac{r_h}{r_s} = \\frac{1.272}{2}\\sqrt{\\frac{c^2}{Ga_0 M}} \\cdot M',
-   descES:'Razón entre los horizontes TIE y GR. Para M87*: rₕ/rₛ ≈ 4×10⁶.',
-   descEN:'Ratio between TIE and GR horizons. For M87*: rₕ/rₛ ≈ 4×10⁶.',
-   ctxES:'M87*: rₕ = 4.04×10⁶ rₛ',ctxEN:'M87*: rₕ = 4.04×10⁶ rₛ'},
+   descES:'Razón entre los horizontes TIE y GR. Para M87*: rₕ/rₛ ≈ 5.9×10⁶.',
+   descEN:'Ratio between TIE and GR horizons. For M87*: rₕ/rₛ ≈ 5.9×10⁶.',
+   ctxES:'M87*: rₕ = 5.92×10⁶ rₛ',ctxEN:'M87*: rₕ = 5.92×10⁶ rₛ'},
   {id:'mc-crit',   cat:'agujeros', nameES:'Masa crítica TIE Mc',         nameEN:'TIE critical mass Mc',
-   latex: 'M_c = \\frac{c^2}{G}\\sqrt{\\frac{c^2}{a_0 G}} \\approx 2.275\\times 10^{23}\\,M_\\odot',
+   latex: 'M_c = \\frac{\\varphi c^4}{4Ga_0} \\approx 2.275\\times 10^{23}\\,M_\\odot',
    descES:'Masa crítica donde rₕ = rₛ. Por encima: rₕ domina sobre rₛ.',
    descEN:'Critical mass where rₕ = rₛ. Above: rₕ dominates over rₛ.',
    ctxES:'Mc ≈ 2.275×10²³ M☉',ctxEN:'Mc ≈ 2.275×10²³ M☉'},
@@ -424,7 +424,7 @@ const CONSTANTS = [
 // ══════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════
-let lang      = 'es';
+let lang      = 'en';
 let activeCat = 'todos';
 let searchQ   = '';
 let selEq     = null;
@@ -563,7 +563,7 @@ function insertCustom(){
   const val = document.getElementById('custom-input').value.trim();
   if(!val) return;
   const box = document.getElementById('code-box');
-  const curr = box.textContent==='— Selecciona una ecuación —' ? '' : box.textContent;
+  const curr = box.textContent==='— Select an equation —' ? '' : box.textContent;
   box.textContent = curr + (curr?'\n\n':'') + `\\[${val}\\]`;
   showToast(lang==='es'?'Ecuación insertada':'Equation inserted');
 }
@@ -574,9 +574,9 @@ function insertCustom(){
 function exportTex(){
   const eqs = activeCat==='todos' ? EQUATIONS : EQUATIONS.filter(e=>e.cat===activeCat);
   const lines = [
-    '% TIE - Teoría de la Infraestructura Espacial',
-    '% R@LC · Rubén Lecona · México 2026',
-    '% Generado por el Laboratorio TIE H-15',
+    '% TIE - Spatial Infrastructure Theory',
+    '% R@LC · Rubén Lecona · Mexico 2026',
+    '% Generated by TIE Laboratory H-15',
     '',
     '\\documentclass{article}',
     '\\usepackage{amsmath,amssymb}',
@@ -597,8 +597,8 @@ function exportTex(){
 function exportMd(){
   const eqs = activeCat==='todos' ? EQUATIONS : EQUATIONS.filter(e=>e.cat===activeCat);
   const lines = [
-    '# TIE — Ecuaciones LaTeX',
-    '**Teoría de la Infraestructura Espacial · R@LC · 2026**',
+    '# TIE — LaTeX Equations',
+    '**Spatial Infrastructure Theory · R@LC · 2026**',
     '',
     ...eqs.map(eq=>{
       const nm = lang==='es'?eq.nameES:eq.nameEN;
@@ -656,7 +656,7 @@ function setLang(l){
   document.getElementById('btn-en').className='lang-btn '+(l==='en'?'active':'inactive');
   const lb=document.getElementById('lnk-back');
   lb.textContent = l==='es'?'← LABORATORIO':'← LABORATORY';
-  lb.href = l==='es'?'labs.html':'lab-en.html';
+  lb.href = l==='es'?'labs.html':'labs-en.html';
   document.getElementById('strip-title').innerHTML = l==='es'?'GENERADOR <span>LaTeX</span>':'<span>LaTeX</span> GENERATOR';
   document.getElementById('strip-badge').textContent = 'TIE v11.8 · KATEX';
   document.getElementById('cat-search').placeholder = l==='es'?'Buscar ecuación...':'Search equation...';
@@ -685,7 +685,6 @@ window.onload = function(){
   selectEq('a0-def');
 };
 </script>
-
 <script src="axon-widget.js"></script>
 </body>
 </html>

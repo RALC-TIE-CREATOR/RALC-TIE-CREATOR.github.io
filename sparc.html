@@ -119,9 +119,12 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .err-bar-fill{height:100%;border-radius:3px;transition:width .5s;}
 
 .const-row{display:flex;flex-wrap:wrap;gap:.75rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.75rem 1.25rem;backdrop-filter:blur(8px);margin-top:1.25rem;}
-.ci{font-family:var(--mono);font-size:.65rem;}
+
+/* --- ESTILO ACTUALIZADO PARA CONSTANTES (TEXTO MÁS GRANDE) --- */
+.ci{font-family:var(--mono);font-size:.85rem;} /* Aumentado de .65rem a .85rem */
 .ci .cl{color:var(--dim);}
-.ci .cv{color:var(--gold);font-weight:700;}
+.ci .cv{color:var(--gold);font-weight:700; font-size: 1rem;} /* Aumentado ligeramente para énfasis */
+
 .nav-links{display:flex;justify-content:center;gap:2rem;margin-top:2rem;flex-wrap:wrap;}
 .nav-links a{font-family:var(--mono);font-size:.7rem;color:var(--dim);text-decoration:none;transition:color .2s;}
 .nav-links a:hover{color:var(--gold);}
@@ -228,6 +231,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 
   <div class="galaxy-grid" id="galaxy-grid"></div>
 
+  <!-- BARRA DE CONSTANTES ACTUALIZADA (EL TEXTO YA ES MÁS GRANDE POR EL CSS) -->
   <div class="const-row">
     <div class="ci"><span class="cl">a₀ = </span><span class="cv">1.082×10⁻¹⁰ m/s²</span></div>
     <div class="ci"><span class="cl">M/L = </span><span class="cv">0.5</span></div>

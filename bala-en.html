@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TIE · H-10 · Bullet Cluster · Gravitational Decoupling</title>
+    <title>TIE · Bullet Cluster · Gravitational Decoupling</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,8 +19,9 @@
 
         nav { background:rgba(0,0,1,0.95); border-bottom:1px solid var(--border); padding:0.85rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
         .nav-logo { font-family:var(--mono); color:var(--gold); text-decoration:none; font-weight:700; font-size:0.85rem; letter-spacing:2px; }
-        /* ESTILO PARA EL BOTÓN ORCID */
-         .orcid-link {
+        
+        /* ORCID BUTTON STYLE */
+        .orcid-link {
             display: flex;
             align-items: center;
             gap: 8px;
@@ -41,40 +42,50 @@
         }
         
         .nav-right { display:flex; align-items:center; gap:1.5rem; }
-        .nav-lang  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; letter-spacing:1px; }
-        .nav-lang.active { color:var(--text); }
+        .lang-btn  { font-family:var(--mono); font-size:0.7rem; font-weight:700; letter-spacing:2px; padding:0.25rem 0.6rem; border-radius:4px; cursor:pointer; border:none; transition:all .2s; }
+        .lang-btn.active { color:#000; background:var(--gold); }
+        .lang-btn.inactive { color:var(--dim); border:1px solid var(--border); background:transparent; }
+        .lang-btn.inactive:hover { color:var(--gold); border-color:var(--gold); }
         .nav-back  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; letter-spacing:1px; border:1px solid rgba(160,160,176,0.3); padding:0.35rem 0.75rem; transition:0.2s; }
         .nav-back:hover { color:var(--blue); border-color:var(--blue); }
 
         .page-header { padding:1.2rem 2rem 1rem; border-bottom:1px solid var(--border); flex-shrink:0; }
-        .page-label  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.3rem; }
-        .page-header h1 { font-family:var(--sans); font-size:1.6rem; font-weight:900; letter-spacing:1px; margin-bottom:0.25rem; }
-        .page-desc { font-size:0.85rem; color:var(--dim); max-width:740px; }
-        .page-eq   { font-family:var(--mono); font-size:0.8rem; color:var(--gold); margin-top:0.4rem; }
+        .page-label  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.3rem; }
+        .page-header h1 { font-family:var(--sans); font-size:1.8rem; font-weight:900; letter-spacing:1px; margin-bottom:0.25rem; }
+        .page-desc { font-size:0.9rem; color:var(--dim); max-width:740px; }
+        .page-eq   { font-family:var(--mono); font-size:0.85rem; color:var(--gold); margin-top:0.4rem; }
 
         .stats-bar { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
         .stat { padding:0.6rem 1.5rem; border-right:1px solid var(--border); text-align:center; }
-        .stat-number { font-family:var(--mono); font-size:1.1rem; font-weight:700; color:var(--gold); }
-        .stat-label  { font-family:var(--mono); font-size:0.6rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
+        .stat-number { font-family:var(--mono); font-size:1.2rem; font-weight:700; color:var(--gold); }
+        .stat-label  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
 
+        /* MAIN - THREE COLUMN LAYOUT */
         .main-wrap { flex:1; display:flex; padding:1.25rem 1.5rem; gap:1.25rem; min-height:0; }
 
-        .sidebar { width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:1.25rem; overflow-y:auto; }
-        .sidebar::-webkit-scrollbar { width:3px; }
-        .sidebar::-webkit-scrollbar-thumb { background:var(--border); }
+        /* LEFT CONTROLS COLUMN */
+        .sidebar-left { width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:1.25rem; overflow-y:auto; }
+        .sidebar-left::-webkit-scrollbar { width:3px; }
+        .sidebar-left::-webkit-scrollbar-thumb { background:var(--border); }
+
+        /* RIGHT INFO COLUMN */
+        .sidebar-right { width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:1.25rem; overflow-y:auto; }
+        .sidebar-right::-webkit-scrollbar { width:3px; }
+        .sidebar-right::-webkit-scrollbar-thumb { background:var(--border); }
 
         .panel { border:1px solid var(--border); background:var(--bg2); padding:1rem; }
-        .panel-title { font-family:var(--mono); font-size:0.7rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.4rem; margin-bottom:0.75rem; }
-        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.75rem; color:var(--dim); padding:0.25rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
-        .data-val { color:var(--text); font-weight:700; }
-        .note { font-family:var(--mono); font-size:0.7rem; color:var(--dim); line-height:1.6; }
+        .panel-title { font-family:var(--mono); font-size:0.75rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.4rem; margin-bottom:0.8rem; }
+        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.8rem; color:var(--dim); padding:0.35rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+        .data-val { color:var(--text); font-weight:700; font-size:0.8rem; }
+        .note { font-family:var(--mono); font-size:0.75rem; color:var(--dim); line-height:1.7; }
+        .note strong { color:var(--gold); }
 
-        .toggle-row { display:flex; align-items:center; justify-content:space-between; font-family:var(--mono); font-size:0.75rem; color:var(--dim); padding:0.5rem 0.6rem; border:1px solid rgba(255,255,255,0.06); cursor:pointer; margin-bottom:5px; transition:0.2s; }
+        .toggle-row { display:flex; align-items:center; justify-content:space-between; font-family:var(--mono); font-size:0.75rem; color:var(--dim); padding:0.6rem 0.7rem; border:1px solid rgba(255,255,255,0.06); cursor:pointer; margin-bottom:6px; transition:0.2s; }
         .toggle-row:hover { background:rgba(255,255,255,0.03); }
-        .chk { width:14px; height:14px; border:1px solid var(--gold); position:relative; display:inline-block; flex-shrink:0; }
+        .chk { width:16px; height:16px; border:1px solid var(--gold); position:relative; display:inline-block; flex-shrink:0; }
         .chk.on::after { content:''; position:absolute; top:2px;left:2px;right:2px;bottom:2px; background:var(--gold); }
 
-        .btn { width:100%; padding:0.75rem 1rem; font-family:var(--mono); font-size:0.75rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border-radius:2px; transition:0.2s; }
+        .btn { width:100%; padding:0.8rem 1rem; font-family:var(--mono); font-size:0.8rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border-radius:2px; transition:0.2s; }
         .btn-gold { background:transparent; color:var(--gold); border:1px solid rgba(255,215,0,0.3); }
         .btn-gold:hover { background:rgba(255,215,0,0.08); border-color:var(--gold); }
         .btn-red  { background:transparent; color:var(--red);  border:1px solid rgba(255,68,85,0.3); }
@@ -86,16 +97,16 @@
         .legend {
             position:absolute; top:16px; left:16px;
             background:rgba(0,0,0,0.8); border:1px solid var(--border);
-            padding:10px 14px; font-family:var(--mono); font-size:0.72rem;
+            padding:12px 16px; font-family:var(--mono); font-size:0.75rem;
         }
-        .leg-item { display:flex; align-items:center; gap:8px; color:var(--dim); margin-bottom:4px; }
-        .leg-dot  { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+        .leg-item { display:flex; align-items:center; gap:8px; color:var(--dim); margin-bottom:5px; }
+        .leg-dot  { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
 
         .status-overlay {
             position:absolute; bottom:16px; left:50%; transform:translateX(-50%);
-            font-family:var(--mono); font-size:0.75rem; color:var(--dim);
+            font-family:var(--mono); font-size:0.8rem; color:var(--dim);
             background:rgba(0,0,0,0.7); border:1px solid var(--border);
-            padding:6px 14px; white-space:nowrap;
+            padding:8px 16px; white-space:nowrap;
         }
 
         footer { border-top:1px solid var(--border); padding:0.65rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
@@ -105,64 +116,50 @@
         .footer-eq     { font-family:var(--mono); font-size:0.7rem; color:rgba(255,215,0,0.5); text-align:center; }
         .footer-credit { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; }
 
-        @media (max-width:900px) { .main-wrap{flex-direction:column} .sidebar{width:100%} }
+        @media (max-width:1000px) { .main-wrap{flex-direction:column} .sidebar-left, .sidebar-right{width:100%} }
     </style>
 </head>
 <body>
 
 <nav>
     <div style="display:flex; align-items:center; gap:20px;">
-    <a href="index.html" class="nav-logo">TIE / R@LC</a>
-    
-    <!-- INYECCIÓN DEL PASAPORTE ORCID -->
-    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
-      <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
-         <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
-      </svg>
-      0009-0008-4935-9010
-    </a>
-  </div>
-  
-  <!-- SELECTOR DE IDIOMA -->
-  <div style="display:flex;gap:.4rem;">
-    <a href="bala.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">ES</a>
-    <a href="bala-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">EN</a>
-  </div>
-  
-  <a href="lab-cosmologia-en.html" class="nav-back">← LABORATORY</a>
+        <a href="index.html" class="nav-logo">TIE / R@LC</a>
+        <!-- ORCID BADGE -->
+        <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verify Author Identity on ORCID">
+            <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
+                <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
+            </svg>
+            0009-0008-4935-9010
+        </a>
+    </div>
+    <div class="nav-right">
+        <button class="lang-btn inactive" id="btn-es" onclick="setLang('es')">ES</button>
+        <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+        <a href="labs-en.html" class="nav-back">← LABORATORY</a>
     </div>
 </nav>
 
 <div class="page-header">
-    <div class="page-label">H-10 · LIVE · COSMOLOGY · §10.7 OF THE TREATISE</div>
+    <div class="page-label">CHAPTER 3 · LIVE · COSMOLOGY · GRAVITATIONAL DECOUPLING</div>
     <h1>BULLET CLUSTER</h1>
-    <p class="page-desc">Baryonic gas collides and decelerates due to electromagnetic friction. The quantum phase superfluid ∇Φ — responsible for gravitational lensing — passes through without friction. No invisible dark matter needed: the decoupling is the signal of infrastructure.</p>
+    <p class="page-desc">Baryonic gas collides and slows down due to electromagnetic friction. The ∇Φ phase superfluid — responsible for gravitational lensing — passes through without resistance. No invisible dark matter is needed: the decoupling is the signature of the infrastructure.</p>
     <div class="page-eq">v_superfluid = 0 (zero viscosity) &nbsp;·&nbsp; v_gas → 0 (EM friction) &nbsp;·&nbsp; ∇Φ TIE ≠ exotic matter</div>
 </div>
 
 <div class="stats-bar">
     <div class="stat"><div class="stat-number">0</div><div class="stat-label">Phase Viscosity</div></div>
-    <div class="stat"><div class="stat-number">∞</div><div class="stat-label">Φ Mean Free Path</div></div>
-    <div class="stat"><div class="stat-number">0</div><div class="stat-label">DM postulated</div></div>
+    <div class="stat"><div class="stat-number">∞</div><div class="stat-label">Φ Free Path</div></div>
+    <div class="stat"><div class="stat-number">0</div><div class="stat-label">Postulated DM</div></div>
     <div class="stat"><div class="stat-number" id="stat-time" style="color:var(--dim)">T+0.00</div><div class="stat-label">Myrs</div></div>
 </div>
 
 <div class="main-wrap">
-    <div class="sidebar">
-
-        <div class="panel">
-            <div class="panel-title">Collision State</div>
-            <div class="data-row">Simulated time <span class="data-val" id="val-time">T+0.00 Myrs</span></div>
-            <div class="data-row">Baryonic friction <span class="data-val" style="color:var(--red)">ACTIVE</span></div>
-            <div class="data-row">Phase viscosity <span class="data-val" style="color:var(--blue)">ZERO</span></div>
-            <div class="data-row" style="border:none; padding-top:0.4rem;">
-                <span id="status-msg" style="color:var(--gold); font-size:0.7rem;">WAITING TO START...</span>
-            </div>
-        </div>
-
-        <div class="panel">
-            <div class="panel-title">TIE Paradigm</div>
-            <p class="note">Ordinary matter (gas) interacts electromagnetically and decelerates. Quantum phase waves Φ (source of lensing) are superfluid — they pass through without friction. The decoupling between lensing and gas is evidence of infrastructure, not particle dark matter.</p>
+    <!-- LEFT COLUMN - CONTROLS -->
+    <div class="sidebar-left">
+        <!-- BUTTONS AT TOP -->
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:0.5rem;">
+            <button class="btn btn-gold" id="btn-start" onclick="startSimulation()">[ START COLLISION ]</button>
+            <button class="btn btn-red"  onclick="resetSimulation()">[ RESET CAMERA ]</button>
         </div>
 
         <div class="panel">
@@ -176,30 +173,60 @@
                 <div class="chk on" id="check-phase"></div>
             </div>
         </div>
-
-        <div style="display:flex;flex-direction:column;gap:8px;margin-top:auto;">
-            <button class="btn btn-gold" id="btn-start" onclick="startSimulation()">[ START COLLISION ]</button>
-            <button class="btn btn-red"  onclick="resetSimulation()">[ RESET CAMERA ]</button>
-        </div>
     </div>
 
+    <!-- CENTER COLUMN - VISUALIZATION -->
     <div class="canvas-area">
         <div class="legend">
             <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div> Baryonic plasma</div>
-            <div class="leg-item"><div class="leg-dot" style="border:2px solid var(--blue);background:transparent;"></div> Φ Superfluid (lensing)</div>
+            <div class="leg-item"><div class="leg-dot" style="border:2px solid var(--blue);background:transparent;"></div> Φ superfluid (lensing)</div>
         </div>
         <canvas id="bulletCanvas"></canvas>
         <div class="status-overlay" id="status-overlay">SYSTEM AT REST</div>
+        <div style="position:absolute; bottom:40px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:0.65rem; color:rgba(255,255,255,0.2);">REFERENCE: CHAPTERS 3 AND 14</div>
+    </div>
+
+    <!-- RIGHT COLUMN - INFORMATION -->
+    <div class="sidebar-right">
+        <!-- COLLISION STATUS (moved to right, at the top) -->
+        <div class="panel">
+            <div class="panel-title">Collision Status</div>
+            <div class="data-row">Simulated time <span class="data-val" id="val-time">T+0.00 Myrs</span></div>
+            <div class="data-row">Baryonic friction <span class="data-val" style="color:var(--red)">ACTIVE</span></div>
+            <div class="data-row">Phase viscosity <span class="data-val" style="color:var(--blue)">ZERO</span></div>
+            <div class="data-row" style="border:none; padding-top:0.5rem;">
+                <span id="status-msg" style="color:var(--gold); font-size:0.75rem;">WAITING TO START...</span>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">TIE Paradigm</div>
+            <p class="note">Ordinary matter (gas) interacts electromagnetically and slows down. The quantum phase Φ solitary waves (source of lensing) are superfluid — they pass through without friction. The decoupling between lensing and gas is evidence of the infrastructure, not of particle dark matter.</p>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">TIE Interpretation</div>
+            <p class="note">The decoupling between the gas (which slows due to EM friction) and the phase field Φ (which passes without resistance) is the signature of the spatial infrastructure. No exotic dark matter is needed — the effect is identical to that observed in the Bullet Cluster (1E 0657-558).</p>
+            <p class="note" style="margin-top:0.6rem; color:var(--blue);">∇Φ: phase gradient of the infrastructure · a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²</p>
+        </div>
     </div>
 </div>
 
 <footer>
     <div class="footer-nav">
         <a href="lente-en.html">← Gravitational Lens</a>
-        <a href="campo-phi.html">φ Field →</a>
+        <a href="campo-phi-en.html">φ Field →</a>
     </div>
-    <div class="footer-eq">∇Φ = superfluid · gas = EM friction · decoupling = §10.7 TIE</div>
-    <div class="footer-credit">R@LC 2026 · MÉXICO · INDEPENDENT RESEARCHER</div>
+    <div class="footer-eq">∇Φ = superfluid · gas = EM friction · decoupling = CH. 3 TIE</div>
+    <div class="footer-credit">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
+    <div style="margin-top:0.3rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">
+        <a href="index.html" style="color:inherit; text-decoration:none;">HOME</a> · 
+        <a href="labs-en.html" style="color:inherit; text-decoration:none;">LAB</a> · 
+        <a href="papers.html" style="color:inherit; text-decoration:none;">PAPERS</a> · 
+        <a href="predictions-en.html" style="color:inherit; text-decoration:none;">PREDICTIONS</a> · 
+        <a href="theory-en.html" style="color:inherit; text-decoration:none;">THEORY</a> · 
+        <a href="https://github.com/ralc-tie-creator" target="_blank" style="color:inherit; text-decoration:none;">GITHUB</a>
+    </div>
 </footer>
 
 <script>
@@ -289,16 +316,18 @@
             isRunning = false;
             document.getElementById('status-msg').textContent  = 'GRAVITATIONAL DECOUPLING CONFIRMED.';
             document.getElementById('status-msg').style.color  = 'var(--green)';
-            document.getElementById('status-overlay').textContent = '✓ GRAVITATIONAL DECOUPLING CONFIRMED — §10.7 TIE';
+            document.getElementById('status-overlay').textContent = '✓ GRAVITATIONAL DECOUPLING CONFIRMED — CH. 10.8 TIE';
         } else {
             animationId = requestAnimationFrame(animate);
         }
     }
 
     function updatePhysics() {
+        // Phase superfluid: no friction
         cluster1.phaseX += cluster1.v;
         cluster2.phaseX += cluster2.v;
 
+        // Baryonic gas: EM friction
         const dist = Math.abs(cluster1.x - cluster2.x);
         const cZone = 120;
         if (dist < cZone) {
@@ -364,7 +393,12 @@
     }
 
     resize(); setupSimulation();
+
+    // Language switching function
+    function setLang(l) {
+        document.getElementById('btn-es').className = l === 'es' ? 'lang-btn active' : 'lang-btn inactive';
+        document.getElementById('btn-en').className = l === 'en' ? 'lang-btn active' : 'lang-btn inactive';
+    }
 </script>
-<script src="axon-widget.js"></script>
 </body>
 </html>

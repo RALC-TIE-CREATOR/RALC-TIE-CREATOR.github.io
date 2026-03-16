@@ -3,22 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TIE · H-09 · Gravitational Lens · Light Deflection</title>
+    <title>TIE · H-09 · Gravitational Lensing · Light Deflection</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold:   #FFD700; --blue:   #5BC8F5; --green:  #44FF88;
-            --red:    #FF4455; --purple: #a855f7;
-            --bg:     #000001; --bg2:    rgba(5,5,15,0.95);
-            --text:   #ffffff; --dim:    #a0a0b0;
+            --gold:   #FFD700;
+            --blue:   #5BC8F5;
+            --green:  #44FF88;
+            --red:    #FF4455;
+            --purple: #a855f7;
+            --bg:     #000001;
+            --bg2:    rgba(5,5,15,0.95);
+            --text:   #ffffff;
+            --dim:    #a0a0b0;
             --border: rgba(91,200,245,0.15);
-            --mono:   'Space Mono', monospace; --sans:   'Syne', sans-serif;}
+            --mono:   'Space Mono', monospace;
+            --sans:   'Syne', sans-serif;
+        }
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { background:var(--bg); color:var(--text); font-family:var(--sans); height:100vh; display:flex; flex-direction:column; overflow:hidden; }
 
-        nav { background:rgba(0,0,1,0.95); border-bottom:1px solid var(--border); padding:0.85rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ── NAV ── */
+        nav {
+            background: rgba(0,0,1,0.95);
+            border-bottom: 1px solid var(--border);
+            padding: 0.85rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
         .nav-logo { font-family:var(--mono); color:var(--gold); text-decoration:none; font-weight:700; font-size:0.85rem; letter-spacing:2px; }
-        /* ESTILO PARA EL BOTÓN ORCID */
+        
+        /* ORCID BUTTON STYLE */
         .orcid-link {display: flex;align-items: center;gap: 8px;font-family: var(--mono);font-size: 0.75rem;color: #A6CE39;text-decoration: none;border: 1px solid rgba(166, 206, 57, 0.3);padding: 4px 12px;border-radius: 2px;transition: 0.3s;letter-spacing: 1px;}
         .orcid-link:hover {background: rgba(166, 206, 57, 0.1);box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);color: #fff;}
         
@@ -28,66 +54,114 @@
         .nav-back  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; letter-spacing:1px; border:1px solid rgba(160,160,176,0.3); padding:0.35rem 0.75rem; transition:0.2s; }
         .nav-back:hover { color:var(--blue); border-color:var(--blue); }
 
+        /* ── HEADER ── */
         .page-header { padding:1.2rem 2rem 1rem; border-bottom:1px solid var(--border); flex-shrink:0; }
         .page-label  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.3rem; }
         .page-header h1 { font-family:var(--sans); font-size:1.6rem; font-weight:900; letter-spacing:1px; margin-bottom:0.25rem; }
         .page-desc { font-size:0.85rem; color:var(--dim); max-width:700px; }
         .page-eq   { font-family:var(--mono); font-size:0.8rem; color:var(--gold); margin-top:0.4rem; }
 
+        /* ── STATS ── */
         .stats-bar { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
         .stat { padding:0.6rem 1.5rem; border-right:1px solid var(--border); text-align:center; }
         .stat-number { font-family:var(--mono); font-size:1.1rem; font-weight:700; color:var(--gold); }
         .stat-label  { font-family:var(--mono); font-size:0.6rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
 
+        /* ── MAIN ── */
         .main-wrap { flex:1; display:flex; padding:1.25rem 1.5rem; gap:1.25rem; min-height:0; }
 
-        .sidebar { width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:1.25rem; overflow-y:auto; }
-        .sidebar::-webkit-scrollbar { width:3px; }
-        .sidebar::-webkit-scrollbar-thumb { background:var(--border); }
+        /* ── LEFT SIDEBAR (original controls) ── */
+        .sidebar-left { 
+            width: 340px; 
+            flex-shrink: 0; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 1rem; 
+            overflow-y: auto; 
+        }
+        .sidebar-left::-webkit-scrollbar { width:3px; }
+        .sidebar-left::-webkit-scrollbar-thumb { background:var(--border); }
+
+        /* ── RIGHT SIDEBAR (new information) ── */
+        .sidebar-right { 
+            width: 340px; 
+            flex-shrink: 0; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 1rem; 
+            overflow-y: auto; 
+        }
+        .sidebar-right::-webkit-scrollbar { width:3px; }
+        .sidebar-right::-webkit-scrollbar-thumb { background:var(--border); }
 
         .panel { border:1px solid var(--border); background:var(--bg2); padding:1rem; }
         .panel-title { font-family:var(--mono); font-size:0.7rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.4rem; margin-bottom:0.75rem; }
 
+        /* Mode buttons (Physical Engine) */
         .mode-btn {
             display: block; width:100%; text-align:left;
-            background: rgba(0,0,0,0.4); border: 1px solid var(--border);
-            color: var(--dim); padding: 0.65rem 0.9rem;
-            font-family: var(--mono); font-size: 0.75rem;
-            cursor: pointer; transition: 0.2s; margin-bottom: 6px; border-radius: 2px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--border);
+            color: var(--dim);
+            padding: 0.6rem 0.9rem;
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-bottom: 6px;
+            border-radius: 2px;
         }
         .mode-btn:hover { background:rgba(255,255,255,0.04); color:var(--text); }
         .mode-btn.active-newton { border-color:var(--red);    color:var(--red);    background:rgba(255,68,85,0.06); }
         .mode-btn.active-dm     { border-color:var(--purple); color:var(--purple); background:rgba(168,85,247,0.06); }
         .mode-btn.active-tie    { border-color:var(--gold);   color:var(--gold);   background:rgba(255,215,0,0.06); }
 
+        /* Slider (Impact Parameter) */
         .slider-wrap { display:flex; flex-direction:column; gap:6px; }
-        .slider-wrap label { font-family:var(--mono); font-size:0.72rem; color:var(--blue); display:flex; justify-content:space-between; }
-        input[type=range] { -webkit-appearance:none; width:100%; background:rgba(91,200,245,0.12); height:3px; border-radius:2px; outline:none; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; background:var(--blue); border-radius:50%; cursor:pointer; }
+        .slider-wrap label { font-family:var(--mono); font-size:0.7rem; color:var(--blue); display:flex; justify-content:space-between; }
+        input[type=range] {
+            -webkit-appearance:none; width:100%;
+            background:rgba(91,200,245,0.12); height:3px; border-radius:2px; outline:none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance:none; width:14px; height:14px;
+            background:var(--blue); border-radius:50%; cursor:pointer;
+        }
 
-        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.75rem; color:var(--dim); padding:0.25rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
-        .data-val { color:var(--text); font-weight:700; }
+        /* Field State (original panel) */
+        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.7rem; color:var(--dim); padding:0.3rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+        .data-val { color:var(--text); font-weight:700; font-size:0.75rem; }
+        
+        /* Explanatory text (new panel) */
         .note { font-family:var(--mono); font-size:0.7rem; color:var(--dim); line-height:1.6; }
+        .note strong { color:var(--gold); font-size:0.75rem; }
 
+        /* FIRE PHOTON button (now at top) */
         .btn-fire {
-            width:100%; padding:0.85rem; font-family:var(--mono); font-size:0.8rem; font-weight:700;
+            width:100%; padding:0.9rem; font-family:var(--mono); font-size:0.8rem; font-weight:700;
             letter-spacing:2px; text-transform:uppercase; cursor:pointer; border-radius:2px;
             background: var(--blue); color:#000; border:none; transition:0.2s;
+            margin-bottom: 0.5rem;
         }
         .btn-fire:hover { background:#fff; }
 
-        .canvas-area { flex:1; border:1px solid var(--border); background:var(--bg2); position:relative; overflow:hidden; min-width:0; }
+        /* ── CANVAS ── */
+        .canvas-area {
+            flex:1; border:1px solid var(--border); background:var(--bg2);
+            position:relative; overflow:hidden; min-width:0;
+        }
         canvas { width:100%; height:100%; display:block; }
 
         .telemetry {
             position:absolute; bottom:16px; right:16px;
             background:rgba(0,0,0,0.85); border:1px solid var(--border);
-            padding:12px 16px; font-family:var(--mono); font-size:0.75rem; min-width:260px;
+            padding:12px 16px; font-family:var(--mono); font-size:0.7rem; min-width:260px;
         }
         .tele-title { color:var(--blue); border-bottom:1px solid var(--border); padding-bottom:5px; margin-bottom:8px; font-size:0.7rem; letter-spacing:1px; }
-        .tele-row   { display:flex; justify-content:space-between; color:var(--dim); padding:2px 0; }
-        .tele-val   { color:var(--text); font-weight:700; min-width:150px; text-align:right; }
+        .tele-row   { display:flex; justify-content:space-between; color:var(--dim); padding:3px 0; font-size:0.7rem; }
+        .tele-val   { color:var(--text); font-weight:700; min-width:150px; text-align:right; font-size:0.75rem; }
 
+        /* ── FOOTER ── */
         footer { border-top:1px solid var(--border); padding:0.65rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
         .footer-nav { display:flex; gap:2rem; }
         .footer-nav a { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; transition:0.2s; }
@@ -95,7 +169,10 @@
         .footer-eq     { font-family:var(--mono); font-size:0.7rem; color:rgba(255,215,0,0.5); text-align:center; }
         .footer-credit { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; }
 
-        @media (max-width:900px) { .main-wrap{flex-direction:column} .sidebar{width:100%} }
+        @media (max-width:1100px) { 
+            .main-wrap{flex-direction:column} 
+            .sidebar-left, .sidebar-right{width:100%} 
+        }
     </style>
 </head>
 <body>
@@ -104,8 +181,8 @@
     <div style="display:flex; align-items:center; gap:20px;">
     <a href="index.html" class="nav-logo">TIE / R@LC</a>
     
-    <!-- INYECCIÓN DEL PASAPORTE ORCID -->
-    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
+    <!-- ORCID BADGE -->
+    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verify Author Identity on ORCID">
       <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
          <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
       </svg>
@@ -113,7 +190,7 @@
     </a>
   </div>
   
-  <!-- SELECTOR DE IDIOMA -->
+  <!-- LANGUAGE SELECTOR -->
   <div style="display:flex;gap:.4rem;">
     <a href="lente.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">ES</a>
     <a href="lente-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">EN</a>
@@ -125,8 +202,8 @@
 
 <div class="page-header">
     <div class="page-label">H-09 · LIVE · GRAVITATIONAL OPTICS</div>
-    <h1>GRAVITATIONAL LENS</h1>
-    <p class="page-desc">Photon deflection simulator in three regimes. Compares the Newtonian prediction, the dark matter model, and the TIE logarithmic phase metric.</p>
+    <h1>GRAVITATIONAL LENSING</h1>
+    <p class="page-desc">Photon deflection simulator in three regimes. Compare Newtonian prediction, the model with added dark matter, and the TIE logarithmic phase metric.</p>
     <div class="page-eq">α = 4GM/c²b &nbsp;·&nbsp; a_TIE = √(a_N·(a_N + a₀)) &nbsp;·&nbsp; factor 2 = two equal TIE contributions</div>
 </div>
 
@@ -138,18 +215,21 @@
 </div>
 
 <div class="main-wrap">
-    <div class="sidebar">
-
+    <!-- LEFT SIDEBAR - ORIGINAL CONTROLS -->
+    <div class="sidebar-left">
+        <!-- FIRE PHOTON BUTTON AT TOP -->
+        <button class="btn-fire" onclick="firePhoton()">FIRE PHOTON</button>
+        
         <div class="panel">
-            <div class="panel-title">Physics Engine</div>
-            <p class="note" style="margin-bottom:0.65rem;">Select which spatial metric governs the curvature of light.</p>
+            <div class="panel-title">PHYSICAL ENGINE</div>
+            <p class="note" style="margin-bottom:0.65rem;">Select which spatial metric governs light curvature.</p>
             <button class="mode-btn" id="btn-newton" onclick="setPhysics('newton',this)">1. Classical physics — visible mass only</button>
             <button class="mode-btn" id="btn-dm"     onclick="setPhysics('dm',this)">2. ΛCDM — with dark matter halo</button>
             <button class="mode-btn active-tie" id="btn-tie" onclick="setPhysics('tie',this)">3. TIE — logarithmic phase potential</button>
         </div>
 
         <div class="panel">
-            <div class="panel-title">Impact Parameter</div>
+            <div class="panel-title">IMPACT PARAMETER</div>
             <div class="slider-wrap">
                 <label>Distance to center (b) <span id="val-b">150 kpc</span></label>
                 <input type="range" id="slider-b" min="50" max="350" value="150" oninput="updateB(this.value)">
@@ -157,17 +237,16 @@
         </div>
 
         <div class="panel">
-            <div class="panel-title">Field State</div>
-            <div class="data-row">Galactic mass <span class="data-val">10¹¹ M☉</span></div>
-            <div class="data-row">Dark matter <span class="data-val" id="val-dm">0 %</span></div>
-            <div class="data-row">Metric <span class="data-val" id="val-metric">TIE Logarithmic</span></div>
-            <div class="data-row">Active engine <span class="data-val" id="val-motor" style="color:var(--gold)">TIE</span></div>
-            <div class="data-row">Potential <span class="data-val" id="val-pot">√(a_N·(a_N+a₀))</span></div>
+            <div class="panel-title">FIELD STATE</div>
+            <div class="data-row">Galactic mass <span class="data-val" id="info-mass">1.0 × 10¹¹ M☉</span></div>
+            <div class="data-row">Dark matter <span class="data-val" id="info-dm">0 %</span></div>
+            <div class="data-row">Metric <span class="data-val" id="info-metric">Logarithmic TIE</span></div>
+            <div class="data-row">Active engine <span class="data-val" id="info-motor" style="color:var(--gold)">TIE</span></div>
+            <div class="data-row">Potential <span class="data-val" id="info-pot">√(a_N·(a_N+a₀))</span></div>
         </div>
-
-        <button class="btn-fire" onclick="firePhoton()">FIRE PHOTON</button>
     </div>
 
+    <!-- CENTRAL CANVAS -->
     <div class="canvas-area" id="canvas-container">
         <canvas id="lensingCanvas"></canvas>
         <div class="telemetry">
@@ -177,15 +256,34 @@
             <div class="tele-row">Angle α <span class="tele-val" id="tele-angle">0.000°</span></div>
         </div>
     </div>
+
+    <!-- RIGHT SIDEBAR - NEW INFORMATION -->
+    <div class="sidebar-right">
+        <div class="panel">
+            <div class="panel-title">CALCULATED PARAMETERS</div>
+            <div class="data-row">Visible mass <span class="data-val" id="calc-mass">1.0 × 10¹¹ M☉</span></div>
+            <div class="data-row">DM added factor <span class="data-val" id="calc-dm">0×</span></div>
+            <div class="data-row">a_N/a₀ ratio <span class="data-val" id="calc-ratio">0.00</span></div>
+            <div class="data-row">Deflection α <span class="data-val" id="calc-alpha">0.000°</span></div>
+            <div class="data-row">Regime <span class="data-val" id="calc-regime">TIE (a_N ≪ a₀)</span></div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">TIE INTERPRETATION</div>
+            <p class="note">In TIE, light deflection obtains the same <strong>2×</strong> factor as in General Relativity, but for a different reason: two equal contributions (geometric −p·dx and phase E·dt).</p>
+            <p class="note" style="margin-top:0.5rem;">For galactic masses, the effective potential is logarithmic because a_TIE = √(a_N·a₀) in the a_N ≪ a₀ regime, producing flat rotation curves without dark matter.</p>
+            <p class="note" style="margin-top:0.5rem; color:var(--gold);">a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²</p>
+        </div>
+    </div>
 </div>
 
 <footer>
     <div class="footer-nav">
-        <a href="gps.html">← GPS Correction</a>
+        <a href="gps-en.html">← GPS Correction</a>
         <a href="bala-en.html">Bullet Cluster →</a>
     </div>
     <div class="footer-eq">α_TIE = 4GM/c²b &nbsp;·&nbsp; emergent factor 2 &nbsp;·&nbsp; no dark matter</div>
-    <div class="footer-credit">R@LC 2026 · MÉXICO · INDEPENDENT RESEARCHER</div>
+    <div class="footer-credit">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
 </footer>
 
 <script>
@@ -195,13 +293,22 @@
     let width, height, cx, cy;
     let physicsMode = 'tie';
     let bParam = 150;
+    let massParam = 1.0; // in units of 10¹¹ M☉
     let photon = null, trail = [], animationId = null;
 
+    // ── SIMULATION CONSTANTS ──
     const G    = 1;
-    const M    = 1500;
-    const M_DM = M * (2 * Math.PI - 1);
+    const BASE_M = 1500; // base mass for simulation (scale)
     const a0   = 0.8;
     const c_sim = 8;
+
+    function getM() {
+        return BASE_M * massParam;
+    }
+
+    function getMDM() {
+        return getM() * (2 * Math.PI - 1); // ← 2π−1 ≈ 5.283 exact (84.1%)
+    }
 
     function resize() {
         width  = canvas.parentElement.clientWidth;
@@ -224,42 +331,67 @@
         document.querySelectorAll('.mode-btn').forEach(b => b.className = 'mode-btn');
         if (mode === 'newton') {
             btn.classList.add('active-newton');
-            document.getElementById('val-dm').textContent     = '0 %';
-            document.getElementById('val-metric').textContent = 'Newtonian 1/r';
-            document.getElementById('val-motor').textContent  = 'Classical';
-            document.getElementById('val-motor').style.color  = 'var(--red)';
-            document.getElementById('val-pot').textContent    = 'GM/r²';
+            document.getElementById('info-dm').textContent     = '0 %';
+            document.getElementById('info-metric').textContent = 'Newtonian 1/r';
+            document.getElementById('info-pot').textContent    = 'GM/r²';
+            document.getElementById('info-motor').textContent  = 'Classical';
+            document.getElementById('info-motor').style.color  = 'var(--red)';
             document.getElementById('tele-motor').textContent = 'Classical Physics';
             document.getElementById('tele-pot').textContent   = '∝ 1/r';
         } else if (mode === 'dm') {
             btn.classList.add('active-dm');
-            document.getElementById('val-dm').textContent     = '+528% (added)';
-            document.getElementById('val-metric').textContent = 'Isothermal halo';
-            document.getElementById('val-motor').textContent  = 'ΛCDM';
-            document.getElementById('val-motor').style.color  = 'var(--purple)';
-            document.getElementById('val-pot').textContent    = 'Halo+visible';
-            document.getElementById('tele-motor').textContent = 'Standard ΛCDM';
+            document.getElementById('info-dm').textContent     = '+528% (added)';
+            document.getElementById('info-metric').textContent = 'Isothermal halo';
+            document.getElementById('info-pot').textContent    = 'Halo+visible';
+            document.getElementById('info-motor').textContent  = 'ΛCDM';
+            document.getElementById('info-motor').style.color  = 'var(--purple)';
+            document.getElementById('tele-motor').textContent = 'ΛCDM Standard';
             document.getElementById('tele-pot').textContent   = 'Hidden halo';
         } else {
             btn.classList.add('active-tie');
-            document.getElementById('val-dm').textContent     = '0 %';
-            document.getElementById('val-metric').textContent = 'TIE Logarithmic';
-            document.getElementById('val-motor').textContent  = 'TIE';
-            document.getElementById('val-motor').style.color  = 'var(--gold)';
-            document.getElementById('val-pot').textContent    = '√(a_N·(a_N+a₀))';
+            document.getElementById('info-dm').textContent     = '0 %';
+            document.getElementById('info-metric').textContent = 'Logarithmic TIE';
+            document.getElementById('info-pot').textContent    = '√(a_N·(a_N+a₀))';
+            document.getElementById('info-motor').textContent  = 'TIE';
+            document.getElementById('info-motor').style.color  = 'var(--gold)';
             document.getElementById('tele-motor').textContent = 'TIE Phase';
             document.getElementById('tele-pot').textContent   = '∝ ln(r)';
         }
+        updateCalculatedParams();
         if (!photon) drawStatic();
     }
 
+    function updateCalculatedParams() {
+        // Update calculated parameters in right panel
+        const M_vis = massParam.toFixed(1);
+        document.getElementById('calc-mass').textContent = `${M_vis} × 10¹¹ M☉`;
+        
+        const dmFactor = (physicsMode === 'dm') ? '5.28×' : '0×';
+        document.getElementById('calc-dm').textContent = dmFactor;
+        
+        // Calculate a_N/a₀ ratio approximately for bParam
+        const r = bParam * 3; // approximate scale
+        const aN = (G * getM()) / (r * r);
+        const ratio = (aN / a0).toFixed(2);
+        document.getElementById('calc-ratio').textContent = ratio;
+        
+        let regime = '';
+        if (physicsMode === 'newton') regime = 'Newton (a_N ≫ a₀)';
+        else if (physicsMode === 'dm') regime = 'ΛCDM with halo';
+        else regime = 'TIE (a_N ≪ a₀)';
+        document.getElementById('calc-regime').textContent = regime;
+    }
+
     function calculateAcceleration(r) {
+        const M = getM();
         const aN = (G * M) / (r * r);
         if (physicsMode === 'newton') return aN;
         if (physicsMode === 'dm') {
+            const M_DM = getMDM();
             const aDM = (G * M_DM) / (r*r + 10000);
             return aN + aDM;
         }
+        // ← CORRECT TIE FORMULA: √(a_N·(a_N+a₀))
         return Math.sqrt(aN * (aN + a0));
     }
 
@@ -269,6 +401,7 @@
         trail  = [];
         document.getElementById('tele-angle').textContent = 'Calculating...';
         document.getElementById('stat-angle').textContent = '...';
+        document.getElementById('calc-alpha').textContent = '...';
         animate();
     }
 
@@ -279,9 +412,10 @@
 
         if (r > 10) {
             const a_total  = calculateAcceleration(r);
-            const a_photon = a_total * 2.0;
+            const a_photon = a_total * 2.0; // factor 2 = two TIE contributions (spatial + phase)
             photon.vx += (dx/r) * a_photon;
             photon.vy += (dy/r) * a_photon;
+            // keep |v| = c_sim
             const vMag = Math.sqrt(photon.vx*photon.vx + photon.vy*photon.vy);
             photon.vx = (photon.vx/vMag) * c_sim;
             photon.vy = (photon.vy/vMag) * c_sim;
@@ -309,7 +443,10 @@
         const fmt = Math.abs(angleDeg).toFixed(3).padStart(7,'0');
         document.getElementById('tele-angle').textContent = `${fmt}°`;
         document.getElementById('stat-angle').textContent = `${fmt}°`;
+        document.getElementById('calc-alpha').textContent = `${fmt}°`;
         document.getElementById('stat-angle').style.color = 'var(--gold)';
+        
+        updateCalculatedParams();
 
         if (photon.x < width && photon.y < height && photon.y > 0) {
             animationId = requestAnimationFrame(animate);
@@ -318,10 +455,12 @@
 
     function drawStatic() {
         ctx.clearRect(0, 0, width, height);
+        // Gravitational field rings
         ctx.beginPath();
         for (let i = 50; i < Math.min(width, height); i += 60) ctx.arc(cx, cy, i, 0, Math.PI*2);
         ctx.strokeStyle = 'rgba(91,200,245,0.04)';
         ctx.lineWidth = 1; ctx.stroke();
+        // DM Halo
         if (physicsMode === 'dm') {
             const g = ctx.createRadialGradient(cx,cy,10,cx,cy,280);
             g.addColorStop(0,'rgba(168,85,247,0.35)');
@@ -329,10 +468,12 @@
             ctx.fillStyle = g;
             ctx.beginPath(); ctx.arc(cx,cy,280,0,Math.PI*2); ctx.fill();
         }
+        // Central galaxy
         const cg = ctx.createRadialGradient(cx,cy,2,cx,cy,22);
         cg.addColorStop(0,'#ffffff'); cg.addColorStop(0.3,'#FFD700'); cg.addColorStop(1,'transparent');
         ctx.fillStyle = cg;
         ctx.beginPath(); ctx.arc(cx,cy,28,0,Math.PI*2); ctx.fill();
+        // Impact line
         ctx.beginPath();
         ctx.moveTo(0, cy-bParam); ctx.lineTo(width, cy-bParam);
         ctx.strokeStyle = 'rgba(255,255,255,0.08)';
@@ -341,6 +482,8 @@
 
     resize();
     setPhysics('tie', document.getElementById('btn-tie'));
+    updateB(150);
+    updateCalculatedParams();
 </script>
 <script src="axon-widget.js"></script>
 </body>

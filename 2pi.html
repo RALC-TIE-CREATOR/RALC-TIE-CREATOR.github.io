@@ -475,6 +475,68 @@ input[type=range]::-webkit-slider-thumb {
 }
 .nav-links a:hover { color: var(--gold); }
 
+/* NUEVO: Cuadro de interpretación TIE */
+.tie-interpretation {
+  background: var(--bg2);
+  border: 2px solid rgba(255,215,0,0.15);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 2rem 0 1rem;
+  backdrop-filter: blur(8px);
+}
+.tie-interpretation-title {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  display: inline-block;
+  border-bottom: 2px solid rgba(255,215,0,0.3);
+  padding-bottom: 0.3rem;
+}
+.tie-interpretation-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.tie-interpretation-text {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--dim);
+  line-height: 1.8;
+}
+.tie-interpretation-text strong {
+  color: var(--gold);
+}
+.tie-interpretation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+.tie-interpretation-item {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.8rem;
+}
+.tie-interpretation-item .item-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--dim);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+.tie-interpretation-item .item-value {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--gold);
+  font-weight: 700;
+}
+@media(max-width:700px){ .tie-interpretation-grid{ grid-template-columns:1fr; } }
+
 /* Footer */
 footer {
   position: relative; z-index:1;
@@ -695,6 +757,34 @@ footer .fcopy {
 
   </div><!-- end tool-grid -->
 
+  <!-- NUEVO: CUADRO DE INTERPRETACIÓN TIE -->
+  <div class="tie-interpretation">
+    <div class="tie-interpretation-title">INTERPRETACIÓN TIE</div>
+    <div class="tie-interpretation-content">
+      <div class="tie-interpretation-text">
+        La constante <strong>\(R = 2\pi\)</strong> (Constante de RALC) es el ciclo completo de sincronía de la infraestructura espacial. 
+        Aparece en todas las ecuaciones dinámicas de TIE porque la infraestructura no procesa fracciones de ciclo.
+      </div>
+      <div class="tie-interpretation-grid">
+        <div class="tie-interpretation-item">
+          <div class="item-label">a₀</div>
+          <div class="item-value" id="ti-a0">1.082×10⁻¹⁰ m/s²</div>
+        </div>
+        <div class="tie-interpretation-item">
+          <div class="item-label">v₀ = c/R</div>
+          <div class="item-value" id="ti-v0">47.715 km/s</div>
+        </div>
+        <div class="tie-interpretation-item">
+          <div class="item-label">m_TIE / m_obs</div>
+          <div class="item-value">2π = 6.283</div>
+        </div>
+      </div>
+      <div class="tie-interpretation-text" style="margin-top:0.5rem;">
+        <strong>Relación clave:</strong> \(a_0 = v_0 \cdot H_0\) — la aceleración de transición es la proyección temporal de la velocidad fundamental de la infraestructura.
+      </div>
+    </div>
+  </div>
+
   <!-- NAV LINKS -->
   <div class="nav-links">
     <a href="curvas.html">← Curvas de Rotación</a>
@@ -846,8 +936,14 @@ function updateH0() {
   const pct = ((val - 67) / (74 - 67) * 100).toFixed(1);
   document.getElementById('h0').style.setProperty('--pct', pct + '%');
   const a0 = getA0();
-  document.getElementById('a0-display').textContent =
-    a0.toExponential(3).replace('e-','×10⁻').replace('e+','×10');
+  const a0Str = a0.toExponential(3).replace('e-','×10⁻').replace('e+','×10');
+  document.getElementById('a0-display').textContent = a0Str;
+  document.getElementById('ti-a0').textContent = a0Str + ' m/s²';
+  
+  // Calcular v₀ = c/R
+  const v0 = 2.998e8 / R_const / 1000; // en km/s
+  document.getElementById('ti-v0').textContent = v0.toFixed(3) + ' km/s';
+  
   calculate();
 }
 

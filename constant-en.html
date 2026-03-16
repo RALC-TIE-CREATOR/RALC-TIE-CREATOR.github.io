@@ -17,27 +17,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 
 nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
 .nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
-/* ESTILO PARA EL BOTÓN ORCID */
-         .orcid-link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            color: #A6CE39;
-            text-decoration: none;
-            border: 1px solid rgba(166, 206, 57, 0.3);
-            padding: 4px 12px;
-            border-radius: 2px;
-            transition: 0.3s;
-            letter-spacing: 1px;
-        }
-        .orcid-link:hover {
-            background: rgba(166, 206, 57, 0.1);
-            box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);
-            color: #fff;
-        }
-  
+/* ORCID BUTTON STYLE */
+.orcid-link {display: flex;align-items: center;gap: 8px;font-family: var(--mono);font-size: 0.75rem;color: #A6CE39;text-decoration: none;border: 1px solid rgba(166, 206, 57, 0.3);padding: 4px 12px;border-radius: 2px;transition: 0.3s;letter-spacing: 1px;}
+.orcid-link:hover {background: rgba(166, 206, 57, 0.1);box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);color: #fff;}
+
 .nav-center{display:flex;gap:.5rem;}
 .lang-link{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;transition:all .2s;}
 .lang-link.active{color:#000;background:var(--gold);}
@@ -47,82 +30,92 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .nav-back:hover{color:var(--gold);}
 
 .page{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:7rem 2rem 4rem;}
-.page-tag{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:.75rem;}
-.page-title{font-size:clamp(2rem,5vw,3.2rem);font-weight:900;letter-spacing:-2px;margin-bottom:.5rem;}
+.page-tag{font-family:var(--mono);font-size:.8rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:.75rem;}
+.page-title{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:900;letter-spacing:-2px;margin-bottom:.5rem;}
 .page-title span{color:var(--gold);}
-.page-sub{font-family:var(--mono);font-size:.8rem;color:var(--dim);max-width:660px;line-height:1.7;margin-bottom:2rem;}
+.page-sub{font-family:var(--mono);font-size:.9rem;color:var(--dim);max-width:660px;line-height:1.7;margin-bottom:2rem;}
 
-.hero-eq{background:var(--bg2);border:1px solid rgba(255,215,0,.3);border-radius:16px;padding:1.25rem 2rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;backdrop-filter:blur(8px);}
-.hero-eq-badge{font-family:var(--mono);font-size:.6rem;color:var(--green);background:rgba(68,255,136,.08);border:1px solid rgba(68,255,136,.25);border-radius:6px;padding:.35rem .8rem;letter-spacing:2px;white-space:nowrap;}
+/* HERO */
+.hero-eq{background:var(--bg2);border:1px solid rgba(255,215,0,.3);border-radius:16px;padding:1.5rem 2rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;backdrop-filter:blur(8px);}
+.hero-eq .katex{font-size:1.2rem;}
+.hero-eq-badge{font-family:var(--mono);font-size:.7rem;color:var(--green);background:rgba(68,255,136,.08);border:1px solid rgba(68,255,136,.25);border-radius:6px;padding:.4rem 1rem;letter-spacing:2px;white-space:nowrap;}
 
-.slider-section{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem;backdrop-filter:blur(8px);margin-bottom:1.5rem;}
-.slider-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.75rem;}
-.slider-name{font-family:var(--mono);font-size:.65rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;}
-.slider-val-wrap{font-family:var(--mono);font-size:1rem;}
+/* SLIDER SECTION */
+.slider-section{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;backdrop-filter:blur(8px);margin-bottom:1.5rem;}
+.slider-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.9rem;}
+.slider-name{font-family:var(--mono);font-size:.75rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;}
+.slider-val-wrap{font-family:var(--mono);font-size:1.2rem;}
 .slider-val{color:var(--gold);font-weight:700;}
-.slider-unit{color:var(--dim);font-size:.75rem;}
+.slider-unit{color:var(--dim);font-size:.85rem;}
 
-input[type=range]{width:100%;height:6px;border-radius:3px;outline:none;cursor:pointer;background:linear-gradient(90deg,var(--gold) var(--pct,43%),rgba(91,200,245,.15) var(--pct,43%));appearance:none;-webkit-appearance:none;margin-bottom:.4rem;}
-input[type=range]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gold);border:2px solid #000;cursor:pointer;}
-.slider-ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.6rem;color:var(--dim);}
+input[type=range]{width:100%;height:8px;border-radius:4px;outline:none;cursor:pointer;background:linear-gradient(90deg,var(--gold) var(--pct,43%),rgba(91,200,245,.15) var(--pct,43%));appearance:none;-webkit-appearance:none;margin-bottom:.5rem;}
+input[type=range]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--gold);border:2px solid #000;cursor:pointer;}
+.slider-ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.7rem;color:var(--dim);}
 
-.results-2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem;}
+/* RESULTS GRID — 2 big cards */
+.results-2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;}
 @media(max-width:560px){.results-2{grid-template-columns:1fr;}}
-.panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;backdrop-filter:blur(8px);}
-.panel-title{font-family:var(--mono);font-size:.65rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;padding-bottom:.5rem;border-bottom:1px solid var(--border);margin-bottom:1rem;}
-.big-val{font-family:var(--mono);font-size:1.65rem;font-weight:700;color:var(--gold);line-height:1.1;}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;backdrop-filter:blur(8px);}
+.panel-title{font-family:var(--mono);font-size:.75rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;padding-bottom:.6rem;border-bottom:1px solid var(--border);margin-bottom:1.2rem;}
+.big-val{font-family:var(--mono);font-size:1.9rem;font-weight:700;color:var(--gold);line-height:1.1;}
 .big-val.flash{animation:fl .4s ease;}
 @keyframes fl{0%{opacity:.25}100%{opacity:1}}
-.val-unit{font-family:var(--mono);font-size:.65rem;color:var(--dim);margin-top:.3rem;}
-.val-eq{font-size:.75rem;color:var(--dim);margin-top:.6rem;line-height:1.6;}
+.val-unit{font-family:var(--mono);font-size:.75rem;color:var(--dim);margin-top:.3rem;}
+.val-eq{font-size:.85rem;color:var(--dim);margin-top:.8rem;line-height:1.7;}
 
+/* THE BIG COMPARISON */
 .comparison{margin-bottom:1.5rem;}
-.comp-title{font-family:var(--mono);font-size:.65rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:.9rem;}
-.comp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;}
+.comp-title{font-family:var(--mono);font-size:.75rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:1rem;}
+.comp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem;}
 @media(max-width:560px){.comp-grid{grid-template-columns:1fr;}}
 
-.comp-card{border-radius:16px;padding:1.4rem;backdrop-filter:blur(8px);text-align:center;border:1px solid var(--border);}
+.comp-card{border-radius:16px;padding:1.5rem;backdrop-filter:blur(8px);text-align:center;border:1px solid var(--border);}
 .comp-card.tie-card{background:rgba(255,215,0,.06);border-color:rgba(255,215,0,.35);}
 .comp-card.obs-card{background:rgba(91,200,245,.04);border-color:rgba(91,200,245,.2);}
 .comp-card.qft-card{background:rgba(255,68,85,.04);border-color:rgba(255,68,85,.2);}
 
-.comp-source{font-family:var(--mono);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:.6rem;}
+.comp-source{font-family:var(--mono);font-size:.7rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:.7rem;}
 .comp-source.g{color:var(--gold);}
 .comp-source.b{color:var(--blue);}
 .comp-source.r{color:var(--red);}
 
-.comp-value{font-family:var(--mono);font-size:1.25rem;font-weight:700;line-height:1.2;margin-bottom:.5rem;}
+.comp-value{font-family:var(--mono);font-size:1.5rem;font-weight:700;line-height:1.2;margin-bottom:.6rem;}
 .comp-value.g{color:var(--gold);}
 .comp-value.b{color:var(--blue);}
 .comp-value.r{color:var(--red);}
 
-.comp-badge{font-family:var(--mono);font-size:.62rem;display:inline-block;padding:.2rem .55rem;border-radius:4px;margin-bottom:.5rem;}
+.comp-badge{font-family:var(--mono);font-size:.7rem;display:inline-block;padding:.3rem .7rem;border-radius:4px;margin-bottom:.6rem;}
 .comp-badge.green{background:rgba(68,255,136,.1);color:var(--green);border:1px solid rgba(68,255,136,.2);}
 .comp-badge.red{background:rgba(255,68,85,.1);color:var(--red);border:1px solid rgba(255,68,85,.2);}
 
-.comp-note{font-family:var(--mono);font-size:.6rem;color:var(--dim);line-height:1.6;}
+.comp-note{font-family:var(--mono);font-size:.7rem;color:var(--dim);line-height:1.7;}
 
-.error-meter{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.4rem;backdrop-filter:blur(8px);margin-bottom:1.5rem;}
-.em-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.9rem;}
-.em-label{font-family:var(--mono);font-size:.65rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;}
-.em-val{font-family:var(--mono);font-size:1.4rem;font-weight:700;}
-.em-note{font-family:var(--mono);font-size:.62rem;color:var(--dim);line-height:1.7;}
+/* ERROR METER */
+.error-meter{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem;backdrop-filter:blur(8px);margin-bottom:1.5rem;}
+.em-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.em-label{font-family:var(--mono);font-size:.75rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;}
+.em-val{font-family:var(--mono);font-size:1.8rem;font-weight:700;}
+.em-bar-wrap{height:14px;background:var(--bg3);border-radius:7px;overflow:hidden;border:1px solid var(--border);margin-bottom:.6rem;}
+.em-bar{height:100%;border-radius:7px;transition:width .6s ease, background .6s ease;}
+.em-note{font-family:var(--mono);font-size:.7rem;color:var(--dim);line-height:1.8;}
 
-.insight{background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.18);border-radius:12px;padding:1.1rem 1.35rem;font-size:.82rem;line-height:1.8;margin-bottom:1.5rem;}
-.insight .hi{color:var(--gold);font-weight:700;}
+/* INSIGHT */
+.insight{background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.18);border-radius:12px;padding:1.3rem 1.6rem;font-size:.9rem;line-height:1.8;margin-bottom:1.5rem;}
+.insight .hi{color:var(--gold);font-weight:700;font-size:.95rem;}
 
-.const-row{display:flex;flex-wrap:wrap;gap:.75rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.75rem 1.25rem;backdrop-filter:blur(8px);margin-bottom:1.5rem;}
-.ci{font-family:var(--mono);font-size:.72rem;}
+/* CONST ROW */
+.const-row{display:flex;flex-wrap:wrap;gap:.75rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.9rem 1.5rem;backdrop-filter:blur(8px);margin-bottom:1.5rem;}
+.ci{font-family:var(--mono);font-size:.8rem;}
 .cl{color:var(--dim);}
 .cv{color:var(--gold);}
 
 .nav-links{display:flex;justify-content:space-between;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);}
-.nav-links a{font-family:var(--mono);font-size:.7rem;color:var(--dim);text-decoration:none;transition:color .2s;}
+.nav-links a{font-family:var(--mono);font-size:.8rem;color:var(--dim);text-decoration:none;transition:color .2s;}
 .nav-links a:hover{color:var(--gold);}
 
 footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);margin-top:2rem;}
-footer .feq{font-family:var(--mono);font-size:.78rem;color:var(--gold);margin-bottom:.5rem;}
-footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;}
+footer .feq{font-family:var(--mono);font-size:.9rem;color:var(--gold);margin-bottom:.5rem;}
+footer .fcopy{font-family:var(--mono);font-size:.7rem;color:var(--dim);letter-spacing:2px;}
 </style>
 </head>
 <body>
@@ -131,17 +124,16 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 <nav>
   <div style="display:flex; align-items:center; gap:20px;">
     <a href="index.html" class="nav-logo">TIE / R@LC</a>
-    
-    <!-- INYECCIÓN DEL PASAPORTE ORCID -->
-    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
+    <!-- ORCID BADGE -->
+    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verify Author Identity on ORCID">
       <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
-         <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
+      <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
       </svg>
       0009-0008-4935-9010
     </a>
   </div>
   
-  <!-- SELECTOR DE IDIOMA -->
+  <!-- LANGUAGE SELECTOR -->
   <div style="display:flex;gap:.4rem;">
     <a href="constante.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">ES</a>
     <a href="constant-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">EN</a>
@@ -151,19 +143,19 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 </nav>
 
 <div class="page">
-  <div class="page-tag">H-08 · Fundamental Constants · Cap. 2 and 11</div>
-  <h1 class="page-title">CONSTANTS <span>a₀ and Λ</span></h1>
-  <p class="page-sub">The same Hubble constant generates a₀ (galactic dynamics) and Λ (cosmic expansion). These are not two independently tuned constants — they are the same infrastructure seen at different scales.</p>
+  <div class="page-tag">H-08 · Fundamental Constants · Ch. 2 & 11</div>
+  <h1 class="page-title"><span>a₀ AND Λ</span> CONSTANTS</h1>
+  <p class="page-sub">The same Hubble constant generates a₀ (galactic dynamics) and Λ (cosmic expansion). They are not two independently adjusted constants — they are the same infrastructure seen at different scales.</p>
 
   <div class="hero-eq">
     <div>\( a_0 = \dfrac{cH_0}{R} \qquad \Lambda = \dfrac{2H_0^2}{c^2} \qquad (R \equiv 2\pi) \)</div>
     <div class="hero-eq-badge">✓ DERIVED FROM H₀</div>
   </div>
 
-  <!-- H0 SLIDER -->
+  <!-- SLIDER H0 -->
   <div class="slider-section">
     <div class="slider-header">
-      <span class="slider-name">Hubble Constant H₀</span>
+      <span class="slider-name">Hubble constant H₀</span>
       <span class="slider-val-wrap"><span class="slider-val" id="h0-disp">70.0</span> <span class="slider-unit">km/s/Mpc</span></span>
     </div>
     <input type="range" id="h0" min="67" max="74" value="70" step="0.1"
@@ -173,8 +165,8 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <span>Hubble tension</span>
       <span>74.0 · SH0ES Cepheids</span>
     </div>
-    <div style="margin-top:.75rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);line-height:1.8;" id="h0-note">
-      H₀=70 → a₀=1.082×10⁻¹⁰ m/s² · Λ=1.145×10⁻⁵² m⁻² · error vs Planck: <span id="note-err" style="color:var(--green)">+3.5%</span>
+    <div style="margin-top:.9rem;font-family:var(--mono);font-size:.7rem;color:var(--dim);line-height:1.8;" id="h0-note">
+      H₀=70 → a₀=1.082×10⁻¹⁰ m/s² · Λ=1.145×10⁻⁵² m⁻² · error vs Planck: <span id="note-err" style="color:var(--green)">5.0%</span>
     </div>
   </div>
 
@@ -185,14 +177,14 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="big-val flash" id="a0-val">1.082×10⁻¹⁰</div>
       <div class="val-unit">m/s²</div>
       <div class="val-eq">\( a_0 = \dfrac{cH_0}{R} \)<br><br>
-        Below a₀ gravity enters TIE regime — stars at galactic outskirts always operate in this regime.</div>
+        Below a₀ gravity enters the TIE regime — stars at the edges of galaxies are always in this regime.</div>
     </div>
     <div class="panel">
       <div class="panel-title">Cosmological constant Λ TIE</div>
       <div class="big-val flash" id="lambda-val">1.145×10⁻⁵²</div>
       <div class="val-unit">m⁻²</div>
-      <div class="val-eq">\( \Lambda_{\text{TIE}} = \dfrac{2 H_0^2}{c^2} \)<br><br>
-        Λ is not "dark energy" — it is the background curvature of the infrastructure. Derived from H₀ with no additional parameter.</div>
+      <div class="val-eq">\( \Lambda = \dfrac{2 H_0^2}{c^2} \)<br><br>
+        Λ is not "dark energy" — it is the <strong>topological background curvature</strong> of the infrastructure. It is derived from H₀ without adjusted parameters.</div>
     </div>
   </div>
 
@@ -203,18 +195,18 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 
       <div class="comp-card obs-card">
         <div class="comp-source b">Planck 2018</div>
-        <div class="comp-value b">1.106×10⁻⁵²</div>
+        <div class="comp-value b">1.0904×10⁻⁵²</div>
         <div class="val-unit" style="margin-bottom:.6rem;">m⁻²</div>
         <div class="comp-badge green">REFERENCE</div>
-        <div class="comp-note">CMB measurement —<br>best available precision.<br>Observed value.</div>
+        <div class="comp-note">Most precise CMB<br>measurement available.<br>Observed value.</div>
       </div>
 
       <div class="comp-card tie-card">
         <div class="comp-source g">TIE</div>
         <div class="comp-value g" id="lambda-comp">1.145×10⁻⁵²</div>
         <div class="val-unit" style="margin-bottom:.6rem;">m⁻²</div>
-        <div class="comp-badge green" id="tie-badge">ERROR: +3.5%</div>
-        <div class="comp-note">Derived from H₀=70.<br>No tuning.<br>Zero free parameters.</div>
+        <div class="comp-badge green" id="tie-badge">ERROR: 5.0%</div>
+        <div class="comp-note">Derived from H₀=70.<br>No adjustment.<br>Zero free parameters.</div>
       </div>
 
       <div class="comp-card qft-card">
@@ -222,7 +214,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
         <div class="comp-value r">~10⁶⁸</div>
         <div class="val-unit" style="margin-bottom:.6rem;">m⁻²</div>
         <div class="comp-badge red">ERROR: 120 ORDERS</div>
-        <div class="comp-note">Worst disagreement<br>in theoretical physics.<br>Does not depend on H₀.</div>
+        <div class="comp-note">The worst disagreement<br>in theoretical physics.<br>Independent of H₀.</div>
       </div>
 
     </div>
@@ -231,37 +223,38 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   <!-- ERROR METER -->
   <div class="error-meter">
     <div class="em-header">
-      <span class="em-label">TIE vs Planck error (Λ) — signed</span>
-      <span class="em-val" id="err-val" style="color:var(--green)">+3.5%</span>
+      <span class="em-label">TIE vs Planck Λ error — signed</span>
+      <span class="em-val" id="err-val" style="color:var(--green)">+5.0%</span>
     </div>
-    <div style="position:relative;height:10px;background:rgba(255,255,255,.05);border-radius:5px;margin:.5rem 0;overflow:hidden;">
+    <!-- Centered bar — left=underestimates, right=overestimates -->
+    <div style="position:relative;height:12px;background:rgba(255,255,255,.05);border-radius:6px;margin:.6rem 0;overflow:hidden;">
       <div style="position:absolute;left:50%;top:0;width:1px;height:100%;background:rgba(255,255,255,.2);"></div>
-      <div id="err-bar-signed" style="position:absolute;top:0;height:100%;border-radius:5px;transition:all .4s ease;"></div>
+      <div id="err-bar-signed" style="position:absolute;top:0;height:100%;border-radius:6px;transition:all .4s ease;"></div>
     </div>
-    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.55rem;color:var(--dim);margin-bottom:.5rem;">
+    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.65rem;color:var(--dim);margin-bottom:.6rem;">
       <span>− TIE underestimates Λ</span>
       <span id="err-zero-lbl" style="color:var(--green)">H₀≈68.5 → error=0</span>
       <span>+ TIE overestimates Λ</span>
     </div>
     <div class="em-note" id="err-note">
-      With H₀=70 km/s/Mpc · Move the slider to explore the Hubble tension · Minimum error near H₀≈68.5
+      With H₀=70 km/s/Mpc · Move the slider to explore the Hubble tension · Minimum error occurs near H₀=68.5
     </div>
   </div>
 
   <!-- INSIGHT -->
   <div class="insight">
-    <span class="hi">Why isn't the error zero?</span><br>
-    Because the Hubble tension is real — Planck measures H₀≈67.4 (CMB, early universe) while SH0ES measures H₀≈73 (Cepheids, local universe). TIE does not resolve that tension but makes it visible: the error in Λ is directly the Hubble tension squared. If H₀=68.5, the error drops below 1%.
+    <span class="hi">Why is the error not zero?</span><br>
+    Because the Hubble tension is real — Planck measures H₀≈67.4 (CMB, early universe) while SH0ES measures H₀≈73 (Cepheids, local universe). TIE does not resolve this tension but makes it visible: the error in Λ is directly the square of the Hubble tension. If H₀=68.5, the error is &lt;1%.
     <br><br>
     <span class="hi">Why 2H₀²/c² and not another factor?</span><br>
-    Because the infrastructure operates in two curvature dimensions — the factor 2 comes from the TIE infrastructure metric tensor. \(\Lambda = 2H_0^2/c^2\) is the minimum background curvature compatible with expansion at rate H₀.
+    Because the infrastructure operates in two curvature dimensions — the factor 2 comes from the metric tensor of the TIE infrastructure. \(\Lambda = 2H_0^2/c^2\) is the minimum background curvature compatible with an expansion at rate H₀.
   </div>
 
   <div class="const-row">
     <div class="ci"><span class="cl">c = </span><span class="cv">2.998×10⁸ m/s</span></div>
     <div class="ci"><span class="cl">H₀(Planck) = </span><span class="cv">67.4 km/s/Mpc</span></div>
     <div class="ci"><span class="cl">H₀(SH0ES) = </span><span class="cv">73.0 km/s/Mpc</span></div>
-    <div class="ci"><span class="cl">Λ(Planck) = </span><span class="cv">1.106×10⁻⁵² m⁻²</span></div>
+    <div class="ci"><span class="cl">Λ(Planck) = </span><span class="cv">1.0904×10⁻⁵² m⁻²</span></div>
   </div>
 
   <div class="nav-links">
@@ -272,10 +265,19 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 </div>
 
 <footer>
-  <div class="feq">\( a_0 = \dfrac{c H_0}{R} \quad\cdot\quad \Lambda_{\text{TIE}} = \dfrac{2 H_0^2}{c^2} \quad\cdot\quad (R \equiv 2\pi) \quad\cdot\quad \text{zero free parameters} \)</div>
+  <div class="feq">\( a_0 = \dfrac{cH_0}{R} \quad\cdot\quad \Lambda = \dfrac{2H_0^2}{c^2} \quad\cdot\quad (R \equiv 2\pi) \quad\cdot\quad \text{zero free parameters} \)</div>
   <div class="fcopy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
+  <div style="margin-top:0.3rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">
+    <a href="index.html" style="color:inherit; text-decoration:none;">HOME</a> · 
+    <a href="labs-en.html" style="color:inherit; text-decoration:none;">LAB</a> · 
+    <a href="papers.html" style="color:inherit; text-decoration:none;">PAPERS</a> · 
+    <a href="predictions-en.html" style="color:inherit; text-decoration:none;">PREDICTIONS</a> · 
+    <a href="theory-en.html" style="color:inherit; text-decoration:none;">THEORY</a> · 
+    <a href="https://github.com/ralc-tie-creator" target="_blank" style="color:inherit; text-decoration:none;">GITHUB</a>
+  </div>
 </footer>
 
+<!-- THREE.JS -->
 <script>
 (function(){
   const canvas=document.getElementById('galaxy-canvas');
@@ -305,12 +307,14 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 })();
 </script>
 
+<!-- CALCULATOR LOGIC -->
 <script>
 const c = 2.998e8;
 const Mpc = 3.0857e22;
-const LAMBDA_PLANCK = 1.106e-52;
+const LAMBDA_PLANCK = 1.0904e-52;
 
 function fmtExp(n) {
+  // Render e.g. 1.082×10⁻¹⁰
   const s = n.toExponential(3);
   const [coef, exp] = s.split('e');
   const expN = parseInt(exp);
@@ -324,46 +328,61 @@ function update() {
   const h0k  = parseFloat(document.getElementById('h0').value);
   const h0si = h0k * 1000 / Mpc;
   const R = 2 * Math.PI;
-  const a0si = c * h0si / R;
+  const a0 = c * h0si / R;
   const lam  = 2 * h0si * h0si / (c * c);
   const err  = (lam - LAMBDA_PLANCK) / LAMBDA_PLANCK * 100;
   const errSigned = (err >= 0 ? '+' : '') + err.toFixed(1);
+  const errAbs = Math.abs(err).toFixed(1);
+  const isGood = Math.abs(err) < 10;
   const errColor = Math.abs(err) < 1 ? 'var(--green)' : Math.abs(err) < 5 ? 'var(--gold)' : 'var(--red)';
 
+  // Slider gradient
   const pct = ((h0k - 67) / (74 - 67) * 100).toFixed(1);
   document.getElementById('h0').style.setProperty('--pct', pct + '%');
 
+  // Display values
   document.getElementById('h0-disp').textContent   = h0k.toFixed(1);
-  document.getElementById('a0-val').textContent     = fmtExp(a0si);
+  document.getElementById('a0-val').textContent     = fmtExp(a0);
   document.getElementById('lambda-val').textContent = fmtExp(lam);
   document.getElementById('lambda-comp').textContent= fmtExp(lam);
 
-  document.getElementById('err-val').textContent = errSigned + '%';
-  document.getElementById('err-val').style.color = errColor;
+  // Error — signed display
+  const errColor2 = Math.abs(err) < 1 ? 'var(--green)' : Math.abs(err) < 5 ? 'var(--gold)' : 'var(--red)';
+  document.getElementById('err-val').textContent  = errSigned + '%';
+  document.getElementById('err-val').style.color  = errColor2;
+  document.getElementById('note-err').textContent = errSigned + '%';
+  document.getElementById('note-err').style.color = errColor2;
 
-  // Centered signed bar
-  const maxRange = 15;
-  const barPct = Math.min(Math.abs(err), maxRange) / maxRange * 50;
+  // Centered signed bar: positive → extends right from center, negative → extends left
+  const maxRange = 15; // ±15% visible range
+  const barPct = Math.min(Math.abs(err), maxRange) / maxRange * 50; // max 50% of total width
   const bar = document.getElementById('err-bar-signed');
   if (err >= 0) {
-    bar.style.left = '50%'; bar.style.right = 'auto';
+    bar.style.left = '50%';
+    bar.style.right = 'auto';
+    bar.style.width = barPct + '%';
   } else {
-    bar.style.right = '50%'; bar.style.left = 'auto';
+    bar.style.right = '50%';
+    bar.style.left = 'auto';
+    bar.style.width = barPct + '%';
   }
-  bar.style.width = barPct + '%';
-  bar.style.background = errColor;
+  bar.style.background = errColor2;
 
+  // TIE badge
   const badge = document.getElementById('tie-badge');
   badge.textContent = 'ERROR: ' + errSigned + '%';
   badge.className   = 'comp-badge ' + (Math.abs(err) < 10 ? 'green' : 'red');
 
+  // H0 note
   document.getElementById('h0-note').innerHTML =
-    `H₀=${h0k.toFixed(1)} → a₀=${fmtExp(a0si)} m/s² · Λ=${fmtExp(lam)} m⁻² · error vs Planck: <span style="color:${errColor}">${errSigned}%</span>`;
+    `H₀=${h0k.toFixed(1)} → a₀=${fmtExp(a0)} m/s² · Λ=${fmtExp(lam)} m⁻² · error vs Planck: <span id="note-err" style="color:${errColor2}">${errSigned}%</span>`;
 
+  // Error note text
   const minH0 = (Math.sqrt(LAMBDA_PLANCK / 2) * c * Mpc / 1000).toFixed(1);
   document.getElementById('err-note').textContent =
-    `With H₀=${h0k.toFixed(1)} km/s/Mpc · Move the slider to explore the Hubble tension · Minimum error near H₀≈${minH0}`;
+    `With H₀=${h0k.toFixed(1)} km/s/Mpc · Move the slider to explore the Hubble tension · Minimum error occurs at H₀≈${minH0}`;
 
+  // Flash
   ['a0-val','lambda-val'].forEach(id => {
     const el = document.getElementById(id);
     el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');

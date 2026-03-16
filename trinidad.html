@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TIE · H-18 · Trinidad Energética · E / U / K</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
             --gold:   #FFD700; --blue:#5BC8F5; --green:#44FF88;
@@ -22,79 +26,115 @@
         }
         * { margin:0; padding:0; box-sizing:border-box; }
         body { background:var(--bg); color:var(--text); font-family:var(--sans); height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+        
+        /* GALAXY BACKGROUND */
+        #galaxy-canvas {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120vw;
+            height: 120vh;
+            min-width: 1200px;
+            min-height: 1200px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.45;
+        }
 
         /* ── NAV ── */
-        nav { background:rgba(0,0,1,0.95); border-bottom:1px solid var(--border); padding:0.85rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+        nav { 
+            position: relative; z-index: 10;
+            background:rgba(0,0,1,0.95); border-bottom:1px solid var(--border); padding:0.85rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; 
+        }
         .nav-logo { font-family:var(--mono); color:var(--gold); text-decoration:none; font-weight:700; font-size:0.85rem; letter-spacing:2px; }
         /* ESTILO PARA EL BOTÓN ORCID */
          .orcid-link {display: flex;align-items: center;gap: 8px;font-family: var(--mono);font-size: 0.75rem;color: #A6CE39;text-decoration: none;border: 1px solid rgba(166, 206, 57, 0.3);padding: 4px 12px;border-radius: 2px;transition: 0.3s;letter-spacing: 1px;}
         .orcid-link:hover {background: rgba(166, 206, 57, 0.1);box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);color: #fff;}
         .nav-right { display:flex; align-items:center; gap:1.5rem; }
-        .nav-lang  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; letter-spacing:1px; }
-        .nav-lang.active { color:var(--text); }
+        .lang-btn  { font-family:var(--mono); font-size:0.7rem; font-weight:700; letter-spacing:2px; padding:0.25rem 0.6rem; border-radius:4px; cursor:pointer; border:none; transition:all .2s; }
+        .lang-btn.active { color:#000; background:var(--gold); }
+        .lang-btn.inactive { color:var(--dim); border:1px solid var(--border); background:transparent; }
+        .lang-btn.inactive:hover { color:var(--gold); border-color:var(--gold); }
         .nav-back  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; border:1px solid rgba(160,160,176,0.3); padding:0.35rem 0.75rem; transition:0.2s; letter-spacing:1px; }
         .nav-back:hover { color:var(--blue); border-color:var(--blue); }
 
         /* ── HEADER ── */
-        .page-header { padding:1.1rem 2rem 0.9rem; border-bottom:1px solid var(--border); flex-shrink:0; }
-        .page-label  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.3rem; }
-        .page-header h1 { font-size:1.6rem; font-weight:900; letter-spacing:1px; margin-bottom:0.2rem; }
-        .page-desc { font-size:0.85rem; color:var(--dim); max-width:700px; }
-        .page-eq   { font-family:var(--mono); font-size:0.78rem; color:var(--gold); margin-top:0.35rem; }
+        .page-header { 
+            position: relative; z-index: 10;
+            padding:1.1rem 2rem 0.9rem; border-bottom:1px solid var(--border); flex-shrink:0; 
+        }
+        .page-label  { font-family:var(--mono); font-size:0.75rem; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.3rem; }
+        .page-header h1 { font-size:1.9rem; font-weight:900; letter-spacing:1px; margin-bottom:0.2rem; }
+        .page-desc { font-size:0.95rem; color:var(--dim); max-width:700px; }
+        .page-eq   { font-family:var(--mono); font-size:0.85rem; color:var(--gold); margin-top:0.35rem; }
+        .page-eq .katex { font-size:0.9rem; }
 
         /* ── STATS ── */
-        .stats-bar { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
-        .stat { padding:0.55rem 1.5rem; border-right:1px solid var(--border); text-align:center; }
-        .stat-number { font-family:var(--mono); font-size:1.05rem; font-weight:700; color:var(--gold); white-space:nowrap; }
-        .stat-label  { font-family:var(--mono); font-size:0.58rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
+        .stats-bar { 
+            position: relative; z-index: 10;
+            display:flex; border-bottom:1px solid var(--border); flex-shrink:0; 
+        }
+        .stat { padding:0.6rem 1.5rem; border-right:1px solid var(--border); text-align:center; }
+        .stat-number { font-family:var(--mono); font-size:1.2rem; font-weight:700; color:var(--gold); white-space:nowrap; }
+        .stat-label  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
 
-        /* ── MAIN ── */
-        .main-wrap { flex:1; display:flex; padding:1.25rem 1.5rem; gap:1.5rem; min-height:0; overflow:hidden; }
+        /* ── MAIN THREE-COLUMN LAYOUT ── */
+        .main-wrap { 
+            position: relative; z-index: 10;
+            flex:1; display:flex; padding:1.25rem 1.5rem; gap:1.5rem; min-height:0; overflow:hidden; 
+        }
 
-        /* ── SIDEBAR ── */
-        .sidebar { width:280px; flex-shrink:0; display:flex; flex-direction:column; gap:1rem; overflow-y:auto; }
-        .sidebar::-webkit-scrollbar { width:3px; }
-        .sidebar::-webkit-scrollbar-thumb { background:var(--border); }
+        /* ── LEFT COLUMN (Escenarios) ── */
+        .left-col { width:280px; flex-shrink:0; display:flex; flex-direction:column; gap:1rem; overflow-y:auto; }
+        .left-col::-webkit-scrollbar { width:3px; }
+        .left-col::-webkit-scrollbar-thumb { background:var(--border); }
 
-        .panel { border:1px solid var(--border); background:var(--bg2); padding:0.9rem; }
-        .panel-title { font-family:var(--mono); font-size:0.68rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.35rem; margin-bottom:0.75rem; }
+        /* ── RIGHT COLUMN (Valores en vivo + Nota ontológica) ── */
+        .right-col { width:280px; flex-shrink:0; display:flex; flex-direction:column; gap:1rem; overflow-y:auto; }
+        .right-col::-webkit-scrollbar { width:3px; }
+        .right-col::-webkit-scrollbar-thumb { background:var(--border); }
+
+        .panel { border:1px solid var(--border); background:var(--bg2); padding:1rem; backdrop-filter:blur(8px); }
+        .panel-title { font-family:var(--mono); font-size:0.75rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.4rem; margin-bottom:0.8rem; }
 
         /* Botones de escenario */
         .scene-btn {
             display:block; width:100%; text-align:left;
             background:rgba(0,0,0,0.4); border:1px solid var(--border);
-            color:var(--dim); padding:0.65rem 0.8rem;
-            font-family:var(--mono); font-size:0.7rem; cursor:pointer;
-            transition:0.2s; margin-bottom:5px; border-radius:2px;
+            color:var(--dim); padding:0.75rem 0.9rem;
+            font-family:var(--mono); font-size:0.75rem; cursor:pointer;
+            transition:0.2s; margin-bottom:6px; border-radius:2px;
         }
         .scene-btn:hover { background:rgba(255,255,255,0.03); color:var(--text); }
         .scene-btn.active { border-color:var(--gold); color:var(--gold); background:rgba(255,215,0,0.06); }
-        .scene-btn .sub { font-size:0.6rem; color:var(--dim); margin-top:3px; display:block; }
+        .scene-btn .sub { font-size:0.65rem; color:var(--dim); margin-top:3px; display:block; }
 
         /* Slider de progreso */
-        .slider-wrap { display:flex; flex-direction:column; gap:6px; }
-        .slider-wrap label { font-family:var(--mono); font-size:0.72rem; color:var(--blue); display:flex; justify-content:space-between; }
-        input[type=range] { -webkit-appearance:none; appearance:none; width:100%; background:rgba(91,200,245,0.12); height:3px; border-radius:2px; outline:none; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:14px; height:14px; background:var(--blue); border-radius:50%; cursor:pointer; box-shadow:0 0 6px var(--blue); }
+        .slider-wrap { display:flex; flex-direction:column; gap:8px; }
+        .slider-wrap label { font-family:var(--mono); font-size:0.8rem; color:var(--blue); display:flex; justify-content:space-between; }
+        input[type=range] { -webkit-appearance:none; appearance:none; width:100%; background:rgba(91,200,245,0.12); height:4px; border-radius:2px; outline:none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:16px; height:16px; background:var(--blue); border-radius:50%; cursor:pointer; box-shadow:0 0 8px var(--blue); }
 
-        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.72rem; color:var(--dim); padding:0.22rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.8rem; color:var(--dim); padding:0.3rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
         .data-val { color:var(--text); font-weight:700; }
-        .note { font-family:var(--mono); font-size:0.68rem; color:var(--dim); line-height:1.6; }
+        .note { font-family:var(--mono); font-size:0.75rem; color:var(--dim); line-height:1.7; }
 
-        /* ── STAGE ── */
+        /* ── CENTER STAGE ── */
         .stage { flex:1; display:flex; flex-direction:column; gap:1rem; min-width:0; min-height:0; }
 
         /* Barra de conservación total */
         .conservation-bar {
             border:1px solid rgba(255,255,255,0.15); background:var(--bg2);
-            padding:0.7rem 1.2rem;
+            padding:0.8rem 1.2rem;
             display:flex; align-items:center; gap:1.5rem; flex-shrink:0;
+            backdrop-filter:blur(8px);
         }
-        .cons-label { font-family:var(--mono); font-size:0.68rem; color:var(--dim); letter-spacing:1px; white-space:nowrap; }
-        .cons-track { flex:1; height:6px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden; }
-        .cons-fill  { height:100%; background:linear-gradient(90deg, var(--gold), var(--green)); border-radius:3px; transition:width 0.4s; }
-        .cons-value { font-family:var(--mono); font-size:0.9rem; font-weight:700; color:var(--green); white-space:nowrap; min-width:120px; text-align:right; }
-        .cons-check { font-family:var(--mono); font-size:0.72rem; white-space:nowrap; }
+        .cons-label { font-family:var(--mono); font-size:0.75rem; color:var(--dim); letter-spacing:1px; white-space:nowrap; }
+        .cons-track { flex:1; height:8px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden; }
+        .cons-fill  { height:100%; background:linear-gradient(90deg, var(--gold), var(--green)); border-radius:4px; transition:width 0.4s; }
+        .cons-value { font-family:var(--mono); font-size:1rem; font-weight:700; color:var(--green); white-space:nowrap; min-width:120px; text-align:right; }
+        .cons-check { font-family:var(--mono); font-size:0.8rem; white-space:nowrap; }
 
         /* Tres tanques */
         .tanks-row { flex:1; display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; min-height:0; }
@@ -102,11 +142,13 @@
         .tank {
             border:1px solid var(--border); background:var(--bg2);
             display:flex; flex-direction:column; overflow:hidden; position:relative;
+            backdrop-filter:blur(8px);
         }
-        .tank-header { padding:0.75rem 1rem 0.5rem; flex-shrink:0; }
-        .tank-badge  { font-family:var(--mono); font-size:0.62rem; font-weight:700; letter-spacing:1px; padding:2px 8px; border-radius:2px; display:inline-block; margin-bottom:5px; }
-        .tank-name   { font-family:var(--mono); font-size:0.8rem; font-weight:700; }
-        .tank-eq     { font-family:var(--mono); font-size:0.68rem; color:var(--dim); margin-top:3px; }
+        .tank-header { padding:0.8rem 1rem 0.5rem; flex-shrink:0; }
+        .tank-badge  { font-family:var(--mono); font-size:0.7rem; font-weight:700; letter-spacing:1px; padding:3px 10px; border-radius:2px; display:inline-block; margin-bottom:6px; }
+        .tank-name   { font-family:var(--mono); font-size:0.9rem; font-weight:700; }
+        .tank-eq     { font-family:var(--mono); font-size:0.75rem; color:var(--dim); margin-top:3px; }
+        .tank-eq .katex { font-size:0.75rem; }
 
         .tank-body { flex:1; position:relative; overflow:hidden; display:flex; align-items:flex-end; }
         /* La barra de llenado */
@@ -125,20 +167,20 @@
 
         .tank-value {
             position:absolute; bottom:0; left:0; right:0;
-            padding:0.6rem 1rem;
-            font-family:var(--mono); font-size:1.1rem; font-weight:700;
+            padding:0.7rem 1rem;
+            font-family:var(--mono); font-size:1.3rem; font-weight:700;
             text-align:center; z-index:2;
             text-shadow: 0 0 20px currentColor;
             transition: color 0.3s;
         }
         .tank-unit {
-            position:absolute; bottom:2.4rem; left:0; right:0;
-            font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.4);
+            position:absolute; bottom:2.8rem; left:0; right:0;
+            font-family:var(--mono); font-size:0.7rem; color:rgba(255,255,255,0.4);
             text-align:center; z-index:2;
         }
         .tank-delta {
             position:absolute; top:0.5rem; right:0.75rem;
-            font-family:var(--mono); font-size:0.75rem; font-weight:700;
+            font-family:var(--mono); font-size:0.8rem; font-weight:700;
             opacity:0; transition:opacity 0.3s;
         }
         .tank-delta.show { opacity:1; }
@@ -162,14 +204,15 @@
         /* Tanque de radiación (solo aparece en aniquilación/emisión) */
         .rad-banner {
             display:none; border:1px solid rgba(255,68,85,0.4); background:rgba(255,68,85,0.06);
-            padding:0.6rem 1.2rem; flex-shrink:0;
-            font-family:var(--mono); font-size:0.82rem;
+            padding:0.7rem 1.3rem; flex-shrink:0;
+            font-family:var(--mono); font-size:0.9rem;
             align-items:center; gap:1rem;
+            backdrop-filter:blur(8px);
         }
         .rad-banner.show { display:flex; }
-        .rad-label { color:var(--dim); font-size:0.68rem; }
-        .rad-value { color:var(--red); font-weight:700; font-size:1rem; }
-        .rad-verify { margin-left:auto; color:var(--green); font-size:0.72rem; }
+        .rad-label { color:var(--dim); font-size:0.75rem; }
+        .rad-value { color:var(--red); font-weight:700; font-size:1.1rem; }
+        .rad-verify { margin-left:auto; color:var(--green); font-size:0.8rem; }
 
         /* Partículas flotantes */
         .particle {
@@ -183,17 +226,27 @@
         }
 
         /* ── FOOTER ── */
-        footer { border-top:1px solid var(--border); padding:0.65rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+        footer { 
+            position: relative; z-index: 10;
+            border-top:1px solid var(--border); padding:0.65rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; 
+        }
         .footer-nav { display:flex; gap:2rem; }
         .footer-nav a { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; transition:0.2s; }
         .footer-nav a:hover { color:var(--blue); }
         .footer-eq     { font-family:var(--mono); font-size:0.7rem; color:rgba(255,215,0,0.5); text-align:center; }
+        .footer-eq .katex { font-size:0.7rem; }
         .footer-credit { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; }
 
-        @media (max-width:900px) { .main-wrap{flex-direction:column;overflow-y:auto} .sidebar{width:100%} .tanks-row{grid-template-columns:1fr} }
+        @media (max-width:1000px) { 
+            .main-wrap{flex-direction:column;overflow-y:auto} 
+            .left-col, .right-col{width:100%} 
+            .tanks-row{grid-template-columns:1fr}
+        }
     </style>
 </head>
 <body>
+
+<canvas id="galaxy-canvas"></canvas>
 
 <nav>
     <div style="display:flex; align-items:center; gap:20px;">
@@ -210,8 +263,8 @@
   
   <!-- SELECTOR DE IDIOMA -->
   <div style="display:flex;gap:.4rem;">
-    <a href="trinidad.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">ES</a>
-    <a href="trinidad-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">EN</a>
+    <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ES</button>
+    <button class="lang-btn inactive" id="btn-en" onclick="setLang('en')">EN</button>
   </div>
   
   <a href="lab-fundamentos.html" class="nav-back">← LABORATORIO</a>
@@ -222,7 +275,7 @@
     <div class="page-label">H-06 · TRINIDAD ENERGÉTICA · MOTOR ABSOLUTO</div>
     <h1>TRINIDAD ENERGÉTICA</h1>
     <p class="page-desc">El Motor Absoluto redistribuye la energía entre tres estados ontológicos. La suma total nunca varía. Selecciona un escenario y mueve el slider para observar la transferencia en tiempo real.</p>
-    <div class="page-eq">E_{\text{total}} = E + U + K &nbsp;·&nbsp; E = m_{\text{TIE}}c^2/R = m_{\text{obs}}c^2 \quad (R \equiv 2\pi)</div>
+    <div class="page-eq">\( E_{\text{total}} = E + U + K \) · \( E = m_{\text{TIE}}c^2/R = m_{\text{obs}}c^2 \quad (R \equiv 2\pi) \)</div>
 </div>
 
 <div class="stats-bar">
@@ -250,8 +303,8 @@
 
 <div class="main-wrap">
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
+    <!-- LEFT COLUMN - Escenarios -->
+    <div class="left-col">
 
         <div class="panel">
             <div class="panel-title">Escenario</div>
@@ -279,29 +332,13 @@
                 <label>t/t_total &nbsp; <span id="lbl-prog">0%</span></label>
                 <input type="range" id="sl-prog" min="0" max="100" value="0" oninput="onProgress(this.value)">
             </div>
-            <div style="margin-top:0.6rem; font-family:var(--mono); font-size:0.65rem; color:var(--dim);" id="scene-hint">
+            <div style="margin-top:0.7rem; font-family:var(--mono); font-size:0.7rem; color:var(--dim);" id="scene-hint">
                 Mueve el slider para iniciar la aniquilación.
             </div>
         </div>
-
-        <div class="panel">
-            <div class="panel-title">Valores en vivo</div>
-            <div class="data-row">m_TIE electrón <span class="data-val">R × m_e</span></div>
-            <div class="data-row">E_existencia(t=0) <span class="data-val" style="color:var(--ce)">511.000 keV</span></div>
-            <div class="data-row">E_TIE = m_TIE·c²/R <span class="data-val" style="color:var(--ce)">= m_obs·c² ✓</span></div>
-            <div class="data-row">E transferida <span class="data-val" id="dv-trans">0.000 keV</span></div>
-            <div class="data-row">Conservación <span class="data-val" id="dv-cons" style="color:var(--green)">PERFECTA ✓</span></div>
-        </div>
-
-        <div class="panel">
-            <div class="panel-title">Nota ontológica</div>
-            <p class="note" id="scene-note">
-                La aniquilación produce exactamente 2×511 keV porque E_TIE = m_TIE·c²/R con m_TIE = R·m_e. La corrección de TIE es ontológica — los joules no cambian, cambia qué fracción de la masa es física real.
-            </p>
-        </div>
     </div>
 
-    <!-- STAGE -->
+    <!-- CENTER STAGE -->
     <div class="stage" id="stage">
 
         <!-- Barra de conservación total -->
@@ -320,7 +357,7 @@
                 <div class="tank-header">
                     <div class="tank-badge">E_EXISTENCIA</div>
                     <div class="tank-name">Energía de Masa</div>
-                    <div class="tank-eq">E = m_{\text{TIE}} \cdot c^2 / R = m_{\text{obs}} \cdot c^2</div>
+                    <div class="tank-eq">\( E = m_{\text{TIE}} \cdot c^2 / R = m_{\text{obs}} \cdot c^2 \)</div>
                 </div>
                 <div class="tank-body">
                     <div class="tank-grid"></div>
@@ -336,7 +373,7 @@
                 <div class="tank-header">
                     <div class="tank-badge">U_TENSIÓN</div>
                     <div class="tank-name">Energía Potencial</div>
-                    <div class="tank-eq">U = −GMm / r</div>
+                    <div class="tank-eq">\( U = -GMm / r \)</div>
                 </div>
                 <div class="tank-body">
                     <div class="tank-grid"></div>
@@ -352,7 +389,7 @@
                 <div class="tank-header">
                     <div class="tank-badge">K_CINÉTICA</div>
                     <div class="tank-name">Energía de Movimiento</div>
-                    <div class="tank-eq">K = ½ m v²</div>
+                    <div class="tank-eq">\( K = \frac{1}{2} m v^2 \)</div>
                 </div>
                 <div class="tank-body">
                     <div class="tank-grid"></div>
@@ -372,6 +409,25 @@
             <span class="rad-verify" id="rad-verify"></span>
         </div>
     </div>
+
+    <!-- RIGHT COLUMN - Valores en vivo + Nota ontológica -->
+    <div class="right-col">
+        <div class="panel">
+            <div class="panel-title">Valores en vivo</div>
+            <div class="data-row">m_TIE electrón <span class="data-val">\( R \times m_e \)</span></div>
+            <div class="data-row">E_existencia(t=0) <span class="data-val" style="color:var(--ce)">511.000 keV</span></div>
+            <div class="data-row">E_TIE = m_TIE·c²/R <span class="data-val" style="color:var(--ce)">= m_obs·c² ✓</span></div>
+            <div class="data-row">E transferida <span class="data-val" id="dv-trans">0.000 keV</span></div>
+            <div class="data-row">Conservación <span class="data-val" id="dv-cons" style="color:var(--green)">PERFECTA ✓</span></div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Nota ontológica</div>
+            <p class="note" id="scene-note">
+                La aniquilación produce exactamente 2×511 keV porque E_TIE = m_TIE·c²/R con m_TIE = R·m_e. La corrección de TIE es ontológica — los joules no cambian, cambia qué fracción de la masa es física real.
+            </p>
+        </div>
+    </div>
 </div>
 
 <footer>
@@ -379,10 +435,64 @@
         <a href="bisturi.html">← Bisturí v2.0</a>
         <a href="jerarquia.html">Jerarquía T⁰/T¹/T² →</a>
     </div>
-    <div class="footer-eq">E_total = E + U + K &nbsp;·&nbsp; Motor Absoluto conserva &nbsp;·&nbsp; E_TIE = m_obs·c² (R ≡ 2π)</div>
+    <div class="footer-eq">\( E_{\text{total}} = E + U + K \) · Motor Absoluto conserva · \( E_{\text{TIE}} = m_{\text{obs}}c^2 \quad (R \equiv 2\pi) \)</div>
     <div class="footer-credit">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+    <div style="margin-top:0.3rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">
+        <a href="index.html" style="color:inherit; text-decoration:none;">INICIO</a> · 
+        <a href="labs.html" style="color:inherit; text-decoration:none;">LAB</a> · 
+        <a href="papers.html" style="color:inherit; text-decoration:none;">PAPERS</a> · 
+        <a href="predicciones.html" style="color:inherit; text-decoration:none;">PREDICCIONES</a> · 
+        <a href="teoria.html" style="color:inherit; text-decoration:none;">TEORÍA</a> · 
+        <a href="https://github.com/ralc-tie-creator" target="_blank" style="color:inherit; text-decoration:none;">GITHUB</a>
+    </div>
 </footer>
 
+<!-- THREE.JS GALAXY BACKGROUND -->
+<script>
+(function(){
+  const canvas = document.getElementById('galaxy-canvas');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  function resize(){
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.updateProjectionMatrix();
+  }
+  resize(); window.addEventListener('resize', resize);
+  camera.position.set(0, 4, 6); camera.lookAt(0, 0, 0);
+
+  const N = 60000, pos = new Float32Array(N*3), col = new Float32Array(N*3);
+  const cIn = new THREE.Color('#FFD700'), cOut = new THREE.Color('#1a1a4e');
+  for(let i=0; i<N; i++){
+    const r = Math.random()*5, b = (i%5)/5 * Math.PI*2, s = r*1.2;
+    const rx = Math.pow(Math.random(),2.5) * (Math.random()<0.5?1:-1) * 0.4 * r;
+    const ry = Math.pow(Math.random(),2.5) * (Math.random()<0.5?1:-1) * 0.12 * r;
+    const rz = Math.pow(Math.random(),2.5) * (Math.random()<0.5?1:-1) * 0.4 * r;
+    pos[i*3]   = Math.cos(b+s)*r + rx;
+    pos[i*3+1] = ry;
+    pos[i*3+2] = Math.sin(b+s)*r + rz;
+    const mixed = new THREE.Color().lerpColors(cIn, cOut, r/5);
+    col[i*3]   = mixed.r;
+    col[i*3+1] = mixed.g;
+    col[i*3+2] = mixed.b;
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  const mat = new THREE.PointsMaterial({ size:0.007, sizeAttenuation:true, depthWrite:false, blending:THREE.AdditiveBlending, vertexColors:true });
+  scene.add(new THREE.Points(geo, mat));
+
+  (function animate(){
+    requestAnimationFrame(animate);
+    scene.rotation.y += 0.0005;
+    renderer.render(scene, camera);
+  })();
+})();
+</script>
+
+<!-- TRINIDAD SIMULATION -->
 <script>
 // ── CONSTANTES ──
 const E_ELECTRON = 511.0; // keV — energía en reposo del electrón
@@ -492,7 +602,7 @@ function updateUI() {
     document.getElementById('cons-check').textContent  = err<0.001 ? '✓ EXACTA' : '⚠ REVISAR';
     document.getElementById('cons-check').style.color  = err<0.001 ? 'var(--green)' : 'var(--orange)';
 
-    // Sidebar
+    // Right column
     document.getElementById('dv-trans').textContent = `${(E_ELECTRON-E+rad).toFixed(3)} keV`;
     document.getElementById('dv-cons').textContent  = err<0.001 ? 'PERFECTA ✓' : 'REVISAR';
     document.getElementById('dv-cons').style.color  = err<0.001 ? 'var(--green)' : 'var(--orange)';
@@ -558,7 +668,22 @@ function onProgress(val) {
 }
 
 // Init
-updateUI();
+window.onload = () => {
+    updateUI();
+    renderMathInElement(document.body, {
+        delimiters: [
+            { left: '\\(', right: '\\)', display: false },
+            { left: '\\[', right: '\\]', display: true },
+        ],
+        throwOnError: false,
+    });
+};
+
+// Language switching function (placeholder)
+function setLang(l) {
+    document.getElementById('btn-es').className = l === 'es' ? 'lang-btn active' : 'lang-btn inactive';
+    document.getElementById('btn-en').className = l === 'en' ? 'lang-btn active' : 'lang-btn inactive';
+}
 </script>
 <script src="axon-widget.js"></script>
 </body>

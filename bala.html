@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TIE · H-10 · Cúmulo Bala · Desacople Gravitacional</title>
+    <title>TIE · Cúmulo Bala · Desacople Gravitacional</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,6 +19,8 @@
 
         nav { background:rgba(0,0,1,0.95); border-bottom:1px solid var(--border); padding:0.85rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
         .nav-logo { font-family:var(--mono); color:var(--gold); text-decoration:none; font-weight:700; font-size:0.85rem; letter-spacing:2px; }
+        
+        /* ESTILO PARA EL BOTÓN ORCID */
         .orcid-link {
             display: flex;
             align-items: center;
@@ -40,45 +42,54 @@
         }
         
         .nav-right { display:flex; align-items:center; gap:1.5rem; }
-        .nav-lang  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; letter-spacing:1px; }
-        .nav-lang.active { color:var(--text); }
+        .lang-btn  { font-family:var(--mono); font-size:0.7rem; font-weight:700; letter-spacing:2px; padding:0.25rem 0.6rem; border-radius:4px; cursor:pointer; border:none; transition:all .2s; }
+        .lang-btn.active { color:#000; background:var(--gold); }
+        .lang-btn.inactive { color:var(--dim); border:1px solid var(--border); background:transparent; }
+        .lang-btn.inactive:hover { color:var(--gold); border-color:var(--gold); }
         .nav-back  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; letter-spacing:1px; border:1px solid rgba(160,160,176,0.3); padding:0.35rem 0.75rem; transition:0.2s; }
         .nav-back:hover { color:var(--blue); border-color:var(--blue); }
 
         .page-header { padding:1.2rem 2rem 1rem; border-bottom:1px solid var(--border); flex-shrink:0; }
-        .page-label  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.3rem; }
-        .page-header h1 { font-family:var(--sans); font-size:1.6rem; font-weight:900; letter-spacing:1px; margin-bottom:0.25rem; }
-        .page-desc { font-size:0.85rem; color:var(--dim); max-width:740px; }
-        .page-eq   { font-family:var(--mono); font-size:0.8rem; color:var(--gold); margin-top:0.4rem; }
+        .page-label  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.3rem; }
+        .page-header h1 { font-family:var(--sans); font-size:1.8rem; font-weight:900; letter-spacing:1px; margin-bottom:0.25rem; }
+        .page-desc { font-size:0.9rem; color:var(--dim); max-width:740px; }
+        .page-eq   { font-family:var(--mono); font-size:0.85rem; color:var(--gold); margin-top:0.4rem; }
 
         .stats-bar { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
         .stat { padding:0.6rem 1.5rem; border-right:1px solid var(--border); text-align:center; }
-        .stat-number { font-family:var(--mono); font-size:1.1rem; font-weight:700; color:var(--gold); }
-        .stat-label  { font-family:var(--mono); font-size:0.6rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
+        .stat-number { font-family:var(--mono); font-size:1.2rem; font-weight:700; color:var(--gold); }
+        .stat-label  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
 
+        /* MAIN - THREE COLUMN LAYOUT */
         .main-wrap { flex:1; display:flex; padding:1.25rem 1.5rem; gap:1.25rem; min-height:0; }
 
-        .sidebar { width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:1.25rem; overflow-y:auto; }
-        .sidebar::-webkit-scrollbar { width:3px; }
-        .sidebar::-webkit-scrollbar-thumb { background:var(--border); }
+        /* LEFT CONTROLS COLUMN */
+        .sidebar-left { width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:1.25rem; overflow-y:auto; }
+        .sidebar-left::-webkit-scrollbar { width:3px; }
+        .sidebar-left::-webkit-scrollbar-thumb { background:var(--border); }
+
+        /* RIGHT INFO COLUMN */
+        .sidebar-right { width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:1.25rem; overflow-y:auto; }
+        .sidebar-right::-webkit-scrollbar { width:3px; }
+        .sidebar-right::-webkit-scrollbar-thumb { background:var(--border); }
 
         .panel { border:1px solid var(--border); background:var(--bg2); padding:1rem; }
-        .panel-title { font-family:var(--mono); font-size:0.7rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.4rem; margin-bottom:0.75rem; }
-        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.75rem; color:var(--dim); padding:0.25rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
-        .data-val { color:var(--text); font-weight:700; }
-        .note { font-family:var(--mono); font-size:0.7rem; color:var(--dim); line-height:1.6; }
+        .panel-title { font-family:var(--mono); font-size:0.75rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.4rem; margin-bottom:0.8rem; }
+        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.8rem; color:var(--dim); padding:0.35rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+        .data-val { color:var(--text); font-weight:700; font-size:0.8rem; }
+        .note { font-family:var(--mono); font-size:0.75rem; color:var(--dim); line-height:1.7; }
+        .note strong { color:var(--gold); }
 
-        .toggle-row { display:flex; align-items:center; justify-content:space-between; font-family:var(--mono); font-size:0.75rem; color:var(--dim); padding:0.5rem 0.6rem; border:1px solid rgba(255,255,255,0.06); cursor:pointer; margin-bottom:5px; transition:0.2s; }
+        .toggle-row { display:flex; align-items:center; justify-content:space-between; font-family:var(--mono); font-size:0.75rem; color:var(--dim); padding:0.6rem 0.7rem; border:1px solid rgba(255,255,255,0.06); cursor:pointer; margin-bottom:6px; transition:0.2s; }
         .toggle-row:hover { background:rgba(255,255,255,0.03); }
-        .chk { width:14px; height:14px; border:1px solid var(--gold); position:relative; display:inline-block; flex-shrink:0; }
+        .chk { width:16px; height:16px; border:1px solid var(--gold); position:relative; display:inline-block; flex-shrink:0; }
         .chk.on::after { content:''; position:absolute; top:2px;left:2px;right:2px;bottom:2px; background:var(--gold); }
 
-        .btn { width:100%; padding:0.75rem 1rem; font-family:var(--mono); font-size:0.75rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border-radius:2px; transition:0.2s; border:none; }
+        .btn { width:100%; padding:0.8rem 1rem; font-family:var(--mono); font-size:0.8rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border-radius:2px; transition:0.2s; }
         .btn-gold { background:transparent; color:var(--gold); border:1px solid rgba(255,215,0,0.3); }
         .btn-gold:hover { background:rgba(255,215,0,0.08); border-color:var(--gold); }
         .btn-red  { background:transparent; color:var(--red);  border:1px solid rgba(255,68,85,0.3); }
         .btn-red:hover  { background:rgba(255,68,85,0.08);  border-color:var(--red); }
-        .btn:disabled { opacity:0.3; cursor:not-allowed; }
 
         .canvas-area { flex:1; border:1px solid var(--border); background:#00000a; position:relative; overflow:hidden; min-width:0; min-height:0; }
         canvas { width:100%; height:100%; display:block; }
@@ -86,18 +97,16 @@
         .legend {
             position:absolute; top:16px; left:16px;
             background:rgba(0,0,0,0.8); border:1px solid var(--border);
-            padding:10px 14px; font-family:var(--mono); font-size:0.72rem;
-            z-index:10;
+            padding:12px 16px; font-family:var(--mono); font-size:0.75rem;
         }
-        .leg-item { display:flex; align-items:center; gap:8px; color:var(--dim); margin-bottom:4px; }
-        .leg-dot  { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+        .leg-item { display:flex; align-items:center; gap:8px; color:var(--dim); margin-bottom:5px; }
+        .leg-dot  { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
 
         .status-overlay {
             position:absolute; bottom:16px; left:50%; transform:translateX(-50%);
-            font-family:var(--mono); font-size:0.75rem; color:var(--dim);
+            font-family:var(--mono); font-size:0.8rem; color:var(--dim);
             background:rgba(0,0,0,0.7); border:1px solid var(--border);
-            padding:6px 14px; white-space:nowrap;
-            z-index:10;
+            padding:8px 16px; white-space:nowrap;
         }
 
         footer { border-top:1px solid var(--border); padding:0.65rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
@@ -107,7 +116,7 @@
         .footer-eq     { font-family:var(--mono); font-size:0.7rem; color:rgba(255,215,0,0.5); text-align:center; }
         .footer-credit { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; }
 
-        @media (max-width:900px) { .main-wrap{flex-direction:column} .sidebar{width:100%} }
+        @media (max-width:1000px) { .main-wrap{flex-direction:column} .sidebar-left, .sidebar-right{width:100%} }
     </style>
 </head>
 <body>
@@ -115,6 +124,7 @@
 <nav>
     <div style="display:flex; align-items:center; gap:20px;">
         <a href="index.html" class="nav-logo">TIE / R@LC</a>
+        <!-- INYECCIÓN DEL PASAPORTE ORCID -->
         <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
             <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
                 <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
@@ -122,21 +132,18 @@
             0009-0008-4935-9010
         </a>
     </div>
-    
-  <!-- SELECTOR DE IDIOMA -->
-  <div style="display:flex;gap:.4rem;">
-    <a href="bala.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">ES</a>
-    <a href="bala-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">EN</a>
-  </div>
-    
-    <a href="lab-cosmologia.html" class="nav-back">← LABORATORIO</a>
+    <div class="nav-right">
+        <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ES</button>
+        <button class="lang-btn inactive" id="btn-en" onclick="setLang('en')">EN</button>
+        <a href="labs.html" class="nav-back">← LABORATORIO</a>
+    </div>
 </nav>
 
 <div class="page-header">
-    <div class="page-label">H-10 · CAPÍTULO 10.8 · COSMOLOGÍA · DESACOPLE GRAVITACIONAL</div>
+    <div class="page-label">CAPÍTULO 3 · EN VIVO · COSMOLOGÍA · DESACOPLE GRAVITACIONAL</div>
     <h1>CÚMULO BALA</h1>
     <p class="page-desc">El gas bariónico choca y frena por fricción electromagnética. El superfluido de fase ∇Φ — responsable del lensing gravitacional — se atraviesa sin rozamiento. No se necesita materia oscura invisible: el desacople es la señal de la infraestructura.</p>
-    <div class="page-eq">η_Φ = 0 (viscosidad cero) &nbsp;·&nbsp; v_gas → 0 (fricción EM) &nbsp;·&nbsp; ∇Φ TIE ≠ materia exótica</div>
+    <div class="page-eq">v_superfluid = 0 (viscosidad cero) &nbsp;·&nbsp; v_gas → 0 (fricción EM) &nbsp;·&nbsp; ∇Φ TIE ≠ materia exótica</div>
 </div>
 
 <div class="stats-bar">
@@ -147,20 +154,12 @@
 </div>
 
 <div class="main-wrap">
-    <div class="sidebar">
-        <div class="panel">
-            <div class="panel-title">Estado de la colisión</div>
-            <div class="data-row">Tiempo simulado <span class="data-val" id="val-time">T+0.00 Myrs</span></div>
-            <div class="data-row">Fricción bariónica <span class="data-val" style="color:var(--red)" id="friccion-estado">ACTIVA</span></div>
-            <div class="data-row">Viscosidad de fase <span class="data-val" style="color:var(--blue)" id="viscosidad-estado">CERO</span></div>
-            <div class="data-row" style="border:none; padding-top:0.4rem;">
-                <span id="status-msg" style="color:var(--gold); font-size:0.7rem;">ESPERANDO INICIO...</span>
-            </div>
-        </div>
-
-        <div class="panel">
-            <div class="panel-title">Paradigma TIE</div>
-            <p class="note">La materia ordinaria (gas) interactúa electromagnéticamente y frena. Las ondas solitarias de fase cuántica Φ (fuente del lensing) son superfluidas — se atraviesan sin fricción. El desacople entre lensing y gas es la evidencia de la infraestructura, no de materia oscura partícula.</p>
+    <!-- LEFT COLUMN - CONTROLS -->
+    <div class="sidebar-left">
+        <!-- BOTONES ARRIBA (subidos) -->
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:0.5rem;">
+            <button class="btn btn-gold" id="btn-start" onclick="startSimulation()">[ INICIAR COLISIÓN ]</button>
+            <button class="btn btn-red"  onclick="resetSimulation()">[ REINICIAR CÁMARA ]</button>
         </div>
 
         <div class="panel">
@@ -174,161 +173,122 @@
                 <div class="chk on" id="check-phase"></div>
             </div>
         </div>
-
-        <div style="display:flex;flex-direction:column;gap:8px;margin-top:auto;">
-            <button class="btn btn-gold" id="btn-start" onclick="startSimulation()">[ INICIAR COLISIÓN ]</button>
-            <button class="btn btn-red"  onclick="resetSimulation()">[ REINICIAR ]</button>
-        </div>
     </div>
 
+    <!-- CENTER COLUMN - VISUALIZATION -->
     <div class="canvas-area">
         <div class="legend">
-            <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div> Plasma bariónico (frena)</div>
-            <div class="leg-item"><div class="leg-dot" style="border:2px solid var(--blue);background:transparent;"></div> Superfluido Φ (atraviesa)</div>
+            <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div> Plasma bariónico</div>
+            <div class="leg-item"><div class="leg-dot" style="border:2px solid var(--blue);background:transparent;"></div> Superfluido Φ (lensing)</div>
         </div>
         <canvas id="bulletCanvas"></canvas>
         <div class="status-overlay" id="status-overlay">SISTEMA EN REPOSO</div>
-        <div style="position:absolute; bottom:40px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">REFERENCIA: CAPÍTULO 10.8 · CÚMULO BALA</div>
+        <div style="position:absolute; bottom:40px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:0.65rem; color:rgba(255,255,255,0.2);">REFERENCIA: CAPÍTULOS 3 Y 14</div>
+    </div>
+
+    <!-- RIGHT COLUMN - INFORMATION -->
+    <div class="sidebar-right">
+        <!-- ESTADO DE LA COLISIÓN (movido a la derecha, arriba de todo) -->
+        <div class="panel">
+            <div class="panel-title">Estado de la colisión</div>
+            <div class="data-row">Tiempo simulado <span class="data-val" id="val-time">T+0.00 Myrs</span></div>
+            <div class="data-row">Fricción bariónica <span class="data-val" style="color:var(--red)">ACTIVA</span></div>
+            <div class="data-row">Viscosidad de fase <span class="data-val" style="color:var(--blue)">CERO</span></div>
+            <div class="data-row" style="border:none; padding-top:0.5rem;">
+                <span id="status-msg" style="color:var(--gold); font-size:0.75rem;">ESPERANDO INICIO...</span>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Paradigma TIE</div>
+            <p class="note">La materia ordinaria (gas) interactúa electromagnéticamente y frena. Las ondas solitarias de fase cuántica Φ (fuente del lensing) son superfluidas — se atraviesan sin fricción. El desacople entre lensing y gas es la evidencia de la infraestructura, no de materia oscura partícula.</p>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Interpretación TIE</div>
+            <p class="note">El desacople entre el gas (que frena por fricción EM) y el campo de fase Φ (que pasa sin rozamiento) es la firma de la infraestructura espacial. No se necesita materia oscura exótica — el efecto es idéntico al observado en el Cúmulo Bala (1E 0657-558).</p>
+            <p class="note" style="margin-top:0.6rem; color:var(--blue);">∇Φ: gradiente de fase de la infraestructura · a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²</p>
+        </div>
     </div>
 </div>
 
 <footer>
     <div class="footer-nav">
-        <a href="lente.html">← H-09 Lente</a>
-        <a href="campo-phi.html">H-13 Campo φ →</a>
+        <a href="lente.html">← Lente Gravitacional</a>
+        <a href="campo-phi.html">Campo φ →</a>
     </div>
-    <div class="footer-eq">∇Φ = superfluido · gas = fricción EM · desacople = CAP. 10.8 TIE</div>
-    <div class="footer-credit">R@LC 2026 · MÉXICO · H-10 · CÚMULO BALA</div>
+    <div class="footer-eq">∇Φ = superfluido · gas = fricción EM · desacople = CAP. 3 TIE</div>
+    <div class="footer-credit">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+    <div style="margin-top:0.3rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">
+        <a href="index.html" style="color:inherit; text-decoration:none;">INICIO</a> · 
+        <a href="labs.html" style="color:inherit; text-decoration:none;">LAB</a> · 
+        <a href="papers.html" style="color:inherit; text-decoration:none;">PAPERS</a> · 
+        <a href="predicciones.html" style="color:inherit; text-decoration:none;">PREDICCIONES</a> · 
+        <a href="teoria.html" style="color:inherit; text-decoration:none;">TEORÍA</a> · 
+        <a href="https://github.com/ralc-tie-creator" target="_blank" style="color:inherit; text-decoration:none;">GITHUB</a>
+    </div>
 </footer>
 
 <script>
-    // ============================================
-    // CONFIGURACIÓN Y ESTADO
-    // ============================================
     const canvas = document.getElementById('bulletCanvas');
-    const ctx = canvas.getContext('2d');
+    const ctx    = canvas.getContext('2d');
     let width, height, animationId, time = 0;
-    let isRunning = false;
-    let showGas = true;
-    let showPhase = true;
-    
-    // Clusters
-    let cluster1 = { 
-        x:0, phaseX:0, v:2.5, 
-        particles: [], 
-        color:'#FF4455',
-        originalX: 0
-    };
-    let cluster2 = { 
-        x:0, phaseX:0, v:-2.5, 
-        particles: [], 
-        color:'#FF8800',
-        originalX: 0
-    };
+    let isRunning = false, showGas = true, showPhase = true;
+    let cluster1 = { x:0, phaseX:0, v:0, particles:[], color:'#FF4455' };
+    let cluster2 = { x:0, phaseX:0, v:0, particles:[], color:'#FF8800' };
 
-    // ============================================
-    // INICIALIZACIÓN
-    // ============================================
     function resize() {
-        const container = canvas.parentElement;
-        width = container.clientWidth;
-        height = container.clientHeight;
-        canvas.width = width;
-        canvas.height = height;
-        
-        // Recalcular posiciones base
-        if (width > 0 && height > 0) {
-            cluster1.originalX = width * 0.15;
-            cluster2.originalX = width * 0.85;
-            setupSimulation();
-        }
+        width  = canvas.parentElement.clientWidth;
+        height = canvas.parentElement.clientHeight;
+        canvas.width = width; canvas.height = height;
     }
-    
-    window.addEventListener('resize', resize);
-
-    function generateParticles(cx, cy, colorBase) {
-        const parts = [];
-        for (let i = 0; i < 300; i++) { // Reducido para mejor rendimiento
-            const angle = Math.random() * 2 * Math.PI;
-            const radius = Math.abs(randGauss(0, 35));
-            parts.push({
-                ox: radius * Math.cos(angle),
-                oy: radius * Math.sin(angle),
-                vx: (Math.random() - 0.5) * 0.4,
-                vy: (Math.random() - 0.5) * 0.4,
-                color: colorBase
-            });
-        }
-        return parts;
-    }
-
-    function randGauss(mean, std) {
-        let u = 0, v = 0;
-        while(u === 0) u = Math.random();
-        while(v === 0) v = Math.random();
-        return mean + std * Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-    }
+    window.addEventListener('resize', () => { resize(); if (!isRunning && time===0) setupSimulation(); });
 
     function setupSimulation() {
-        if (width === 0 || height === 0) return;
-        
-        // Posiciones iniciales
-        cluster1.x = cluster1.phaseX = width * 0.15;
-        cluster2.x = cluster2.phaseX = width * 0.85;
-        cluster1.v = 2.5;
-        cluster2.v = -2.5;
-        
-        // Generar partículas
+        cluster1.x = cluster1.phaseX = width * 0.15; cluster1.v =  2.5;
+        cluster2.x = cluster2.phaseX = width * 0.85; cluster2.v = -2.5;
         cluster1.particles = generateParticles(cluster1.x, height/2, cluster1.color);
         cluster2.particles = generateParticles(cluster2.x, height/2, cluster2.color);
-        
-        // Resetear tiempo y UI
         time = 0;
-        isRunning = false;
-        
-        // Actualizar UI
-        document.getElementById('val-time').textContent = 'T+0.00 Myrs';
-        document.getElementById('stat-time').textContent = 'T+0.00';
-        document.getElementById('stat-time').style.color = 'var(--dim)';
-        document.getElementById('status-msg').textContent = 'ESPERANDO INICIO...';
-        document.getElementById('status-msg').style.color = 'var(--gold)';
+        document.getElementById('val-time').textContent    = 'T+0.00 Myrs';
+        document.getElementById('stat-time').textContent   = 'T+0.00';
+        document.getElementById('stat-time').style.color   = 'var(--dim)';
+        document.getElementById('status-msg').textContent  = 'ESPERANDO INICIO...';
+        document.getElementById('status-msg').style.color  = 'var(--gold)';
         document.getElementById('status-overlay').textContent = 'SISTEMA EN REPOSO';
-        document.getElementById('friccion-estado').textContent = 'ACTIVA';
-        document.getElementById('viscosidad-estado').textContent = 'CERO';
-        document.getElementById('friccion-estado').style.color = 'var(--red)';
-        document.getElementById('viscosidad-estado').style.color = 'var(--blue)';
-        
-        const btn = document.getElementById('btn-start');
-        btn.textContent = '[ INICIAR COLISIÓN ]';
-        btn.disabled = false;
-        btn.style.opacity = '1';
-        
+        document.getElementById('btn-start').textContent   = '[ INICIAR COLISIÓN ]';
+        document.getElementById('btn-start').style.opacity = '1';
         drawFrame();
     }
 
-    // ============================================
-    // CONTROLES
-    // ============================================
+    function generateParticles(cx, cy, colorBase) {
+        const parts = [];
+        for (let i = 0; i < 600; i++) {
+            const r = Math.abs(randGauss(0,38));
+            const t = Math.random() * 2 * Math.PI;
+            parts.push({ ox:r*Math.cos(t), oy:r*Math.sin(t),
+                         vx:(Math.random()-0.5)*0.45, vy:(Math.random()-0.5)*0.45,
+                         color:colorBase });
+        }
+        return parts;
+    }
+    function randGauss(mean, std) {
+        return std * Math.sqrt(-2*Math.log(1-Math.random())) * Math.cos(2*Math.PI*Math.random()) + mean;
+    }
+
     function startSimulation() {
         if (isRunning) return;
         isRunning = true;
-        
-        document.getElementById('status-msg').textContent = 'COLISIÓN EN PROGRESO...';
+        document.getElementById('status-msg').textContent  = 'COLISIÓN EN PROGRESO...';
         document.getElementById('status-overlay').textContent = 'ANALIZANDO DINÁMICA...';
-        
-        const btn = document.getElementById('btn-start');
-        btn.textContent = '[ EN PROGRESO ]';
-        btn.disabled = true;
-        
+        document.getElementById('btn-start').textContent   = '[ EN PROGRESO ]';
+        document.getElementById('btn-start').style.opacity = '0.4';
         animate();
     }
 
     function resetSimulation() {
         isRunning = false;
-        if (animationId) {
-            cancelAnimationFrame(animationId);
-            animationId = null;
-        }
+        cancelAnimationFrame(animationId);
         setupSimulation();
     }
 
@@ -343,175 +303,102 @@
         if (!isRunning) drawFrame();
     }
 
-    // ============================================
-    // FÍSICA
-    // ============================================
+    function animate() {
+        updatePhysics();
+        drawFrame();
+        time += 0.05;
+        const tStr = `T+${time.toFixed(2)} Myrs`;
+        document.getElementById('val-time').textContent  = tStr;
+        document.getElementById('stat-time').textContent = `T+${time.toFixed(2)}`;
+        document.getElementById('stat-time').style.color = 'var(--gold)';
+
+        if (cluster1.phaseX > width * 0.82) {
+            isRunning = false;
+            document.getElementById('status-msg').textContent  = 'DESACOPLE GRAVITACIONAL CONFIRMADO.';
+            document.getElementById('status-msg').style.color  = 'var(--green)';
+            document.getElementById('status-overlay').textContent = '✓ DESACOPLE GRAVITACIONAL CONFIRMADO — CAP. 10.8 TIE';
+        } else {
+            animationId = requestAnimationFrame(animate);
+        }
+    }
+
     function updatePhysics() {
-        // Actualizar fase (sin fricción)
+        // Superfluido de fase: sin fricción
         cluster1.phaseX += cluster1.v;
         cluster2.phaseX += cluster2.v;
 
-        // Calcular distancia entre centros
+        // Gas bariónico: fricción EM
         const dist = Math.abs(cluster1.x - cluster2.x);
-        const collisionZone = 150; // Zona de interacción
-
-        // Si están cerca, aplicar fricción al gas
-        if (dist < collisionZone) {
-            // Fricción electromagnética
-            cluster1.v *= 0.98;
-            cluster2.v *= 0.98;
-            
-            // Perturbación en partículas
-            const strength = (collisionZone - dist) * 0.008;
-            cluster1.particles.forEach(p => { 
-                p.vy += (p.oy > 0 ? strength : -strength);
-            });
-            cluster2.particles.forEach(p => { 
-                p.vy += (p.oy > 0 ? strength : -strength);
-            });
-            
-            // Actualizar UI
-            document.getElementById('friccion-estado').textContent = 'FRENANDO';
+        const cZone = 120;
+        if (dist < cZone) {
+            cluster1.v *= 0.95; cluster2.v *= 0.95;
+            const sf = (cZone - dist) * 0.005;
+            cluster1.particles.forEach(p => { p.vy += p.oy > 0 ? sf : -sf; });
+            cluster2.particles.forEach(p => { p.vy += p.oy > 0 ? sf : -sf; });
         }
-
-        // Actualizar posiciones del gas
-        cluster1.x += cluster1.v;
-        cluster2.x += cluster2.v;
-
-        // Mover partículas
-        cluster1.particles.forEach(p => {
-            p.ox += p.vx;
-            p.oy += p.vy;
-        });
-        cluster2.particles.forEach(p => {
-            p.ox += p.vx;
-            p.oy += p.vy;
-        });
+        cluster1.x += cluster1.v; cluster2.x += cluster2.v;
+        cluster1.particles.forEach(p => { p.ox += p.vx; p.oy += p.vy; });
+        cluster2.particles.forEach(p => { p.ox += p.vx; p.oy += p.vy; });
     }
 
-    // ============================================
-    // RENDERIZADO
-    // ============================================
     function drawFrame() {
-        // Limpiar canvas con efecto de estela
-        ctx.fillStyle = 'rgba(0,0,1,0.15)';
+        ctx.fillStyle = 'rgba(0,0,1,0.28)';
         ctx.fillRect(0, 0, width, height);
-        
-        // Dibujar fase (superfluido)
+        ctx.globalCompositeOperation = 'lighter';
+
         if (showPhase) {
-            drawSoliton(cluster1.phaseX, height/2, cluster1.color);
-            drawSoliton(cluster2.phaseX, height/2, cluster2.color);
-            
-            ctx.fillStyle = 'rgba(91,200,245,0.9)';
-            ctx.font = "bold 14px 'Space Mono'";
+            drawSoliton(cluster1.phaseX, height/2);
+            drawSoliton(cluster2.phaseX, height/2);
+            ctx.fillStyle = 'rgba(91,200,245,0.7)';
+            ctx.font = "12px 'Space Mono'";
             ctx.textAlign = 'center';
-            ctx.shadowColor = 'rgba(91,200,245,0.5)';
-            ctx.shadowBlur = 10;
-            ctx.fillText('∇Φ', cluster1.phaseX, height/2 - 60);
-            ctx.fillText('∇Φ', cluster2.phaseX, height/2 - 60);
-            ctx.shadowBlur = 0;
+            ctx.fillText('∇Φ', cluster1.phaseX, height/2 - 88);
+            ctx.fillText('∇Φ', cluster2.phaseX, height/2 - 88);
         }
-        
-        // Dibujar gas
         if (showGas) {
             drawGas(cluster1.x, height/2, cluster1.particles);
             drawGas(cluster2.x, height/2, cluster2.particles);
         }
+        ctx.globalCompositeOperation = 'source-over';
     }
 
-    function drawSoliton(x, y, color) {
-        // Círculo exterior
-        ctx.beginPath();
-        ctx.arc(x, y, 70, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(91,200,245,0.4)';
+    function drawSoliton(x, y) {
+        ctx.beginPath(); ctx.arc(x, y, 68, 0, Math.PI*2);
         ctx.lineWidth = 2.5;
-        ctx.shadowColor = 'rgba(91,200,245,0.3)';
-        ctx.shadowBlur = 15;
-        ctx.stroke();
-        
-        // Relleno tenue
+        ctx.strokeStyle = 'rgba(91,200,245,0.45)';
+        ctx.shadowColor  = 'rgba(91,200,245,0.4)'; ctx.shadowBlur = 18;
+        ctx.stroke(); ctx.shadowBlur = 0;
+        ctx.beginPath(); ctx.arc(x, y, 68, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(91,200,245,0.04)'; ctx.fill();
         ctx.beginPath();
-        ctx.arc(x, y, 70, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(91,200,245,0.03)';
-        ctx.shadowBlur = 0;
-        ctx.fill();
-        
-        // Cruz central
-        ctx.beginPath();
-        ctx.moveTo(x - 12, y);
-        ctx.lineTo(x + 12, y);
-        ctx.moveTo(x, y - 12);
-        ctx.lineTo(x, y + 12);
-        ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-        ctx.lineWidth = 1.2;
-        ctx.stroke();
+        ctx.moveTo(x-9,y); ctx.lineTo(x+9,y);
+        ctx.moveTo(x,y-9); ctx.lineTo(x,y+9);
+        ctx.strokeStyle = 'rgba(255,255,255,0.45)'; ctx.lineWidth = 1; ctx.stroke();
     }
 
     function drawGas(gx, gy, particles) {
         particles.forEach(p => {
-            const px = gx + p.ox;
-            const py = gy + p.oy;
-            
-            // Ignorar partículas fuera del canvas
-            if (px < 0 || px > width || py < 0 || py > height) return;
-            
-            // Efecto de calentamiento en zona de colisión
-            const distToCenter = Math.abs(px - width/2);
-            const heat = Math.max(0, 1 - distToCenter / 300);
-            
-            ctx.beginPath();
-            ctx.arc(px, py, 1.8, 0, Math.PI * 2);
-            
+            const px = gx + p.ox, py = gy + p.oy;
+            const heat = Math.max(0, 1 - Math.abs(p.ox)/50);
+            ctx.beginPath(); ctx.arc(px, py, 1.5, 0, Math.PI*2);
             if (heat > 0.7 && isRunning) {
                 ctx.fillStyle = '#ffffff';
-                ctx.shadowColor = '#FFD700';
-                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#FFD700'; ctx.shadowBlur = 8;
             } else {
                 ctx.fillStyle = p.color;
-                ctx.shadowColor = p.color;
-                ctx.shadowBlur = 6;
+                ctx.shadowColor = p.color; ctx.shadowBlur = 4;
             }
-            ctx.fill();
+            ctx.fill(); ctx.shadowBlur = 0;
         });
-        ctx.shadowBlur = 0;
     }
 
-    // ============================================
-    // ANIMACIÓN
-    // ============================================
-    function animate() {
-        if (!isRunning) return;
-        
-        updatePhysics();
-        drawFrame();
-        
-        time += 0.03;
-        const tStr = `T+${time.toFixed(2)} Myrs`;
-        document.getElementById('val-time').textContent = tStr;
-        document.getElementById('stat-time').textContent = tStr;
-        document.getElementById('stat-time').style.color = 'var(--gold)';
+    resize(); setupSimulation();
 
-        // Verificar si alcanzaron el desacople
-        if (cluster1.phaseX > width * 0.8 && cluster2.phaseX < width * 0.2) {
-            isRunning = false;
-            document.getElementById('status-msg').textContent = '✓ DESACOPLE GRAVITACIONAL CONFIRMADO';
-            document.getElementById('status-msg').style.color = 'var(--green)';
-            document.getElementById('status-overlay').textContent = '✓ DESACOPLE GRAVITACIONAL — CAP. 10.8 TIE';
-            document.getElementById('friccion-estado').textContent = 'COMPLETADA';
-            return;
-        }
-        
-        animationId = requestAnimationFrame(animate);
+    // Función para cambio de idioma (placeholder)
+    function setLang(l) {
+        document.getElementById('btn-es').className = l === 'es' ? 'lang-btn active' : 'lang-btn inactive';
+        document.getElementById('btn-en').className = l === 'en' ? 'lang-btn active' : 'lang-btn inactive';
     }
-
-    // ============================================
-    // INICIALIZACIÓN
-    // ============================================
-    resize();
-    window.addEventListener('load', () => {
-        setTimeout(resize, 100); // Asegurar dimensiones correctas
-    });
 </script>
-<script src="axon-widget.js"></script>
 </body>
 </html>

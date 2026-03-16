@@ -40,7 +40,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-shrink: 0;}
+            flex-shrink: 0;
+        }
         .nav-logo { font-family:var(--mono); color:var(--gold); text-decoration:none; font-weight:700; font-size:0.85rem; letter-spacing:2px; }
         
         /* ESTILO PARA EL BOTÓN ORCID */
@@ -69,23 +70,42 @@
         /* ── MAIN ── */
         .main-wrap { flex:1; display:flex; padding:1.25rem 1.5rem; gap:1.25rem; min-height:0; }
 
-        /* ── SIDEBAR ── */
-        .sidebar { width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:1.25rem; overflow-y:auto; }
-        .sidebar::-webkit-scrollbar { width:3px; }
-        .sidebar::-webkit-scrollbar-thumb { background:var(--border); }
+        /* ── SIDEBAR IZQUIERDA (controles originales) ── */
+        .sidebar-left { 
+            width: 340px; 
+            flex-shrink: 0; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 1rem; 
+            overflow-y: auto; 
+        }
+        .sidebar-left::-webkit-scrollbar { width:3px; }
+        .sidebar-left::-webkit-scrollbar-thumb { background:var(--border); }
+
+        /* ── SIDEBAR DERECHA (información nueva) ── */
+        .sidebar-right { 
+            width: 340px; 
+            flex-shrink: 0; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 1rem; 
+            overflow-y: auto; 
+        }
+        .sidebar-right::-webkit-scrollbar { width:3px; }
+        .sidebar-right::-webkit-scrollbar-thumb { background:var(--border); }
 
         .panel { border:1px solid var(--border); background:var(--bg2); padding:1rem; }
         .panel-title { font-family:var(--mono); font-size:0.7rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.4rem; margin-bottom:0.75rem; }
 
-        /* Botones de modo */
+        /* Botones de modo (Motor físico) */
         .mode-btn {
             display: block; width:100%; text-align:left;
             background: rgba(0,0,0,0.4);
             border: 1px solid var(--border);
             color: var(--dim);
-            padding: 0.65rem 0.9rem;
+            padding: 0.6rem 0.9rem;
             font-family: var(--mono);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             cursor: pointer;
             transition: 0.2s;
             margin-bottom: 6px;
@@ -96,9 +116,9 @@
         .mode-btn.active-dm     { border-color:var(--purple); color:var(--purple); background:rgba(168,85,247,0.06); }
         .mode-btn.active-tie    { border-color:var(--gold);   color:var(--gold);   background:rgba(255,215,0,0.06); }
 
-        /* Slider */
+        /* Slider (Parámetro de impacto) */
         .slider-wrap { display:flex; flex-direction:column; gap:6px; }
-        .slider-wrap label { font-family:var(--mono); font-size:0.72rem; color:var(--blue); display:flex; justify-content:space-between; }
+        .slider-wrap label { font-family:var(--mono); font-size:0.7rem; color:var(--blue); display:flex; justify-content:space-between; }
         input[type=range] {
             -webkit-appearance:none; width:100%;
             background:rgba(91,200,245,0.12); height:3px; border-radius:2px; outline:none;
@@ -108,14 +128,20 @@
             background:var(--blue); border-radius:50%; cursor:pointer;
         }
 
-        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.75rem; color:var(--dim); padding:0.25rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
-        .data-val { color:var(--text); font-weight:700; }
+        /* Estado del campo (panel original) */
+        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.7rem; color:var(--dim); padding:0.3rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
+        .data-val { color:var(--text); font-weight:700; font-size:0.75rem; }
+        
+        /* Texto explicativo (nuevo panel) */
         .note { font-family:var(--mono); font-size:0.7rem; color:var(--dim); line-height:1.6; }
+        .note strong { color:var(--gold); font-size:0.75rem; }
 
+        /* Botón DISPARAR FOTÓN (ahora arriba) */
         .btn-fire {
-            width:100%; padding:0.85rem; font-family:var(--mono); font-size:0.8rem; font-weight:700;
+            width:100%; padding:0.9rem; font-family:var(--mono); font-size:0.8rem; font-weight:700;
             letter-spacing:2px; text-transform:uppercase; cursor:pointer; border-radius:2px;
             background: var(--blue); color:#000; border:none; transition:0.2s;
+            margin-bottom: 0.5rem;
         }
         .btn-fire:hover { background:#fff; }
 
@@ -129,11 +155,11 @@
         .telemetry {
             position:absolute; bottom:16px; right:16px;
             background:rgba(0,0,0,0.85); border:1px solid var(--border);
-            padding:12px 16px; font-family:var(--mono); font-size:0.75rem; min-width:260px;
+            padding:12px 16px; font-family:var(--mono); font-size:0.7rem; min-width:260px;
         }
         .tele-title { color:var(--blue); border-bottom:1px solid var(--border); padding-bottom:5px; margin-bottom:8px; font-size:0.7rem; letter-spacing:1px; }
-        .tele-row   { display:flex; justify-content:space-between; color:var(--dim); padding:2px 0; }
-        .tele-val   { color:var(--text); font-weight:700; min-width:150px; text-align:right; }
+        .tele-row   { display:flex; justify-content:space-between; color:var(--dim); padding:3px 0; font-size:0.7rem; }
+        .tele-val   { color:var(--text); font-weight:700; min-width:150px; text-align:right; font-size:0.75rem; }
 
         /* ── FOOTER ── */
         footer { border-top:1px solid var(--border); padding:0.65rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
@@ -143,7 +169,10 @@
         .footer-eq     { font-family:var(--mono); font-size:0.7rem; color:rgba(255,215,0,0.5); text-align:center; }
         .footer-credit { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; }
 
-        @media (max-width:900px) { .main-wrap{flex-direction:column} .sidebar{width:100%} }
+        @media (max-width:1100px) { 
+            .main-wrap{flex-direction:column} 
+            .sidebar-left, .sidebar-right{width:100%} 
+        }
     </style>
 </head>
 <body>
@@ -186,10 +215,13 @@
 </div>
 
 <div class="main-wrap">
-    <div class="sidebar">
-
+    <!-- SIDEBAR IZQUIERDA - CONTROLES ORIGINALES -->
+    <div class="sidebar-left">
+        <!-- BOTÓN DISPARAR FOTÓN ARRIBA (nueva posición) -->
+        <button class="btn-fire" onclick="firePhoton()">DISPARAR FOTÓN</button>
+        
         <div class="panel">
-            <div class="panel-title">Motor físico</div>
+            <div class="panel-title">MOTOR FÍSICO</div>
             <p class="note" style="margin-bottom:0.65rem;">Selecciona qué métrica espacial gobierna la curvatura de la luz.</p>
             <button class="mode-btn" id="btn-newton" onclick="setPhysics('newton',this)">1. Física clásica — solo masa visible</button>
             <button class="mode-btn" id="btn-dm"     onclick="setPhysics('dm',this)">2. ΛCDM — con halo de materia oscura</button>
@@ -197,7 +229,7 @@
         </div>
 
         <div class="panel">
-            <div class="panel-title">Parámetro de impacto</div>
+            <div class="panel-title">PARÁMETRO DE IMPACTO</div>
             <div class="slider-wrap">
                 <label>Distancia al centro (b) <span id="val-b">150 kpc</span></label>
                 <input type="range" id="slider-b" min="50" max="350" value="150" oninput="updateB(this.value)">
@@ -205,17 +237,16 @@
         </div>
 
         <div class="panel">
-            <div class="panel-title">Estado del campo</div>
-            <div class="data-row">Masa galáctica <span class="data-val">10¹¹ M☉</span></div>
-            <div class="data-row">Materia oscura <span class="data-val" id="val-dm">0 %</span></div>
-            <div class="data-row">Métrica <span class="data-val" id="val-metric">Logarítmica TIE</span></div>
-            <div class="data-row">Motor activo <span class="data-val" id="val-motor" style="color:var(--gold)">TIE</span></div>
-            <div class="data-row">Potencial <span class="data-val" id="val-pot">√(a_N·(a_N+a₀))</span></div>
+            <div class="panel-title">ESTADO DEL CAMPO</div>
+            <div class="data-row">Masa galáctica <span class="data-val" id="info-mass">1.0 × 10¹¹ M☉</span></div>
+            <div class="data-row">Materia oscura <span class="data-val" id="info-dm">0 %</span></div>
+            <div class="data-row">Métrica <span class="data-val" id="info-metric">Logarítmica TIE</span></div>
+            <div class="data-row">Motor activo <span class="data-val" id="info-motor" style="color:var(--gold)">TIE</span></div>
+            <div class="data-row">Potencial <span class="data-val" id="info-pot">√(a_N·(a_N+a₀))</span></div>
         </div>
-
-        <button class="btn-fire" onclick="firePhoton()">DISPARAR FOTÓN</button>
     </div>
 
+    <!-- CANVAS CENTRAL -->
     <div class="canvas-area" id="canvas-container">
         <canvas id="lensingCanvas"></canvas>
         <div class="telemetry">
@@ -223,6 +254,25 @@
             <div class="tele-row">Motor <span class="tele-val" id="tele-motor">TIE Fase</span></div>
             <div class="tele-row">Potencial Φ <span class="tele-val" id="tele-pot">∝ ln(r)</span></div>
             <div class="tele-row">Ángulo α <span class="tele-val" id="tele-angle">0.000°</span></div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR DERECHA - INFORMACIÓN NUEVA -->
+    <div class="sidebar-right">
+        <div class="panel">
+            <div class="panel-title">PARÁMETROS CALCULADOS</div>
+            <div class="data-row">Masa visible <span class="data-val" id="calc-mass">1.0 × 10¹¹ M☉</span></div>
+            <div class="data-row">Factor DM añadido <span class="data-val" id="calc-dm">0×</span></div>
+            <div class="data-row">Relación a_N/a₀ <span class="data-val" id="calc-ratio">0.00</span></div>
+            <div class="data-row">Deflexión α <span class="data-val" id="calc-alpha">0.000°</span></div>
+            <div class="data-row">Régimen <span class="data-val" id="calc-regime">TIE (a_N ≪ a₀)</span></div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">INTERPRETACIÓN TIE</div>
+            <p class="note">En TIE, la deflexión de la luz obtiene el mismo factor <strong>2×</strong> que en Relatividad General, pero por una razón distinta: dos contribuciones iguales (geométrica −p·dx y de fase E·dt).</p>
+            <p class="note" style="margin-top:0.5rem;">Para masas galácticas, el potencial efectivo es logarítmico porque a_TIE = √(a_N·a₀) en el régimen a_N ≪ a₀, produciendo curvas de rotación planas sin materia oscura.</p>
+            <p class="note" style="margin-top:0.5rem; color:var(--gold);">a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²</p>
         </div>
     </div>
 </div>
@@ -243,14 +293,22 @@
     let width, height, cx, cy;
     let physicsMode = 'tie';
     let bParam = 150;
+    let massParam = 1.0; // en unidades de 10¹¹ M☉
     let photon = null, trail = [], animationId = null;
 
     // ── CONSTANTES DE SIMULACIÓN ──
     const G    = 1;
-    const M    = 1500;
-    const M_DM = M * (2 * Math.PI - 1); // ← 2π−1 ≈ 5.283 exacto (84.1%)
+    const BASE_M = 1500; // masa base para la simulación (escala)
     const a0   = 0.8;
     const c_sim = 8;
+
+    function getM() {
+        return BASE_M * massParam;
+    }
+
+    function getMDM() {
+        return getM() * (2 * Math.PI - 1); // ← 2π−1 ≈ 5.283 exacto (84.1%)
+    }
 
     function resize() {
         width  = canvas.parentElement.clientWidth;
@@ -273,39 +331,63 @@
         document.querySelectorAll('.mode-btn').forEach(b => b.className = 'mode-btn');
         if (mode === 'newton') {
             btn.classList.add('active-newton');
-            document.getElementById('val-dm').textContent     = '0 %';
-            document.getElementById('val-metric').textContent = 'Newtoniana 1/r';
-            document.getElementById('val-motor').textContent  = 'Clásico';
-            document.getElementById('val-motor').style.color  = 'var(--red)';
-            document.getElementById('val-pot').textContent    = 'GM/r²';
+            document.getElementById('info-dm').textContent     = '0 %';
+            document.getElementById('info-metric').textContent = 'Newtoniana 1/r';
+            document.getElementById('info-pot').textContent    = 'GM/r²';
+            document.getElementById('info-motor').textContent  = 'Clásico';
+            document.getElementById('info-motor').style.color  = 'var(--red)';
             document.getElementById('tele-motor').textContent = 'Física Clásica';
             document.getElementById('tele-pot').textContent   = '∝ 1/r';
         } else if (mode === 'dm') {
             btn.classList.add('active-dm');
-            document.getElementById('val-dm').textContent     = '+528% (añadida)';
-            document.getElementById('val-metric').textContent = 'Halo isotérmico';
-            document.getElementById('val-motor').textContent  = 'ΛCDM';
-            document.getElementById('val-motor').style.color  = 'var(--purple)';
-            document.getElementById('val-pot').textContent    = 'Halo+visible';
+            document.getElementById('info-dm').textContent     = '+528% (añadida)';
+            document.getElementById('info-metric').textContent = 'Halo isotérmico';
+            document.getElementById('info-pot').textContent    = 'Halo+visible';
+            document.getElementById('info-motor').textContent  = 'ΛCDM';
+            document.getElementById('info-motor').style.color  = 'var(--purple)';
             document.getElementById('tele-motor').textContent = 'ΛCDM Estándar';
             document.getElementById('tele-pot').textContent   = 'Halo oculto';
         } else {
             btn.classList.add('active-tie');
-            document.getElementById('val-dm').textContent     = '0 %';
-            document.getElementById('val-metric').textContent = 'Logarítmica TIE';
-            document.getElementById('val-motor').textContent  = 'TIE';
-            document.getElementById('val-motor').style.color  = 'var(--gold)';
-            document.getElementById('val-pot').textContent    = '√(a_N·(a_N+a₀))';
+            document.getElementById('info-dm').textContent     = '0 %';
+            document.getElementById('info-metric').textContent = 'Logarítmica TIE';
+            document.getElementById('info-pot').textContent    = '√(a_N·(a_N+a₀))';
+            document.getElementById('info-motor').textContent  = 'TIE';
+            document.getElementById('info-motor').style.color  = 'var(--gold)';
             document.getElementById('tele-motor').textContent = 'TIE Fase';
             document.getElementById('tele-pot').textContent   = '∝ ln(r)';
         }
+        updateCalculatedParams();
         if (!photon) drawStatic();
     }
 
+    function updateCalculatedParams() {
+        // Actualizar parámetros calculados en el panel derecho
+        const M_vis = massParam.toFixed(1);
+        document.getElementById('calc-mass').textContent = `${M_vis} × 10¹¹ M☉`;
+        
+        const dmFactor = (physicsMode === 'dm') ? '5.28×' : '0×';
+        document.getElementById('calc-dm').textContent = dmFactor;
+        
+        // Calcular relación a_N/a₀ aproximada para bParam
+        const r = bParam * 3; // escala aproximada
+        const aN = (G * getM()) / (r * r);
+        const ratio = (aN / a0).toFixed(2);
+        document.getElementById('calc-ratio').textContent = ratio;
+        
+        let regime = '';
+        if (physicsMode === 'newton') regime = 'Newton (a_N ≫ a₀)';
+        else if (physicsMode === 'dm') regime = 'ΛCDM con halo';
+        else regime = 'TIE (a_N ≪ a₀)';
+        document.getElementById('calc-regime').textContent = regime;
+    }
+
     function calculateAcceleration(r) {
+        const M = getM();
         const aN = (G * M) / (r * r);
         if (physicsMode === 'newton') return aN;
         if (physicsMode === 'dm') {
+            const M_DM = getMDM();
             const aDM = (G * M_DM) / (r*r + 10000);
             return aN + aDM;
         }
@@ -319,6 +401,7 @@
         trail  = [];
         document.getElementById('tele-angle').textContent = 'Calculando...';
         document.getElementById('stat-angle').textContent = '...';
+        document.getElementById('calc-alpha').textContent = '...';
         animate();
     }
 
@@ -360,7 +443,10 @@
         const fmt = Math.abs(angleDeg).toFixed(3).padStart(7,'0');
         document.getElementById('tele-angle').textContent = `${fmt}°`;
         document.getElementById('stat-angle').textContent = `${fmt}°`;
+        document.getElementById('calc-alpha').textContent = `${fmt}°`;
         document.getElementById('stat-angle').style.color = 'var(--gold)';
+        
+        updateCalculatedParams();
 
         if (photon.x < width && photon.y < height && photon.y > 0) {
             animationId = requestAnimationFrame(animate);
@@ -396,6 +482,8 @@
 
     resize();
     setPhysics('tie', document.getElementById('btn-tie'));
+    updateB(150);
+    updateCalculatedParams();
 </script>
 <script src="axon-widget.js"></script>
 </body>

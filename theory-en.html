@@ -87,7 +87,7 @@ nav {
   text-decoration: none;
   font-weight: 700;
 }
-/* ESTILO PARA EL BOTÓN ORCID */
+/* ORCID BUTTON STYLE */
          .orcid-link {
             display: flex;
             align-items: center;
@@ -160,7 +160,7 @@ nav {
   line-height: 1.6;
 }
 
-/* SECCIÓN POSTULADOS */
+/* POSTULATES SECTION */
 .section-title {
   font-size: 2rem;
   font-weight: 800;
@@ -224,7 +224,7 @@ nav {
   border-top: 1px solid var(--border);
 }
 
-/* SECCIÓN BISTURÍ */
+/* BISTURÍ SECTION */
 .bisturi-container {
   background: rgba(5,5,15,0.7);
   backdrop-filter: blur(10px);
@@ -274,7 +274,7 @@ nav {
   line-height: 1.5;
 }
 
-/* SECCIÓN CONSTANTES */
+/* CONSTANTS SECTION */
 .constants-subtitle {
   font-size: 1.4rem;
   font-weight: 600;
@@ -286,7 +286,7 @@ nav {
 
 .constants-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.8rem;
   margin: 2rem 0;
 }
@@ -336,7 +336,7 @@ nav {
   line-height: 1.5;
 }
 
-/* SECCIÓN FÓRMULAS */
+/* FORMULAS SECTION */
 .formulas-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -423,7 +423,7 @@ nav {
   color: var(--gold);
 }
 
-/* LAGRANGIANO */
+/* LAGRANGIAN */
 .lagrangian-container {
   background: linear-gradient(145deg, rgba(155,89,182,0.2) 0%, rgba(5,5,15,0.8) 100%);
   border: 2px solid var(--purple);
@@ -484,7 +484,7 @@ nav {
   color: var(--gold);
 }
 
-/* NUEVA SECCIÓN: ¿POR QUÉ TIE? (estilo comparativo) */
+/* COMPARISON SECTION */
 .comparison-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -551,7 +551,7 @@ footer {
   letter-spacing: 2px;
 }
 
-/* ═══════════ GLOSSARY ═══════════ */
+/* GLOSSARY */
 .glosario-wrap{margin-top:3rem;}
 .glosario-search-wrap{display:flex;gap:.75rem;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;}
 #glos-search{flex:1;min-width:200px;background:rgba(0,0,0,.5);border:1px solid rgba(255,215,0,.2);border-radius:10px;color:#fff;font-family:'Space Mono',monospace;font-size:.75rem;padding:.55rem .9rem;outline:none;transition:border-color .2s;}
@@ -594,6 +594,44 @@ footer {
 .glos-link-btn:hover{color:#000;background:var(--gold);}
 .glos-no-results{font-family:'Space Mono',monospace;font-size:.75rem;color:rgba(255,255,255,.3);text-align:center;padding:2rem;letter-spacing:2px;}
 
+/* ECOSYSTEM LINKS */
+.ecosistema-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 2rem 0 1rem;
+  flex-wrap: wrap;
+}
+
+.ecosistema-link {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--dim);
+  text-decoration: none;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid rgba(255,215,0,0.2);
+  border-radius: 40px;
+  transition: 0.3s;
+  letter-spacing: 2px;
+}
+
+.ecosistema-link:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 15px rgba(255,215,0,0.2);
+}
+
+.ecosistema-link.lab {
+  background: rgba(91,200,245,0.1);
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.ecosistema-link.lab:hover {
+  background: var(--blue);
+  color: #000;
+  border-color: var(--blue);
+}
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
@@ -604,9 +642,8 @@ footer {
 <nav>
   <div style="display:flex; align-items:center; gap:20px;">
     <a href="index.html" class="nav-logo">TIE / R@LC</a>
-    
-    <!-- INYECCIÓN DEL PASAPORTE ORCID -->
-    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
+    <!-- ORCID BADGE -->
+    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verify Author Identity on ORCID">
       <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
          <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
       </svg>
@@ -614,13 +651,13 @@ footer {
     </a>
   </div>
   
-  <!-- SELECTOR DE IDIOMA -->
+  <!-- LANGUAGE SELECTOR -->
   <div style="display:flex;gap:.4rem;">
     <a href="teoria.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">ES</a>
     <a href="theory-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">EN</a>
   </div>
   
-  <a href="lab-en.html" class="nav-back">← LABORATORY</a>
+  <a href="labs.html" class="nav-back">← LABORATORY</a>
 </nav>
 
 <div class="page">
@@ -628,7 +665,16 @@ footer {
   <h1 class="page-title">THE PILLARS OF TIE</h1>
   <p class="page-sub">Four postulates. One scalpel. Zero free parameters. The entire universe in one infrastructure.</p>
 
-  <!-- POSTULADOS -->
+  <!-- ECOSYSTEM LINKS -->
+  <div class="ecosistema-links">
+    <a href="index.html" class="ecosistema-link">← MAIN PAGE</a>
+    <a href="labs.html" class="ecosistema-link lab">⚡ TIE LABORATORY</a>
+    <a href="https://github.com/ralc-tie-creator" target="_blank" class="ecosistema-link">🔧 GITHUB</a>
+    <a href="papers.html" class="ecosistema-link">📄 PAPERS</a>
+    <a href="predictions.html" class="ecosistema-link">✓ PREDICTIONS</a>
+  </div>
+
+  <!-- 4 POSTULATES -->
   <div class="section-title">THE 4 POSTULATES</div>
   <div class="postulates-grid">
     <!-- I. Absolute Engine -->
@@ -639,7 +685,7 @@ footer {
       <div class="postulate-quote">"Time is not a dimension. It is the engine."</div>
     </div>
 
-    <!-- II. Infrastructure Espacial -->
+    <!-- II. Infrastructure -->
     <div class="postulate-card">
       <span class="postulate-number">II</span>
       <div class="postulate-title">Infrastructure</div>
@@ -664,10 +710,10 @@ footer {
     </div>
   </div>
 
-  <!-- BISTURÍ T² v2.0 -->
+  <!-- T² SCALPEL v2.0 -->
   <div class="section-title">THE T² SCALPEL <span style="font-size:0.6em; color:var(--gold); vertical-align:middle;">v2.0</span></div>
   <div class="bisturi-container">
-    <p style="color:var(--dim); margin-bottom:2rem;">The method that detects, diagnoses and operates on $T^2$ in the equations of physics. v2.0 adds dual diagnosis: it is not always eliminated — sometimes it is <em>translated</em>.</p>
+    <p style="color:var(--dim); margin-bottom:2rem;">The method that detects, diagnoses and operates on $T^2$ in physics equations. v2.0 adds dual diagnosis: it is not always eliminated — sometimes it is <em>translated</em>.</p>
     <div class="bisturi-grid">
       <div class="bisturi-step">
         <span class="step-number">1</span>
@@ -677,22 +723,22 @@ footer {
       <div class="bisturi-step">
         <span class="step-number">2</span>
         <div class="step-title">Diagnose</div>
-        <div class="step-desc">Is it <strong>deceptive</strong> (measurement artifact) or <strong>kinematic</strong> (real acceleration)? Three tests: Arrow of Time · Operational Independence · Controlled Degradation.</div>
+        <div class="step-desc">Is it <strong>deceptive</strong> (measurement artifact) or <strong>kinematic</strong> (real acceleration)? Three tests: Arrow of time · Operational independence · Controlled degradation.</div>
       </div>
       <div class="bisturi-step" style="border-color: rgba(255,68,85,0.5);">
         <span class="step-number" style="background: rgba(255,68,85,0.15); color:var(--red);">3a</span>
-        <div class="step-title" style="color:var(--red);">Remove</div>
+        <div class="step-title" style="color:var(--red);">Eliminate</div>
         <div class="step-desc">If <strong>deceptive</strong>: replace with topological cycle $2\pi$. Verify dimensional consistency. <em>Example: $E=mc^2$, $F=kq^2/r^2$.</em></div>
       </div>
       <div class="bisturi-step" style="border-color: rgba(68,255,136,0.5);">
         <span class="step-number" style="background: rgba(68,255,136,0.15); color:var(--green);">3b</span>
         <div class="step-title" style="color:var(--green);">Translate</div>
-        <div class="step-desc">If <strong>kinematic</strong>: rewrite as $a = \omega_\phi^2\,d^2x/d\phi^2$. Time disappears as a dimension. <em>Example: $a=GM/r^2$.</em></div>
+        <div class="step-desc">If <strong>kinematic</strong>: rewrite $a = \omega_\phi^2\,d^2x/d\phi^2$. Time disappears as a dimension. <em>Example: $a=GM/r^2$.</em></div>
       </div>
       <div class="bisturi-step">
         <span class="step-number">4</span>
         <div class="step-title">Verify</div>
-        <div class="step-desc">Error $<1\%$: surgery successful. Larger error: look for more residual $T^2$.</div>
+        <div class="step-desc">Error $<1\%$: correct surgery. Larger error: look for more residual $T^2$.</div>
       </div>
     </div>
     <div style="margin-top:1.5rem; padding:1rem; background:rgba(255,215,0,0.05); border:1px solid rgba(255,215,0,0.2); border-radius:8px; font-size:0.8rem; color:var(--dim); text-align:center;">
@@ -701,28 +747,28 @@ footer {
     </div>
   </div>
 
-  <!-- CONSTANTES FUNDAMENTALES (HEREDADAS) -->
+  <!-- FUNDAMENTAL CONSTANTS (INHERITED) -->
   <div class="constants-subtitle">⚙️ FUNDAMENTAL CONSTANTS (INHERITED)</div>
   <div class="constants-grid">
     <!-- G -->
     <div class="constant-card">
       <span class="constant-symbol">$G$</span>
       <div class="constant-value">$G = 6.674\times10^{-11}\,\text{m}^3\text{kg}^{-1}\text{s}^{-2}$</div>
-      <div class="constant-desc">Gravitational constant (measured with observed masses)</div>
+      <div class="constant-desc">Gravitational curvature (measured with observed masses)</div>
     </div>
 
     <!-- c -->
     <div class="constant-card">
       <span class="constant-symbol">$c$</span>
       <div class="constant-value">$c = 2.998\times10^{8}\,\text{m/s}$</div>
-      <div class="constant-desc">Speed of light in vacuum</div>
+      <div class="constant-desc">Absolute Engine — propagation speed</div>
     </div>
 
     <!-- ħ -->
     <div class="constant-card">
       <span class="constant-symbol">$\hbar$</span>
       <div class="constant-value">$\hbar = 1.055\times10^{-34}\ \text{J}\cdot\text{s}$</div>
-      <div class="constant-desc">Minimum quantum of action (reality pixel)</div>
+      <div class="constant-desc">Minimum pixel — synchronization quantum (Postulate 1.3)</div>
    </div>
 
     <!-- H₀ -->
@@ -730,13 +776,42 @@ footer {
       <span class="constant-symbol">$H_0$</span>
       <div class="constant-value">$H_0 \approx 70\,\text{km/s/Mpc}$</div>
       <div class="constant-num">$2.268\times10^{-18}\,\text{s}^{-1}$</div>
-      <div class="constant-desc">Hubble constant (expansion rate)</div>
+      <div class="constant-desc">Expansion rate, origin of $a_0$</div>
+    </div>
+
+    <!-- mₑ (electron) -->
+    <div class="constant-card">
+      <span class="constant-symbol">$m_e$</span>
+      <div class="constant-value">$m_e = 9.109\times10^{-31}\,\text{kg}$</div>
+      <div class="constant-desc">Electron mass</div>
+    </div>
+
+    <!-- e (elementary charge) -->
+    <div class="constant-card">
+      <span class="constant-symbol">$e$</span>
+      <div class="constant-value">$e = 1.602\times10^{-19}\,\text{C}$</div>
+      <div class="constant-desc">Elementary charge</div>
+    </div>
+
+    <!-- kₑ (Coulomb constant) - CORREGIDO: \cdot en lugar de \cdotp -->
+    <div class="constant-card">
+      <span class="constant-symbol">$k_e$</span>
+      <div class="constant-value">$k_e = 8.988\times10^{9}\,\text{N}\cdot\text{m}^2/\text{C}^2$</div>
+      <div class="constant-desc">Coulomb constant</div>
     </div>
   </div>
 
-  <!-- CONSTANTES TIE (DERIVADAS) -->
+  <!-- TIE CONSTANTS (DERIVED) -->
   <div class="constants-subtitle">🔬 TIE CONSTANTS (DERIVED)</div>
   <div class="constants-grid">
+    <!-- ℛ = 2π -->
+    <div class="constant-card">
+      <span class="constant-symbol">$\mathcal{R}$</span>
+      <div class="constant-value">$\mathcal{R} = 2\pi$</div>
+      <div class="constant-num">$6.283185\ldots$</div>
+      <div class="constant-desc">RALC Constant — complete synchronization cycle (Post. 1.4)</div>
+    </div>
+
     <!-- a₀ -->
     <div class="constant-card">
       <span class="constant-symbol">$a_0$</span>
@@ -753,20 +828,60 @@ footer {
       <div class="constant-desc">TIE cosmological constant (background curvature)</div>
     </div>
 
-    <!-- ℛ -->
+    <!-- φ (golden number) -->
     <div class="constant-card">
-      <span class="constant-symbol">$\mathcal{R}$</span>
-      <div class="constant-value">$\mathcal{R} = 2\pi$</div>
-      <div class="constant-num">$6.283185\ldots$</div>
-      <div class="constant-desc">RALC constant (complete synchronization cycle)</div>
+      <span class="constant-symbol">$\varphi$</span>
+      <div class="constant-value">$\varphi = \dfrac{1+\sqrt{5}}{2}$</div>
+      <div class="constant-num">$1.618033\ldots$</div>
+      <div class="constant-desc">Quadratic root of horizon — emerges from $u^2+u-1=0$ (Ch. 10)</div>
     </div>
 
-    <!-- G permanece empírico -->
+    <!-- ω_φ -->
+    <div class="constant-card">
+      <span class="constant-symbol">$\omega_\phi$</span>
+      <div class="constant-value">$\omega_\phi = \sqrt{2}\,H_0$</div>
+      <div class="constant-num">$3.21\times10^{-18}\,\text{rad/s}$</div>
+      <div class="constant-desc">Eigenfrequency of field $\phi$ — $c\sqrt{\Lambda_{\text{TIE}}}$ (Ch. 12)</div>
+    </div>
+
+    <!-- 𝒜 (dimensional prefactor) -->
+    <div class="constant-card">
+      <span class="constant-symbol">$\mathcal{A}$</span>
+      <div class="constant-value">$\mathcal{A} = \dfrac{\hbar H_0^2}{c^3}$</div>
+      <div class="constant-num">$2.01\times10^{-95}\,\text{kg/m}$</div>
+      <div class="constant-desc">Dimensional prefactor of TIE Lagrangian (Ch. 12)</div>
+    </div>
+
+    <!-- v₀ (fundamental velocity) -->
+    <div class="constant-card">
+      <span class="constant-symbol">$v_0$</span>
+      <div class="constant-value">$v_0 = \dfrac{c}{2\pi}$</div>
+      <div class="constant-num">$47.715\,\text{km/s}$</div>
+      <div class="constant-desc">Fundamental T¹ velocity — origin of $a_0$ and $\nabla\phi_0$</div>
+    </div>
+
+    <!-- r_trans -->
+    <div class="constant-card">
+      <span class="constant-symbol">$r_{\text{trans}}$</span>
+      <div class="constant-value">$r_{\text{trans}} = \sqrt{\dfrac{GM}{a_0}}$</div>
+      <div class="constant-num">(depends on $M$)</div>
+      <div class="constant-desc">Radius where rotation curves become flat</div>
+    </div>
+
+    <!-- r₀ (detachment scale) -->
+    <div class="constant-card">
+      <span class="constant-symbol">$r_0$</span>
+      <div class="constant-value">$r_0 = \left(\dfrac{GM}{\Lambda_{\text{TIE}} c^2}\right)^{1/3}$</div>
+      <div class="constant-num">(depends on $M$)</div>
+      <div class="constant-desc">Hubble detachment scale</div>
+    </div>
+
+    <!-- G remains empirical -->
     <div class="constant-card" style="border-color: rgba(255,200,0,0.3);">
       <span class="constant-symbol">$G$</span>
       <div class="constant-value" style="font-size:0.8rem; color:var(--gold);">Residual phenomenological parameter</div>
       <div class="constant-num">$6.674\times10^{-11}\,\text{m}^3\text{kg}^{-1}\text{s}^{-2}$</div>
-      <div class="constant-desc">$G$ remains as the only empirical constant in TIE. Deriving $G$ from topological parameters is an open research frontier.</div>
+      <div class="constant-desc">$G$ remains the only empirical constant of TIE. Deriving $G$ from topological parameters is an open research front.</div>
     </div>
   </div>
 
@@ -774,7 +889,7 @@ footer {
   <div class="section-title">REINTERPRETED FORMULAS</div>
   <div class="formulas-grid">
     
-    <!-- 1. Gravedad -->
+    <!-- 1. Gravity -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--blue); margin-bottom:0.5rem;">⚡ GRAVITY</div>
       
@@ -794,7 +909,7 @@ footer {
       <div class="formula-interp" style="background:rgba(91,200,245,0.05); border-left-color:var(--blue);">
         <strong>Limits:</strong><br>
         $a_N \gg a_0$: $a_{\text{TIE}} \to a_N$ (Newtonian regime) ✓<br>
-        $a_N \ll a_0$: $a_{\text{TIE}} \to \sqrt{a_N a_0}$ (flat rotation curves, no dark matter) ✓
+        $a_N \ll a_0$: $a_{\text{TIE}} \to \sqrt{a_N a_0}$ (flat curves, no dark matter) ✓
       </div>
       
       <div class="formula-interp">
@@ -804,13 +919,13 @@ footer {
       </div>
     </div>
 
-    <!-- 2. Energía -->
+    <!-- 2. Energy -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--gold); margin-bottom:0.5rem;">⚡ ENERGY</div>
       
       <div class="formula-classic">$$E = mc^2$$</div>
       
-      <div class="formula-tie">$$E_{\text{ciclo}} = \frac{m_{\text{obs}} c^2}{2\pi}$$</div>
+      <div class="formula-tie">$$E_{\text{cycle}} = \frac{m_{\text{obs}} c^2}{2\pi}$$</div>
       <div class="formula-tie">$$m_{\text{TIE}} = 2\pi \, m_{\text{obs}}$$</div>
       
       <div class="formula-tie" style="margin-top:1rem; border-top:1px dashed var(--border); padding-top:1rem;">
@@ -827,9 +942,9 @@ footer {
       </div>
       
       <div class="formula-interp" style="background:rgba(255,215,0,0.05); border-left-color:var(--gold);">
-        <strong>⚠️ Importante:</strong> La energía total $E = mc^2$ es la misma. 
+        <strong>⚠️ Important:</strong> Total energy $E = mc^2$ is the same. 
         TIE introduces that this energy manifests in synchronization cycles: 
-        $E_{\text{cycle}} = mc^2/2\pi$ is the energy per cycle, and real mass is $2\pi$ times observed mass.
+        $E_{\text{cycle}} = mc^2/2\pi$ is energy per cycle, and real mass is $2\pi$ times observed mass.
       </div>
       
       <div class="formula-interp">
@@ -839,40 +954,39 @@ footer {
       </div>
     </div>
 
-    <!-- 3. Electromagnetismo -->
+    <!-- 3. Electromagnetism (simplified) -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--green); margin-bottom:0.5rem;">⚡ ELECTROMAGNETISM</div>
       
       <div class="formula-classic">$$F = k_e\frac{q_{\text{SI}}^2}{r^2}$$</div>
       
       <div class="formula-tie">$$q_{\text{TIE}} = \sqrt{k_e} \cdot q_{\text{SI}}$$</div>
-      <div class="formula-tie">$$k_{\text{TIE}} = \frac{k_e}{4\pi^2}$$</div>
+      <div class="formula-tie">$$[q_{\text{TIE}}^2] = \text{kg}\cdot\text{m}^3/\text{s}^2$$</div>
       
       <div class="formula-tie" style="margin-top:1rem; border-top:1px dashed var(--border); padding-top:1rem;">
-        $$F = k_{\text{TIE}} \frac{q_{\text{TIE}}^2}{r^2}$$
+        $$F = \frac{q_{\text{TIE}}^2}{r^2}$$
       </div>
       
       <div class="formula-variables">
         <strong>Where:</strong>
-        <span class="var">$q_{\text{SI}}$</span> = SI charge (Coulombs)<br>
-        <span class="var">$q_{\text{TIE}}$</span> = charge as electromagnetic curvature, $[q_{\text{TIE}}^2] = \text{kg}\cdot\text{m}^3/\text{s}^2$<br>
-        <span class="var">$k_e = 8.988\times10^9$</span> = Coulomb constant<br>
-        <span class="var">$k_{\text{TIE}} = k_e/4\pi^2$</span> = TIE electromagnetic constant
+        <span class="var">$q_{\text{SI}}$</span> = charge in SI (Coulombs)<br>
+        <span class="var">$q_{\text{TIE}}$</span> = charge as electromagnetic curvature<br>
+        <span class="var">$k_e = 8.988\times10^9$</span> = Coulomb constant (absorbed)
       </div>
       
       <div class="formula-interp" style="background:rgba(255,215,0,0.05); border-left-color:var(--green);">
-        <strong>⚠️ Nota:</strong> La definición SI $q = I\cdot t$ introduce $T^2$ artificial. 
-        When removed, charge is a geometric property of the infrastructure, like mass.
+        <strong>⚠️ Note:</strong> The SI definition $q = I\cdot t$ introduces artificial $T^2$. 
+        When eliminated, charge becomes a geometric property of the infrastructure, like mass.
       </div>
       
       <div class="formula-interp">
         <strong>Example:</strong> Two electrons at $1\,\text{nm}$:<br>
         Coulomb: $F = k_e e^2/r^2 = 2.307\times10^{-10}\,\text{N}$<br>
-        TIE: $q_{\text{TIE}} = e\sqrt{k_e}$, $F = \frac{k_e}{4\pi^2} \frac{(e\sqrt{k_e})^2}{r^2} = 2.307\times10^{-10}\,\text{N}$ ✓
+        TIE: $q_{\text{TIE}} = e\sqrt{k_e}$, $F = \frac{(e\sqrt{k_e})^2}{r^2} = 2.307\times10^{-10}\,\text{N}$ ✓
       </div>
     </div>
 
-    <!-- 4. Nuclear fuerte -->
+    <!-- 4. Strong nuclear -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--red); margin-bottom:0.5rem;">⚡ STRONG NUCLEAR</div>
       
@@ -893,11 +1007,11 @@ footer {
       </div>
       
       <div class="formula-interp" style="background:rgba(255,215,0,0.05); border-left-color:var(--red);">
-        The nuclear cut-off is not due to messenger particles, but to saturation of the infrastructure coherence channel. Effective range is $r \sim 1/f_i \approx 1.4\,\text{fm}$.
+        The nuclear cutoff is not due to messenger particles, but to saturation of the infrastructure's coherence channel. Effective range $r \sim 1/f_i \approx 1.4\,\text{fm}$.
       </div>
     </div>
 
-    <!-- 5. Nuclear débil -->
+    <!-- 5. Weak nuclear -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--purple); margin-bottom:0.5rem;">⚡ WEAK NUCLEAR</div>
       <div class="formula-classic">$$\Gamma = \frac{2\pi}{\hbar} |M|^2 \rho(E)$$</div>
@@ -910,7 +1024,7 @@ footer {
         <span class="var">$\rho(E)$</span> = available synchronization channels
       </div>
       <div class="formula-interp">
-        Fermi's Golden Rule. TIE inherits it unchanged: independent validation (1934).
+        Fermi's Golden Rule. TIE inherits it without modification: independent validation (1934).
       </div>
     </div>
 
@@ -926,11 +1040,11 @@ footer {
         <span class="var">$8\pi^2$</span> = two layers $\times$ complete cycles
       </div>
       <div class="formula-interp">
-        The cosmological constant is not dark energy — it is the background curvature of the infrastructure.
+        The cosmological constant is not dark energy, it is background curvature of the infrastructure.
       </div>
     </div>
 
-    <!-- 7. GPS / Viscosidad -->
+    <!-- 7. GPS / Viscosity -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--blue); margin-bottom:0.5rem;">⚡ GPS / VISCOSITY</div>
       <div class="formula-classic">$$\Delta t = \frac{\Phi_2 - \Phi_1}{c^2}\,T$$</div>
@@ -946,7 +1060,7 @@ footer {
       </div>
     </div>
 
-    <!-- 8. Black Holes negros -->
+    <!-- 8. Black holes -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--red); margin-bottom:0.5rem;">⚡ BLACK HOLES</div>
       
@@ -960,16 +1074,16 @@ footer {
         <span class="var">$r_s$</span> = Schwarzschild radius (GR)<br>
         <span class="var">$r_h$</span> = TIE horizon — the <em>Golden Horizon</em><br>
         <span class="var">$a_0 = cH_0/2\pi$</span> = transition acceleration<br>
-        <span class="var">$\varphi = (1+\sqrt{5})/2 = 1.6180\ldots$</span> = golden ratio — emerges from the equation, not postulated<br>
+        <span class="var">$\varphi = (1+\sqrt{5})/2 = 1.6180\ldots$</span> = golden number — emerges from equation, not postulated<br>
         <span class="var">$\sqrt{\varphi} \approx 1.272$</span> = golden horizon coefficient
       </div>
       
       <div class="formula-interp" style="background:rgba(255,215,0,0.05); border-left-color:var(--gold);">
-        <strong>✨ The golden ratio emerges by itself.</strong> When setting $a_{\text{TIE}}(r_h) = a_0$ with the canonical equation $\sqrt{a_N(a_N+a_0)}$, the quadratic $u^2+u-1=0$ appears, whose positive root is exactly $1/\varphi$. Not postulated.
+        <strong>✨ The golden number emerges naturally.</strong> By setting $a_{\text{TIE}}(r_h) = a_0$ with the canonical equation $\sqrt{a_N(a_N+a_0)}$, the quadratic $u^2+u-1=0$ appears whose positive root is exactly $1/\varphi$. Not postulated.
       </div>
       
       <div class="formula-interp" style="background:rgba(91,200,245,0.05); border-left-color:var(--blue);">
-        <strong>⚠️ Note:</strong> The TIE horizon grows as $\sqrt{M}$ (vs linear in GR). No singularities — the interior is a saturation region with $\rho_{\max} = m^4c^3/\hbar^3$.
+        <strong>⚠️ Note:</strong> TIE horizon grows as $\sqrt{M}$ (vs linear in GR). No singularities — interior is a saturation region with $\rho_{\max} = m^4c^3/\hbar^3$.
       </div>
       
       <div class="formula-interp">
@@ -980,7 +1094,7 @@ footer {
       </div>
     </div>
 
-    <!-- 9. Mecánica cuántica -->
+    <!-- 9. Quantum mechanics -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--green); margin-bottom:0.5rem;">⚡ QUANTUM MECHANICS</div>
       <div class="formula-classic">$$\Delta x \cdot \Delta p \geq \frac{\hbar}{2}$$</div>
@@ -992,11 +1106,11 @@ footer {
         <span class="var">$\Delta p$</span> = momentum uncertainty
       </div>
       <div class="formula-interp">
-        The uncertainty principle is the granularity of $\hbar$. Not an axiom — it is the minimum pixel.
+        The uncertainty principle is the granularity of $\hbar$. Not an axiom, it's the minimum pixel.
       </div>
     </div>
 
-    <!-- 10. Estructura fina -->
+    <!-- 10. Fine structure -->
     <div class="formula-card">
       <div style="font-family:var(--mono); font-size:0.7rem; color:var(--purple); margin-bottom:0.5rem;">⚡ FINE STRUCTURE</div>
       <div class="formula-classic">$$\alpha = \frac{e^2}{4\pi\epsilon_0\hbar c} = \frac{1}{137}$$</div>
@@ -1004,53 +1118,84 @@ footer {
       <div class="formula-variables">
         <strong>Where:</strong>
         <span class="var">$\alpha$</span> = fine structure constant<br>
-        <span class="var">$e$</span> = carga elemental<br>
+        <span class="var">$e$</span> = elementary charge<br>
         <span class="var">$\hbar c$</span> = electromagnetic interaction pixel
       </div>
       <div class="formula-interp">
         Relation between charge (EM curvature) and synchronization quantum. TIE error $<0.1\%$.
       </div>
     </div>
+
+    <!-- 11. NEW: Light deflection -->
+    <div class="formula-card">
+      <div style="font-family:var(--mono); font-size:0.7rem; color:var(--gold); margin-bottom:0.5rem;">☀️ LIGHT DEFLECTION</div>
+      <div class="formula-classic">$$\theta_{\text{Newton}} = \frac{2GM}{c^2R} = 0.875''$$</div>
+      <div class="formula-tie">$$\theta_{\text{TIE}} = \frac{4GM}{c^2R} = 1.750''$$</div>
+      <div class="formula-variables">
+        <strong>Where:</strong>
+        <span class="var">$M$</span> = Sun's mass<br>
+        <span class="var">$R$</span> = Sun's radius<br>
+        <span class="var">$1.750''$</span> = measured value (Eddington 1919, modern VLBI)
+      </div>
+      <div class="formula-interp" style="background:rgba(255,215,0,0.05); border-left-color:var(--gold);">
+        <strong>Factor 2 without curving time:</strong> Two equal contributions: geometric (−p·dx) + phase (E·dt). VLBI: 1.748±0.006″ ✓
+      </div>
+    </div>
+
+    <!-- 12. NEW: COW correction (falsifiable prediction) -->
+    <div class="formula-card">
+      <div style="font-family:var(--mono); font-size:0.7rem; color:var(--blue); margin-bottom:0.5rem;">🧪 COW CORRECTION</div>
+      <div class="formula-classic">$$\Delta\phi_{\text{COW}} = \frac{m g A \lambda}{\hbar v}$$</div>
+      <div class="formula-tie">$$\Delta\phi_{\text{TIE}} = \Delta\phi_{\text{COW}}\left(1 + \frac{a_0}{g}\right)$$</div>
+      <div class="formula-variables">
+        <strong>Where:</strong>
+        <span class="var">$a_0/g \approx 1.1\times10^{-11}$</span> = dimensionless correction<br>
+        <span class="var">$g$</span> = Earth's gravity
+      </div>
+      <div class="formula-interp">
+        <strong>Falsifiable prediction:</strong> Verifiable with next-generation neutron interferometry (ILL-Grenoble, NIST).
+      </div>
+    </div>
   </div>
 
-  <!-- LAGRANGIANO DE LA INFRAESTRUCTURA -->
+  <!-- LAGRANGIAN OF THE INFRASTRUCTURE -->
   <div class="lagrangian-container">
-    <div class="lagrangian-title">⚛️ THE LAGRANGIAN OF THE INFRASTRUCTURE</div>
+    <div class="lagrangian-title">⚛️ LAGRANGIAN OF THE INFRASTRUCTURE</div>
     <div class="lagrangian-equation">
       $$
       \mathcal{L}_{\text{TIE}} = \mathcal{A}\!\left[\frac{1}{2}\left(\frac{\partial\phi}{\partial T}\right)^2 - \frac{c^2}{2}(\nabla\phi)^2 - \frac{\omega_\phi^2}{2}\phi^2 - \frac{G}{\pi c^2}\,\phi\,\rho_{\text{bar}}\!\left(1-\frac{1}{2\pi}\right)\right]
       $$
     </div>
     <div class="lagrangian-desc">
-      The Lagrangian that unifies all infrastructure dynamics. From it, the equations of motion of the synchronization field $\phi$ are derived — at quantum scale it is the wave function $\psi$, at classical scale it generates gravitational perturbations. <strong>Zero free parameters. Newton's $G$ unchanged.</strong>
+      The Lagrangian that unifies all dynamics of the infrastructure. From it, the equations of motion of the synchronization field $\phi$ are derived, which at quantum scale is the wavefunction $\psi$ and at classical scale generates gravitational perturbations. <strong>Zero free parameters. Newton's $G$ without redefinition.</strong>
     </div>
     <div class="lagrangian-terms">
       <span class="lagrangian-term-item"><span class="term">$\mathcal{A} = \hbar H_0^2/c^3$</span> dimensional prefactor $\approx 2.01\times10^{-95}\,\text{kg/m}$</span>
-      <span class="lagrangian-term-item"><span class="term">$\omega_\phi = \sqrt{2}\,H_0$</span> field natural frequency $\approx 3.21\times10^{-18}\,\text{rad/s}$</span>
+      <span class="lagrangian-term-item"><span class="term">$\omega_\phi = \sqrt{2}\,H_0$</span> field eigenfrequency $\approx 3.21\times10^{-18}\,\text{rad/s}$</span>
       <span class="lagrangian-term-item"><span class="term">$\phi$</span> dimensionless [rad] — synchronization field</span>
       <span class="lagrangian-term-item"><span class="term">$1-1/2\pi = 84.1\%$</span> dark matter fraction as coupling</span>
-      <span class="lagrangian-term-item"><span class="term">$G$</span> Newton's constant unchanged — sole residual phenomenological parameter</span>
+      <span class="lagrangian-term-item"><span class="term">$G$</span> Newton's constant without redefinition — only residual phenomenological parameter</span>
     </div>
   </div>
 
-  <!-- ===== NUEVA SECCIÓN: ¿POR QUÉ TIE? (AHORA AL FINAL) ===== -->
+  <!-- WHY TIE? SECTION -->
   <div class="section-title">WHY TIE IF THE NUMBERS ARE THE SAME?</div>
   
   <div style="background: rgba(5,5,15,0.7); backdrop-filter:blur(10px); border:1px solid var(--border); border-radius:16px; padding:2rem; margin:2rem 0;">
     
-    <!-- Botones de pestañas -->
+    <!-- Tab buttons -->
     <div style="display:flex; gap:1rem; margin-bottom:2rem; justify-content:center; flex-wrap:wrap;">
       <button onclick="showStandard()" style="background:transparent; border:2px solid var(--red); color:var(--red); padding:0.8rem 2rem; font-family:var(--mono); cursor:pointer; border-radius:30px; transition:0.3s; font-weight:700;">🔴 STANDARD VIEW</button>
       <button onclick="showTIE()" style="background:transparent; border:2px solid var(--green); color:var(--green); padding:0.8rem 2rem; font-family:var(--mono); cursor:pointer; border-radius:30px; transition:0.3s; font-weight:700;">🟢 TIE VIEW</button>
     </div>
     
-    <!-- Contenido: Visión Estándar (visible por defecto) -->
+    <!-- Content: Standard View (visible by default) -->
     <div id="view-standard" style="display:block;">
       <h3 style="color:var(--red); margin-bottom:1.5rem; font-size:1.3rem; text-align:center;">🔴 What standard physics sees</h3>
       <div class="comparison-grid">
         <div class="comparison-item standard">
           <div class="comparison-label standard">DARK MATTER</div>
-          <div class="comparison-text">"A particle we have not found"</div>
+          <div class="comparison-text">"A particle we haven't found"</div>
         </div>
         <div class="comparison-item standard">
           <div class="comparison-label standard">DARK ENERGY (Λ)</div>
@@ -1058,39 +1203,47 @@ footer {
         </div>
         <div class="comparison-item standard">
           <div class="comparison-label standard">QUANTUM GRAVITY</div>
-          <div class="comparison-text">"Incompatible — we need strings"</div>
+          <div class="comparison-text">"Incompatible — need strings"</div>
         </div>
         <div class="comparison-item standard">
           <div class="comparison-label standard">QUANTUM AXIOMS</div>
           <div class="comparison-text">"That's just how nature is (5 mysteries)"</div>
         </div>
+        <div class="comparison-item standard">
+          <div class="comparison-label standard">T² (time squared)</div>
+          <div class="comparison-text">"Mathematical tool, unquestioned"</div>
+        </div>
       </div>
     </div>
     
-    <!-- Contenido: Visión TIE (oculto por defecto) -->
+    <!-- Content: TIE View (hidden by default) -->
     <div id="view-tie" style="display:none;">
       <h3 style="color:var(--green); margin-bottom:1.5rem; font-size:1.3rem; text-align:center;">🟢 What TIE reveals</h3>
       <div class="comparison-grid">
         <div class="comparison-item tie">
           <div class="comparison-label tie">DARK MATTER</div>
-          <div class="comparison-text">"84.1% = 1 − 1/2π — unaccounted real mass"</div>
+          <div class="comparison-text">"84.1% = 1 − 1/2π — baryonic phase deficit"</div>
         </div>
         <div class="comparison-item tie">
           <div class="comparison-label tie">DARK ENERGY (Λ)</div>
-          <div class="comparison-text">"Λ = 2H₀²/c² — background curvature"</div>
+          <div class="comparison-text">"Λ = 2H₀²/c² — background curvature of the network"</div>
         </div>
         <div class="comparison-item tie">
           <div class="comparison-label tie">QUANTUM GRAVITY</div>
-          <div class="comparison-text">"Same field φ at different scales"</div>
+          <div class="comparison-text">"Unified: same field φ at different scales"</div>
         </div>
         <div class="comparison-item tie">
           <div class="comparison-label tie">QUANTUM AXIOMS</div>
-          <div class="comparison-text">"All derived from ħ granularity"</div>
+          <div class="comparison-text">"All derived from granularity of ħ + cycles 2π"</div>
+        </div>
+        <div class="comparison-item tie">
+          <div class="comparison-label tie">T² (time squared)</div>
+          <div class="comparison-text">"Symptom to diagnose: deceptive or kinematic"</div>
         </div>
       </div>
     </div>
 
-    <!-- Frase central unificadora -->
+    <!-- Unifying central phrase -->
     <div style="margin-top:2rem; border-top:1px solid var(--border); padding-top:1.5rem; text-align:center;">
       <span style="font-family:var(--mono); color:var(--gold); font-size:1rem;">⚡ THE NUMBERS ARE THE SAME. THE UNDERSTANDING IS NOT.</span>
     </div>
@@ -1107,8 +1260,8 @@ footer {
   }
   </script>
 
-  <!-- ===== GLOSSARY · TIE ===== -->
-  <div class="section-title" id="glosario" style="margin-top:3rem">GLOSSARY TIE</div>
+  <!-- TIE GLOSSARY -->
+  <div class="section-title" id="glossary" style="margin-top:3rem">TIE GLOSSARY</div>
   <div class="glosario-wrap">
     <div class="glosario-search-wrap">
       <input type="text" id="glos-search" placeholder="Search term..." oninput="glosFilter()">
@@ -1117,17 +1270,31 @@ footer {
     <div class="glos-grid" id="glos-grid"></div>
   </div>
 
-  <!-- ===== FIN NUEVA SECCIÓN ===== -->
+  <!-- ECOSYSTEM LINKS (also at bottom) -->
+  <div class="ecosistema-links" style="margin-top:3rem;">
+    <a href="index.html" class="ecosistema-link">← MAIN PAGE</a>
+    <a href="labs.html" class="ecosistema-link lab">⚡ TIE LABORATORY</a>
+    <a href="papers.html" class="ecosistema-link">📄 PAPERS</a>
+    <a href="predictions.html" class="ecosistema-link">✓ PREDICTIONS</a>
+    <a href="https://github.com/ralc-tie-creator" target="_blank" class="ecosistema-link">🔧 GITHUB</a>
+  </div>
 
 </div>
 
 <footer>
-  <div class="footer-equation">4 postulates · 1 scalpel · 1 Lagrangian · 0 free parameters</div>
-  <div class="footer-copy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
+  <div class="footer-equation">δ∫dφ = 0 · 4 postulates · 1 scalpel · 1 Lagrangian · 0 free parameters</div>
+  <div class="footer-copy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER · ORCID: 0009-0008-4935-9010</div>
+  <div style="margin-top:1rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">
+    <a href="index.html" style="color:inherit; text-decoration:none;">HOME</a> · 
+    <a href="labs.html" style="color:inherit; text-decoration:none;">LAB</a> · 
+    <a href="papers.html" style="color:inherit; text-decoration:none;">PAPERS</a> · 
+    <a href="predictions.html" style="color:inherit; text-decoration:none;">PREDICTIONS</a> · 
+    <a href="https://github.com/ralc-tie-creator" target="_blank" style="color:inherit; text-decoration:none;">GITHUB</a>
+  </div>
 </footer>
 
 <script>
-// ===== GALAXIA 3D =====
+// ===== 3D GALAXY =====
 const canvas = document.getElementById('galaxy-canvas');
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -1222,7 +1389,7 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// Renderizar KaTeX al final
+// Render KaTeX
 document.addEventListener("DOMContentLoaded", function() {
   if (typeof renderMathInElement === 'function') {
     renderMathInElement(document.body, {
@@ -1239,143 +1406,107 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <script>
-
-// ═══════════════════════════════════════
-// GLOSARIO TIE
-// ═══════════════════════════════════════
+// ===== GLOSSARY =====
 const GLOSARIO = [
   {
     id:'a0', symbol:'a₀', color:'#FFD700',
-    term:'Milgrom Acceleration',
-    tagline:'The constant connecting gravity and cosmos',
+    term:'Transition acceleration',
+    tagline:'The constant connecting galaxies and cosmos',
     cat:'fundamental',
-    def:`<strong>a₀</strong> is the critical acceleration marking the boundary between the Newtonian regime and the TIE regime. Above a₀, gravity behaves according to Newton. Below it, infrastructure physics emerges.<br><br>In TIE it is not a free parameter: it <strong>derives directly from H₀</strong>, connecting the local scale of gravity with the global expansion of the universe.`,
+    def:`<strong>a₀</strong> is the critical acceleration marking the boundary between Newtonian and TIE regimes. Below a₀, infrastructure physics emerges.<br><br>In TIE it is not a free parameter: it is <strong>derived directly from H₀ and 2π</strong>: a₀ = cH₀/2π.`,
     formula:'a_0 = \\frac{cH_0}{2\\pi} = 1.082 \\times 10^{-10}\\,\\text{m/s}^2',
-    origin:`<em>1983</em> — Mordehai Milgrom proposes MOND and empirically finds a₀ ≈ cH₀/6. Does not explain the factor.<br><br><em>2024 · TIE</em> — Rubén Lecona shows the correct factor is <em>2π</em>. The 2π emerges from treating cosmic expansion as rotation: ω₀ = H₀ = 2π/T_universe. With this factor, a₀ = cH₀/2π matches observations to 0.3%.`,
+    origin:`<em>1983</em> — Milgrom proposes MOND and empirically finds a₀ ≈ 1.2×10⁻¹⁰ m/s².<br><br><em>TIE</em> — the 2π factor emerges from treating cosmic expansion as a cycle: H₀ = 2π/T_universe.`,
     viz:'a0',
-    links:[{txt:'a₀ Calculator',href:'constante.html'},{txt:'2π Factor',href:'2pi.html'}]
+    links:[{txt:'a₀ calculator',href:'constante.html'},{txt:'2π factor',href:'2pi.html'}]
+  },
+  {
+    id:'v0', symbol:'v₀', color:'#5BC8F5',
+    term:'Fundamental velocity',
+    tagline:'The T¹ velocity of the infrastructure',
+    cat:'fundamental',
+    def:`<strong>v₀ = c/2π</strong> is the fundamental velocity of the infrastructure. It is the asymptotic rotation velocity of any isolated galaxy: v_flat = (GM a₀)^(1/4).<br><br>Ontological hierarchy: T⁰ (∇φ₀) → T¹ (v₀) → T² (a₀).`,
+    formula:'v_0 = \\frac{c}{2\\pi} = 47.715\\,\\text{km/s}',
+    origin:`<em>TIE</em> — emerges from the postulate of complete cycles: light speed c, when expressed per cycle, gives v₀.`,
+    viz:'vflat',
+    links:[{txt:'Rotation curves',href:'curvas.html'}]
   },
   {
     id:'phi', symbol:'φ', color:'#00f5c8',
-    term:'Spatial Infrastructure Field',
-    tagline:'El tejido dinámico del espacio-tiempo',
+    term:'Synchronization field',
+    tagline:'The dynamic fabric of space',
     cat:'fundamental',
-    def:`<strong>φ</strong> is the scalar field describing the dynamic state of space itself. Not an additional force field — it is the quantifiable geometry of the vacuum.<br><br>In Newtonian gravity space is passive. In TIE, space has a <strong>response capacity</strong> that manifests as field φ, with a modified potential relative to GR in low-acceleration regimes.`,
-    formula:'\\phi(r) = -\\frac{GM}{r}\\left(1 + \\frac{a_0 r}{2c^2}\\right)',
-    origin:`<em>Einstein 1915</em> — spacetime is geometric but vacuum has no internal degrees of freedom.<br><br><em>TIE</em> — Lecona introduces φ as infrastructure field. The correction <em>a₀r/2c²</em> is small in the solar system but dominant in galaxies, explaining flat rotation curves without dark matter.`,
+    def:`<strong>φ</strong> is the scalar field describing the synchronization state of the infrastructure. At quantum scale it is ψ (wavefunction); at classical scale it generates gravitational perturbations h_ij.`,
+    formula:'\\phi(x,t) = \\begin{cases} \\psi(x) & \\text{quantum} \\\\ h_{ij}(x,t) & \\text{classical} \\end{cases}',
+    origin:`<em>TIE Ch. 7</em> — quantum-gravitational unification through the same field φ.`,
     viz:'phi',
-    links:[{txt:'φ Field 3D',href:'campo-phi.html'},{txt:'GPS Correction',href:'gps.html'}]
+    links:[{txt:'Field φ 3D',href:'campo-phi.html'}]
   },
   {
     id:'rh', symbol:'rₕ', color:'#FF8C42',
-    term:'TIE Golden Horizon',
-    tagline:'The horizon where the golden ratio emerges',
+    term:'Golden TIE Horizon',
+    tagline:'The horizon where φ (golden) emerges',
     cat:'agujeros',
-    def:`<strong>rₕ</strong> is the radius where TIE acceleration equals a₀. Solving the saturation condition yields the quadratic u²+u−1=0, whose positive root is exactly <strong>u = 1/φ = 0.6180</strong>, where φ = (1+√5)/2 is the golden ratio.<br><br>For M87* (6.5×10⁹ M☉): rₕ = <strong>5.92×10⁶ × rₛ</strong>. Observable consequences for EHT and ngEHT.`,
+    def:`<strong>rₕ</strong> is the radius where a_TIE(rₕ) = a₀. Solving u²+u−1=0 (u = a_N/a₀) yields the golden number φ = (1+√5)/2.<br><br>rₕ = √(φ·GM/a₀) ≈ 1.272√(GM/a₀). Grows as √M, not linearly.`,
     formula:'r_h = \\sqrt{\\dfrac{\\varphi \\cdot GM}{a_0}} \\approx 1.272\\,\\sqrt{\\dfrac{GM}{a_0}}',
-    origin:`<em>Schwarzschild 1916</em> — rₛ = 2GM/c² defines the classical event horizon.<br><br><em>TIE (Ch. X)</em> — Setting a_TIE(rₕ) = a₀ with the canonical equation √(aₙ(aₙ+a₀)) yields u²+u−1=0. The positive root is u = 1/φ — the emergent golden ratio. Not postulated. Mc = φ·c⁴/(4G·a₀) ≈ 2.275×10²³ M☉.`,
+    origin:`<em>TIE Ch. 10</em> — the quadratic equation emerges from the saturation condition of the infrastructure.`,
     viz:'rh',
-    links:[{txt:'rₕ Calculator',href:'agujeros.html'},{txt:'Lensing 3D',href:'lensing.html'}]
-  },
-  {
-    id:'t2', symbol:'T²', color:'#ff6eb4',
-    term:'Artificial Time T²',
-    tagline:'The scalpel that corrects artificial double derivation',
-    cat:'fundamental',
-    def:`<strong>Artificial T²</strong> is the squared-time factor that appears in physical equations as a measurement artifact, not real physics.<br><br>The TIE scalpel: identify which T² are <strong>real</strong> (genuine double derivation) and which are <strong>artificial</strong> (coordinate or unit artifacts).`,
-    formula:'a = \\frac{\\Delta v}{\\Delta t} \\implies [\\text{m/s}^2] = \\frac{[\\text{m/s}]}{[\\text{s}]} \\quad \\leftarrow T^2\\text{ artificial}',
-    origin:`<em>Core TIE concept</em> — Lecona observes that the fine-tuning problem of Λ (10¹²⁰ orders of error) exists because QFT computes vacuum energy with an artificial T².<br><br>When removed, Λ_TIE = 2H₀²/c² emerges naturally. <em>The fine-tuning problem disappears</em>.`,
-    viz:'t2',
-    links:[{txt:'Full theory',href:'teoria.html'},{txt:'Λ constant',href:'constante.html'}]
+    links:[{txt:'rₕ calculator',href:'agujeros.html'}]
   },
   {
     id:'lambda', symbol:'Λ', color:'#5BC8F5',
-    term:'TIE Cosmological Constant',
+    term:'TIE cosmological constant',
     tagline:'No dark energy, no fine-tuning',
     cat:'cosmologia',
-    def:`<strong>Λ_TIE</strong> is the cosmological constant derived in TIE solely from H₀. No dark energy, no fine-tuning required.<br><br>The classic problem: QFT predicts a vacuum density 10¹²⁰ times larger than observed. TIE resolves this by identifying an <strong>artificial T²</strong> in the QFT calculation.`,
+    def:`<strong>Λ_TIE = 2H₀²/c²</strong> is the background curvature of the infrastructure. Requires no dark energy or fine-tuning. 5% error vs. Planck 2018.`,
     formula:'\\Lambda_{\\text{TIE}} = \\frac{2H_0^2}{c^2} = 1.145 \\times 10^{-52}\\,\\text{m}^{-2}',
-    origin:`<em>Einstein 1917</em> — introduces Λ ad hoc for a static universe.<br><em>Hubble 1929</em> — Λ reemerges as 'dark energy'.<br><br><em>TIE</em> — Λ is not a free constant or mysterious energy. It is the residual curvature of expanding space: <em>2H₀²/c²</em>. Planck 2018: Λ_obs = 1.0904×10⁻⁵² m⁻². TIE error: 5.0% (H₀=70 km/s/Mpc) — vs 10¹²⁰ orders from QFT.`,
+    origin:`<em>TIE Ch. 11</em> — derived from a₀ and S²×S¹ topology.`,
     viz:'lambda',
-    links:[{txt:'Λ Calculator',href:'constante.html'},{txt:'Predictions',href:'predicciones.html'}]
+    links:[{txt:'Λ calculator',href:'constante.html'}]
   },
   {
-    id:'vflat', symbol:'v∞', color:'#aaff00',
-    term:'Flat Rotation Velocity',
-    tagline:'The perfect prediction without dark matter',
+    id:'rtrans', symbol:'rₜ', color:'#aaff00',
+    term:'Transition radius',
+    tagline:'Where curves become flat',
     cat:'galaxias',
-    def:`<strong>v_flat</strong> is the asymptotic rotation velocity of stars in the outer disk of a galaxy. By Newton it should fall as 1/√r. Observations show it remains <strong>constant</strong> — the anomaly that led to postulating dark matter.<br><br>TIE predicts v_flat exactly from visible baryonic mass, with no free parameters and no dark matter.`,
-    formula:'v_{\\text{flat}} = (G M_{\\text{bar}} a_0)^{1/4}',
-    origin:`<em>1970s — Vera Rubin</em> discovers flat rotation curves. The community postulates dark matter halos.<br><br><em>1983 — Milgrom</em> proposes v_flat = (GMa₀)^(1/4) empirically.<br><br><em>TIE</em> — the same formula emerges <em>naturally</em> from field φ. Tested on <em>175 SPARC galaxies</em> with σ = 0.07 dex.`,
+    def:`<strong>r_trans = √(GM/a₀)</strong> is the radius where Newtonian acceleration equals a₀. Beyond this, gravity enters the TIE regime and rotation curves become flat.`,
+    formula:'r_{\\text{trans}} = \\sqrt{\\frac{GM}{a_0}}',
+    origin:`<em>From Step 3b of the Scalpel</em> — natural scale generated by translating kinematic a to phase.`,
     viz:'vflat',
-    links:[{txt:'Rotation curves',href:'curvas.html'},{txt:'Base SPARC',href:'sparc.html'}]
+    links:[{txt:'Rotation curves',href:'curvas.html'}]
   },
   {
-    id:'mc', symbol:'Mc', color:'#FF4455',
-    term:'TIE Critical Mass',
-    tagline:'The threshold where TIE exceeds GR',
-    cat:'agujeros',
-    def:`<strong>Mc</strong> is the mass at which rₕ = rₛ exactly. Above Mc the TIE horizon dominates; below it GR dominates.<br><br><strong>Mc ≈ 1.06×10²³ M☉</strong> — equivalent to ~100 times the Virgo cluster mass.`,
-    formula:'M_c = \\frac{c^2}{G}\\sqrt{\\frac{c^2}{a_0 G}} \\approx 1.06\\times 10^{23}\\,M_\\odot',
-    origin:`<em>TIE derivation</em> — Obtained by setting rₕ = rₛ and solving for M. Mc depends only on c, G and H₀ — <em>zero adjustable parameters</em>.`,
-    viz:'mc',
-    links:[{txt:'Black holes',href:'agujeros.html'}]
-  },
-  {
-    id:'flisa', symbol:'f♦', color:'#b388ff',
-    term:'TIE LISA Frequency',
-    tagline:'The a₀ signature in gravitational waves',
-    cat:'predicciones',
-    def:`<strong>f_LISA</strong> is the frequency at which TIE predicts gravitational waves carry the modulation of artificial T². It coincides with LISA's peak sensitivity band.<br><br>Not a coincidence: <strong>LISA will detect exactly where TIE predicts its signature</strong>.`,
-    formula:'f_{\\text{LISA}} = \\frac{a_0}{\\pi c} = \\frac{H_0}{2\\pi^2} \\approx 2.4\\,\\text{mHz}',
-    origin:`<em>TIE</em> — Field φ has a natural oscillation frequency set by a₀ and c.<br><br><em>LISA (2035)</em> — Peak sensitivity at ~2–3 mHz. <em>Exactly where TIE predicts its signature</em>. If LISA detects the T² modulation, TIE would be confirmed.`,
-    viz:'flisa',
-    links:[{txt:'φ Field / GW',href:'campo-phi.html'},{txt:'Falsifiability',href:'falsabilidad.html'}]
-  },
-  {
-    id:'infra', symbol:'IE', color:'#FFD700',
-    term:'Spatial Infrastructure',
-    tagline:'Space is not empty — it has structure',
-    cat:'fundamental',
-    def:`<strong>Spatial Infrastructure</strong> is the property of spacetime to have an internal dynamic state, quantified by field φ. Not ether, not dark energy.<br><br>It is the generalization of Einstein's geometry: space does not only curve — <strong>it stores and transmits gravitational information</strong> at scales where a < a₀.`,
-    formula:'S_{\\text{TIE}} = \\int d^4x\\,\\sqrt{-g}\\left[\\frac{R}{16\\pi G} + \\mathcal{L}_\\phi + \\mathcal{L}_m\\right]',
-    origin:`<em>Einstein 1915</em> — geometric and dynamic spacetime, but with no internal vacuum degrees of freedom.<br><br><em>TIE</em> — the quantum vacuum has fluctuations that in the macroscopic limit manifest as field φ. The name <em>TIE</em> comes directly: <em>T</em>heory of <em>I</em>nfrastructure <em>E</em>spacial (Spatial Infrastructure).`,
-    viz:'infra',
-    links:[{txt:'Theory',href:'teoria.html'}]
-  },
-  {
-    id:'twopi', symbol:'2π', color:'#aaff00',
-    term:'Universal 2π Factor',
-    tagline:'Why the universe "rotates" at 2π/T',
-    cat:'fundamental',
-    def:`The <strong>2π factor</strong> connects the Hubble frequency with the angular frequency of the universe. It emerges from treating cosmic expansion as a <strong>periodic</strong> process in 4D.<br><br>Its presence in a₀ = cH₀/<strong>2π</strong> makes TIE a derived theory, not a parametric one.`,
-    formula:'\\omega_0 = H_0 = \\frac{2\\pi}{T_{\\text{universo}}} \\implies a_0 = \\frac{cH_0}{2\\pi}',
-    origin:`<em>Milgrom 1983</em> — empirically fits a₀ ≈ 1.2×10⁻¹⁰ m/s², notes it is of order cH₀ but does not derive the exact factor.<br><br><em>TIE</em> — modeling the expanding universe as a rotating 4D system, the angular frequency is ω₀ = 2π/T_universe = H₀. The 2π is the signature of periodicity, not a fit.`,
-    viz:'twopi',
-    links:[{txt:'2π Calculator',href:'2pi.html'},{txt:'Universal Clock',href:'reloj-universal.html'}]
-  },
-  {
-    id:'sparc', symbol:'σ', color:'#5BC8F5',
-    term:'SPARC Test',
-    tagline:'175 galaxies, 0 free parameters',
-    cat:'predicciones',
-    def:`<strong>SPARC</strong> is the reference database for galactic rotation curves. 175 galaxies with stellar masses determined by independent infrared photometry.<br><br>TIE predicts v_flat for each galaxy using <em>only the visible baryonic mass</em>. Scatter is <strong>σ = 0.07 dex</strong> — the observational error floor.`,
-    formula:'\\log v_f = \\frac{1}{4}\\log(G M_{\\text{bar}} a_0) \\quad \\sigma = 0.07\\,\\text{dex}',
-    origin:`<em>2016 — McGaugh, Lelli, Schombert</em> publish the Baryonic Tully-Fisher Relation using SPARC.<br><br><em>TIE</em> — the same relation emerges from v_flat = (GM_bar·a₀)^(1/4). The 0.07 dex scatter is consistent with measurement errors — <em>no intrinsic scatter</em>.`,
-    viz:'sparc',
-    links:[{txt:'SPARC Explorer',href:'sparc.html'},{txt:'Dark Matter',href:'materia-oscura.html'}]
-  },
-  {
-    id:'t0', symbol:'T₀', color:'#FF8C42',
-    term:'Universal Period T₀',
-    tagline:'The clock ticking since the Big Bang',
+    id:'r0', symbol:'r₀', color:'#b388ff',
+    term:'Detachment scale',
+    tagline:'The limit of bound structures',
     cat:'cosmologia',
-    def:`<strong>T₀</strong> is the fundamental period of the universe in TIE. Does not imply a cyclic universe — it is the natural time scale defining a₀ and f_LISA.<br><br><strong>T₀ ≈ 87.9 Gyr</strong> — approximately 6.4 times the current age of the universe.`,
-    formula:'T_0 = \\frac{2\\pi}{H_0} \\approx 87.9\\,\\text{Gyr}',
-    origin:`<em>TIE</em> — writing H₀ = 2π/T₀, Hubble expansion takes the form of angular frequency. T₀ is the associated period.<br><br>Significance: <em>a single parameter (H₀) generates all phenomenology</em>. Acceleration a₀ = c/T₀. LISA frequency f_LISA = H₀/2π².`,
-    viz:'t0',
-    links:[{txt:'Universal Clock',href:'reloj-universal.html'},{txt:'2π Factor',href:'2pi.html'}]
+    def:`<strong>r₀ = (GM/Λ_TIE c²)^(1/3)</strong> is the scale where gravitational attraction equals cosmic expansion. It is the maximum radius of a bound structure.`,
+    formula:'r_0 = \\left(\\frac{GM}{\\Lambda_{\\text{TIE}} c^2}\\right)^{1/3}',
+    origin:`<em>From Step 3b of the Scalpel</em> — second natural scale.`,
+    viz:'lambda',
+    links:[{txt:'Cosmology',href:'cosmologia.html'}]
   },
+  {
+    id:'omega_phi', symbol:'ω_φ', color:'#5BC8F5',
+    term:'Field φ eigenfrequency',
+    tagline:'The heartbeat of the infrastructure',
+    cat:'fundamental',
+    def:`<strong>ω_φ = √2 H₀</strong> is the natural frequency of the synchronization field φ. It can also be expressed as ω_φ = c√Λ_TIE.<br><br>Its value is ω_φ ≈ 3.21×10⁻¹⁸ rad/s, equivalent to a period of ~4.5 times the age of the universe.`,
+    formula:'\\omega_\\phi = \\sqrt{2} H_0 = c\\sqrt{\\Lambda_{\\text{TIE}}} \\approx 3.21\\times10^{-18}\\,\\text{rad/s}',
+    origin:`<em>TIE Ch. 12</em> — emerges from the Lagrangian as the effective mass of the field.`,
+    viz:'lambda',
+    links:[{txt:'TIE Lagrangian',href:'lagrangiano.html'}]
+  },
+  {
+    id:'prefactor', symbol:'𝒜', color:'#9b59b6',
+    term:'Dimensional prefactor',
+    tagline:'The energy scale of the infrastructure',
+    cat:'fundamental',
+    def:`<strong>𝒜 = ħH₀²/c³</strong> is the dimensional prefactor giving correct units to the TIE Lagrangian. It is the only combination of ħ, H₀ and c with units of kg/m.`,
+    formula:'\\mathcal{A} = \\frac{\\hbar H_0^2}{c^3} \\approx 2.01\\times10^{-95}\\,\\text{kg/m}',
+    origin:`<em>TIE Ch. 12</em> — necessary because φ is dimensionless.`,
+    viz:'lambda',
+    links:[{txt:'TIE Lagrangian',href:'lagrangiano.html'}]
+  }
 ];
 
 const CATS_GLOS = {
@@ -1415,7 +1546,7 @@ function glosRenderGrid(){
   });
   grid.innerHTML = '';
   if(items.length===0){
-    grid.innerHTML='<div class="glos-no-results">— SIN RESULTADOS —</div>';
+    grid.innerHTML='<div class="glos-no-results">— NO RESULTS —</div>';
     return;
   }
   items.forEach(g=>{
@@ -1435,9 +1566,9 @@ function glosRenderGrid(){
       </div>
       <div class="glos-body">
         <div class="glos-tabs">
-          <button class="glos-tab active" onclick="glosTab(event,'${g.id}','def')">DEFINICIÓN</button>
-          <button class="glos-tab" onclick="glosTab(event,'${g.id}','origen')">ORIGEN</button>
-          <button class="glos-tab" onclick="glosTab(event,'${g.id}','viz')">VISUALIZACIÓN</button>
+          <button class="glos-tab active" onclick="glosTab(event,'${g.id}','def')">DEFINITION</button>
+          <button class="glos-tab" onclick="glosTab(event,'${g.id}','origen')">ORIGIN</button>
+          <button class="glos-tab" onclick="glosTab(event,'${g.id}','viz')">VISUALIZATION</button>
         </div>
         <div id="glos-pane-def-${g.id}" class="glos-pane active">
           <div class="glos-def">${g.def}</div>
@@ -1491,8 +1622,8 @@ function glosDrawViz(id){
   const drawAxes=()=>{ ctx.strokeStyle=dim;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(40,H-30);ctx.lineTo(W-20,H-30);ctx.stroke();ctx.beginPath();ctx.moveTo(40,H-30);ctx.lineTo(40,15);ctx.stroke(); };
   const lbl=document.getElementById('glos-viz-lbl-'+id);
 
-  if(id==='a0'){
-    if(lbl) lbl.textContent='a₀ como frontera de regímenes';
+  if(id==='a0'||id==='rtrans'){
+    if(lbl) lbl.textContent='a₀ as regime boundary';
     drawAxes();
     ctx.strokeStyle='#5BC8F5';ctx.lineWidth=2;ctx.beginPath();
     for(let x=1;x<W-55;x++){const r=(x/(W-60))*5+0.1;const v=1/Math.sqrt(r);const py=H-30-(v*0.55*(H-50));x===1?ctx.moveTo(x+40,Math.max(15,py)):ctx.lineTo(x+40,Math.max(15,py));}
@@ -1517,7 +1648,7 @@ function glosDrawViz(id){
     ctx.fillStyle='#5BC8F5';ctx.font='9px monospace';ctx.fillText('-GM/r',W-60,H-52);
     ctx.fillStyle=gold;ctx.fillText('φ_TIE',W-55,H-68);
   }
-  else if(id==='rh'||id==='mc'){
+  else if(id==='rh'){
     if(lbl) lbl.textContent='rₕ (TIE) vs rₛ (GR)';
     drawAxes();
     ctx.strokeStyle='#5BC8F5';ctx.lineWidth=2;ctx.beginPath();
@@ -1532,8 +1663,8 @@ function glosDrawViz(id){
     ctx.fillStyle='#5BC8F5';ctx.fillText('rₛ',W-30,35);
     ctx.fillStyle=gold;ctx.fillText('rₕ',W-30,58);
   }
-  else if(id==='vflat'||id==='sparc'){
-    if(lbl) lbl.textContent='BTFR: 175 galaxias SPARC';
+  else if(id==='vflat'||id==='v0'){
+    if(lbl) lbl.textContent='BTFR: 175 SPARC galaxies';
     drawAxes();
     let r=12345;
     for(let i=0;i<60;i++){r=(r*22695477+1)&0xffffffff;const logM=8.5+(r%100)/100*4;const logV=0.25*(logM-10)+2.1+((r>>8)%20-10)*0.025;const px=40+((logM-8.5)/4)*(W-60);const py=H-30-((logV-1.5)/1.2)*(H-50);ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fillStyle='rgba(91,200,245,0.65)';ctx.fill();}
@@ -1542,8 +1673,8 @@ function glosDrawViz(id){
     ctx.stroke();
     ctx.fillStyle=gold;ctx.font='9px monospace';ctx.fillText('v∝M^(1/4) · σ=0.07dex',40,22);
   }
-  else if(id==='lambda'){
-    if(lbl) lbl.textContent='Error: QFT vs TIE vs observation';
+  else if(id==='lambda'||id==='r0'||id==='omega_phi'||id==='prefactor'){
+    if(lbl) lbl.textContent='QFT vs TIE vs observation error';
     const bars=[{lbl:'QFT',val:120,color:'#FF4455'},{lbl:'TIE',val:5.0,color:gold},{lbl:'Obs.',val:0.5,color:'#44FF88'}];
     const bw=55,gap=35,startX=45;
     bars.forEach((b,i)=>{
@@ -1555,63 +1686,6 @@ function glosDrawViz(id){
       ctx.fillStyle='rgba(255,255,255,0.5)';ctx.fillText(b.lbl,x+bw/2-12,H-15);
     });
   }
-  else if(id==='t2'){
-    if(lbl) lbl.textContent='T² real vs T² artificial';
-    [0.28,0.72].forEach((fx,i)=>{
-      const x=W*fx,r=Math.min(W*0.18,H*0.32);
-      ctx.strokeStyle=i===0?'#44FF88':'#FF4455';ctx.lineWidth=2;
-      ctx.beginPath();ctx.arc(x,H/2,r,0,Math.PI*2);ctx.stroke();
-      const a=-Math.PI/3;ctx.beginPath();ctx.moveTo(x,H/2);ctx.lineTo(x+r*0.7*Math.sin(a),H/2-r*0.7*Math.cos(a));ctx.stroke();
-      ctx.fillStyle=i===0?'#44FF88':'#FF4455';ctx.font='9px monospace';
-      ctx.fillText(i===0?'REAL':'ARTIFICIAL',x-r+2,H/2+r+14);
-      ctx.font='18px monospace';ctx.fillText(i===0?'✓':'✗',x-6,H/2+7);
-    });
-  }
-  else if(id==='flisa'){
-    if(lbl) lbl.textContent='Banda LISA y predicción TIE ~2.4mHz';
-    drawAxes();
-    const xOf=f=>40+((Math.log10(f)-Math.log10(0.1))/(Math.log10(100)-Math.log10(0.1)))*(W-60);
-    ctx.fillStyle='rgba(91,200,245,0.05)';ctx.fillRect(xOf(0.1),15,xOf(100)-xOf(0.1),H-45);
-    ctx.strokeStyle='rgba(91,200,245,0.4)';ctx.lineWidth=1.5;ctx.beginPath();
-    for(let i=0;i<=100;i++){const f=Math.pow(10,Math.log10(0.1)+(Math.log10(100)-Math.log10(0.1))*i/100);const sens=0.5*(Math.pow(f/3,-4)+1+Math.pow(f/7,4));const x=xOf(f),y=H-30-(1-Math.min(1,Math.log10(sens+1)*0.4))*(H-50);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
-    ctx.stroke();
-    const xf=xOf(2.4);ctx.strokeStyle=gold;ctx.lineWidth=2;ctx.setLineDash([5,3]);
-    ctx.beginPath();ctx.moveTo(xf,15);ctx.lineTo(xf,H-30);ctx.stroke();ctx.setLineDash([]);
-    ctx.fillStyle=gold;ctx.font='10px monospace';ctx.fillText('2.4mHz',xf-20,28);
-    ctx.fillStyle='rgba(91,200,245,0.7)';ctx.font='9px monospace';ctx.fillText('LISA band',W/2-25,H-18);
-  }
-  else if(id==='infra'){
-    if(lbl) lbl.textContent='Campo φ deformando el espacio';
-    const cx=W*0.55,cy=H*0.5;
-    ctx.strokeStyle='rgba(255,215,0,0.12)';ctx.lineWidth=0.8;
-    for(let i=0;i<=7;i++){ctx.beginPath();for(let j=0;j<=9;j++){const x0=25+j*(W-45)/9,y0=8+i*(H-22)/7;const dx=x0-cx,dy=y0-cy,r=Math.sqrt(dx*dx+dy*dy)||1;const def=18/(r*0.1+1);const x=x0+dx/r*def*0.35,y=y0+dy/r*def*0.35;j===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();}
-    for(let j=0;j<=9;j++){ctx.beginPath();for(let i=0;i<=7;i++){const x0=25+j*(W-45)/9,y0=8+i*(H-22)/7;const dx=x0-cx,dy=y0-cy,r=Math.sqrt(dx*dx+dy*dy)||1;const def=18/(r*0.1+1);const x=x0+dx/r*def*0.35,y=y0+dy/r*def*0.35;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();}
-    ctx.beginPath();ctx.arc(cx,cy,7,0,Math.PI*2);ctx.fillStyle=gold;ctx.fill();
-  }
-  else if(id==='twopi'){
-    if(lbl) lbl.textContent='ω₀ = H₀ = 2π/T_universo';
-    const cx=W*0.35,cy=H*0.5,r=Math.min(cx-20,cy-15)*0.85;
-    ctx.strokeStyle='rgba(170,255,0,0.25)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();
-    ctx.strokeStyle=gold;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.PI*1.97);ctx.stroke();
-    ctx.fillStyle=gold;ctx.font='11px monospace';ctx.fillText('2π',cx+r*0.55,cy-r*0.55);
-    ctx.fillStyle='rgba(255,255,255,0.7)';ctx.font='11px monospace';
-    ctx.fillText('ω₀ = H₀',W*0.62,cy-18);ctx.fillText('= 2π/T₀',W*0.62,cy+2);
-    ctx.fillStyle='rgba(170,255,0,0.8)';ctx.fillText('⟹ a₀=cH₀/2π',W*0.59,cy+26);
-  }
-  else if(id==='t0'){
-    if(lbl) lbl.textContent='T₀ en la línea de tiempo cósmica';
-    const barY=H*0.42,barH2=20,tAge=13.8,tTotal=87.9;
-    const xAge=30+((tAge/tTotal))*(W-50),xT0=W-20;
-    ctx.fillStyle='rgba(255,140,66,0.15)';ctx.fillRect(30,barY,xAge-30,barH2);
-    ctx.fillStyle='rgba(255,215,0,0.06)';ctx.fillRect(xAge,barY,xT0-xAge,barH2);
-    ctx.strokeStyle='rgba(255,140,66,0.5)';ctx.lineWidth=1.5;ctx.strokeRect(30,barY,xAge-30,barH2);
-    ctx.strokeStyle='rgba(255,215,0,0.25)';ctx.strokeRect(xAge,barY,xT0-xAge,barH2);
-    ctx.strokeStyle=gold;ctx.lineWidth=2;ctx.setLineDash([4,3]);
-    ctx.beginPath();ctx.moveTo(xAge,barY-14);ctx.lineTo(xAge,barY+barH2+14);ctx.stroke();ctx.setLineDash([]);
-    ctx.font='9px monospace';ctx.fillStyle='rgba(255,140,66,0.9)';ctx.fillText('Hoy 13.8Gyr',xAge-36,barY-17);
-    ctx.fillStyle='rgba(255,215,0,0.6)';ctx.fillText('T₀=87.9Gyr →',xAge+6,barY+barH2+20);
-    ctx.fillStyle='rgba(255,255,255,0.3)';ctx.fillText('Big Bang',32,barY+barH2+20);
-  }
 }
 
 function initGlosario(){
@@ -1619,9 +1693,19 @@ function initGlosario(){
   glosRenderGrid();
 }
 
+// Initialize glossary on load
+document.addEventListener('DOMContentLoaded', function() {
+  initGlosario();
+});
 </script>
+
+<!-- AXON Widget (preserved) -->
 <script src="axon-widget.js"></script>
+
+<!-- Re-initialize glossary after KaTeX -->
+<script>
+setTimeout(initGlosario, 500);
+</script>
+
 </body>
 </html>
-
-

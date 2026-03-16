@@ -17,26 +17,26 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 
 nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
 .nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
-/* ESTILO PARA EL BOTÓN ORCID */
-         .orcid-link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            color: #A6CE39;
-            text-decoration: none;
-            border: 1px solid rgba(166, 206, 57, 0.3);
-            padding: 4px 12px;
-            border-radius: 2px;
-            transition: 0.3s;
-            letter-spacing: 1px;
-        }
-        .orcid-link:hover {
-            background: rgba(166, 206, 57, 0.1);
-            box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);
-            color: #fff;
-        }
+/* ORCID BUTTON STYLE */
+.orcid-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: #A6CE39;
+    text-decoration: none;
+    border: 1px solid rgba(166, 206, 57, 0.3);
+    padding: 4px 12px;
+    border-radius: 2px;
+    transition: 0.3s;
+    letter-spacing: 1px;
+}
+.orcid-link:hover {
+    background: rgba(166, 206, 57, 0.1);
+    box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);
+    color: #fff;
+}
   
 .nav-center{display:flex;gap:.5rem;}
 .lang-link{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;transition:all .2s;}
@@ -46,12 +46,51 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;transition:color .2s;}
 .nav-back:hover{color:var(--gold);}
 
+/* ECOSYSTEM LINKS */
+.ecosistema-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 2rem 0 1rem;
+  flex-wrap: wrap;
+}
+
+.ecosistema-link {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--dim);
+  text-decoration: none;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid rgba(255,215,0,0.2);
+  border-radius: 40px;
+  transition: 0.3s;
+  letter-spacing: 2px;
+}
+
+.ecosistema-link:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 15px rgba(255,215,0,0.2);
+}
+
+.ecosistema-link.lab {
+  background: rgba(91,200,245,0.1);
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.ecosistema-link.lab:hover {
+  background: var(--blue);
+  color: #000;
+  border-color: var(--blue);
+}
+
 .page{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:7rem 2rem 4rem;}
 .page-tag{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:.75rem;}
 .page-title{font-size:clamp(2rem,5vw,3.2rem);font-weight:900;letter-spacing:-2px;margin-bottom:.5rem;}
 .page-title span{color:var(--gold);}
 .page-sub{font-family:var(--mono);font-size:.8rem;color:var(--dim);max-width:660px;line-height:1.7;margin-bottom:2rem;}
 
+/* TRAFFIC LIGHT */
 .semaforo{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
 .sem-card{border-radius:16px;padding:1.5rem;text-align:center;backdrop-filter:blur(8px);}
 .sem-card.verde{background:rgba(68,255,136,.06);border:2px solid rgba(68,255,136,.35);}
@@ -66,14 +105,16 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .sem-lbl.amarillo{color:var(--gold);}
 .sem-lbl.rojo{color:var(--red);}
 
+/* PROGRESS BAR */
 .progress-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.9rem 1.25rem;margin-bottom:2rem;backdrop-filter:blur(8px);}
 .progress-track{height:10px;background:rgba(255,255,255,.06);border-radius:5px;overflow:hidden;margin-bottom:.5rem;display:flex;}
-.progress-green{background:var(--green);border-radius:5px 0 0 5px;}
-.progress-yellow{background:var(--gold);}
-.progress-red{background:var(--red);border-radius:0 5px 5px 0;}
+.progress-green{background:var(--green);border-radius:5px 0 0 5px;transition:width 1s ease;}
+.progress-yellow{background:var(--gold);transition:width 1s ease;}
+.progress-red{background:var(--red);border-radius:0 5px 5px 0;transition:width 1s ease;}
 .progress-legend{display:flex;gap:1.5rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);}
 .pl-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:.3rem;vertical-align:middle;}
 
+/* PREDICTIONS LIST */
 .pred-list{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.5rem;}
 .pred-item{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.9rem 1.1rem;display:flex;align-items:center;gap:1rem;backdrop-filter:blur(8px);transition:border-color .2s;}
 .pred-item:hover{border-color:rgba(255,215,0,.2);}
@@ -92,10 +133,12 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .pred-badge.yellow{background:rgba(255,215,0,.1);color:var(--gold);border:1px solid rgba(255,215,0,.25);}
 .pred-badge.red{background:rgba(255,68,85,.1);color:var(--red);border:1px solid rgba(255,68,85,.25);}
 
+/* SECTION HEADERS */
 .section-hdr{font-family:var(--mono);font-size:.65rem;letter-spacing:3px;text-transform:uppercase;padding:.4rem .8rem;border-radius:6px;margin-bottom:.6rem;display:inline-block;}
 .section-hdr.verde{background:rgba(68,255,136,.08);color:var(--green);border:1px solid rgba(68,255,136,.2);}
 .section-hdr.amarillo{background:rgba(255,215,0,.08);color:var(--gold);border:1px solid rgba(255,215,0,.2);}
 
+/* NEWS */
 .news-box{background:rgba(68,255,136,.04);border:1px solid rgba(68,255,136,.2);border-radius:14px;padding:1.1rem 1.35rem;margin-bottom:1.5rem;}
 .news-title{font-family:var(--mono);font-size:.62rem;color:var(--green);letter-spacing:3px;text-transform:uppercase;margin-bottom:.8rem;}
 .news-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.63rem;}
@@ -105,6 +148,7 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .tag-2028{display:inline-block;background:rgba(255,215,0,.08);color:var(--gold);border:1px solid rgba(255,215,0,.2);border-radius:4px;font-size:.55rem;padding:.1rem .35rem;}
 .tag-2035{display:inline-block;background:rgba(91,200,245,.08);color:var(--blue);border:1px solid rgba(91,200,245,.2);border-radius:4px;font-size:.55rem;padding:.1rem .35rem;}
 
+/* FALSIFIABILITY BOX */
 .falsab-box{background:rgba(255,68,85,.04);border:2px solid rgba(255,68,85,.25);border-radius:16px;padding:1.35rem 1.5rem;margin-bottom:1.5rem;}
 .falsab-title{font-family:var(--mono);font-size:.65rem;color:var(--red);letter-spacing:3px;text-transform:uppercase;margin-bottom:.75rem;}
 .falsab-text{font-size:.83rem;line-height:1.8;margin-bottom:.9rem;}
@@ -112,6 +156,7 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .falsab-list li::before{content:'⚠ ';color:var(--red);}
 .falsab-list li strong{color:var(--text);}
 
+/* COW PANEL */
 .cow-panel{background:var(--bg2);border:1px solid rgba(91,200,245,.2);border-radius:14px;padding:1.1rem 1.35rem;margin-bottom:1.5rem;backdrop-filter:blur(8px);}
 .cow-title{font-family:var(--mono);font-size:.62rem;color:var(--blue);letter-spacing:3px;text-transform:uppercase;margin-bottom:.75rem;}
 .cow-eq{margin:.6rem 0;}
@@ -129,8 +174,8 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   <div style="display:flex; align-items:center; gap:20px;">
     <a href="index.html" class="nav-logo">TIE / R@LC</a>
     
-    <!-- INYECCIÓN DEL PASAPORTE ORCID -->
-    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
+    <!-- ORCID BADGE -->
+    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verify Author Identity on ORCID">
       <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
          <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
       </svg>
@@ -138,19 +183,28 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     </a>
   </div>
   
-  <!-- SELECTOR DE IDIOMA -->
+  <!-- LANGUAGE SELECTOR -->
   <div style="display:flex;gap:.4rem;">
-    <a href="predicciones.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">ES</a>
-    <a href="predictions-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">EN</a>
+    <a href="predicciones.html" class="lang-link inactive">ES</a>
+    <a href="predictions-en.html" class="lang-link active">EN</a>
   </div>
   
-  <a href="lab-en.html" class="nav-back">← LABORATORY</a>
+  <a href="labs.html" class="nav-back">← LABORATORY</a>
 </nav>
 
 <div class="page">
-  <div class="page-tag">Verification Status · No Faith · Only Numbers</div>
+  <div class="page-tag">Verification status · No faith · Just numbers</div>
   <h1 class="page-title">VERIFIABLE <span>PREDICTIONS</span></h1>
-  <p class="page-sub">TIE makes concrete numerical predictions with zero free parameters. Each one can be confirmed or refuted with data. If any fails, the theory is wrong. That is how science works.</p>
+  <p class="page-sub">TIE makes concrete numerical predictions with zero free parameters. Each can be confirmed or refuted with data. If any fails, the theory is wrong. That's how science works.</p>
+
+  <!-- ECOSYSTEM NAVIGATION BAR -->
+  <div class="ecosistema-links">
+    <a href="index.html" class="ecosistema-link">← MAIN PAGE</a>
+    <a href="labs.html" class="ecosistema-link lab">⚡ TIE LABORATORY</a>
+    <a href="https://github.com/ralc-tie-creator" target="_blank" class="ecosistema-link">🔧 GITHUB</a>
+    <a href="papers.html" class="ecosistema-link">📄 PAPERS</a>
+    <a href="theory-en.html" class="ecosistema-link">📘 THEORY</a>
+  </div>
 
   <!-- TRAFFIC LIGHT -->
   <div class="semaforo">
@@ -193,7 +247,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
           <span class="pred-tie">TIE: 1 − 1/2π = 84.1%</span>
           <span class="pred-obs">Observed: ~84%</span>
         </div>
-        <div class="pred-src">Planck 2018 · CMB + gravitational lensing · Cap. V</div>
+        <div class="pred-src">Planck 2018 · CMB + gravitational lensing · Ch. V</div>
       </div>
       <span class="pred-badge green">error &lt;1%</span>
     </div>
@@ -206,7 +260,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
           <span class="pred-tie">TIE: 1.145×10⁻⁵² m⁻²</span>
           <span class="pred-obs">Planck: 1.0904×10⁻⁵² m⁻²</span>
         </div>
-        <div class="pred-src">Derived from H₀ — no free parameters · Cap. XI</div>
+        <div class="pred-src">Derived from H₀ — no parameters · Ch. XI</div>
       </div>
       <span class="pred-badge green">error 5.0%</span>
     </div>
@@ -219,7 +273,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
           <span class="pred-tie">TIE: 45.7 μs/day</span>
           <span class="pred-obs">Observed: 45.9 μs/day</span>
         </div>
-        <div class="pred-src">GPS constellation 1978–present · regime a_N ≫ a₀ · Cap. VI</div>
+        <div class="pred-src">GPS constellation 1978–present · a_N ≫ a₀ regime · Ch. VI</div>
       </div>
       <span class="pred-badge green">error 0.4%</span>
     </div>
@@ -227,12 +281,12 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="pred-item confirmed">
       <div class="pred-icon">✅</div>
       <div class="pred-body">
-        <div class="pred-name">Mercury perihelion precession</div>
+        <div class="pred-name">Mercury's perihelion precession</div>
         <div class="pred-vals">
           <span class="pred-tie">TIE: 43.0″/century</span>
           <span class="pred-obs">Observed: 43.1 ± 0.5″/century</span>
         </div>
-        <div class="pred-src">Historical observations · factor 2 from δ∫dφ=0 · Cap. IX</div>
+        <div class="pred-src">Historical observations · factor 2 from δ∫dφ=0 · Ch. IX</div>
       </div>
       <span class="pred-badge green">error 0.2%</span>
     </div>
@@ -245,7 +299,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
           <span class="pred-tie">TIE: 5.292×10⁻¹¹ m</span>
           <span class="pred-obs">Observed: 5.297×10⁻¹¹ m</span>
         </div>
-        <div class="pred-src">Precision spectroscopy · ψ as real density · Cap. VII</div>
+        <div class="pred-src">Precision spectroscopy · ψ as real density · Ch. VII</div>
       </div>
       <span class="pred-badge green">error 0.10%</span>
     </div>
@@ -258,7 +312,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
           <span class="pred-tie">TIE: 1/137.12</span>
           <span class="pred-obs">Observed: 1/137.036</span>
         </div>
-        <div class="pred-src">CODATA 2018 · derived without tuning · Cap. VII</div>
+        <div class="pred-src">CODATA 2018 · derived without adjustment · Ch. VII</div>
       </div>
       <span class="pred-badge green">error &lt;0.1%</span>
     </div>
@@ -266,12 +320,12 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="pred-item confirmed">
       <div class="pred-icon">✅</div>
       <div class="pred-body">
-        <div class="pred-name">Galaxy cluster mass factor</div>
+        <div class="pred-name">Galaxy cluster factor</div>
         <div class="pred-vals">
           <span class="pred-tie">TIE: 2π = 6.283×</span>
           <span class="pred-obs">Observed: ~6.25×</span>
         </div>
-        <div class="pred-src">Cluster observations · visible vs dynamical mass · Cap. V</div>
+        <div class="pred-src">Cluster observations · visible vs dynamical mass · Ch. V</div>
       </div>
       <span class="pred-badge green">error 0.5%</span>
     </div>
@@ -281,12 +335,12 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="pred-body">
         <div class="pred-name">Fermi's Golden Rule — independent validation</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: native structure 2π/ħ</span>
+          <span class="pred-tie">TIE: native 2π/ħ structure</span>
           <span class="pred-obs">Fermi 1934 — built without knowing TIE</span>
         </div>
-        <div class="pred-src">Nuclear decay · transition rate · Cap. VII</div>
+        <div class="pred-src">Nuclear decay · transition rate · Ch. VII</div>
       </div>
-      <span class="pred-badge green">validation 1934</span>
+      <span class="pred-badge green">1934 validation</span>
     </div>
 
     <div class="pred-item confirmed">
@@ -297,7 +351,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
           <span class="pred-tie">TIE: a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²</span>
           <span class="pred-obs">Observed: ~1.2×10⁻¹⁰ m/s²</span>
         </div>
-        <div class="pred-src">McGaugh et al. 2016 · galactic RAR · Cap. II</div>
+        <div class="pred-src">McGaugh et al. 2016 · galactic RAR · Ch. II</div>
       </div>
       <span class="pred-badge green">error ~10%</span>
     </div>
@@ -310,7 +364,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
           <span class="pred-tie">TIE: 4GM/c²R = 1.750″</span>
           <span class="pred-obs">Eddington 1919: 1.750″</span>
         </div>
-        <div class="pred-src">Factor 2 from δ∫dφ=0 without dt² — two equal phase contributions · Cap. IX</div>
+        <div class="pred-src">Factor 2 from δ∫dφ=0 without dt² — two equal phase contributions · Ch. IX</div>
       </div>
       <span class="pred-badge green">error 0%</span>
     </div>
@@ -323,7 +377,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
           <span class="pred-tie">TIE: 1.750″</span>
           <span class="pred-obs">VLBI: 1.748 ± 0.006″</span>
         </div>
-        <div class="pred-src">Very Long Baseline Interferometry · modern verification · Cap. IX</div>
+        <div class="pred-src">Very Long Baseline Interferometry · modern verification · Ch. IX</div>
       </div>
       <span class="pred-badge green">error 0.1%</span>
     </div>
@@ -336,9 +390,9 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
           <span class="pred-tie">TIE: f ~ 5×10⁻¹⁹ Hz (infrastructure, not radiation)</span>
           <span class="pred-obs">Indirect signature: 84.1% dark matter + flat profiles</span>
         </div>
-        <div class="pred-src">Not detectable by LIGO/LISA — its signature is structural, not periodic · Cap. XII</div>
+        <div class="pred-src">Field undetectable by LIGO/LISA — its signature is structural, not periodic · Ch. XII</div>
       </div>
-      <span class="pred-badge green">indirect verification</span>
+      <span class="pred-badge green">indirect verified</span>
     </div>
 
   </div>
@@ -353,9 +407,9 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
         <div class="pred-name">TIE photosphere — black hole shadow</div>
         <div class="pred-vals">
           <span class="pred-tie">TIE: rₕ ≫ rₛ (physical horizon)</span>
-          <span class="pred-obs">Observable photosphere not yet derived</span>
+          <span class="pred-obs">Photosphere not yet derived</span>
         </div>
-        <div class="pred-src">EHT measures photosphere, not horizon · TIE photosphere = future work Cap. X · ngEHT 2028+ · AMT Namibia · Lunar Telescope</div>
+        <div class="pred-src">EHT measures photosphere, not horizon · TIE photosphere = future work Ch. X · ngEHT 2028+ · AMT Namibia · Lunar Telescope</div>
       </div>
       <span class="pred-badge yellow">2028–2030+</span>
     </div>
@@ -363,12 +417,12 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="pred-item pending">
       <div class="pred-icon">⏳</div>
       <div class="pred-body">
-        <div class="pred-name">φ field signal — LISA ~2.4 mHz</div>
+        <div class="pred-name">Field φ signal — LISA ~2.4 mHz</div>
         <div class="pred-vals">
           <span class="pred-tie">TIE: signal ~2.4 mHz in gravitational waves</span>
           <span class="pred-obs">LISA launch 2035</span>
         </div>
-        <div class="pred-src">€89.5M Thales-OHB contract signed Jan 2026 · NASA unit tests Jan 2026 · Cap. VIII</div>
+        <div class="pred-src">€89.5M Thales-OHB contract signed Jan 2026 · NASA tests Jan 2026 · Ch. VIII</div>
       </div>
       <span class="pred-badge yellow">LISA 2035</span>
     </div>
@@ -381,7 +435,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
           <span class="pred-tie">TIE: ΔφTIE = ΔφCOW · (1 + a₀·L/g)</span>
           <span class="pred-obs">Correction ~10⁻¹¹ — below current precision</span>
         </div>
-        <div class="pred-src">ILL-Grenoble · next-generation NIST · Cap. VII §7.6</div>
+        <div class="pred-src">ILL-Grenoble · NIST next generation · Ch. VII §7.6</div>
       </div>
       <span class="pred-badge yellow">next gen.</span>
     </div>
@@ -389,33 +443,33 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="pred-item pending">
       <div class="pred-icon">⏳</div>
       <div class="pred-body">
-        <div class="pred-name">Critical mass Mc — rₕ = rₛ crossover</div>
+        <div class="pred-name">Critical mass Mc — rₕ = rₛ crossing</div>
         <div class="pred-vals">
           <span class="pred-tie">TIE: Mc = φc⁴/(4Ga₀) ≈ 2.275×10²³ M☉</span>
-          <span class="pred-obs">Pending ngEHT — no known astrophysical mass reaches Mc</span>
+          <span class="pred-obs">ngEHT pending — no known astrophysical mass reaches Mc</span>
         </div>
-        <div class="pred-src">Structural prediction of the golden horizon · Cap. X §10.4</div>
+        <div class="pred-src">Structural prediction of the golden horizon · Ch. X §10.4</div>
       </div>
       <span class="pred-badge yellow">ngEHT 2028+</span>
     </div>
 
   </div>
 
-  <!-- MARCH 2026 NEWS -->
+  <!-- NEWS MARCH 2026 -->
   <div class="news-box">
-    <div class="news-title">🚀 Experimental updates — March 2026</div>
+    <div class="news-title">🚀 Experimental news — March 2026</div>
     <table class="news-table">
-      <tr><th>Project</th><th>Update</th><th>Date</th><th>TIE prediction</th><th>Status</th></tr>
+      <tr><th>Project</th><th>News</th><th>Date</th><th>TIE prediction</th><th>Status</th></tr>
       <tr>
         <td style="color:var(--text);font-weight:700">AMT Africa (Namibia)</td>
-        <td>Unisa-UNAM agreement signed — Africa Millimetre Telescope. Improves EHT coverage in the southern hemisphere.</td>
+        <td>Unisa-UNAM agreement signed — Africa Millimetre Telescope. Improves EHT southern hemisphere coverage.</td>
         <td style="color:var(--dim)">Feb 2026</td>
         <td style="color:var(--gold)">TIE photosphere</td>
         <td><span class="tag-activo">ACTIVE</span></td>
       </tr>
       <tr>
         <td style="color:var(--text);font-weight:700">AtLAST + EHT</td>
-        <td>Study published on expanding the population of observable black holes at horizon scale.</td>
+        <td>Published study on expanding observable BH population at horizon scale.</td>
         <td style="color:var(--dim)">Feb 2026</td>
         <td style="color:var(--gold)">TIE photosphere</td>
         <td><span class="tag-2028">2028+</span></td>
@@ -439,31 +493,31 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 
   <!-- COW DETAILS -->
   <div class="cow-panel">
-    <div class="cow-title">🔬 Detail — Corrected COW experiment (Cap. VII §7.6)</div>
+    <div class="cow-title">🔬 Details — COW experiment correction (Ch. VII §7.6)</div>
     <div class="cow-eq">\( \Delta\phi_{\text{TIE}} = \Delta\phi_{\text{COW}} \cdot \left(1 + \frac{a_0 \cdot L}{g}\right) \)</div>
     <div class="cow-note">
       Where a₀ = cH₀/2π ≈ 1.08×10⁻¹⁰ m/s² and g ≈ 9.81 m/s²<br>
       → Correction: a₀/g ≈ <strong style="color:var(--blue)">1.1×10⁻¹¹</strong> — predicted without free parameters<br>
       → Verifiable with next-generation neutron interferometry at <strong style="color:var(--text)">ILL-Grenoble</strong> or <strong style="color:var(--text)">NIST</strong><br>
-      → The correction is small but non-zero — its exact magnitude distinguishes TIE from the standard formulation of ψ
+      → The correction is small but non-zero — its exact magnitude distinguishes TIE from standard ψ formulation
     </div>
   </div>
 
   <!-- FALSIFIABILITY -->
   <div class="falsab-box">
     <div class="falsab-title">⚠ Falsifiability conditions — when TIE would be refuted</div>
-    <div class="falsab-text">TIE asks for no faith. It asks you to measure it. If any of these conditions is met, the theory is wrong and must be abandoned.</div>
+    <div class="falsab-text">TIE asks not for faith. It asks to be measured. If any of these conditions is met, the theory is wrong and must be abandoned.</div>
     <ul class="falsab-list">
       <li><strong>ngEHT / AMT / Lunar Telescope</strong> — if the observable shadow of M87* or Sgr A* matches rₛ (GR) and not the TIE photosphere once formally derived</li>
-      <li><strong>LISA 2035</strong> — if no signal is detected in the ~2.4 mHz band of the φ field at LISA's sensitivity</li>
-      <li><strong>ILL-Grenoble / NIST</strong> — if the COW correction is zero at 10⁻¹² precision (below TIE's prediction of 10⁻¹¹)</li>
-      <li><strong>Next-generation GPS</strong> — if the measured correction systematically differs from 45.7 μs/day at &lt;0.1% precision</li>
+      <li><strong>LISA 2035</strong> — if no signal is detected in the ~2.4 mHz band of the φ field with LISA's sensitivity</li>
+      <li><strong>ILL-Grenoble / NIST</strong> — if the COW correction is zero to 10⁻¹² precision (below TIE's 10⁻¹¹ prediction)</li>
+      <li><strong>Next-generation GPS</strong> — if the measured correction systematically differs from 45.7 μs/day with &lt;0.1% precision</li>
     </ul>
   </div>
 
   <div style="font-family:var(--mono);font-size:.65rem;color:var(--dim);text-align:center;padding:.75rem;border:1px solid var(--border);border-radius:8px;line-height:1.8;">
-    Last updated: March 2026 · 16 predictions · 12 confirmed · 4 pending · 0 refuted<br>
-    All derived from H₀ and ħ — zero free parameters tuned
+    Last update: March 2026 · 16 predictions · 12 confirmed · 4 pending · 0 refuted<br>
+    All derived from H₀ and ħ — zero free parameters adjusted
   </div>
 
 </div>
@@ -471,6 +525,13 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 <footer>
   <div class="feq">16 predictions · 12 confirmed · 4 pending · 0 refuted · 0 free parameters</div>
   <div class="fcopy">R@LC 2026 · MEXICO · INDEPENDENT RESEARCHER</div>
+  <div style="margin-top:1rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">
+    <a href="index.html" style="color:inherit; text-decoration:none;">HOME</a> · 
+    <a href="labs.html" style="color:inherit; text-decoration:none;">LAB</a> · 
+    <a href="papers.html" style="color:inherit; text-decoration:none;">PAPERS</a> · 
+    <a href="theory-en.html" style="color:inherit; text-decoration:none;">THEORY</a> · 
+    <a href="https://github.com/ralc-tie-creator" target="_blank" style="color:inherit; text-decoration:none;">GITHUB</a>
+  </div>
 </footer>
 
 <script>

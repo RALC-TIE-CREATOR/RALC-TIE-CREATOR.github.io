@@ -505,7 +505,7 @@ Cuando respondas a los usuarios:
 **Ejemplo de respuesta:**
 > "La aceleración de transición a₀ = 1.082×10⁻¹⁰ m/s² se calcula como a₀ = cH₀/2π. Puedes explorar cómo varía con H₀ en la herramienta H-08 (Constantes TIE) del Laboratorio de Fundamentos. El valor predicho por TIE tiene un error del 5.0% respecto a la constante cosmológica observada por Planck — y lo logra sin necesidad de energía oscura. Actualmente tenemos 12 de 16 predicciones verificadas, con las 4 restantes en proceso de validación con nuevos experimentos."`;
 
-  // ──────────────────────────────────────────────────────
+// ──────────────────────────────────────────────────────
 
 // Detección de Idioma
 const isEN = document.documentElement.lang === 'en' || 
@@ -728,6 +728,15 @@ const PAGE_MAP = {
   `;
   document.head.appendChild(style);
 
+  // Helper para renderizado matemático KaTeX
+  function ensureKatex(cb){
+    if(window.katex){ cb(); return; }
+    const link = document.createElement('link'); link.rel='stylesheet'; link.href='https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css';
+    document.head.appendChild(link);
+    const s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js'; s.onload=cb;
+    document.head.appendChild(s);
+  }
+   
   // ── 6. DETECTAR PÁGINA ACTUAL ───────────────────────
   const slug = location.pathname.split('/').pop().replace('.html','') || 'index';
   let currentTool = 'Sitio TIE';

@@ -13,7 +13,7 @@
   --text:#fff;--dim:#9090a8;--border:rgba(0,245,200,0.15);
   --mono:'Space Mono',monospace;--sans:'Syne',sans-serif;}
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;overflow:hidden;}
+,body{height:100%;overflow:hidden;}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex;flex-direction:column;}
 #bg-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.22;}
 
@@ -114,7 +114,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:16px;height:16px;b
 
 <nav>
     <div style="display:flex; align-items:center; gap:20px;">
-    <a href="index.html" class="nav-logo">TIE / R@LC</a>
+    <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
     <!-- ORCID BADGE -->
     <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verify Author Identity on ORCID">
       <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
@@ -130,7 +130,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:16px;height:16px;b
     <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
   </div>
   
-  <a href="labs-en.html" class="nav-back" id="lnk-back">← LABORATORY</a>
+  <a href="lab-en.html" class="nav-back" id="lnk-back">← LABORATORY</a>
 </nav>
 
 <div class="strip">
@@ -732,7 +732,7 @@ function setScenario(i){
 // ══════════════════════════════
 const TL={
   es:{
-    back:'← LABORATORIO',backHref:'labs.html',
+    back:'← LABORATORIO',backHref:'lab-en.html',
     stripTitle:'CAMPO <span>φ</span> · ONDAS GRAVITACIONALES',
     badge:'WEBGL · TIEMPO REAL',
     lbl_scenario:'ESCENARIO',
@@ -750,7 +750,7 @@ const TL={
     sc:['⚫⚫ BH–BH','🌟🌟 NS–NS','⚫🌟 BH–NS','🌊 LISA'],
   },
   en:{
-    back:'← LABORATORY',backHref:'labs-en.html',
+    back:'← LABORATORY',backHref:'lab-en.html',
     stripTitle:'φ <span>FIELD</span> · GRAVITATIONAL WAVES',
     badge:'WEBGL · REAL-TIME',
     lbl_scenario:'SCENARIO',

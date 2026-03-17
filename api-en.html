@@ -170,7 +170,7 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
 
 <nav>
   <div style="display:flex; align-items:center; gap:20px;">
-    <a href="index.html" class="nav-logo">TIE / R@LC</a>
+    <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
     
     <!-- ORCID BADGE -->
     <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verify Author Identity on ORCID">
@@ -187,7 +187,7 @@ nav{position:relative;z-index:100;display:flex;align-items:center;justify-conten
     <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
   </div>
   
-  <a href="labs-en.html" class="nav-back" id="lnk-back">← LABORATORY</a>
+  <a href="lab-en.html" class="nav-back" id="lnk-back">← LABORATORY</a>
 </nav>
 
 <div class="strip">
@@ -681,7 +681,7 @@ function setLang(l){
   document.getElementById('btn-en').className='lang-btn '+(l==='en'?'active':'inactive');
   const lb=document.getElementById('lnk-back');
   lb.textContent=l==='es'?'← LABORATORIO':'← LABORATORY';
-  lb.href=l==='es'?'labs.html':'labs-en.html';
+  lb.href=l==='es'?'labs.html':'lab-en.html';
   document.getElementById('strip-title').innerHTML=l==='es'?'API <span>PÚBLICA</span> REST · TIE':'<span>PUBLIC</span> REST API · TIE';
   document.getElementById('ep-header-title').textContent=l==='es'?'ENDPOINTS':'ENDPOINTS';
   document.getElementById('ic-status-title').textContent=l==='es'?'ESTADO API':'API STATUS';

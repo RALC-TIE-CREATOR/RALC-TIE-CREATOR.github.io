@@ -9,7 +9,7 @@
   // CAMBIA ESTA URL POR LA DE TU BACKEND LOCAL
    // ── 1. CONFIGURACIÓN ─────────────────────────────────
   const API_KEY = "AIzaSyC4QU28EPB-_zi-7tkKB2p-Om5zBKlxZ-U"; 
-  const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`; 
+  const LOCAL_API_URL = "http://localhost:3000/api/chat"; 
   const IMAGEN_AXON = 'AXON FACE 2.png';
   
   // ── 2. DETECCIÓN DE IDIOMA ─────────────────────────

@@ -7,7 +7,7 @@
 
   // ── 1. CONFIGURACIÓN DE CONEXIÓN (LOCAL) ───────────
   // CAMBIA ESTA URL POR LA DE TU BACKEND LOCAL
-  const LOCAL_API_URL = "http://localhost:3000/api/chat"; 
+  const LOCAL_API_URL = ""; 
   const IMAGEN_AXON = 'AXON FACE 2.png';
   
   // ── 2. DETECCIÓN DE IDIOMA ─────────────────────────

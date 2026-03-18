@@ -1,21 +1,21 @@
 // ═══════════════════════════════════════════════════════
-// AXON WIDGET v3.0 — TIE Floating Chat (FUSIÓN DEFINITIVA)
+// AXON WIDGET v1.7 MOD — TIE Floating Chat (VERSIÓN DEFINITIVA)
+// CONTEXTO COMPLETO + AVATAR + CONEXIÓN LOCAL
 // ═══════════════════════════════════════════════════════
 (function(){
   'use strict';
 
-  // ── 1. CONFIGURACIÓN ─────────────────────────────────
-  const API_KEY = "AIzaSyC4QU28EPB-_zi-7tkKB2p-Om5zBKlxZ-U"; 
-  const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+  // ── 1. CONFIGURACIÓN DE CONEXIÓN (LOCAL) ───────────
+  // CAMBIA ESTA URL POR LA DE TU BACKEND LOCAL
+  const LOCAL_API_URL = "http://localhost:3000/api/chat"; 
   const IMAGEN_AXON = 'AXON FACE 2.png';
-  let offlineMode = false;
-
+  
   // ── 2. DETECCIÓN DE IDIOMA ─────────────────────────
   const isEN = document.documentElement.lang === 'en' || 
                location.pathname.includes('-en.html') || 
                location.pathname.includes('index-en');
 
-  // ── 3. 🧠 CONTEXTO MAESTRO COMPLETO (de v1.8) ───────
+  // ── 3. 🧠 CONTEXTO MAESTRO COMPLETO TIE ───────────
   const MASTER_CONTEXT = `# 🧠 CONTEXTO COMPLETO PARA AXON · ASISTENTE TIE v2.0
 
 Eres AXON, el asistente oficial de la Teoría de la Infraestructura Espacial (TIE), creado por R@LC (Rubén A. Lecona Curto), investigador independiente en México.
@@ -76,7 +76,7 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 - 20 herramientas en total
 - 5 laboratorios
 - 175 galaxias SPARC integradas
-- **12/16 predicciones verificadas** (ACTUALIZADO)
+- 8/11 predicciones verificadas
 - 0 parámetros libres
 
 ---
@@ -93,30 +93,125 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 - v₀ = c/2π = 47,715 km/s (T¹ - velocidad fundamental, invariante)
 - a₀ = v₀·H₀ = cH₀/2π (T² - aceleración de transición, varía con H₀)
 
+**Controles:**
+- Slider H₀ (67-74 km/s/Mpc)
+- Selector de 4 masas de ejemplo
+- Modo "Causal" que invierte la pirámide ortodoxa
+
+**Resultados:**
+- v₀ permanece constante (47,715 km/s) independientemente de H₀
+- a₀ varía proporcionalmente a H₀
+- Muestra por qué el paradigma ortodoxo necesita materia oscura
+
+---
+
 ### H-04 · Bisturí TIE v2.0
 **URL:** onto.html
 
 **Descripción:** El Traductor Ontológico. Aplica el Diagnóstico Dual a 10 ecuaciones de la física estándar.
+
+**Ecuaciones analizadas:**
+1. F = ma
+2. F = GMm/r²
+3. E = mc²
+4. F = kq²/r² (Ley de Coulomb)
+5. V = -g² e^{-m_π c r/ħ}/r (Yukawa)
+6. E = hν
+7. Γ = (2π/ħ)|M|²ρ(E) (Regla de Oro de Fermi)
+8. Fuerza nuclear débil
+9. Ecuación de Schrödinger
+10. Métrica de Schwarzschild
+
+**Las 3 Pruebas del Diagnóstico Dual:**
+- **Prueba 1 (Flecha del Tiempo)**: ¿Despejar t da ±t donde solo debería haber una dirección?
+- **Prueba 2 (Invarianza de Unidades)**: ¿El T² desaparece al cambiar de sistema (SI ↔ CGS ↔ naturales)?
+- **Prueba 3 (Consistencia con el Reposo)**: ¿Aplicada a sistema estático produce absurdos?
+
+**Resultados posibles:**
+- **ESPURIO** → Paso 3a: eliminar (multiplicar por 2π)
+- **CINEMÁTICO** → Paso 3b: traducir a fase φ
+- **NATIVA** (Fermi) → Ya tiene estructura 2π/ħ, validación independiente
+
+---
 
 ### H-06 · Trinidad Energética
 **URL:** trinidad.html
 
 **Descripción:** El Motor Absoluto redistribuye energía entre tres estados ontológicos.
 
+**Ecuaciones:**
+- **Existencia (E)**: E = mc²/2π (energía por ciclo de sincronía)
+- **Tensión (U)**: U = -GMm/r (deuda de sincronía, 2π implícito en masas)
+- **Cinética (K)**: K = ½mv² (movimiento sobre infraestructura)
+
+**Escenarios:**
+1. **Caída libre**: Piedra se eleva (U↑), cae (U→K), impacta (K→U)
+2. **Emisión atómica**: Electrón excitado (U) → desexcitación → fotón (E)
+3. **Aniquilación e⁺e⁻**: Fotón (E) → par (E)
+4. **Velocidad de escape**: K necesaria para vencer U
+
+**Resultados:**
+- La suma E + U + K permanece constante
+- El 2π nunca desaparece, solo cambia de lugar
+
+---
+
 ### H-03 · Calculadora R
 **URL:** 2pi.html
 
 **Descripción:** Calculadora interactiva de la constante R = 2π. Conecta masa observada con masa real de infraestructura.
+
+**Ecuaciones:**
+- m_TIE = R · m_obs (R = 2π)
+- v_flat = (G M a₀)^{1/4}
+
+**Datos:** 55 galaxias SPARC integradas
+
+**Controles:**
+- Slider H₀ (67-74 km/s/Mpc)
+- Filtro por tipo morfológico
+- Selector de galaxias
+
+**Resultados:**
+- Gráfica log-log v_flat vs masa
+- Comparación predicción TIE (línea dorada) vs puntos observados
+
+---
 
 ### H-05 · Materia Oscura
 **URL:** materia-oscura.html
 
 **Descripción:** Conversor de masa observable a masa real TIE. Demuestra que la "materia oscura" es 1 - 1/2π = 84.1%.
 
+**Ecuaciones:**
+- Fracción visible: 1/2π = 15.9%
+- Fracción "oscura": 1 - 1/2π = 84.1%
+
+**Controles:** Selector de unidades (kg, M☉, g, lb)
+
+**Resultados:**
+- Barra animada 15.9% / 84.1%
+- m_TIE = 2π · m_obs siempre
+
+---
+
 ### H-08 · a₀ y Λ — Constantes TIE
 **URL:** constante.html
 
 **Descripción:** Calculadora de las constantes fundamentales a₀ y Λ.
+
+**Ecuaciones:**
+- a₀ = cH₀/2π
+- Λ = 2H₀²/c²
+
+**Controles:** Slider H₀ (67-74 km/s/Mpc)
+
+**Resultados:**
+- a₀ en m/s²
+- Λ en m⁻²
+- Radio de transición r_trans = √(GM/a₀)
+- Comparación Λ_TIE vs Λ_Planck (error 5.0%)
+- Gráfica doble eje Planck vs SH0ES
 
 ---
 
@@ -126,22 +221,71 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 **URL:** rms.html
 
 **Descripción:** Análisis estadístico riguroso de las 175 galaxias SPARC.
-**Resultado:** σ_TIE = 0.067 dex (0 parámetros libres)
+
+**Ecuación:** σ = std(log₁₀(v_TIE/v_obs))
+
+**Controles:**
+- Filtros por tipo morfológico (Sc/Sb/Sa/Sd/LSB/dIrr)
+- Filtro por calidad Q (1=alta, 2=media, 3=baja)
+
+**Resultados:**
+- σ_TIE = 0.067 dex (0 parámetros libres)
+- σ_ΛCDM = 0.11 dex (2 parámetros por galaxia)
+- σ_Newton = 0.38 dex
+- Histograma de residuos con gaussiana superpuesta
+
+---
 
 ### H-06 · Simulador RAR
 **URL:** simrar.html
 
 **Descripción:** Visualiza la Relación de Aceleración Radial.
 
+**Ecuación:** a_obs = √[a_bar(a_bar + a₀)]
+
+**Datos:** 250 puntos del catálogo SPARC
+
+**Resultados:**
+- a₀ fijo = 1.082×10⁻¹⁰ m/s² (predicción, no ajuste)
+- Curva TIE superpuesta a datos
+- R² actualizado en tiempo real
+
+---
+
 ### H-01 · Curvas de Rotación
 **URL:** curvas.html
 
 **Descripción:** Generador de curvas de rotación galácticas con 12 presets reales.
 
+**Ecuaciones:**
+- a_TIE = √[a_N(a_N + a₀)]
+- v(r) = √[r · a_TIE]
+
+**Presets incluidos:** NGC3198, NGC2403, NGC6503, NGC7331, UGC2885, NGC5907, UGC128, F568-3, F563-1, DDO154, DDO168, IC2574
+
+**Controles:**
+- 3 modos: Presets, Libre, Comparar
+- Checkboxes: v_disk, v_gas, v_Newton
+
+**Resultados:**
+- Curva de rotación TIE vs Newton
+- Radio de transición r_t mostrado numéricamente
+
+---
+
 ### H-02 · Explorador SPARC
 **URL:** sparc.html
 
 **Descripción:** Catálogo completo de 175 galaxias reales.
+
+**Ecuación:** v_TIE = (G M_bar · a₀)^{1/4}
+
+**Controles:**
+- Búsqueda por nombre
+- Filtros por tipo y calidad Q
+- 4 modos gráfica
+
+**Resultados:** Modal con datos completos de cada galaxia
 
 ---
 
@@ -152,21 +296,47 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 
 **Descripción:** Simulador de deflexión de luz con 3 modelos.
 
+**Ecuaciones:**
+- α_TIE = 4π√(G M a₀)/c²
+- α_Newton = 2GM/(c²b)
+
+**Resultados:**
+- α_TIE constante (~3.6 arcsec para M=1e11 M☉)
+- Factor 2 emergente
+
+---
+
 ### H-11 · Agujeros Negros
 **URL:** agujeros.html
 
 **Descripción:** Comparación GR vs TIE.
-**Ecuaciones:** r_s = 2GM/c², r_h = 1.272√(GM/a₀)
+
+**Ecuaciones:**
+- r_s = 2GM/c²
+- r_h = 1.272√(GM/a₀)
+- M_c = 2.275×10²³ M☉
+
+**Presets:** M87*, Sgr A*, NGC1277, Sol, GW150914, M_crítica
+
+**Resultados:** r_h ≫ r_s, sin singularidad
+
+---
 
 ### H-12 · Corrección GPS
 **URL:** gps.html
 
+**Ecuación:** Δτ/τ = ΔΦ/c²
+
 **Resultado:** 45.7 μs/día (vs 45.9 observado) · error 0.4%
+
+---
 
 ### H-12.1 · Reloj Universal
 **URL:** reloj.html
 
 **Descripción:** Motor Absoluto con relojes analógicos
+
+**6 ubicaciones:** Tierra, GPS, ISS, Luna, Marte, espacio profundo
 
 ---
 
@@ -177,15 +347,21 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 
 **Descripción:** Simulación de desacople sin materia oscura
 
+---
+
 ### H-07 · Lensing Gravitacional
 **URL:** lensing.html
 
 **Descripción:** Visualizador 3D Three.js con anillo de Einstein
 
+---
+
 ### H-13 · Campo φ (Ondas GW)
 **URL:** campo-phi.html
 
-**Ecuación:** f_φ = √2 H₀/(2π) ≈ 2.4 mHz
+**Ecuaciones:**
+- m_φ = ħ a₀ / c²
+- f_φ = √2 H₀/(2π) ≈ 2.4 mHz (dentro banda LISA)
 
 ---
 
@@ -194,47 +370,118 @@ Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
 ### H-14 · TIE AI Chat (tú mismo)
 **URL:** chat.html
 
+---
+
 ### H-15 · Generador LaTeX
 **URL:** latex.html
 
 **Descripción:** Catálogo de ecuaciones TIE con código LaTeX
 
+---
+
 ### H-16 · API Pública REST
 **URL:** api.html
 
+**Endpoints:** /v1/curva-rotacion, /v1/horizonte, /v1/constantes
+
 ---
 
-# 📚 APÉNDICE MATEMÁTICO
-## Constantes Fundamentales
-| Símbolo | Nombre | Valor |
-|---------|--------|-------|
-| R | Constante de RALC | 2π = 6.2832... |
-| a₀ | Aceleración de transición | cH₀/2π = 1.082×10⁻¹⁰ m/s² |
-| v₀ | Velocidad fundamental | c/2π = 47,715 km/s |
-| Λ | Constante cosmológica TIE | 2H₀²/c² = 1.145×10⁻⁵² m⁻² |
+# 📚 APÉNDICE MATEMÁTICO COMPLETO
 
-## Ecuaciones Centrales
+## Constantes Fundamentales
+| Símbolo | Nombre | Valor | Origen |
+|---------|--------|-------|--------|
+| R | Constante de RALC | 2π = 6.2832... | Ciclo completo |
+| a₀ | Aceleración de transición | cH₀/2π = 1.082×10⁻¹⁰ m/s² | c, H₀, 2π |
+| v₀ | Velocidad fundamental | c/2π = 47,715 km/s | c, 2π |
+| Λ | Constante cosmológica TIE | 2H₀²/c² = 1.145×10⁻⁵² m⁻² | H₀, c |
+| t | Raíz cúbica del horizonte | 0.7549 | t³ + t² - 1 = 0 |
+
+## Ecuaciones Centrales por Capítulo
+
+### Capítulo 2: Gravedad
 - a_TIE = √[a_N(a_N + a₀)]
+- a_N = GM/r²
+- a₀ = cH₀/2π
+- v_flat = (G M a₀)^{1/4}
+- r_trans = √(GM/a₀)
+
+### Capítulo 3: Energía y Carga
 - E_TIE = mc²/2π
 - m_TIE = 2π·m_obs
 - Materia oscura: 1 - 1/2π = 84.1%
-- r_h = 1.272√(GM/a₀)
-- v_flat = (G M a₀)^{1/4}
+- q_TIE = q_SI · √k_e
+- [q_TIE]² = kg·m³/s²
+- F = q_TIE²/r² (Coulomb TIE)
+
+### Capítulo 4: Fuerza Nuclear y Mecánica Cuántica
+- f_i = m_π c/ħ = 7.07×10¹⁴ m⁻¹
+- λ_i = ħ/(m_π c) = 1.41 fm
+- Γ_N = ħc/(απ²) = 13.88·ħc
+- α = e²k_e/(ħc) = 1/137.036
+- Δx·Δp ≥ ħ/2 (granularidad, no axioma)
+
+### Capítulo 5: Fuerza Nuclear Débil
+- Γ = (2π/ħ)·|M|²·ρ(E) (Regla de Oro de Fermi - NATIVA)
+- λ = ln2 / t_{1/2}
+
+### Capítulo 6: Formulación Tensorial
+- dl² = (1 - 2Φ_TIE/c²)⁻¹ dr² + r² dΩ²
+- Φ_TIE(r) = -GM/r · 1/√(1 + a₀r²/(GM))
+- G_ij + Λ_TIE g_ij = (8π²G/c⁴) T_ij
+- Λ_TIE = 8π²a₀²/c⁴ = 2H₀²/c²
+
+### Capítulo 7: Mecánica Cuántica
+- ψ(x) ≡ ρ_ħ^{1/2}(x), [ψ] = m^{-3/2}
+- |ψ|² = densidad volumétrica
+- V_TIE = -ħ a₀ / c
+- Δφ_COW corregido: Δφ_TIE = Δφ_COW·(1 + a₀/g)
+
+### Capítulo 8: Ondas Gravitacionales
+- δg_ij = h_ij · φ(x,t)
+- ∂φ/∂t = -c(∇φ · k̂)
+- ω = c|k|
+- δL/L = δg_ij/2
+
+### Capítulo 9: Principio Geodésico
+- φ = (1/ħ)∫(E dt - p dx)
 - δ∫dφ = 0
+- θ = 4GM/(c²R) (deflexión luz)
+- Δφ_Mercurio = 6πGM/[c²a(1-e²)]
+- Δt_Shapiro = (2GM/c³) ln(r₁r₂/b²)
+
+### Capítulo 10: Agujeros Negros
+- u² + u - 1 = 0, u = a₀/a_N = 1/φ
+- r_h = √(φ GM/a₀) = 1.272√(GM/a₀)
+- M_c = φ c⁴/(4G a₀) = 2.275×10²³ M☉
+
+### Capítulo 11: Lambda Exacta
+- Λ_TIE = 8π²a₀²/c⁴ = 2H₀²/c²
+- 8π² = 4π × 2π (topología S² × S¹)
+
+### Capítulo 12: Lagrangiano de la Infraestructura
+- ℒ_TIE = A [½(∂φ/∂T)² - c²/2(∇φ)² - ω_φ²/2 φ² - (G/(πc²)) φ ρ_bar (1-1/2π)]
+- A = ħH₀²/c³ ≈ 2.01×10⁻⁹⁵ kg/m
+- ω_φ = √2 H₀
+- m_φ = ħ√2 H₀/c² ≈ 2.1×10⁻³³ eV/c²
+- f_φ = √2 H₀/(2π) ≈ 5.1×10⁻¹⁹ Hz (fondo estacionario)
 
 ---
 
-# 📊 PREDICCIONES VERIFICADAS (12/16)
+# 📊 PREDICCIONES VERIFICADAS
 
 | Predicción | Valor TIE | Observado | Error |
 |------------|-----------|-----------|-------|
 | Materia oscura | 84.1% | ~84% | < 1% |
-| a₀ | 1.082×10⁻¹⁰ | 1.2×10⁻¹⁰ | ~10% |
+| a₀ | 1.082×10⁻¹⁰ m/s² | 1.2×10⁻¹⁰ (MOND) | ~10% |
 | Regla de Fermi | 2π/ħ | 2π/ħ | 0% |
-| α | 1/137.12 | 1/137.036 | 0.06% |
+| α (estructura fina) | 1/137.12 | 1/137.036 | 0.06% |
 | Radio de Bohr | 5.297×10⁻¹¹ m | 5.292×10⁻¹¹ m | 0.10% |
 | GPS | 45.7 μs/día | 45.9 μs/día | 0.4% |
-| Λ | 1.145×10⁻⁵² | 1.090×10⁻⁵² | 5.0% |
+| Cúmulos galácticos | 2π × masa obs | ~6.25× | 0.5% |
+| Deflexión luz | 1.750″ | 1.748±0.006″ | 0.1% |
+| Precesión Mercurio | 43.0″/siglo | 43.1″/siglo | 0.2% |
+| Λ | 1.145×10⁻⁵² m⁻² | 1.090×10⁻⁵² m⁻² | 5.0% |
 
 ---
 
@@ -245,110 +492,45 @@ Cuando respondas a los usuarios:
 1. **Sé preciso pero accesible**: Usa las ecuaciones cuando sea relevante, pero explica su significado.
 2. **Recomienda herramientas**: Si preguntan sobre un concepto, sugiere qué herramienta del laboratorio pueden usar para explorarlo.
 3. **Contextualiza los resultados**: No des solo números — explica qué significan en el marco de TIE.
-4. **Menciona las predicciones verificadas**: Cuando sea relevante, destaca que TIE tiene 0 parámetros libres y 12/16 predicciones verificadas.
-5. **Sé honesto sobre limitaciones**: Si algo es trabajo futuro (ej. las 4 predicciones pendientes), menciónalo.`;
+4. **Menciona las predicciones verificadas**: Cuando sea relevante, destaca que TIE tiene 0 parámetros libres y sus predicciones coinciden con observaciones.
+5. **Sé honesto sobre limitaciones**: Si algo es trabajo futuro (ej. fotosfera TIE), menciónalo.
 
-  // ── 4. MAPA DE NAVEGACIÓN (de v1.8) ─────────────────
+**Ejemplo de respuesta:**
+> "La aceleración de transición a₀ = 1.082×10⁻¹⁰ m/s² se calcula como a₀ = cH₀/2π. Puedes explorar cómo varía con H₀ en la herramienta H-08 (Constantes TIE) del Laboratorio de Fundamentos. El valor predicho por TIE tiene un error del 5.0% respecto a la constante cosmológica observada por Planck — y lo logra sin necesidad de energía oscura."`;
+
+  // ── 4. MAPA DE NAVEGACIÓN (completo) ───────────────
   const PAGE_MAP = {
-    'index': {es:'Página principal TIE', en:'TIE Home'},
-    'teoria': {es:'Teoría TIE Fundamentos', en:'TIE Theory Foundations'},
-    'theory': {es:'Teoría TIE Fundamentos', en:'TIE Theory Foundations'},
-    'sparc': {es:'H-02 · Base de datos SPARC', en:'H-02 · SPARC Database'},
-    'curvas': {es:'H-01 · Curvas de Rotación TIE', en:'H-01 · Rotation Curves TIE'},
-    'rotation-curves': {es:'H-01 · Curvas de Rotación TIE', en:'H-01 · Rotation Curves TIE'},
-    '2pi': {es:'H-03 · Factor 2π fundamental', en:'H-03 · Fundamental 2π factor'},
-    'materia-oscura': {es:'H-05 · Materia Oscura vs TIE', en:'H-05 · Dark Matter vs TIE'},
-    'dark-matter': {es:'H-05 · Materia Oscura vs TIE', en:'H-05 · Dark Matter vs TIE'},
-    'constante': {es:'H-08 · Constante Cosmológica Λ_TIE', en:'H-08 · Cosmological Constant Λ_TIE'},
-    'constant': {es:'H-08 · Constante Cosmológica Λ_TIE', en:'H-08 · Cosmological Constant Λ_TIE'},
-    'agujeros': {es:'H-11 · Agujeros Negros', en:'H-11 · Black Holes'},
-    'black-holes': {es:'H-11 · Agujeros Negros', en:'H-11 · Black Holes'},
-    'gps': {es:'H-12 · Corrector de GPS', en:'H-12 · GPS corrector'},
-    'rms': {es:'H-20 · Test de 175 Galaxias RMS', en:'H-20 · RMS Test of 175 Galaxies'},
-    'labs': {es:'Hub de Laboratorios', en:'Labs Hub'},
-    'lab': {es:'Hub de Laboratorios', en:'Labs Hub'}
+    'index':                  {es:'Página principal TIE',                          en:'TIE Home'},
+    'teoria':                 {es:'Teoría TIE Fundamentos',                        en:'TIE Theory Foundations'},
+    'predicciones':           {es:'Predicciones TIE',                              en:'TIE Predictions'},
+    'papers':                 {es:'Papers y Publicaciones',                        en:'TIE Papers'},
+    'labs':                   {es:'Hub de Laboratorios',                           en:'TIE Labs Hub'},
+    'constante':              {es:'H-01 · Constante Cosmológica',                  en:'H-01 · Cosmological Constant'},
+    'masa-critica':           {es:'H-02 · Masa Crítica',                           en:'H-02 · Critical Mass'},
+    'agujeros':               {es:'H-03 · Agujeros Negros',                        en:'H-03 · Black Holes'},
+    'curvas':                 {es:'H-04 · Curvas de Rotación',                     en:'H-04 · Rotation Curves'},
+    'sparc':                  {es:'H-05 · Base de datos SPARC',                    en:'H-05 · SPARC DB'},
+    'gps':                    {es:'H-06 · GPS y Relojes',                         en:'H-06 · GPS Correction'},
+    'lensing':                {es:'H-07 · Lensing Gravitacional 3D',               en:'H-07 · 3D Lensing'},
+    '2pi':                    {es:'H-08 · Factor 2π',                             en:'H-08 · 2π Factor'},
+    'materia-oscura':         {es:'H-09 · Materia Oscura',                         en:'H-09 · Dark Matter'},
+    'reloj-universal':        {es:'H-10 · Reloj Universal',                        en:'H-10 · Universal Clock'},
+    'falsibilidad':           {es:'H-11 · Falsificabilidad',                      en:'H-11 · Falsifiability'},
+    'campo-phi':              {es:'H-13 · Campo φ / Ondas GW',                    en:'H-13 · φ Field / GW Waves'},
+    'chat':                   {es:'H-14 · AXON Chat',                             en:'H-14 · AXON Chat'},
+    'latex':                  {es:'H-15 · Generador LaTeX',                       en:'H-15 · LaTeX Gen'},
+    'api':                    {es:'H-16 · API REST TIE',                          en:'H-16 · TIE REST API'},
+    'jerarquia':              {es:'H-17 · Jerarquía Cósmica',                     en:'H-17 · Cosmic Hierarchy'},
+    'trinidad':               {es:'H-18 · Trinidad Energética',                   en:'H-18 · Energetic Trinity'},
+    'traductor_ontologico':   {es:'H-19 · Bisturí T² / Traductor',                 en:'H-19 · T² Scalpel'},
+    'rms':                    {es:'H-20 · Test RMS Galaxias',                     en:'H-20 · RMS Galaxy Test'}
   };
 
   const slug = location.pathname.split('/').pop().replace('.html','') || 'index';
-  let currentPage = 'Sitio TIE';
-  for(let [key, val] of Object.entries(PAGE_MAP)) {
-    if(slug.includes(key)) {
-      currentPage = isEN ? val.en : val.es;
-      break;
-    }
-  }
+  const pageMatch = Object.keys(PAGE_MAP).find(k => slug.includes(k));
+  const currentPage = pageMatch ? (isEN ? PAGE_MAP[pageMatch].en : PAGE_MAP[pageMatch].es) : 'Sitio TIE';
 
-  // ── 5. HERRAMIENTAS Y BASE DE CONOCIMIENTO (de v2.0) ─
-  const tools = [
-    { keywords: ['curva','rotation','galaxia'], 
-      name: 'H-01 Curvas de Rotación', 
-      url: isEN ? 'rotation-curves-en.html' : 'curvas.html' },
-    { keywords: ['sparc','galaxias','database'], 
-      name: 'H-02 Explorador SPARC', 
-      url: isEN ? 'sparc-en.html' : 'sparc.html' },
-    { keywords: ['2π','2pi','constante','ralc'], 
-      name: 'H-03 Calculadora R', 
-      url: isEN ? '2pi-en.html' : '2pi.html' },
-    { keywords: ['bisturí','scalpel','ontología'], 
-      name: 'H-04 Bisturí TIE', 
-      url: isEN ? 'onto-en.html' : 'onto.html' },
-    { keywords: ['materia oscura','dark matter','84.1'], 
-      name: 'H-05 Materia Oscura', 
-      url: isEN ? 'dark-matter-en.html' : 'materia-oscura.html' },
-    { keywords: ['a₀','aceleración','transición','constante'], 
-      name: 'H-08 Constantes TIE', 
-      url: isEN ? 'constant-en.html' : 'constante.html' },
-    { keywords: ['agujero','black hole','horizonte'], 
-      name: 'H-11 Agujeros Negros', 
-      url: isEN ? 'black-holes-en.html' : 'agujeros.html' },
-    { keywords: ['gps','reloj','clock'], 
-      name: 'H-12 Corrección GPS', 
-      url: isEN ? 'gps-en.html' : 'gps.html' },
-    { keywords: ['rms','error','estadística'], 
-      name: 'H-20 RMS SPARC', 
-      url: isEN ? 'rms-en.html' : 'rms.html' }
-  ];
-
-  const knowledgeBase = [
-    {
-      keywords: ['qué es tie','what is tie','teoría','theory'],
-      response: isEN 
-        ? 'TIE (Theory of Spatial Infrastructure) proposes that space is not empty, but an active network. Time is an Absolute Motor, and forces are properties of this infrastructure. It unifies physics with zero free parameters.'
-        : 'TIE (Teoría de la Infraestructura Espacial) propone que el espacio no está vacío, sino que es una red activa. El tiempo es un Motor Absoluto, y las fuerzas son propiedades de esta infraestructura. Unifica la física con cero parámetros libres.'
-    },
-    {
-      keywords: ['a₀','a0','aceleración','transición'],
-      response: isEN
-        ? 'a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s² is the transition acceleration. It marks where gravity changes from Newtonian to TIE regime, explaining galaxy rotation without dark matter.'
-        : 'a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s² es la aceleración de transición. Marca donde la gravedad cambia de régimen newtoniano a TIE, explicando la rotación galáctica sin materia oscura.'
-    },
-    {
-      keywords: ['materia oscura','dark matter','84%'],
-      response: isEN
-        ? 'In TIE, "dark matter" is 1 - 1/2π = 84.1% of real mass. It is not a particle, but the fraction of mass that standard physics misses by using E = mc² instead of E = mc²/2π.'
-        : 'En TIE, la "materia oscura" es 1 - 1/2π = 84.1% de la masa real. No es una partícula, sino la fracción de masa que la física estándar no contabiliza al usar E = mc² en lugar de E = mc²/2π.'
-    },
-    {
-      keywords: ['constante','ralc','2π','2pi'],
-      response: isEN
-        ? 'R = 2π is the RALC Constant. It relates real mass to observed mass: m_TIE = 2π·m_obs. This factor appears in all fundamental forces.'
-        : 'R = 2π es la Constante de RALC. Relaciona la masa real con la masa observada: m_TIE = 2π·m_obs. Este factor aparece en todas las fuerzas fundamentales.'
-    },
-    {
-      keywords: ['agujero','black hole','horizonte'],
-      response: isEN
-        ? 'TIE black holes have radius r_h = 1.272√(GM/a₀). No singularity, just saturation of the infrastructure. For M87*, r_h ≈ 1.14×10¹⁷ km (5.9×10⁶ times Schwarzschild).'
-        : 'Los agujeros negros en TIE tienen radio r_h = 1.272√(GM/a₀). No hay singularidad, solo saturación de la infraestructura. Para M87*, r_h ≈ 1.14×10¹⁷ km (5.9×10⁶ veces Schwarzschild).'
-    },
-    {
-      keywords: ['predicciones','predictions','verificadas','verified'],
-      response: isEN
-        ? 'TIE has 12/16 verified predictions with zero free parameters: dark matter (84.1%), a₀, Fermi rule, α, Bohr radius, GPS (45.7μs/day), Λ (5% error), and more.'
-        : 'TIE tiene 12/16 predicciones verificadas con cero parámetros libres: materia oscura (84.1%), a₀, regla de Fermi, α, radio de Bohr, GPS (45.7μs/día), Λ (5% error), y más.'
-    }
-  ];
-
-  // ── 6. KATEX (de v1.8) ─────────────────────────────
+  // ── 5. KATEX ────────────────────────────────────────
   function ensureKatex(cb){
     if(window.katex){ cb(); return; }
     const link = document.createElement('link'); link.rel='stylesheet'; link.href='https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css';
@@ -357,7 +539,7 @@ Cuando respondas a los usuarios:
     document.head.appendChild(s);
   }
 
-  // ── 7. ESTILOS (de v2.0, mejorados) ─────────────────
+  // ── 6. ESTILOS (mejorados con avatar) ───────────────
   const style = document.createElement('style');
   style.textContent = `
     #axon-widget { position: fixed; bottom: 20px; right: 20px; z-index: 9999; font-family: 'Syne', sans-serif; }
@@ -371,7 +553,7 @@ Cuando respondas a los usuarios:
     #axon-bubble img { width: 100%; height: 100%; object-fit: cover; }
     #axon-panel { 
       display: none; position: absolute; bottom: 70px; right: 0; width: 340px; 
-      height: 480px; background: rgba(5, 5, 15, 0.98); border: 1px solid rgba(255, 215, 0, 0.3);
+      height: 480px; background: rgba(5, 5, 15, 0.98); border: 1px solid rgba(91, 200, 245, 0.3);
       border-radius: 12px; flex-direction: column; overflow: hidden; backdrop-filter: blur(10px);
       box-shadow: 0 10px 40px rgba(0,0,0,0.7); animation: axFadeIn 0.3s ease-out;
     }
@@ -391,8 +573,6 @@ Cuando respondas a los usuarios:
     }
     .ax-u { align-self: flex-end; background: rgba(91, 200, 245, 0.12); color: #fff; border: 1px solid rgba(91, 200, 245, 0.2); }
     .ax-a { align-self: flex-start; background: rgba(255, 255, 255, 0.04); color: #e0e0e0; border: 1px solid rgba(255, 215, 0, 0.1); }
-    .ax-tool { color: #FFD700; text-decoration: none; border-bottom: 1px dashed #FFD700; }
-    .ax-tool:hover { color: #fff; }
     .ax-error { align-self: flex-start; background: rgba(255, 68, 85, 0.12); color: #FF4455; border: 1px solid rgba(255, 68, 85, 0.3); }
     #ax-input-area { padding: 10px; background: rgba(0,0,0,0.5); border-top: 1px solid rgba(255,255,255,0.05); display: flex; gap: 8px; }
     #ax-input { flex: 1; background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 6px; color: #fff; padding: 8px; outline: none; font-size: 0.8rem; }
@@ -403,18 +583,17 @@ Cuando respondas a los usuarios:
   `;
   document.head.appendChild(style);
 
-  // ── 8. CREAR WIDGET (estructura de v2.0) ────────────
+  // ── 7. CREAR WIDGET (con avatar) ────────────────────
   const container = document.createElement('div');
   container.id = 'axon-widget';
   container.innerHTML = `
     <div id="axon-panel">
       <div id="axon-head">
-        <span style="color:#FFD700; font-size:0.7rem; font-weight:800; letter-spacing:1px;">AXON // v3.0</span>
-        <span style="color:#a0a0b0; font-size:0.6rem;">${currentPage}</span>
+        <span style="color:#FFD700; font-size:0.7rem; font-weight:800; letter-spacing:1px; font-family:'Space Mono';">AXON_H14 // WIDGET</span>
         <button id="axon-close" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.1rem;">✕</button>
       </div>
       <div id="axon-msgs">
-        <div class="ax-m ax-a">${isEN ? '🟡 AXON online. How can I assist you?' : '🟡 AXON en línea. ¿Cómo puedo asistirte?'}</div>
+        <div class="ax-m ax-a">${isEN ? 'Synchrony active. How can I assist you in this lab?' : 'Sincronía activa en la red. ¿Cómo puedo asistirte en este laboratorio?'}</div>
       </div>
       <div id="ax-input-area">
         <input type="text" id="ax-input" placeholder="${isEN ? 'Ask TIE...' : 'Pregunta a TIE...'}" autocomplete="off">
@@ -427,7 +606,7 @@ Cuando respondas a los usuarios:
   `;
   document.body.appendChild(container);
 
-  // ── 9. ELEMENTOS DEL DOM ───────────────────────────
+  // ── 8. ELEMENTOS DEL DOM ───────────────────────────
   const bubble = document.getElementById('axon-bubble');
   const panel = document.getElementById('axon-panel');
   const closeBtn = document.getElementById('axon-close');
@@ -438,8 +617,9 @@ Cuando respondas a los usuarios:
   let chatHistory = [];
 
   bubble.onclick = () => { 
-    panel.style.display = panel.style.display === 'flex' ? 'none' : 'flex';
-    if(panel.style.display === 'flex') input.focus();
+    const isVisible = panel.style.display === 'flex';
+    panel.style.display = isVisible ? 'none' : 'flex';
+    if(!isVisible) input.focus();
   };
   
   closeBtn.onclick = (e) => { 
@@ -460,26 +640,7 @@ Cuando respondas a los usuarios:
     return msgDiv;
   }
 
-  // ── 10. FUNCIONES DE AYUDA (de v2.0) ────────────────
-  function findToolSuggestion(text) {
-    for(let t of tools) {
-      if(t.keywords.some(k => text.toLowerCase().includes(k))) {
-        return { name: t.name, url: t.url };
-      }
-    }
-    return null;
-  }
-
-  function findKnowledgeBaseResponse(text) {
-    for(let k of knowledgeBase) {
-      if(k.keywords.some(kw => text.toLowerCase().includes(kw))) {
-        return k.response;
-      }
-    }
-    return null;
-  }
-
-  // ── 11. ENVÍO DE MENSAJE (híbrido: intenta Gemini, si falla usa offline) ──
+  // ── 9. ENVÍO DE MENSAJE (conexión local) ───────────
   async function sendMessage() {
     const text = input.value.trim();
     if(!text) return;
@@ -491,77 +652,47 @@ Cuando respondas a los usuarios:
     const loadingMsg = document.createElement('div');
     loadingMsg.className = 'ax-m ax-a ax-loader';
     loadingMsg.id = loadingId;
-    loadingMsg.innerHTML = '... <span style="font-size:0.6rem;">(pensando...)</span>';
+    loadingMsg.innerHTML = '... <span style="font-size:0.6rem;">(conectando con infraestructura local...)</span>';
     msgsContainer.appendChild(loadingMsg);
     msgsContainer.scrollTop = msgsContainer.scrollHeight;
 
     try {
-      // Si estamos en modo offline, lanzar error directamente
-      if(offlineMode) throw new Error('Modo offline activado');
-
-      const response = await fetch(GEMINI_URL, {
-        method: 'POST', 
+      const response = await fetch(LOCAL_API_URL, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          contents: [{ 
-            parts: [{ text: MASTER_CONTEXT + "\n\nUsuario en " + currentPage + ": " + text }] 
-          }] 
+        body: JSON.stringify({
+          contents: [...chatHistory, { role: 'user', parts: [{ text: text }] }],
+          systemInstruction: { parts: [{ text: `CONTEXTO_PAGINA_ACTUAL: ${currentPage}\n\n` + MASTER_CONTEXT }] }
         })
       });
 
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
       const data = await response.json();
-      let reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      loadingMsg.classList.remove('ax-loader');
 
-      if(!reply) throw new Error('Respuesta vacía');
+      if (!response.ok) throw new Error(data.error || "Error de conexión local");
 
-      // Aplicar KaTeX
-      let formattedReply = reply.replace(/\n/g, '<br>');
+      const reply = data.reply;
+      loadingMsg.innerHTML = reply.replace(/\n/g, '<br>');
       
       ensureKatex(() => {
-        formattedReply = formattedReply.replace(/\\\((.+?)\\\)/gs, (_, tex) => {
-          try { 
-            return katex.renderToString(tex, { throwOnError: false }); 
-          } catch(e) { 
-            return `<span style="color:#FF4455;">${tex}</span>`; 
-          }
+        loadingMsg.innerHTML = loadingMsg.innerHTML.replace(/\\\((.+?)\\\)/gs, (_, tex) => {
+          try { return katex.renderToString(tex, { throwOnError: false }); } 
+          catch(e) { return _; }
         });
-        document.getElementById(loadingId).innerHTML = formattedReply;
       });
 
-      chatHistory.push({ role: 'user', text });
-      chatHistory.push({ role: 'model', text: reply });
-      if(chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+      chatHistory.push({ role: 'user', parts: [{ text: text }] });
+      chatHistory.push({ role: 'model', parts: [{ text: reply }] });
+      if(chatHistory.length > 20) chatHistory.shift();
 
     } catch (err) {
-      console.warn('Gemini error, usando modo offline:', err);
-      offlineMode = true;
-      
-      // Buscar en base de conocimiento local
-      let response = findKnowledgeBaseResponse(text);
-      
-      if(!response) {
-        response = isEN
-          ? "I don't have a specific answer for that. You can explore the TIE tools manually or ask about: a₀, dark matter, black holes, predictions, or the RALC constant."
-          : "No tengo una respuesta específica para eso. Puedes explorar las herramientas TIE manualmente o preguntar sobre: a₀, materia oscura, agujeros negros, predicciones, o la constante RALC.";
-      }
-
-      // Sugerir herramienta
-      const tool = findToolSuggestion(text);
-      if(tool) {
-        response += isEN
-          ? ` <br><br>🔧 Try the <a href="${tool.url}" class="ax-tool" onclick="panel.style.display='none'">${tool.name}</a> tool.`
-          : ` <br><br>🔧 Prueba la herramienta <a href="${tool.url}" class="ax-tool" onclick="panel.style.display='none'">${tool.name}</a>.`;
-      }
-
-      document.getElementById(loadingId).innerHTML = response;
-      document.getElementById(loadingId).className = 'ax-m ax-a';
+      loadingMsg.innerHTML = "⚠️ ALERTA: Error de sincronía con la infraestructura local.";
+      loadingMsg.style.color = "#FF4455";
+      loadingMsg.classList.remove('ax-loader');
     }
   }
 
   sendBtn.onclick = sendMessage;
   input.onkeydown = (e) => { if(e.key === 'Enter') sendMessage(); };
 
-  console.log('🟡 AXON v3.0 loaded - TIE knowledge ready');
 })();

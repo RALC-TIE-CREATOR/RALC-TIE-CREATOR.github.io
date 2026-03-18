@@ -7,7 +7,9 @@
 
   // ── 1. CONFIGURACIÓN DE CONEXIÓN (LOCAL) ───────────
   // CAMBIA ESTA URL POR LA DE TU BACKEND LOCAL
-  const LOCAL_API_URL = ""; 
+   // ── 1. CONFIGURACIÓN ─────────────────────────────────
+  const API_KEY = "AIzaSyC4QU28EPB-_zi-7tkKB2p-Om5zBKlxZ-U"; 
+  const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`; 
   const IMAGEN_AXON = 'AXON FACE 2.png';
   
   // ── 2. DETECCIÓN DE IDIOMA ─────────────────────────

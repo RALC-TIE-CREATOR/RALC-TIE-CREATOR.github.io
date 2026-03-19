@@ -702,7 +702,7 @@ function useChip(txt) {
 }
 
 // ═══════════════════════════════════════════
-// SEND (CONECTADO A VERCEL)
+// SEND (CONECTADO A Cloudflare)
 // ═══════════════════════════════════════════
 async function send() {
   if (busy) return;
@@ -744,7 +744,7 @@ async function send() {
     }));
     contents.push({ role: 'user', parts: [{ text: text }] });
 
-    const res = await fetch("https://ralc-tie-creator-github-io.vercel.app/api/chat", {
+    const res = await fetch("https://axon-tie.rlecona1.workers.dev/api/chat", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -756,13 +756,13 @@ async function send() {
     if (!res.ok) {
       let errorDesc = `Error HTTP ${res.status}`;
       if (res.status === 404) errorDesc = "ERROR 404: Ruta API no encontrada.";
-      else if (res.status === 504) errorDesc = "ERROR 504: Timeout en Vercel.";
+      else if (res.status === 504) errorDesc = "ERROR 504: Timeout en Cloudflare.";
       throw new Error(errorDesc);
     }
 
     const data = await res.json();
     const reply = data?.reply;
-    if (!reply) throw new Error('Respuesta vacía de Vercel');
+    if (!reply) throw new Error('Respuesta vacía de Cloudflare');
 
     bubbleEl.innerHTML = renderMd(reply);
     renderKatex(bubbleEl);
@@ -902,7 +902,7 @@ const T = {
     statusReady: 'AXON · TIE v12.0 en contexto · listo',
     statusThink: 'AXON está consultando la infraestructura...',
     statusOk: (ms) => `Respuesta generada en ${ms} ms · sincronía estable`,
-    statusErr: '⚠ Error de sincronía con la red Vercel',
+    statusErr: '⚠ Error de sincronía con la red Cloudflare.',
     sysPre: 'Eres AXON, el asistente oficial de la Teoría de la Infraestructura Espacial (TIE). Responde en español de manera precisa y pedagógica. Tienes el siguiente conocimiento del Tratado TIE:',
     sysPost: '\n\nRecuerda: sé preciso pero accesible, recomienda herramientas específicas de la web cuando sea relevante, contextualiza los resultados numéricos, menciona las predicciones verificadas y sé honesto sobre limitaciones.'
   },
@@ -925,7 +925,7 @@ const T = {
     statusReady: 'AXON · TIE v12.0 in context · ready',
     statusThink: 'AXON is consulting the infrastructure...',
     statusOk: (ms) => `Response generated in ${ms} ms · stable synchrony`,
-    statusErr: '⚠ Synchrony error with Vercel network',
+    statusErr: '⚠ Synchrony error with Cloudflare network',
     sysPre: 'You are AXON, the official assistant of the Theory of Spatial Infrastructure (TIE). Respond in English precisely and pedagogically. You have the following knowledge of the TIE Treatise:',
     sysPost: '\n\nRemember: be precise yet accessible, recommend specific website tools when relevant, contextualize numerical results, mention verified predictions, and be honest about limitations.'
   }

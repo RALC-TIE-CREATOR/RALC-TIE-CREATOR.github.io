@@ -284,7 +284,7 @@
       </div>
 
       <div id="ax-input-area">
-        <input type="text" id="ax-input" placeholder="${t.placeholder}" autocomplete="off" maxlength="500">
+        <input type="text" id="ax-input" placeholder="${t.placeholder}" autocomplete="off" maxlength="2000">
         <button id="ax-send">↑</button>
       </div>
       <div id="axon-footer">${t.footer}</div>

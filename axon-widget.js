@@ -1,700 +1,400 @@
 // ═══════════════════════════════════════════════════════
-// AXON WIDGET v1.7 MOD — TIE Floating Chat (VERSIÓN DEFINITIVA)
-// CONTEXTO COMPLETO + AVATAR + CONEXIÓN LOCAL
+// AXON WIDGET v2.0 — TIE Floating Chat (PRODUCCIÓN)
+// Backend seguro en Cloudflare Worker · Sin API key expuesta
 // ═══════════════════════════════════════════════════════
 (function(){
   'use strict';
 
-  // ── 1. CONFIGURACIÓN DE CONEXIÓN (LOCAL) ───────────
-  // CAMBIA ESTA URL POR LA DE TU BACKEND LOCAL
-   // ── 1. CONFIGURACIÓN ─────────────────────────────────
-  const API_KEY = "AIzaSyC4QU28EPB-_zi-7tkKB2p-Om5zBKlxZ-U"; 
-  const LOCAL_API_URL = "http://localhost:3000/api/chat"; 
-  const IMAGEN_AXON = 'AXON FACE 2.png';
-  
-  // ── 2. DETECCIÓN DE IDIOMA ─────────────────────────
-  const isEN = document.documentElement.lang === 'en' || 
-               location.pathname.includes('-en.html') || 
+  // ── 1. CONFIGURACIÓN ─────────────────────────────────
+  // ⚠️ REEMPLAZA esta URL con la de tu Cloudflare Worker después del deployment
+  const WORKER_URL   = "https://axon-tie.TU_USUARIO.workers.dev/api/chat";
+  const IMAGEN_AXON  = 'AXON FACE 2.png';
+
+  // ── 2. DETECCIÓN DE IDIOMA ────────────────────────────
+  const isEN = document.documentElement.lang === 'en' ||
+               location.pathname.includes('-en.html') ||
                location.pathname.includes('index-en');
 
-  // ── 3. 🧠 CONTEXTO MAESTRO COMPLETO TIE ───────────
-  const MASTER_CONTEXT = `# 🧠 CONTEXTO COMPLETO PARA AXON · ASISTENTE TIE v2.0
-
-Eres AXON, el asistente oficial de la Teoría de la Infraestructura Espacial (TIE), creado por R@LC (Rubén A. Lecona Curto), investigador independiente en México.
-
-Tu personalidad: eres un guía entusiasta, preciso y pedagógico. Explicas conceptos complejos con claridad, usando analogías cuando es útil, pero siempre basándote en los números y las ecuaciones. Tu objetivo es ayudar a los visitantes a entender TIE y a navegar por las 20 herramientas interactivas.
-
-Respondes en el mismo idioma en que te pregunten (español o inglés). Tus respuestas deben ser concisas pero completas, y siempre que sea relevante, mencionas qué herramienta específica pueden usar para explorar el concepto.
-
-Tu conocimiento se basa en el Tratado TIE completo y en la estructura de la página web que se detalla a continuación.
-
----
-
-# 🌐 ESTRUCTURA DE LA PÁGINA WEB TIE
-
-## Página Principal (index.html / index-en.html)
-- Portal de entrada a TIE
-- Muestra las estadísticas principales: R = 2π, a₀ = cH₀/2π, 84.1% materia oscura, Λ error 5.0%
-- Contiene el widget de AXON para consultas
-
-## Página de Teoría (teoria.html / theory-en.html)
-Contiene la explicación completa de los fundamentos de TIE:
-
-### Los 4 Postulados Fundamentales
-1. **El Tiempo es un Motor Absoluto**: Fluye unidireccional y constante, no es una dimensión elástica
-2. **La Infraestructura Espacial**: El espacio es una red activa que transmite, sincroniza y procesa información
-3. **El Cuanto Mínimo de Sincronía**: ħ es el paquete mínimo indivisible (píxel de la realidad)
-4. **Ciclos Completos**: La infraestructura opera en ciclos de 2π (Constante de RALC)
-
-### Constantes Fundamentales
-- R = 2π = 6.2832... (Constante de RALC)
-- a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s² (aceleración de transición)
-- v₀ = c/2π = 47,715 km/s (velocidad fundamental de la infraestructura)
-- Λ = 2H₀²/c² = 1.145×10⁻⁵² m⁻² (constante cosmológica TIE)
-
-### Ecuaciones Principales
-- **Gravedad**: a_TIE = √[a_N(a_N + a₀)]
-- **Energía**: E = mc²/2π
-- **Masa TIE**: m_TIE = 2π·m_obs
-- **Materia oscura**: 1 - 1/2π = 84.1%
-- **Horizonte agujero negro**: r_h = 1.272√(GM/a₀)
-- **Velocidad plana galáctica**: v_flat = (GM a₀)^{1/4}
-- **Ley de Coulomb TIE**: F = q_TIE²/r² con q_TIE = q_SI·√k_e
-
-### El Bisturí TIE v2.0
-Método de 4 pasos con Diagnóstico Dual:
-1. **Encontrar el T²**: Identificar tiempo al cuadrado en unidades
-2. **Diagnosticar**: Aplicar 3 pruebas (Flecha del Tiempo, Invarianza de Unidades, Consistencia con el Reposo)
-3a. **Eliminar** (si espurio): Sustituir por ciclo 2π
-3b. **Traducir** (si cinemático): Expresar en términos de fase φ
-4. **Dejar que los números hablen**: Verificar con datos
-
----
-
-# 🧪 LABORATORIOS Y HERRAMIENTAS (20 EN TOTAL)
-
-## 🚪 Página Central de Laboratorios (labs.html / lab-en.html)
-Puerta de entrada a los 5 laboratorios temáticos. Muestra estadísticas:
-- 20 herramientas en total
-- 5 laboratorios
-- 175 galaxias SPARC integradas
-- 8/11 predicciones verificadas
-- 0 parámetros libres
-
----
-
-## ⚛️ LAB 01 · FUNDAMENTOS (6 herramientas)
-
-### H-17 · Jerarquía Cósmica T⁰/T¹/T²
-**URL:** jerarquia.html
-
-**Descripción:** Visualizador de la jerarquía causal T⁰→T¹→T². Demuestra que la aceleración gravitacional no es causa sino sombra.
-
-**Ecuaciones:**
-- ∇φ₀ = m v₀/ħ = 1/λ_C (T⁰ - gradiente de fase)
-- v₀ = c/2π = 47,715 km/s (T¹ - velocidad fundamental, invariante)
-- a₀ = v₀·H₀ = cH₀/2π (T² - aceleración de transición, varía con H₀)
-
-**Controles:**
-- Slider H₀ (67-74 km/s/Mpc)
-- Selector de 4 masas de ejemplo
-- Modo "Causal" que invierte la pirámide ortodoxa
-
-**Resultados:**
-- v₀ permanece constante (47,715 km/s) independientemente de H₀
-- a₀ varía proporcionalmente a H₀
-- Muestra por qué el paradigma ortodoxo necesita materia oscura
-
----
-
-### H-04 · Bisturí TIE v2.0
-**URL:** onto.html
-
-**Descripción:** El Traductor Ontológico. Aplica el Diagnóstico Dual a 10 ecuaciones de la física estándar.
-
-**Ecuaciones analizadas:**
-1. F = ma
-2. F = GMm/r²
-3. E = mc²
-4. F = kq²/r² (Ley de Coulomb)
-5. V = -g² e^{-m_π c r/ħ}/r (Yukawa)
-6. E = hν
-7. Γ = (2π/ħ)|M|²ρ(E) (Regla de Oro de Fermi)
-8. Fuerza nuclear débil
-9. Ecuación de Schrödinger
-10. Métrica de Schwarzschild
-
-**Las 3 Pruebas del Diagnóstico Dual:**
-- **Prueba 1 (Flecha del Tiempo)**: ¿Despejar t da ±t donde solo debería haber una dirección?
-- **Prueba 2 (Invarianza de Unidades)**: ¿El T² desaparece al cambiar de sistema (SI ↔ CGS ↔ naturales)?
-- **Prueba 3 (Consistencia con el Reposo)**: ¿Aplicada a sistema estático produce absurdos?
-
-**Resultados posibles:**
-- **ESPURIO** → Paso 3a: eliminar (multiplicar por 2π)
-- **CINEMÁTICO** → Paso 3b: traducir a fase φ
-- **NATIVA** (Fermi) → Ya tiene estructura 2π/ħ, validación independiente
-
----
-
-### H-06 · Trinidad Energética
-**URL:** trinidad.html
-
-**Descripción:** El Motor Absoluto redistribuye energía entre tres estados ontológicos.
-
-**Ecuaciones:**
-- **Existencia (E)**: E = mc²/2π (energía por ciclo de sincronía)
-- **Tensión (U)**: U = -GMm/r (deuda de sincronía, 2π implícito en masas)
-- **Cinética (K)**: K = ½mv² (movimiento sobre infraestructura)
-
-**Escenarios:**
-1. **Caída libre**: Piedra se eleva (U↑), cae (U→K), impacta (K→U)
-2. **Emisión atómica**: Electrón excitado (U) → desexcitación → fotón (E)
-3. **Aniquilación e⁺e⁻**: Fotón (E) → par (E)
-4. **Velocidad de escape**: K necesaria para vencer U
-
-**Resultados:**
-- La suma E + U + K permanece constante
-- El 2π nunca desaparece, solo cambia de lugar
-
----
-
-### H-03 · Calculadora R
-**URL:** 2pi.html
-
-**Descripción:** Calculadora interactiva de la constante R = 2π. Conecta masa observada con masa real de infraestructura.
-
-**Ecuaciones:**
-- m_TIE = R · m_obs (R = 2π)
-- v_flat = (G M a₀)^{1/4}
-
-**Datos:** 55 galaxias SPARC integradas
-
-**Controles:**
-- Slider H₀ (67-74 km/s/Mpc)
-- Filtro por tipo morfológico
-- Selector de galaxias
-
-**Resultados:**
-- Gráfica log-log v_flat vs masa
-- Comparación predicción TIE (línea dorada) vs puntos observados
-
----
-
-### H-05 · Materia Oscura
-**URL:** materia-oscura.html
-
-**Descripción:** Conversor de masa observable a masa real TIE. Demuestra que la "materia oscura" es 1 - 1/2π = 84.1%.
-
-**Ecuaciones:**
-- Fracción visible: 1/2π = 15.9%
-- Fracción "oscura": 1 - 1/2π = 84.1%
-
-**Controles:** Selector de unidades (kg, M☉, g, lb)
-
-**Resultados:**
-- Barra animada 15.9% / 84.1%
-- m_TIE = 2π · m_obs siempre
-
----
-
-### H-08 · a₀ y Λ — Constantes TIE
-**URL:** constante.html
-
-**Descripción:** Calculadora de las constantes fundamentales a₀ y Λ.
-
-**Ecuaciones:**
-- a₀ = cH₀/2π
-- Λ = 2H₀²/c²
-
-**Controles:** Slider H₀ (67-74 km/s/Mpc)
-
-**Resultados:**
-- a₀ en m/s²
-- Λ en m⁻²
-- Radio de transición r_trans = √(GM/a₀)
-- Comparación Λ_TIE vs Λ_Planck (error 5.0%)
-- Gráfica doble eje Planck vs SH0ES
-
----
-
-## 🌌 LAB 02 · GALAXIAS (4 herramientas)
-
-### H-21 · Error Estadístico Global RMS
-**URL:** rms.html
-
-**Descripción:** Análisis estadístico riguroso de las 175 galaxias SPARC.
-
-**Ecuación:** σ = std(log₁₀(v_TIE/v_obs))
-
-**Controles:**
-- Filtros por tipo morfológico (Sc/Sb/Sa/Sd/LSB/dIrr)
-- Filtro por calidad Q (1=alta, 2=media, 3=baja)
-
-**Resultados:**
-- σ_TIE = 0.067 dex (0 parámetros libres)
-- σ_ΛCDM = 0.11 dex (2 parámetros por galaxia)
-- σ_Newton = 0.38 dex
-- Histograma de residuos con gaussiana superpuesta
-
----
-
-### H-06 · Simulador RAR
-**URL:** simrar.html
-
-**Descripción:** Visualiza la Relación de Aceleración Radial.
-
-**Ecuación:** a_obs = √[a_bar(a_bar + a₀)]
-
-**Datos:** 250 puntos del catálogo SPARC
-
-**Resultados:**
-- a₀ fijo = 1.082×10⁻¹⁰ m/s² (predicción, no ajuste)
-- Curva TIE superpuesta a datos
-- R² actualizado en tiempo real
-
----
-
-### H-01 · Curvas de Rotación
-**URL:** curvas.html
-
-**Descripción:** Generador de curvas de rotación galácticas con 12 presets reales.
-
-**Ecuaciones:**
-- a_TIE = √[a_N(a_N + a₀)]
-- v(r) = √[r · a_TIE]
-
-**Presets incluidos:** NGC3198, NGC2403, NGC6503, NGC7331, UGC2885, NGC5907, UGC128, F568-3, F563-1, DDO154, DDO168, IC2574
-
-**Controles:**
-- 3 modos: Presets, Libre, Comparar
-- Checkboxes: v_disk, v_gas, v_Newton
-
-**Resultados:**
-- Curva de rotación TIE vs Newton
-- Radio de transición r_t mostrado numéricamente
-
----
-
-### H-02 · Explorador SPARC
-**URL:** sparc.html
-
-**Descripción:** Catálogo completo de 175 galaxias reales.
-
-**Ecuación:** v_TIE = (G M_bar · a₀)^{1/4}
-
-**Controles:**
-- Búsqueda por nombre
-- Filtros por tipo y calidad Q
-- 4 modos gráfica
-
-**Resultados:** Modal con datos completos de cada galaxia
-
----
-
-## ⏱️ LAB 03 · GRAVEDAD (4 herramientas)
-
-### H-09 · Lente Gravitacional TIE
-**URL:** lente.html
-
-**Descripción:** Simulador de deflexión de luz con 3 modelos.
-
-**Ecuaciones:**
-- α_TIE = 4π√(G M a₀)/c²
-- α_Newton = 2GM/(c²b)
-
-**Resultados:**
-- α_TIE constante (~3.6 arcsec para M=1e11 M☉)
-- Factor 2 emergente
-
----
-
-### H-11 · Agujeros Negros
-**URL:** agujeros.html
-
-**Descripción:** Comparación GR vs TIE.
-
-**Ecuaciones:**
-- r_s = 2GM/c²
-- r_h = 1.272√(GM/a₀)
-- M_c = 2.275×10²³ M☉
-
-**Presets:** M87*, Sgr A*, NGC1277, Sol, GW150914, M_crítica
-
-**Resultados:** r_h ≫ r_s, sin singularidad
-
----
-
-### H-12 · Corrección GPS
-**URL:** gps.html
-
-**Ecuación:** Δτ/τ = ΔΦ/c²
-
-**Resultado:** 45.7 μs/día (vs 45.9 observado) · error 0.4%
-
----
-
-### H-12.1 · Reloj Universal
-**URL:** reloj.html
-
-**Descripción:** Motor Absoluto con relojes analógicos
-
-**6 ubicaciones:** Tierra, GPS, ISS, Luna, Marte, espacio profundo
-
----
-
-## 🔭 LAB 04 · COSMOLOGÍA (3 herramientas)
-
-### H-10 · Cúmulo Bala
-**URL:** bala.html
-
-**Descripción:** Simulación de desacople sin materia oscura
-
----
-
-### H-07 · Lensing Gravitacional
-**URL:** lensing.html
-
-**Descripción:** Visualizador 3D Three.js con anillo de Einstein
-
----
-
-### H-13 · Campo φ (Ondas GW)
-**URL:** campo-phi.html
-
-**Ecuaciones:**
-- m_φ = ħ a₀ / c²
-- f_φ = √2 H₀/(2π) ≈ 2.4 mHz (dentro banda LISA)
-
----
-
-## 🤖 LAB 05 · INVESTIGADORES (3 herramientas)
-
-### H-14 · TIE AI Chat (tú mismo)
-**URL:** chat.html
-
----
-
-### H-15 · Generador LaTeX
-**URL:** latex.html
-
-**Descripción:** Catálogo de ecuaciones TIE con código LaTeX
-
----
-
-### H-16 · API Pública REST
-**URL:** api.html
-
-**Endpoints:** /v1/curva-rotacion, /v1/horizonte, /v1/constantes
-
----
-
-# 📚 APÉNDICE MATEMÁTICO COMPLETO
-
-## Constantes Fundamentales
-| Símbolo | Nombre | Valor | Origen |
-|---------|--------|-------|--------|
-| R | Constante de RALC | 2π = 6.2832... | Ciclo completo |
-| a₀ | Aceleración de transición | cH₀/2π = 1.082×10⁻¹⁰ m/s² | c, H₀, 2π |
-| v₀ | Velocidad fundamental | c/2π = 47,715 km/s | c, 2π |
-| Λ | Constante cosmológica TIE | 2H₀²/c² = 1.145×10⁻⁵² m⁻² | H₀, c |
-| t | Raíz cúbica del horizonte | 0.7549 | t³ + t² - 1 = 0 |
-
-## Ecuaciones Centrales por Capítulo
-
-### Capítulo 2: Gravedad
-- a_TIE = √[a_N(a_N + a₀)]
-- a_N = GM/r²
-- a₀ = cH₀/2π
-- v_flat = (G M a₀)^{1/4}
-- r_trans = √(GM/a₀)
-
-### Capítulo 3: Energía y Carga
-- E_TIE = mc²/2π
-- m_TIE = 2π·m_obs
-- Materia oscura: 1 - 1/2π = 84.1%
-- q_TIE = q_SI · √k_e
-- [q_TIE]² = kg·m³/s²
-- F = q_TIE²/r² (Coulomb TIE)
-
-### Capítulo 4: Fuerza Nuclear y Mecánica Cuántica
-- f_i = m_π c/ħ = 7.07×10¹⁴ m⁻¹
-- λ_i = ħ/(m_π c) = 1.41 fm
-- Γ_N = ħc/(απ²) = 13.88·ħc
-- α = e²k_e/(ħc) = 1/137.036
-- Δx·Δp ≥ ħ/2 (granularidad, no axioma)
-
-### Capítulo 5: Fuerza Nuclear Débil
-- Γ = (2π/ħ)·|M|²·ρ(E) (Regla de Oro de Fermi - NATIVA)
-- λ = ln2 / t_{1/2}
-
-### Capítulo 6: Formulación Tensorial
-- dl² = (1 - 2Φ_TIE/c²)⁻¹ dr² + r² dΩ²
-- Φ_TIE(r) = -GM/r · 1/√(1 + a₀r²/(GM))
-- G_ij + Λ_TIE g_ij = (8π²G/c⁴) T_ij
-- Λ_TIE = 8π²a₀²/c⁴ = 2H₀²/c²
-
-### Capítulo 7: Mecánica Cuántica
-- ψ(x) ≡ ρ_ħ^{1/2}(x), [ψ] = m^{-3/2}
-- |ψ|² = densidad volumétrica
-- V_TIE = -ħ a₀ / c
-- Δφ_COW corregido: Δφ_TIE = Δφ_COW·(1 + a₀/g)
-
-### Capítulo 8: Ondas Gravitacionales
-- δg_ij = h_ij · φ(x,t)
-- ∂φ/∂t = -c(∇φ · k̂)
-- ω = c|k|
-- δL/L = δg_ij/2
-
-### Capítulo 9: Principio Geodésico
-- φ = (1/ħ)∫(E dt - p dx)
-- δ∫dφ = 0
-- θ = 4GM/(c²R) (deflexión luz)
-- Δφ_Mercurio = 6πGM/[c²a(1-e²)]
-- Δt_Shapiro = (2GM/c³) ln(r₁r₂/b²)
-
-### Capítulo 10: Agujeros Negros
-- u² + u - 1 = 0, u = a₀/a_N = 1/φ
-- r_h = √(φ GM/a₀) = 1.272√(GM/a₀)
-- M_c = φ c⁴/(4G a₀) = 2.275×10²³ M☉
-
-### Capítulo 11: Lambda Exacta
-- Λ_TIE = 8π²a₀²/c⁴ = 2H₀²/c²
-- 8π² = 4π × 2π (topología S² × S¹)
-
-### Capítulo 12: Lagrangiano de la Infraestructura
-- ℒ_TIE = A [½(∂φ/∂T)² - c²/2(∇φ)² - ω_φ²/2 φ² - (G/(πc²)) φ ρ_bar (1-1/2π)]
-- A = ħH₀²/c³ ≈ 2.01×10⁻⁹⁵ kg/m
-- ω_φ = √2 H₀
-- m_φ = ħ√2 H₀/c² ≈ 2.1×10⁻³³ eV/c²
-- f_φ = √2 H₀/(2π) ≈ 5.1×10⁻¹⁹ Hz (fondo estacionario)
-
----
-
-# 📊 PREDICCIONES VERIFICADAS
-
-| Predicción | Valor TIE | Observado | Error |
-|------------|-----------|-----------|-------|
-| Materia oscura | 84.1% | ~84% | < 1% |
-| a₀ | 1.082×10⁻¹⁰ m/s² | 1.2×10⁻¹⁰ (MOND) | ~10% |
-| Regla de Fermi | 2π/ħ | 2π/ħ | 0% |
-| α (estructura fina) | 1/137.12 | 1/137.036 | 0.06% |
-| Radio de Bohr | 5.297×10⁻¹¹ m | 5.292×10⁻¹¹ m | 0.10% |
-| GPS | 45.7 μs/día | 45.9 μs/día | 0.4% |
-| Cúmulos galácticos | 2π × masa obs | ~6.25× | 0.5% |
-| Deflexión luz | 1.750″ | 1.748±0.006″ | 0.1% |
-| Precesión Mercurio | 43.0″/siglo | 43.1″/siglo | 0.2% |
-| Λ | 1.145×10⁻⁵² m⁻² | 1.090×10⁻⁵² m⁻² | 5.0% |
-
----
-
-# 🎯 INSTRUCCIONES PARA AXON
-
-Cuando respondas a los usuarios:
-
-1. **Sé preciso pero accesible**: Usa las ecuaciones cuando sea relevante, pero explica su significado.
-2. **Recomienda herramientas**: Si preguntan sobre un concepto, sugiere qué herramienta del laboratorio pueden usar para explorarlo.
-3. **Contextualiza los resultados**: No des solo números — explica qué significan en el marco de TIE.
-4. **Menciona las predicciones verificadas**: Cuando sea relevante, destaca que TIE tiene 0 parámetros libres y sus predicciones coinciden con observaciones.
-5. **Sé honesto sobre limitaciones**: Si algo es trabajo futuro (ej. fotosfera TIE), menciónalo.
-
-**Ejemplo de respuesta:**
-> "La aceleración de transición a₀ = 1.082×10⁻¹⁰ m/s² se calcula como a₀ = cH₀/2π. Puedes explorar cómo varía con H₀ en la herramienta H-08 (Constantes TIE) del Laboratorio de Fundamentos. El valor predicho por TIE tiene un error del 5.0% respecto a la constante cosmológica observada por Planck — y lo logra sin necesidad de energía oscura."`;
-
-  // ── 4. MAPA DE NAVEGACIÓN (completo) ───────────────
+  // ── 3. CONTEXTO DE PÁGINA ACTUAL ─────────────────────
+  // Solo manda el contexto mínimo de la página — el system prompt
+  // completo vive seguro en el Worker, no en el cliente
   const PAGE_MAP = {
-    'index':                  {es:'Página principal TIE',                          en:'TIE Home'},
-    'teoria':                 {es:'Teoría TIE Fundamentos',                        en:'TIE Theory Foundations'},
-    'predicciones':           {es:'Predicciones TIE',                              en:'TIE Predictions'},
-    'papers':                 {es:'Papers y Publicaciones',                        en:'TIE Papers'},
-    'labs':                   {es:'Hub de Laboratorios',                           en:'TIE Labs Hub'},
-    'constante':              {es:'H-01 · Constante Cosmológica',                  en:'H-01 · Cosmological Constant'},
-    'masa-critica':           {es:'H-02 · Masa Crítica',                           en:'H-02 · Critical Mass'},
-    'agujeros':               {es:'H-03 · Agujeros Negros',                        en:'H-03 · Black Holes'},
-    'curvas':                 {es:'H-04 · Curvas de Rotación',                     en:'H-04 · Rotation Curves'},
-    'sparc':                  {es:'H-05 · Base de datos SPARC',                    en:'H-05 · SPARC DB'},
-    'gps':                    {es:'H-06 · GPS y Relojes',                         en:'H-06 · GPS Correction'},
-    'lensing':                {es:'H-07 · Lensing Gravitacional 3D',               en:'H-07 · 3D Lensing'},
-    '2pi':                    {es:'H-08 · Factor 2π',                             en:'H-08 · 2π Factor'},
-    'materia-oscura':         {es:'H-09 · Materia Oscura',                         en:'H-09 · Dark Matter'},
-    'reloj-universal':        {es:'H-10 · Reloj Universal',                        en:'H-10 · Universal Clock'},
-    'falsibilidad':           {es:'H-11 · Falsificabilidad',                      en:'H-11 · Falsifiability'},
-    'campo-phi':              {es:'H-13 · Campo φ / Ondas GW',                    en:'H-13 · φ Field / GW Waves'},
-    'chat':                   {es:'H-14 · AXON Chat',                             en:'H-14 · AXON Chat'},
-    'latex':                  {es:'H-15 · Generador LaTeX',                       en:'H-15 · LaTeX Gen'},
-    'api':                    {es:'H-16 · API REST TIE',                          en:'H-16 · TIE REST API'},
-    'jerarquia':              {es:'H-17 · Jerarquía Cósmica',                     en:'H-17 · Cosmic Hierarchy'},
-    'trinidad':               {es:'H-18 · Trinidad Energética',                   en:'H-18 · Energetic Trinity'},
-    'traductor_ontologico':   {es:'H-19 · Bisturí T² / Traductor',                 en:'H-19 · T² Scalpel'},
-    'rms':                    {es:'H-20 · Test RMS Galaxias',                     en:'H-20 · RMS Galaxy Test'}
+    'index':                  {es:'Página Principal TIE',                    en:'TIE Main Page'},
+    'teoria':                 {es:'Los Pilares de TIE — Fundamentos',         en:'TIE Pillars — Theory'},
+    'theory':                 {es:'Los Pilares de TIE — Fundamentos',         en:'TIE Pillars — Theory'},
+    'labs':                   {es:'Laboratorio — 20 Herramientas',            en:'Lab — 20 Tools'},
+    'lab-en':                 {es:'Laboratorio — 20 Herramientas',            en:'Lab — 20 Tools'},
+    'curvas':                 {es:'H-01 · Curvas de Rotación Galáctica',      en:'H-01 · Galactic Rotation Curves'},
+    'sparc':                  {es:'H-02 · Explorador SPARC 175 Galaxias',     en:'H-02 · SPARC Explorer 175 Galaxies'},
+    '2pi':                    {es:'H-03 · Calculadora 2π / Constante R@LC',   en:'H-03 · 2π Calculator / RALC Constant'},
+    'onto':                   {es:'H-04 · Bisturí T² / Traductor Ontológico', en:'H-04 · T² Scalpel / Ontological Translator'},
+    'materia-oscura':         {es:'H-05 · Materia Oscura 84.1%',              en:'H-05 · Dark Matter 84.1%'},
+    'constante':              {es:'H-08 · a₀ y Λ Cosmológica',               en:'H-08 · a₀ and Cosmological Λ'},
+    'agujeros':               {es:'H-11 · Agujeros Negros TIE vs GR',         en:'H-11 · Black Holes TIE vs GR'},
+    'black-holes':            {es:'H-11 · Agujeros Negros TIE vs GR',         en:'H-11 · Black Holes TIE vs GR'},
+    'gps':                    {es:'H-12 · Corrección GPS Viscosidad',          en:'H-12 · GPS Correction Viscosity'},
+    'reloj-universal':        {es:'H-12.1 · Reloj Universal TIE',             en:'H-12.1 · Universal Clock TIE'},
+    'lensing':                {es:'H-07 · Lensing Gravitacional',             en:'H-07 · Gravitational Lensing'},
+    'campo-phi':              {es:'H-13 · Campo φ / Ondas Gravitacionales',   en:'H-13 · φ Field / Gravitational Waves'},
+    'latex':                  {es:'H-15 · Generador LaTeX TIE',               en:'H-15 · TIE LaTeX Generator'},
+    'api':                    {es:'H-16 · API REST Pública TIE',              en:'H-16 · TIE Public REST API'},
+    'jerarquia':              {es:'H-17 · Jerarquía Cósmica T⁰/T¹/T²',       en:'H-17 · Cosmic Hierarchy T⁰/T¹/T²'},
+    'trinidad':               {es:'H-18 · Trinidad Energética',               en:'H-18 · Energetic Trinity'},
+    'simrar':                 {es:'H-19 · Simulador RAR',                     en:'H-19 · RAR Simulator'},
+    'rms':                    {es:'H-20 · Test RMS Global SPARC',             en:'H-20 · SPARC Global RMS Test'},
+    'predicciones':           {es:'Predicciones Verificables — Semáforo',     en:'Verifiable Predictions — Traffic Light'},
+    'predictions':            {es:'Predicciones Verificables — Semáforo',     en:'Verifiable Predictions — Traffic Light'},
+    'falsabilidad':           {es:'Criterios de Falsabilidad — Popper',       en:'Falsifiability Criteria — Popper'},
+    'falsifiability':         {es:'Criterios de Falsabilidad — Popper',       en:'Falsifiability Criteria — Popper'},
+    'papers':                 {es:'Papers y Publicaciones — Zenodo/arXiv',    en:'Papers & Publications — Zenodo/arXiv'},
+    'chat':                   {es:'H-14 · AXON Chat Completo',                en:'H-14 · AXON Full Chat'},
   };
 
-  const slug = location.pathname.split('/').pop().replace('.html','') || 'index';
-  const pageMatch = Object.keys(PAGE_MAP).find(k => slug.includes(k));
-  const currentPage = pageMatch ? (isEN ? PAGE_MAP[pageMatch].en : PAGE_MAP[pageMatch].es) : 'Sitio TIE';
+  const slug        = location.pathname.split('/').pop().replace('.html','') || 'index';
+  const pageMatch   = Object.keys(PAGE_MAP).find(k => slug.includes(k));
+  const currentPage = pageMatch
+    ? (isEN ? PAGE_MAP[pageMatch].en : PAGE_MAP[pageMatch].es)
+    : (isEN ? 'TIE Site' : 'Sitio TIE');
 
-  // ── 5. KATEX ────────────────────────────────────────
+  // ── 4. KATEX (renderizado de ecuaciones) ─────────────
   function ensureKatex(cb){
     if(window.katex){ cb(); return; }
-    const link = document.createElement('link'); link.rel='stylesheet'; link.href='https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css';
+    const link = document.createElement('link');
+    link.rel  = 'stylesheet';
+    link.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css';
     document.head.appendChild(link);
-    const s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js'; s.onload=cb;
+    const s    = document.createElement('script');
+    s.src      = 'https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js';
+    s.onload   = cb;
     document.head.appendChild(s);
   }
 
-  // ── 6. ESTILOS (mejorados con avatar) ───────────────
+  function renderKatex(element) {
+    ensureKatex(() => {
+      // Inline math: \( ... \)
+      element.innerHTML = element.innerHTML.replace(
+        /\\\((.+?)\\\)/gs,
+        (_, tex) => {
+          try { return katex.renderToString(tex, { throwOnError: false }); }
+          catch(e) { return _; }
+        }
+      );
+      // Block math: \[ ... \]
+      element.innerHTML = element.innerHTML.replace(
+        /\\\[(.+?)\\\]/gs,
+        (_, tex) => {
+          try { return katex.renderToString(tex, { throwOnError: false, displayMode: true }); }
+          catch(e) { return _; }
+        }
+      );
+    });
+  }
+
+  // ── 5. ESTILOS ────────────────────────────────────────
   const style = document.createElement('style');
   style.textContent = `
-    #axon-widget { position: fixed; bottom: 20px; right: 20px; z-index: 9999; font-family: 'Syne', sans-serif; }
-    #axon-bubble { 
-      width: 55px; height: 55px; background: #000; border-radius: 50%; 
-      display: flex; align-items: center; justify-content: center; cursor: pointer;
-      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4); transition: 0.3s; border: 2px solid #FFD700;
+    #axon-widget {
+      position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+      font-family: 'Syne', 'Space Mono', monospace;
+    }
+    #axon-bubble {
+      width: 56px; height: 56px; background: #000; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; border: 2px solid #FFD700;
+      box-shadow: 0 4px 20px rgba(255,215,0,0.4);
+      transition: transform 0.25s, box-shadow 0.25s;
       overflow: hidden;
     }
-    #axon-bubble:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6); }
+    #axon-bubble:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 28px rgba(255,215,0,0.65);
+    }
     #axon-bubble img { width: 100%; height: 100%; object-fit: cover; }
-    #axon-panel { 
-      display: none; position: absolute; bottom: 70px; right: 0; width: 340px; 
-      height: 480px; background: rgba(5, 5, 15, 0.98); border: 1px solid rgba(91, 200, 245, 0.3);
-      border-radius: 12px; flex-direction: column; overflow: hidden; backdrop-filter: blur(10px);
-      box-shadow: 0 10px 40px rgba(0,0,0,0.7); animation: axFadeIn 0.3s ease-out;
+
+    #axon-panel {
+      display: none;
+      position: absolute; bottom: 72px; right: 0;
+      width: 340px; height: 500px;
+      background: rgba(4,4,14,0.97);
+      border: 1px solid rgba(91,200,245,0.25);
+      border-radius: 14px;
+      flex-direction: column; overflow: hidden;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 12px 48px rgba(0,0,0,0.75);
+      animation: axFadeIn 0.25s ease-out;
     }
-    #axon-head { 
-      background: rgba(255, 215, 0, 0.1); padding: 12px; 
-      border-bottom: 1px solid rgba(255, 215, 0, 0.15); 
-      display: flex; justify-content: space-between; align-items: center; 
+
+    #axon-head {
+      padding: 12px 14px;
+      background: rgba(255,215,0,0.07);
+      border-bottom: 1px solid rgba(255,215,0,0.12);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-shrink: 0;
     }
-    #axon-msgs { 
-      flex: 1; overflow-y: auto; padding: 15px; display: flex; 
-      flex-direction: column; gap: 10px; scrollbar-width: thin; 
+    #axon-head-left { display: flex; align-items: center; gap: 8px; }
+    #axon-avatar-small {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1px solid #FFD700; overflow: hidden;
+      flex-shrink: 0;
     }
-    .ax-m { 
-      padding: 8px 12px; border-radius: 10px; font-size: 0.78rem; 
-      line-height: 1.5; max-width: 88%; font-family: 'Space Mono', monospace; 
-      word-wrap: break-word;
+    #axon-avatar-small img { width: 100%; height: 100%; object-fit: cover; }
+    #axon-title {
+      color: #FFD700; font-size: 0.68rem; font-weight: 800;
+      letter-spacing: 1.5px; font-family: 'Space Mono', monospace;
     }
-    .ax-u { align-self: flex-end; background: rgba(91, 200, 245, 0.12); color: #fff; border: 1px solid rgba(91, 200, 245, 0.2); }
-    .ax-a { align-self: flex-start; background: rgba(255, 255, 255, 0.04); color: #e0e0e0; border: 1px solid rgba(255, 215, 0, 0.1); }
-    .ax-error { align-self: flex-start; background: rgba(255, 68, 85, 0.12); color: #FF4455; border: 1px solid rgba(255, 68, 85, 0.3); }
-    #ax-input-area { padding: 10px; background: rgba(0,0,0,0.5); border-top: 1px solid rgba(255,255,255,0.05); display: flex; gap: 8px; }
-    #ax-input { flex: 1; background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 6px; color: #fff; padding: 8px; outline: none; font-size: 0.8rem; }
-    #ax-send { background: #FFD700; border: none; border-radius: 6px; padding: 0 12px; cursor: pointer; font-weight: 800; color: #000; }
-    .ax-loader { font-size: 0.7rem; color: #FFD700; opacity: 0.6; animation: axPulse 1.5s infinite; }
-    @keyframes axFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes axPulse { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+    #axon-subtitle {
+      color: rgba(255,255,255,0.35); font-size: 0.55rem;
+      letter-spacing: 0.5px; margin-top: 1px;
+    }
+    #axon-close {
+      background: none; border: none; color: rgba(255,255,255,0.5);
+      cursor: pointer; font-size: 1rem; padding: 2px 4px;
+      transition: color 0.2s;
+    }
+    #axon-close:hover { color: #fff; }
+
+    #axon-msgs {
+      flex: 1; overflow-y: auto; padding: 14px;
+      display: flex; flex-direction: column; gap: 10px;
+      scrollbar-width: thin; scrollbar-color: rgba(255,215,0,0.2) transparent;
+    }
+    #axon-msgs::-webkit-scrollbar { width: 4px; }
+    #axon-msgs::-webkit-scrollbar-thumb { background: rgba(255,215,0,0.2); border-radius: 2px; }
+
+    .ax-m {
+      padding: 9px 13px; border-radius: 10px;
+      font-size: 0.77rem; line-height: 1.55;
+      max-width: 90%; word-wrap: break-word;
+      font-family: 'Space Mono', monospace;
+    }
+    .ax-u {
+      align-self: flex-end;
+      background: rgba(91,200,245,0.1);
+      color: #e8f4fd;
+      border: 1px solid rgba(91,200,245,0.2);
+    }
+    .ax-a {
+      align-self: flex-start;
+      background: rgba(255,255,255,0.04);
+      color: #dde8f0;
+      border: 1px solid rgba(255,215,0,0.1);
+    }
+    .ax-error {
+      align-self: flex-start;
+      background: rgba(255,68,85,0.1);
+      color: #ff6677;
+      border: 1px solid rgba(255,68,85,0.25);
+    }
+    .ax-loader {
+      font-size: 0.68rem; color: #FFD700;
+      opacity: 0.7; animation: axPulse 1.5s infinite;
+    }
+
+    #ax-input-area {
+      padding: 10px 12px;
+      background: rgba(0,0,0,0.45);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex; gap: 8px; flex-shrink: 0;
+    }
+    #ax-input {
+      flex: 1; background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; color: #fff;
+      padding: 8px 11px; outline: none;
+      font-size: 0.78rem; font-family: 'Space Mono', monospace;
+      transition: border-color 0.2s;
+    }
+    #ax-input:focus { border-color: rgba(255,215,0,0.4); }
+    #ax-input::placeholder { color: rgba(255,255,255,0.25); }
+    #ax-send {
+      background: #FFD700; border: none; border-radius: 8px;
+      padding: 0 14px; cursor: pointer;
+      font-weight: 900; color: #000; font-size: 1rem;
+      transition: background 0.2s, transform 0.15s;
+      flex-shrink: 0;
+    }
+    #ax-send:hover { background: #ffe033; transform: scale(1.05); }
+    #ax-send:active { transform: scale(0.97); }
+
+    #axon-footer {
+      padding: 5px 14px 8px;
+      text-align: center;
+      font-size: 0.5rem;
+      color: rgba(255,255,255,0.18);
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+
+    @keyframes axFadeIn {
+      from { opacity: 0; transform: translateY(8px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes axPulse {
+      0%   { opacity: 0.3; }
+      50%  { opacity: 1; }
+      100% { opacity: 0.3; }
+    }
+
+    /* Dot indicator de estado */
+    #axon-status-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #00e676; display: inline-block;
+      box-shadow: 0 0 5px #00e676;
+      animation: axPulse 2s infinite;
+    }
   `;
   document.head.appendChild(style);
 
-  // ── 7. CREAR WIDGET (con avatar) ────────────────────
+  // ── 6. TEXTOS I18N ────────────────────────────────────
+  const t = {
+    greeting: isEN
+      ? 'Sync active. Ask me anything about TIE — theory, tools, predictions.'
+      : 'Sincronía activa. Pregúntame lo que quieras sobre TIE — teoría, herramientas, predicciones.',
+    placeholder: isEN ? 'Ask TIE...'         : 'Pregunta a TIE...',
+    loading:     isEN ? 'Processing...'       : 'Procesando...',
+    error:       isEN
+      ? '⚠️ Connection error. Try again in a moment.'
+      : '⚠️ Error de conexión. Intenta de nuevo en un momento.',
+    footer:      isEN ? 'R@LC · TIE · 0 free parameters' : 'R@LC · TIE · 0 parámetros libres',
+    subtitle:    isEN ? 'TIE Assistant · Gemini'         : 'Asistente TIE · Gemini',
+  };
+
+  // ── 7. HTML DEL WIDGET ────────────────────────────────
+  const svgFallback = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23000' stroke='%23FFD700' stroke-width='2'/%3E%3Ccircle cx='35' cy='40' r='8' fill='%23FFD700'/%3E%3Ccircle cx='65' cy='40' r='8' fill='%23FFD700'/%3E%3Cpath d='M30 65 Q50 80,70 65' stroke='%23FFD700' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E`;
+
   const container = document.createElement('div');
   container.id = 'axon-widget';
   container.innerHTML = `
     <div id="axon-panel">
       <div id="axon-head">
-        <span style="color:#FFD700; font-size:0.7rem; font-weight:800; letter-spacing:1px; font-family:'Space Mono';">AXON_H14 // WIDGET</span>
-        <button id="axon-close" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.1rem;">✕</button>
+        <div id="axon-head-left">
+          <div id="axon-avatar-small">
+            <img src="${IMAGEN_AXON}" alt="AXON" onerror="this.src='${svgFallback}'">
+          </div>
+          <div>
+            <div id="axon-title">AXON <span id="axon-status-dot"></span></div>
+            <div id="axon-subtitle">${t.subtitle}</div>
+          </div>
+        </div>
+        <button id="axon-close" title="Cerrar">✕</button>
       </div>
+
       <div id="axon-msgs">
-        <div class="ax-m ax-a">${isEN ? 'Synchrony active. How can I assist you in this lab?' : 'Sincronía activa en la red. ¿Cómo puedo asistirte en este laboratorio?'}</div>
+        <div class="ax-m ax-a">${t.greeting}</div>
       </div>
+
       <div id="ax-input-area">
-        <input type="text" id="ax-input" placeholder="${isEN ? 'Ask TIE...' : 'Pregunta a TIE...'}" autocomplete="off">
+        <input type="text" id="ax-input" placeholder="${t.placeholder}" autocomplete="off" maxlength="500">
         <button id="ax-send">↑</button>
       </div>
+      <div id="axon-footer">${t.footer}</div>
     </div>
-    <div id="axon-bubble">
-      <img src="${IMAGEN_AXON}" alt="AXON" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'%23000\' stroke=\'%23FFD700\' stroke-width=\'2\'/%3E%3Ccircle cx=\'35\' cy=\'40\' r=\'8\' fill=\'%23FFD700\'/%3E%3Ccircle cx=\'65\' cy=\'40\' r=\'8\' fill=\'%23FFD700\'/%3E%3Cpath d=\'M30 65 Q50 80,70 65\' stroke=\'%23FFD700\' stroke-width=\'4\' fill=\'none\' stroke-linecap=\'round\'/%3E%3C/svg%3E';">
+
+    <div id="axon-bubble" title="AXON · Asistente TIE">
+      <img src="${IMAGEN_AXON}" alt="AXON" onerror="this.src='${svgFallback}'">
     </div>
   `;
   document.body.appendChild(container);
 
-  // ── 8. ELEMENTOS DEL DOM ───────────────────────────
-  const bubble = document.getElementById('axon-bubble');
-  const panel = document.getElementById('axon-panel');
-  const closeBtn = document.getElementById('axon-close');
-  const input = document.getElementById('ax-input');
-  const sendBtn = document.getElementById('ax-send');
-  const msgsContainer = document.getElementById('axon-msgs');
-  
-  let chatHistory = [];
+  // ── 8. REFERENCIAS DOM ────────────────────────────────
+  const bubble      = document.getElementById('axon-bubble');
+  const panel       = document.getElementById('axon-panel');
+  const closeBtn    = document.getElementById('axon-close');
+  const input       = document.getElementById('ax-input');
+  const sendBtn     = document.getElementById('ax-send');
+  const msgs        = document.getElementById('axon-msgs');
 
-  bubble.onclick = () => { 
-    const isVisible = panel.style.display === 'flex';
-    panel.style.display = isVisible ? 'none' : 'flex';
-    if(!isVisible) input.focus();
-  };
-  
-  closeBtn.onclick = (e) => { 
-    e.stopPropagation(); 
-    panel.style.display = 'none'; 
-  };
+  let chatHistory   = [];
+  let isLoading     = false;
 
-  function appendMessage(role, text, isHtml = false, isError = false) {
-    const msgDiv = document.createElement('div');
-    msgDiv.className = `ax-m ${role === 'user' ? 'ax-u' : (isError ? 'ax-error' : 'ax-a')}`;
-    if(isHtml) {
-      msgDiv.innerHTML = text;
-    } else {
-      msgDiv.textContent = text;
-    }
-    msgsContainer.appendChild(msgDiv);
-    msgsContainer.scrollTop = msgsContainer.scrollHeight;
-    return msgDiv;
+  // ── 9. TOGGLE ─────────────────────────────────────────
+  bubble.onclick = () => {
+    const open = panel.style.display === 'flex';
+    panel.style.display = open ? 'none' : 'flex';
+    if (!open) setTimeout(() => input.focus(), 100);
+  };
+  closeBtn.onclick = (e) => { e.stopPropagation(); panel.style.display = 'none'; };
+
+  // ── 10. AÑADIR MENSAJE ────────────────────────────────
+  function addMessage(role, text, isError = false) {
+    const div = document.createElement('div');
+    div.className = `ax-m ${role === 'user' ? 'ax-u' : (isError ? 'ax-error' : 'ax-a')}`;
+    div.innerHTML = text.replace(/\n/g, '<br>');
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+    return div;
   }
 
-  // ── 9. ENVÍO DE MENSAJE (conexión local) ───────────
+  // ── 11. ENVIAR MENSAJE ────────────────────────────────
   async function sendMessage() {
     const text = input.value.trim();
-    if(!text) return;
+    if (!text || isLoading) return;
 
+    isLoading = true;
     input.value = '';
-    appendMessage('user', text);
-    
-    const loadingId = 'msg-' + Date.now();
-    const loadingMsg = document.createElement('div');
-    loadingMsg.className = 'ax-m ax-a ax-loader';
-    loadingMsg.id = loadingId;
-    loadingMsg.innerHTML = '... <span style="font-size:0.6rem;">(conectando con infraestructura local...)</span>';
-    msgsContainer.appendChild(loadingMsg);
-    msgsContainer.scrollTop = msgsContainer.scrollHeight;
+    sendBtn.disabled = true;
+
+    addMessage('user', text);
+
+    // Loading indicator
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'ax-m ax-a ax-loader';
+    loadingDiv.textContent = t.loading;
+    msgs.appendChild(loadingDiv);
+    msgs.scrollTop = msgs.scrollHeight;
 
     try {
-      const response = await fetch(LOCAL_API_URL, {
-        method: 'POST',
+      const response = await fetch(WORKER_URL, {
+        method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          contents: [...chatHistory, { role: 'user', parts: [{ text: text }] }],
-          systemInstruction: { parts: [{ text: `CONTEXTO_PAGINA_ACTUAL: ${currentPage}\n\n` + MASTER_CONTEXT }] }
+          contents: [
+            ...chatHistory,
+            { role: 'user', parts: [{ text }] }
+          ],
+          // Solo mandamos el contexto de página — el system prompt completo
+          // vive seguro en el Worker
+          systemInstruction: {
+            parts: [{ text: `PÁGINA_ACTUAL: ${currentPage}\nIDIOMA: ${isEN ? 'EN' : 'ES'}` }]
+          }
         })
       });
 
       const data = await response.json();
-      loadingMsg.classList.remove('ax-loader');
 
-      if (!response.ok) throw new Error(data.error || "Error de conexión local");
+      if (!response.ok) throw new Error(data.error || `Error ${response.status}`);
 
-      const reply = data.reply;
-      loadingMsg.innerHTML = reply.replace(/\n/g, '<br>');
-      
-      ensureKatex(() => {
-        loadingMsg.innerHTML = loadingMsg.innerHTML.replace(/\\\((.+?)\\\)/gs, (_, tex) => {
-          try { return katex.renderToString(tex, { throwOnError: false }); } 
-          catch(e) { return _; }
-        });
-      });
+      const reply = data.reply || '';
 
-      chatHistory.push({ role: 'user', parts: [{ text: text }] });
+      // Reemplazar loader con respuesta
+      loadingDiv.classList.remove('ax-loader');
+      loadingDiv.innerHTML = reply.replace(/\n/g, '<br>');
+
+      // Renderizar ecuaciones LaTeX si las hay
+      if (reply.includes('\\(') || reply.includes('\\[')) {
+        renderKatex(loadingDiv);
+      }
+
+      // Actualizar historial (máximo 10 turnos = 20 mensajes)
+      chatHistory.push({ role: 'user',  parts: [{ text }] });
       chatHistory.push({ role: 'model', parts: [{ text: reply }] });
-      if(chatHistory.length > 20) chatHistory.shift();
+      if (chatHistory.length > 20) chatHistory.splice(0, 2);
 
     } catch (err) {
-      loadingMsg.innerHTML = "⚠️ ALERTA: Error de sincronía con la infraestructura local.";
-      loadingMsg.style.color = "#FF4455";
-      loadingMsg.classList.remove('ax-loader');
+      loadingDiv.classList.remove('ax-loader');
+      loadingDiv.className = 'ax-m ax-error';
+      loadingDiv.textContent = t.error;
+      console.error('[AXON]', err);
+    } finally {
+      isLoading        = false;
+      sendBtn.disabled = false;
+      input.focus();
+      msgs.scrollTop   = msgs.scrollHeight;
     }
   }
 
-  sendBtn.onclick = sendMessage;
-  input.onkeydown = (e) => { if(e.key === 'Enter') sendMessage(); };
+  // ── 12. EVENTOS ───────────────────────────────────────
+  sendBtn.onclick       = sendMessage;
+  input.onkeydown       = (e) => { if (e.key === 'Enter' && !e.shiftKey) sendMessage(); };
 
 })();

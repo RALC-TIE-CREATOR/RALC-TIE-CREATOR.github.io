@@ -7,7 +7,7 @@
 
   // ── 1. CONFIGURACIÓN ─────────────────────────────────
   // ⚠️ REEMPLAZA esta URL con la de tu Cloudflare Worker después del deployment
-  const WORKER_URL   = "https://axon-tie.TU_USUARIO.workers.dev/api/chat";
+  const WORKER_URL = "https://axon-tie.rlecona1.workers.dev/api/chat";
   const IMAGEN_AXON  = 'AXON FACE 2.png';
 
   // ── 2. DETECCIÓN DE IDIOMA ────────────────────────────

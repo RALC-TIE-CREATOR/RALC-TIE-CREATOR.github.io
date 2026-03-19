@@ -495,7 +495,7 @@ function useChip(txt) {
 }
 
 // ═══════════════════════════════════════════
-// SEND (CONNECTED TO VERCEL)
+// SEND (CONNECTED TO Cloudflare)
 // ═══════════════════════════════════════════
 async function send() {
   if (busy) return;
@@ -535,7 +535,7 @@ async function send() {
     }));
     contents.push({ role: 'user', parts: [{ text: text }] });
 
-    const res = await fetch("https://ralc-tie-creator-github-io.vercel.app/api/chat", {
+    const res = await fetch("https://axon-tie.rlecona1.workers.dev/api/chat", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -547,13 +547,13 @@ async function send() {
     if (!res.ok) {
       let errorDesc = `HTTP Error ${res.status}`;
       if (res.status === 404) errorDesc = "ERROR 404: API route not found.";
-      else if (res.status === 504) errorDesc = "ERROR 504: Vercel timeout.";
+      else if (res.status === 504) errorDesc = "ERROR 504: Cloudflare timeout.";
       throw new Error(errorDesc);
     }
 
     const data = await res.json();
     const reply = data?.reply;
-    if (!reply) throw new Error('Empty response from Vercel');
+    if (!reply) throw new Error('Empty response from Cloudflare');
 
     bubbleEl.innerHTML = renderMd(reply);
     renderKatex(bubbleEl);
@@ -693,7 +693,7 @@ const T = {
     statusReady: 'AXON · TIE v12.0 in context · ready',
     statusThink: 'AXON is consulting the infrastructure...',
     statusOk: (ms) => `Response generated in ${ms} ms · stable synchrony`,
-    statusErr: '⚠ Synchrony error with Vercel network',
+    statusErr: '⚠ Synchrony error with Cloudflare network',
     sysPre: 'You are AXON, the official assistant of the Theory of Spatial Infrastructure (TIE). Respond in English precisely and pedagogically. You have the following knowledge of the TIE Treatise:',
     sysPost: '\n\nRemember: be precise yet accessible, recommend specific website tools when relevant, contextualize numerical results, mention verified predictions, and be honest about limitations.'
   }

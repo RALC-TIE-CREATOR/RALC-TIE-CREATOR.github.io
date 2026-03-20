@@ -5,507 +5,481 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TIE · H-06 · RAR Simulator · Radial Acceleration Relation</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --gold:   #FFD700;
-            --blue:   #5BC8F5;
-            --green:  #44FF88;
-            --red:    #FF4455;
-            --purple: #a855f7;
-            --bg:     #000001;
-            --bg2:    rgba(5,5,15,0.95);
-            --text:   #ffffff;
-            --dim:    #a0a0b0;
-            --border: rgba(91,200,245,0.15);
-            --mono:   'Space Mono', monospace;
-            --sans:   'Syne', sans-serif;
+            --gold:#FFD700;--blue:#5BC8F5;--green:#44FF88;--red:#FF4455;
+            --purple:#a855f7;--bg:#000001;--bg2:rgba(5,5,15,0.95);
+            --text:#ffffff;--dim:#a0a0b0;--border:rgba(91,200,245,0.15);
+            --mono:'Space Mono',monospace;--sans:'Syne',sans-serif;
         }
-        * { margin:0; padding:0; box-sizing:border-box; }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: var(--sans);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        /* ── NAV ── */
-        nav {
-            background: rgba(0,0,1,0.95);
-            border-bottom: 1px solid var(--border);
-            padding: 0.85rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-        }
-        .nav-logo {
-            font-family: var(--mono);
-            color: var(--gold);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-        }
-        /* ORCID BUTTON STYLE */
-        .orcid-link {display: flex;align-items: center;gap: 8px;font-family: var(--mono);font-size: 0.75rem;color: #A6CE39;text-decoration: none;border: 1px solid rgba(166, 206, 57, 0.3);padding: 4px 12px;border-radius: 2px;transition: 0.3s;letter-spacing: 1px;}
-        .orcid-link:hover {background: rgba(166, 206, 57, 0.1);box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);color: #fff;}
-        
-        .nav-right { display: flex; align-items: center; gap: 1.5rem; }
-        .lang-link {
-            font-family: var(--mono);
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            padding: 0.25rem 0.6rem;
-            border-radius: 4px;
-            text-decoration: none;
-            transition: all .2s;
-        }
-        .lang-link.active { color:#000; background:var(--gold); }
-        .lang-link.inactive { color:var(--dim); border:1px solid var(--border); background:transparent; }
-        .lang-link.inactive:hover { color:var(--gold); border-color:var(--gold); }
-        .nav-back {
-            font-family: var(--mono);
-            font-size: 0.7rem;
-            color: var(--dim);
-            text-decoration: none;
-            letter-spacing: 1px;
-            border: 1px solid rgba(160,160,176,0.3);
-            padding: 0.35rem 0.75rem;
-            transition: 0.2s;
-        }
-        .nav-back:hover { color: var(--blue); border-color: var(--blue); }
-
-        /* ── HEADER ── */
-        .page-header {
-            padding: 1.2rem 2rem 1rem;
-            border-bottom: 1px solid var(--border);
-            flex-shrink: 0;
-        }
-        .page-label {
-            font-family: var(--mono);
-            font-size: 0.65rem;
-            color: var(--dim);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 0.3rem;
-        }
-        .page-header h1 {
-            font-family: var(--sans);
-            font-size: 1.6rem;
-            font-weight: 900;
-            letter-spacing: 1px;
-            margin-bottom: 0.25rem;
-        }
-        .page-desc {
-            font-size: 0.85rem;
-            color: var(--dim);
-            max-width: 700px;
-        }
-        .page-eq {
-            font-family: var(--mono);
-            font-size: 0.8rem;
-            color: var(--gold);
-            margin-top: 0.4rem;
-        }
-
-        /* ── STATS ── */
-        .stats-bar {
-            display: flex;
-            gap: 0;
-            border-bottom: 1px solid var(--border);
-            flex-shrink: 0;
-        }
-        .stat {
-            padding: 0.6rem 1.5rem;
-            border-right: 1px solid var(--border);
-            text-align: center;
-        }
-        .stat-number { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--gold); }
-        .stat-label  { font-family: var(--mono); font-size: 0.6rem; color: var(--dim); letter-spacing: 1px; text-transform: uppercase; margin-top: 1px; }
-
-        /* ── MAIN ── */
-        .main-wrap {
-            flex: 1;
-            display: flex;
-            padding: 1.25rem 1.5rem;
-            gap: 1.25rem;
-            min-height: 0;
-        }
-
-        /* ── SIDEBAR (INCREASED SIZES) ── */
-        .sidebar {
-            width: 320px;
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-            overflow-y: auto;
-        }
-        .sidebar::-webkit-scrollbar { width: 3px; }
-        .sidebar::-webkit-scrollbar-thumb { background: var(--border); }
-
-        .panel {
-            border: 1px solid var(--border);
-            background: var(--bg2);
-            padding: 1rem;
-        }
-        .panel-title {
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            color: var(--gold);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(255,215,0,0.15);
-            padding-bottom: 0.4rem;
-            margin-bottom: 0.8rem;
-        }
-        .data-row {
-            display: flex;
-            justify-content: space-between;
-            font-family: var(--mono);
-            font-size: 0.8rem;
-            color: var(--dim);
-            padding: 0.3rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-        }
-        .data-val { color: var(--text); font-weight: 700; }
-
-        .btn {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            font-family: var(--mono);
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 2px;
-            transition: 0.2s;
-        }
-        .btn-blue {
-            background: transparent;
-            color: var(--blue);
-            border: 1px solid rgba(91,200,245,0.4);
-        }
-        .btn-blue:hover { background: rgba(91,200,245,0.08); border-color: var(--blue); }
-        .btn-gold {
-            background: transparent;
-            color: var(--gold);
-            border: 1px solid rgba(255,215,0,0.3);
-        }
-        .btn-gold:hover { background: rgba(255,215,0,0.08); border-color: var(--gold); }
-        .btn-red {
-            background: transparent;
-            color: var(--red);
-            border: 1px solid rgba(255,68,85,0.3);
-        }
-        .btn-red:hover { background: rgba(255,68,85,0.08); border-color: var(--red); }
-
-        .note {
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            color: var(--dim);
-            line-height: 1.7;
-        }
-
-        /* ── CHART AREA ── */
-        .chart-area {
-            flex: 1;
-            border: 1px solid var(--border);
-            background: var(--bg2);
-            padding: 1.25rem;
-            position: relative;
-            min-width: 0;
-            min-height: 0;
-        }
-        .eq-overlay {
-            position: absolute;
-            top: 20px; left: 25px;
-            font-family: var(--mono);
-            font-size: 0.9rem;
-            color: var(--gold);
-            background: rgba(0,0,0,0.85);
-            padding: 8px 12px;
-            border: 1px dashed rgba(255,215,0,0.35);
-            pointer-events: none;
-            display: none;
-        }
-        canvas { width: 100% !important; height: 100% !important; }
-
-        /* ── FOOTER ── */
-        footer {
-            border-top: 1px solid var(--border);
-            padding: 0.65rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-        }
-        .footer-nav { display: flex; gap: 2rem; }
-        .footer-nav a {
-            font-family: var(--mono);
-            font-size: 0.7rem;
-            color: var(--dim);
-            text-decoration: none;
-            transition: 0.2s;
-        }
-        .footer-nav a:hover { color: var(--blue); }
-        .footer-eq {
-            font-family: var(--mono);
-            font-size: 0.7rem;
-            color: rgba(255,215,0,0.5);
-            text-align: center;
-        }
-        .footer-credit {
-            font-family: var(--mono);
-            font-size: 0.65rem;
-            color: var(--dim);
-            letter-spacing: 1px;
-        }
-
-        @media (max-width: 900px) {
-            .main-wrap { flex-direction: column; }
-            .sidebar { width: 100%; }
-        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{background:var(--bg);color:var(--text);font-family:var(--sans);height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+        nav{background:rgba(0,0,1,0.95);border-bottom:1px solid var(--border);padding:0.85rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+        .nav-logo{font-family:var(--mono);color:var(--gold);text-decoration:none;font-weight:700;font-size:0.85rem;letter-spacing:2px;}
+        .orcid-link{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:0.75rem;color:#A6CE39;text-decoration:none;border:1px solid rgba(166,206,57,0.3);padding:4px 12px;border-radius:2px;transition:0.3s;letter-spacing:1px;}
+        .orcid-link:hover{background:rgba(166,206,57,0.1);box-shadow:0 0 15px rgba(166,206,57,0.3);color:#fff;}
+        .nav-back{font-family:var(--mono);font-size:0.7rem;color:var(--dim);text-decoration:none;letter-spacing:1px;border:1px solid rgba(160,160,176,0.3);padding:0.35rem 0.75rem;transition:0.2s;}
+        .nav-back:hover{color:var(--blue);border-color:var(--blue);}
+        .page-header{padding:1.2rem 2rem 1rem;border-bottom:1px solid var(--border);flex-shrink:0;}
+        .page-label{font-family:var(--mono);font-size:0.65rem;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:0.3rem;}
+        .page-header h1{font-family:var(--sans);font-size:1.6rem;font-weight:900;letter-spacing:1px;margin-bottom:0.25rem;}
+        .page-desc{font-size:0.85rem;color:var(--dim);max-width:700px;}
+        .page-eq{font-family:var(--mono);font-size:0.85rem;color:var(--gold);margin-top:0.5rem;}
+        /* KaTeX panels */
+        .katex{font-size:0.9em!important;}
+        .stats-bar{display:flex;gap:0;border-bottom:1px solid var(--border);flex-shrink:0;}
+        .stat{padding:0.6rem 1.5rem;border-right:1px solid var(--border);text-align:center;}
+        .stat-number{font-family:var(--mono);font-size:1.1rem;font-weight:700;color:var(--gold);}
+        .stat-label{font-family:var(--mono);font-size:0.6rem;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-top:1px;}
+        .main-wrap{flex:1;display:flex;padding:1.25rem 1.5rem;gap:1.25rem;min-height:0;}
+        .sidebar{width:320px;flex-shrink:0;display:flex;flex-direction:column;gap:1.25rem;overflow-y:auto;}
+        .sidebar::-webkit-scrollbar{width:3px;}
+        .sidebar::-webkit-scrollbar-thumb{background:var(--border);}
+        .panel{border:1px solid var(--border);background:var(--bg2);padding:1rem;}
+        .panel-title{font-family:var(--mono);font-size:0.75rem;color:var(--gold);letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid rgba(255,215,0,0.15);padding-bottom:0.4rem;margin-bottom:0.8rem;}
+        .data-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:0.8rem;color:var(--dim);padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.03);}
+        .data-val{color:var(--text);font-weight:700;}
+        .btn{width:100%;padding:0.8rem 1rem;font-family:var(--mono);font-size:0.8rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:0.2s;}
+        .btn-blue{background:transparent;color:var(--blue);border:1px solid rgba(91,200,245,0.4);}
+        .btn-blue:hover{background:rgba(91,200,245,0.08);border-color:var(--blue);}
+        .btn-gold{background:transparent;color:var(--gold);border:1px solid rgba(255,215,0,0.3);}
+        .btn-gold:hover{background:rgba(255,215,0,0.08);border-color:var(--gold);}
+        .btn-red{background:transparent;color:var(--red);border:1px solid rgba(255,68,85,0.3);}
+        .btn-red:hover{background:rgba(255,68,85,0.08);border-color:var(--red);}
+        .note{font-family:var(--mono);font-size:0.75rem;color:var(--dim);line-height:1.7;}
+        .chart-area{flex:1;border:1px solid var(--border);background:var(--bg2);padding:1.25rem;position:relative;min-width:0;min-height:0;display:flex;flex-direction:column;}
+        .eq-overlay{position:absolute;top:20px;left:25px;font-family:var(--mono);font-size:0.85rem;color:var(--gold);background:rgba(0,0,0,0.85);padding:8px 14px;border:1px dashed rgba(255,215,0,0.35);pointer-events:none;display:none;}
+        .chart-canvas-wrap{flex:1;position:relative;min-height:0;}
+        footer{border-top:1px solid var(--border);padding:0.65rem 2rem;display:flex;flex-direction:column;justify-content:center;align-items:center;flex-shrink:0;gap:0.3rem;}
+        .footer-nav{display:flex;gap:2rem;}
+        .footer-nav a{font-family:var(--mono);font-size:0.7rem;color:var(--dim);text-decoration:none;transition:0.2s;}
+        .footer-nav a:hover{color:var(--blue);}
+        .footer-eq{font-family:var(--mono);font-size:0.7rem;color:rgba(255,215,0,0.5);text-align:center;}
+        .footer-credit{font-family:var(--mono);font-size:0.65rem;color:var(--dim);letter-spacing:1px;}
+        @media(max-width:900px){.main-wrap{flex-direction:column;}.sidebar{width:100%;}}
     </style>
 </head>
 <body>
 
 <nav>
-    <div style="display:flex; align-items:center; gap:20px;">
-    <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
-    
-    <!-- ORCID BADGE -->
-    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verify Author Identity on ORCID">
-      <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
-         <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
-      </svg>
-      0009-0008-4935-9010
-    </a>
-  </div>
-  
-  <!-- LANGUAGE SELECTOR -->
-  <div style="display:flex;gap:.4rem;">
-    <a href="simrar.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">ES</a>
-    <a href="simrar-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">EN</a>
-  </div>
-  
-  <a href="lab-galaxias-en.html" class="nav-back">← LABORATORY</a>
+    <div style="display:flex;align-items:center;gap:20px;">
+        <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
+        <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verify Author Identity on ORCID">
+            <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
+                <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
+            </svg>
+            0009-0008-4935-9010
+        </a>
     </div>
+    <div style="display:flex;gap:.4rem;">
+        <a href="simrar.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">ES</a>
+        <a href="simrar-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">EN</a>
+    </div>
+    <a href="lab-galaxias-en.html" class="nav-back">← LABORATORY</a>
 </nav>
 
 <div class="page-header">
-    <div class="page-label">CHAPTERS 8 & 9 · LIVE · RADIAL ACCELERATION RELATION</div>
+    <div class="page-label">CHAPTERS 8 & 9 · LIVE · RADIAL ACCELERATION RELATION · 135 REAL SPARC GALAXIES</div>
     <h1>RAR SIMULATOR</h1>
-    <p class="page-desc">Observed acceleration in galaxies as a function of baryonic acceleration. TIE predicts the exact relation from first principles — no dark matter, no free parameters.</p>
-    <div class="page-eq">a_obs = √(a_bar · (a_bar + a₀)) &nbsp;·&nbsp; a₀ = cH₀/R = 1.082×10⁻¹⁰ m/s²</div>
+    <p class="page-desc">Observed acceleration in galaxies as a function of baryonic acceleration. TIE predicts the exact relation from first principles — no dark matter, no free parameters. Real data from the SPARC catalog (Lelli et al. 2016).</p>
+    <div class="page-eq" id="eq-header"></div>
 </div>
 
 <div class="stats-bar">
-    <div class="stat"><div class="stat-number">250</div><div class="stat-label">SPARC points</div></div>
+    <div class="stat"><div class="stat-number" id="stat-n">135</div><div class="stat-label">Real SPARC galaxies</div></div>
     <div class="stat"><div class="stat-number">1.082</div><div class="stat-label">a₀ ×10⁻¹⁰ m/s²</div></div>
     <div class="stat"><div class="stat-number">0</div><div class="stat-label">Free parameters</div></div>
-    <div class="stat"><div class="stat-number" id="val-r2" style="color:var(--dim)">--</div><div class="stat-label">R² fit</div></div>
+    <div class="stat"><div class="stat-number" id="val-r2" style="color:var(--dim)">--</div><div class="stat-label">σ dex TIE</div></div>
 </div>
 
 <div class="main-wrap">
     <div class="sidebar">
-
         <div class="panel">
             <div class="panel-title">Procedure</div>
-            <p class="note" style="margin-bottom:0.75rem;">Inject simulated SPARC catalog data. Then activate the TIE prediction curve and observe the fit with no free parameters.</p>
+            <p class="note" style="margin-bottom:0.75rem;">Load the real SPARC catalog (135 galaxies with measured v_flat). Then activate the TIE prediction curve — zero free parameters.</p>
             <div style="display:flex;flex-direction:column;gap:8px;">
-                <button class="btn btn-blue" onclick="generateMockSparcData()">1. INJECT SPARC DATA</button>
+                <button class="btn btn-blue" onclick="loadRealSparcData()">1. LOAD SPARC DATA</button>
                 <button class="btn btn-gold" onclick="plotTIECurve()">2. ACTIVATE TIE CURVE</button>
-                <button class="btn btn-red" onclick="resetSystem()">3. RESET SYSTEM</button>
+                <button class="btn btn-red"  onclick="resetSystem()">3. RESET SYSTEM</button>
             </div>
         </div>
 
         <div class="panel">
             <div class="panel-title">System status</div>
-            <div class="data-row">Generated points <span class="data-val" id="val-count">0</span></div>
-            <div class="data-row">Mean error <span class="data-val" id="val-error">--</span></div>
+            <div class="data-row">Loaded galaxies <span class="data-val" id="val-count">0</span></div>
+            <div class="data-row">σ_dex (ddof=1) <span class="data-val" id="val-error">--</span></div>
+            <div class="data-row">RMS <span class="data-val" id="val-rms">--</span></div>
             <div class="data-row">TIE a₀ <span class="data-val" style="color:var(--gold)">1.082×10⁻¹⁰</span></div>
             <div class="data-row">TIE curve <span class="data-val" id="val-curve" style="color:var(--dim)">INACTIVE</span></div>
         </div>
 
         <div class="panel">
+            <div class="panel-title">Equations</div>
+            <p class="note" style="margin-bottom:0.5rem;">Baryonic acceleration:</p>
+            <div id="math-abar" style="margin-bottom:0.8rem;text-align:center;"></div>
+            <p class="note" style="margin-bottom:0.5rem;">TIE prediction:</p>
+            <div id="math-atot" style="text-align:center;"></div>
+        </div>
+
+        <div class="panel">
             <div class="panel-title">Physical note</div>
-            <p class="note">The value <span style="color:var(--gold)">a₀ = cH₀/R</span> is a <em>prediction</em> derived from the TIE Treatise, not a fit. The empirical MOND value (1.2×10⁻¹⁰) is approximate. TIE uses the exact value: <span style="color:var(--gold)">1.082×10⁻¹⁰ m/s²</span> (with R ≡ 2π).</p>
+            <p class="note">The value <span id="note-a0" style="color:var(--gold)"></span> is a <em>prediction</em> derived from the TIE Treatise, not a fit. The empirical MOND value (1.2×10⁻¹⁰) is approximate. TIE uses the exact value derived from first principles: <span style="color:var(--gold)">1.082×10⁻¹⁰ m/s²</span>.</p>
         </div>
     </div>
 
     <div class="chart-area">
         <div class="eq-overlay" id="eq-overlay">
-            a<sub>obs</sub> = √(a<sub>bar</sub>·(a<sub>bar</sub>+a₀))
+            <span id="overlay-eq"></span> &nbsp; σ = <span id="overlay-sigma">--</span> dex
         </div>
-        <canvas id="rarChart"></canvas>
+        <div class="chart-canvas-wrap">
+            <canvas id="rarChart"></canvas>
+        </div>
     </div>
 </div>
 
 <footer>
     <div class="footer-nav">
         <a href="sparc-en.html">← SPARC Explorer</a>
-        <a href="constant-en.html">a₀ and Λ →</a>
+        <a href="rms-en.html">RMS Global →</a>
     </div>
-    <div class="footer-eq">a_obs = √(a_bar·(a_bar+a₀)) &nbsp;·&nbsp; a₀ = cH₀/R &nbsp;·&nbsp; 0 free parameters</div>
+    <div class="footer-eq" id="footer-eq"></div>
     <div class="footer-credit">Copyright (C) 2026 Rubén Antonio Lecona Curto (R@LC) · MEXICO · INDEPENDENT RESEARCHER</div>
-    <div style="margin-top:0.3rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">
-        <a href="index-en.html" style="color:inherit; text-decoration:none;">HOME</a> · 
-        <a href="lab-en.html" style="color:inherit; text-decoration:none;">LAB</a> · 
-        <a href="papers-en.html" style="color:inherit; text-decoration:none;">PAPERS</a> · 
-        <a href="predictions-en.html" style="color:inherit; text-decoration:none;">PREDICTIONS</a> · 
-        <a href="theory-en.html" style="color:inherit; text-decoration:none;">THEORY</a> · 
-        <a href="https://github.com/ralc-tie-creator" target="_blank" style="color:inherit; text-decoration:none;">GITHUB</a>
+    <div style="margin-top:0.3rem;font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.2);">
+        <a href="index-en.html" style="color:inherit;text-decoration:none;">HOME</a> ·
+        <a href="lab-en.html" style="color:inherit;text-decoration:none;">LAB</a> ·
+        <a href="papers-en.html" style="color:inherit;text-decoration:none;">PAPERS</a> ·
+        <a href="predictions-en.html" style="color:inherit;text-decoration:none;">PREDICTIONS</a> ·
+        <a href="theory-en.html" style="color:inherit;text-decoration:none;">THEORY</a> ·
+        <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" style="color:inherit;text-decoration:none;">GITHUB</a>
     </div>
 </footer>
 
 <script>
-    // ── TIE CONSTANTS (Ch. 2 — derived, not fitted) ──
-    const a0 = 1.082e-10; // m/s² — a₀ = cH₀/R  (H₀=70 km/s/Mpc, R=2π)
+// ── TIE CONSTANTS ──────────────────────────────────────────────
+const G    = 6.674e-11;
+const c    = 2.998e8;
+const H0   = 2.268e-18;
+const a0   = c * H0 / (2 * Math.PI);   // 1.082e-10 m/s²
+const Msun = 1.989e30;
+const km   = 1e3;
 
-    let chartInstance = null;
-    let scatterData   = [];
-    let tieCurve      = [];
+// ── KATEX RENDER ───────────────────────────────────────────────
+function rk(id, tex, displayMode = false) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    katex.render(tex, el, { throwOnError: false, displayMode });
+}
 
-    // Newton line: a_obs = a_bar
-    const newtonCurve = [];
-    for (let i = -14; i <= -8; i += 0.5) {
-        newtonCurve.push({ x: Math.pow(10,i), y: Math.pow(10,i) });
+window.addEventListener('load', () => {
+    rk('eq-header',  'a_{\\text{obs}} = \\sqrt{a_{\\text{bar}}(a_{\\text{bar}}+a_0)} \\quad a_0 = \\dfrac{cH_0}{2\\pi} = 1.082\\times10^{-10}\\,\\text{m/s}^2', false);
+    rk('note-a0',    'a_0 = cH_0/2\\pi', false);
+    rk('math-abar',  'a_{\\text{bar}} = \\dfrac{v_{\\text{flat}}^{4}}{G\\,M_{\\text{bar}}}', true);
+    rk('math-atot',  'a_{\\text{TIE}} = \\sqrt{a_{\\text{bar}}(a_{\\text{bar}}+a_0)}', true);
+    rk('footer-eq',  'a_{\\text{obs}} = \\sqrt{a_{\\text{bar}}(a_{\\text{bar}}+a_0)} \\;\\cdot\\; a_0 = cH_0/2\\pi \\;\\cdot\\; 0\\text{ free parameters}', false);
+    rk('overlay-eq', 'a_{\\text{obs}} = \\sqrt{a_{\\text{bar}}\\,(a_{\\text{bar}}+a_0)}', false);
+});
+
+// ── REAL SPARC DATA ────────────────────────────────────────────
+// Lelli, McGaugh & Schombert (2016) — galaxies with measured Vflat
+// M_bar in 10⁹ M☉, Vflat in km/s
+const SPARC_DATA = [
+    {name:'D631-7',     M_bar:0.3880,   Vflat:57.7,  Q:1},
+    {name:'DDO064',     M_bar:0.2895,   Vflat:46.1,  Q:1},
+    {name:'DDO154',     M_bar:0.3015,   Vflat:47.0,  Q:2},
+    {name:'DDO161',     M_bar:1.6520,   Vflat:66.3,  Q:1},
+    {name:'DDO168',     M_bar:0.5085,   Vflat:53.4,  Q:2},
+    {name:'DDO170',     M_bar:1.0065,   Vflat:60.0,  Q:2},
+    {name:'ESO079-G014',M_bar:29.0065,  Vflat:175.0, Q:1},
+    {name:'ESO116-G012',M_bar:3.2290,   Vflat:109.1, Q:1},
+    {name:'ESO563-G021',M_bar:179.8865, Vflat:314.6, Q:1},
+    {name:'F561-1',     M_bar:3.6605,   Vflat:50.0,  Q:3},
+    {name:'F563-1',     M_bar:4.1515,   Vflat:109.9, Q:1},
+    {name:'F563-V2',    M_bar:3.6620,   Vflat:116.6, Q:1},
+    {name:'F568-V1',    M_bar:4.4035,   Vflat:112.3, Q:1},
+    {name:'F571-8',     M_bar:6.8640,   Vflat:139.7, Q:1},
+    {name:'F571-V1',    M_bar:2.1415,   Vflat:83.6,  Q:2},
+    {name:'F574-1',     M_bar:6.7925,   Vflat:97.8,  Q:1},
+    {name:'F579-V1',    M_bar:8.1690,   Vflat:112.1, Q:1},
+    {name:'F583-1',     M_bar:2.6190,   Vflat:85.8,  Q:1},
+    {name:'IC2574',     M_bar:1.5440,   Vflat:66.4,  Q:2},
+    {name:'IC4202',     M_bar:102.2005, Vflat:242.6, Q:1},
+    {name:'KK98-251',   M_bar:0.1575,   Vflat:33.7,  Q:2},
+    {name:'NGC0024',    M_bar:2.6205,   Vflat:106.3, Q:1},
+    {name:'NGC0055',    M_bar:3.8790,   Vflat:85.6,  Q:2},
+    {name:'NGC0100',    M_bar:3.6060,   Vflat:88.1,  Q:1},
+    {name:'NGC0247',    M_bar:5.4120,   Vflat:104.9, Q:2},
+    {name:'NGC0289',    M_bar:63.5015,  Vflat:163.0, Q:2},
+    {name:'NGC0300',    M_bar:2.3970,   Vflat:93.3,  Q:2},
+    {name:'NGC0801',    M_bar:179.4860, Vflat:220.1, Q:1},
+    {name:'NGC0891',    M_bar:73.6320,  Vflat:216.1, Q:1},
+    {name:'NGC1003',    M_bar:9.2900,   Vflat:109.8, Q:1},
+    {name:'NGC1090',    M_bar:44.8055,  Vflat:164.4, Q:1},
+    {name:'NGC1705',    M_bar:0.4055,   Vflat:71.9,  Q:3},
+    {name:'NGC2366',    M_bar:0.7650,   Vflat:50.2,  Q:3},
+    {name:'NGC2403',    M_bar:8.2195,   Vflat:131.2, Q:1},
+    {name:'NGC2683',    M_bar:41.6135,  Vflat:154.0, Q:2},
+    {name:'NGC2841',    M_bar:103.8355, Vflat:284.8, Q:1},
+    {name:'NGC2903',    M_bar:43.4835,  Vflat:184.6, Q:1},
+    {name:'NGC2915',    M_bar:0.8285,   Vflat:83.5,  Q:2},
+    {name:'NGC2976',    M_bar:1.8575,   Vflat:85.4,  Q:2},
+    {name:'NGC2998',    M_bar:98.9020,  Vflat:209.9, Q:1},
+    {name:'NGC3109',    M_bar:0.5740,   Vflat:66.2,  Q:1},
+    {name:'NGC3198',    M_bar:30.0085,  Vflat:150.1, Q:1},
+    {name:'NGC3521',    M_bar:46.5720,  Vflat:213.7, Q:1},
+    {name:'NGC3726',    M_bar:41.5900,  Vflat:168.0, Q:2},
+    {name:'NGC3741',    M_bar:0.1960,   Vflat:50.1,  Q:1},
+    {name:'NGC3769',    M_bar:14.8685,  Vflat:118.6, Q:2},
+    {name:'NGC3877',    M_bar:37.7505,  Vflat:168.4, Q:2},
+    {name:'NGC3893',    M_bar:35.0615,  Vflat:174.0, Q:1},
+    {name:'NGC3917',    M_bar:12.8710,  Vflat:135.9, Q:1},
+    {name:'NGC3949',    M_bar:22.4045,  Vflat:163.0, Q:2},
+    {name:'NGC3953',    M_bar:73.4825,  Vflat:220.8, Q:1},
+    {name:'NGC3972',    M_bar:8.3905,   Vflat:132.7, Q:1},
+    {name:'NGC3992',    M_bar:130.0650, Vflat:241.0, Q:1},
+    {name:'NGC4010',    M_bar:11.4285,  Vflat:125.8, Q:2},
+    {name:'NGC4013',    M_bar:42.5140,  Vflat:172.9, Q:2},
+    {name:'NGC4051',    M_bar:50.3310,  Vflat:157.0, Q:2},
+    {name:'NGC4085',    M_bar:12.2110,  Vflat:131.5, Q:2},
+    {name:'NGC4088',    M_bar:61.8690,  Vflat:171.7, Q:1},
+    {name:'NGC4100',    M_bar:32.7990,  Vflat:158.2, Q:1},
+    {name:'NGC4138',    M_bar:23.5385,  Vflat:147.3, Q:2},
+    {name:'NGC4157',    M_bar:61.0360,  Vflat:184.7, Q:1},
+    {name:'NGC4183',    M_bar:8.9250,   Vflat:110.6, Q:1},
+    {name:'NGC4214',    M_bar:1.0565,   Vflat:80.1,  Q:2},
+    {name:'NGC4217',    M_bar:45.2115,  Vflat:181.3, Q:1},
+    {name:'NGC4559',    M_bar:15.4995,  Vflat:121.2, Q:1},
+    {name:'NGC5005',    M_bar:90.6400,  Vflat:262.2, Q:1},
+    {name:'NGC5033',    M_bar:66.5685,  Vflat:194.2, Q:1},
+    {name:'NGC5055',    M_bar:88.1830,  Vflat:179.0, Q:1},
+    {name:'NGC5371',    M_bar:181.3765, Vflat:209.5, Q:1},
+    {name:'NGC5585',    M_bar:3.1545,   Vflat:90.3,  Q:1},
+    {name:'NGC5907',    M_bar:108.7375, Vflat:215.0, Q:1},
+    {name:'NGC5985',    M_bar:115.9500, Vflat:293.6, Q:1},
+    {name:'NGC6015',    M_bar:21.8985,  Vflat:154.1, Q:2},
+    {name:'NGC6195',    M_bar:216.4450, Vflat:251.7, Q:1},
+    {name:'NGC6503',    M_bar:8.1665,   Vflat:116.3, Q:1},
+    {name:'NGC6674',    M_bar:139.4920, Vflat:241.3, Q:1},
+    {name:'NGC6946',    M_bar:38.7565,  Vflat:158.9, Q:1},
+    {name:'NGC7331',    M_bar:136.3825, Vflat:239.0, Q:1},
+    {name:'NGC7814',    M_bar:38.3345,  Vflat:218.9, Q:1},
+    {name:'PGC51017',   M_bar:0.2785,   Vflat:18.6,  Q:3},
+    {name:'UGC00128',   M_bar:13.4410,  Vflat:129.3, Q:1},
+    {name:'UGC00731',   M_bar:1.9685,   Vflat:73.3,  Q:1},
+    {name:'UGC01230',   M_bar:10.2400,  Vflat:103.7, Q:1},
+    {name:'UGC01281',   M_bar:0.4705,   Vflat:55.2,  Q:1},
+    {name:'UGC02259',   M_bar:1.3565,   Vflat:86.2,  Q:2},
+    {name:'UGC02487',   M_bar:262.9405, Vflat:332.0, Q:1},
+    {name:'UGC02885',   M_bar:241.8375, Vflat:289.5, Q:1},
+    {name:'UGC02916',   M_bar:85.3495,  Vflat:182.7, Q:2},
+    {name:'UGC02953',   M_bar:137.4370, Vflat:264.9, Q:2},
+    {name:'UGC03205',   M_bar:66.4980,  Vflat:219.6, Q:1},
+    {name:'UGC03546',   M_bar:53.3430,  Vflat:196.9, Q:1},
+    {name:'UGC03580',   M_bar:11.0030,  Vflat:126.2, Q:2},
+    {name:'UGC04278',   M_bar:1.7695,   Vflat:91.4,  Q:1},
+    {name:'UGC04305',   M_bar:1.0580,   Vflat:34.5,  Q:3},
+    {name:'UGC04325',   M_bar:1.6910,   Vflat:90.9,  Q:1},
+    {name:'UGC04499',   M_bar:1.8760,   Vflat:72.8,  Q:1},
+    {name:'UGC05005',   M_bar:5.1430,   Vflat:98.9,  Q:1},
+    {name:'UGC05253',   M_bar:102.1870, Vflat:213.7, Q:2},
+    {name:'UGC05716',   M_bar:1.3880,   Vflat:73.1,  Q:2},
+    {name:'UGC05721',   M_bar:0.8275,   Vflat:79.7,  Q:1},
+    {name:'UGC05986',   M_bar:5.0145,   Vflat:113.0, Q:2},
+    {name:'UGC06399',   M_bar:1.8220,   Vflat:85.0,  Q:1},
+    {name:'UGC06446',   M_bar:1.8730,   Vflat:82.2,  Q:1},
+    {name:'UGC06614',   M_bar:84.0630,  Vflat:199.8, Q:1},
+    {name:'UGC06628',   M_bar:3.3695,   Vflat:41.8,  Q:2},
+    {name:'UGC06667',   M_bar:1.5075,   Vflat:83.8,  Q:1},
+    {name:'UGC06786',   M_bar:41.7335,  Vflat:219.4, Q:1},
+    {name:'UGC06787',   M_bar:54.1580,  Vflat:248.1, Q:2},
+    {name:'UGC06818',   M_bar:1.8730,   Vflat:71.2,  Q:2},
+    {name:'UGC06917',   M_bar:5.4390,   Vflat:108.7, Q:1},
+    {name:'UGC06923',   M_bar:2.2540,   Vflat:79.6,  Q:2},
+    {name:'UGC06930',   M_bar:7.7030,   Vflat:107.2, Q:1},
+    {name:'UGC06973',   M_bar:28.6880,  Vflat:174.2, Q:3},
+    {name:'UGC06983',   M_bar:5.6160,   Vflat:109.0, Q:1},
+    {name:'UGC07125',   M_bar:5.9850,   Vflat:65.2,  Q:1},
+    {name:'UGC07151',   M_bar:1.7580,   Vflat:73.5,  Q:1},
+    {name:'UGC07261',   M_bar:2.2645,   Vflat:74.7,  Q:2},
+    {name:'UGC07399',   M_bar:1.3230,   Vflat:103.0, Q:1},
+    {name:'UGC07524',   M_bar:2.9970,   Vflat:79.5,  Q:1},
+    {name:'UGC07603',   M_bar:0.4460,   Vflat:61.6,  Q:1},
+    {name:'UGC07690',   M_bar:0.8190,   Vflat:57.4,  Q:2},
+    {name:'UGC08286',   M_bar:1.2695,   Vflat:82.4,  Q:1},
+    {name:'UGC08490',   M_bar:1.2285,   Vflat:78.6,  Q:1},
+    {name:'UGC08550',   M_bar:0.4325,   Vflat:56.9,  Q:1},
+    {name:'UGC08699',   M_bar:28.8890,  Vflat:182.4, Q:2},
+    {name:'UGC09037',   M_bar:53.3850,  Vflat:152.3, Q:2},
+    {name:'UGC09133',   M_bar:174.8910, Vflat:226.8, Q:1},
+    {name:'UGC09992',   M_bar:0.4860,   Vflat:33.6,  Q:2},
+    {name:'UGC10310',   M_bar:2.0665,   Vflat:71.4,  Q:1},
+    {name:'UGC11455',   M_bar:200.4960, Vflat:269.4, Q:1},
+    {name:'UGC11914',   M_bar:75.9020,  Vflat:288.1, Q:1},
+    {name:'UGC12506',   M_bar:105.3415, Vflat:234.0, Q:2},
+    {name:'UGC12632',   M_bar:2.3945,   Vflat:71.7,  Q:1},
+    {name:'UGCA442',    M_bar:0.3330,   Vflat:56.4,  Q:1},
+    {name:'UGCA444',    M_bar:0.0730,   Vflat:37.0,  Q:2},
+];
+
+// ── STATE ──────────────────────────────────────────────────────
+let chartInstance = null;
+let loaded = false;
+let curveActive = false;
+
+function sciTick(val) {
+    const exp = Math.round(Math.log10(val));
+    const base = val / Math.pow(10, exp);
+    const b = Math.abs(base - 1) < 0.05 ? '' : base.toFixed(1) + '×';
+    return `${b}10^${exp}`;
+}
+
+function initChart() {
+    const ctx = document.getElementById('rarChart').getContext('2d');
+    const newtonLine = [];
+    for (let i = -14; i <= -7; i += 0.15) {
+        const a = Math.pow(10, i);
+        newtonLine.push({ x: a, y: a });
     }
-
-    function formatSci(value) {
-        const exp = Math.round(Math.log10(value));
-        const sup = {'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
-        return '10' + exp.toString().split('').map(c => sup[c]||c).join('');
-    }
-
-    function initChart() {
-        const ctx2 = document.getElementById('rarChart').getContext('2d');
-        Chart.defaults.color      = '#a0a0b0';
-        Chart.defaults.font.family = "'Space Mono', monospace";
-
-        chartInstance = new Chart(ctx2, {
-            type: 'scatter',
-            data: {
-                datasets: [{
-                    label: 'Pure Newton (a_obs = a_bar)',
-                    data: newtonCurve,
-                    showLine: true,
-                    borderColor: 'rgba(255,68,85,0.55)',
-                    borderDash: [5,5],
-                    backgroundColor: 'transparent',
-                    pointRadius: 0,
-                    borderWidth: 2
-                }]
+    chartInstance = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Pure Newton (a_obs = a_bar)',
+                data: newtonLine,
+                showLine: true,
+                borderColor: 'rgba(255,96,96,0.45)',
+                backgroundColor: 'transparent',
+                pointRadius: 0,
+                borderWidth: 1.5,
+                borderDash: [5, 4],
+                tension: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 500 },
+            scales: {
+                x: {
+                    type: 'logarithmic', min: 1e-14, max: 1e-7,
+                    title: { display: true, text: 'a_bar  [m/s²]', color: '#a0a0b0', font: { family: 'Space Mono', size: 11 } },
+                    ticks: { color: '#a0a0b0', font: { family: 'Space Mono', size: 9 }, maxTicksLimit: 8, callback: val => sciTick(val) },
+                    grid: { color: 'rgba(255,255,255,0.06)' }
+                },
+                y: {
+                    type: 'logarithmic', min: 1e-14, max: 1e-7,
+                    title: { display: true, text: 'a_obs  [m/s²]', color: '#a0a0b0', font: { family: 'Space Mono', size: 11 } },
+                    ticks: { color: '#a0a0b0', font: { family: 'Space Mono', size: 9 }, maxTicksLimit: 8, callback: val => sciTick(val) },
+                    grid: { color: 'rgba(255,255,255,0.06)' }
+                }
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        type: 'logarithmic', min: 1e-14, max: 1e-8,
-                        title: { display:true, text:'Baryonic acceleration a_bar [m/s²]',
-                                 color:'#5BC8F5', font:{size:13,weight:'bold',family:"'Syne',sans-serif"} },
-                        grid: { color:'rgba(91,200,245,0.05)' },
-                        ticks: { color:'#a0a0b0',
-                            callback(v){ return Number.isInteger(Math.log10(v)) ? formatSci(v) : null; }
-                        }
-                    },
-                    y: {
-                        type: 'logarithmic', min: 1e-13, max: 1e-8,
-                        title: { display:true, text:'Observed acceleration a_obs [m/s²]',
-                                 color:'#5BC8F5', font:{size:13,weight:'bold',family:"'Syne',sans-serif"} },
-                        grid: { color:'rgba(91,200,245,0.05)' },
-                        ticks: { color:'#a0a0b0',
-                            callback(v){ return Number.isInteger(Math.log10(v)) ? formatSci(v) : null; }
+            plugins: {
+                legend: { labels: { color: '#a0a0b0', font: { family: 'Space Mono', size: 10 } } },
+                tooltip: {
+                    callbacks: {
+                        label(ctx) {
+                            const d = ctx.dataset.data[ctx.dataIndex];
+                            if (d && d.name) return `${d.name} (Q=${d.Q}): a_bar=${d.x.toExponential(2)}, a_obs=${d.y.toExponential(2)}`;
+                            return `${ctx.parsed.y.toExponential(2)} m/s²`;
                         }
                     }
-                },
-                plugins: {
-                    legend: { labels:{ color:'#ffffff', font:{size:11} } },
-                    tooltip: {
-                        backgroundColor:'rgba(5,5,15,0.95)',
-                        titleColor:'#FFD700',
-                        borderColor:'rgba(91,200,245,0.25)',
-                        borderWidth:1,
-                        bodyFont:{ family:"'Space Mono',monospace" },
-                        callbacks: { label(ctx){ return `${ctx.dataset.label}: ${ctx.parsed.y.toExponential(2)} m/s²`; } }
-                    }
-                },
-                animation: { duration:1200, easing:'easeOutQuart' }
+                }
             }
-        });
-    }
-
-    function generateMockSparcData() {
-        if (scatterData.length > 0) return;
-        scatterData = [];
-        for (let i = 0; i < 250; i++) {
-            const abar  = Math.pow(10, -13.5 + Math.random()*5);
-            const ideal = Math.sqrt(abar * (abar + a0));   // ← correct TIE formula
-            const noise = 1 + (Math.random()-0.5) * (0.15 + (1e-11/abar)*0.1);
-            scatterData.push({ x: abar, y: ideal * noise });
         }
-        chartInstance.data.datasets.push({
-            label: 'Galactic observations (SPARC)',
-            data: scatterData,
-            backgroundColor: 'rgba(91,200,245,0.55)',
-            borderColor: '#5BC8F5',
-            pointRadius: 4, pointHoverRadius: 6, borderWidth: 1
-        });
-        chartInstance.update();
-        document.getElementById('val-count').textContent = '250 points';
-        document.getElementById('val-error').textContent = 'Calculating...';
-    }
+    });
+}
 
-    function plotTIECurve() {
-        if (tieCurve.length > 0) return;
-        if (scatterData.length === 0) {
-            alert('First inject the telescope data.');
-            return;
-        }
-        tieCurve = [];
-        for (let i = -14; i <= -8; i += 0.05) {
-            const abar = Math.pow(10, i);
-            tieCurve.push({ x: abar, y: Math.sqrt(abar*(abar+a0)) });
-        }
-        chartInstance.data.datasets.push({
-            label: 'TIE Treatise — first principles prediction',
-            data: tieCurve,
-            showLine: true,
-            borderColor: '#FFD700',
-            backgroundColor: 'transparent',
-            pointRadius: 0, borderWidth: 3, tension: 0.4
-        });
-        chartInstance.update();
-        document.getElementById('eq-overlay').style.display = 'block';
-        document.getElementById('val-error').textContent   = 'σ ≈ 0.07 dex';
-        document.getElementById('val-r2').textContent      = '0.941';
-        document.getElementById('val-r2').style.color      = 'var(--gold)';
-        document.getElementById('val-curve').textContent   = 'ACTIVE';
-        document.getElementById('val-curve').style.color   = 'var(--green)';
-    }
+function loadRealSparcData() {
+    if (loaded) return;
+    const points = [], colors = [], logRatios = [];
+    SPARC_DATA.forEach(g => {
+        const Mbar_kg  = g.M_bar * 1e9 * Msun;
+        const vflat_ms = g.Vflat * km;
+        const a_bar    = Math.pow(vflat_ms, 4) / (G * Mbar_kg);
+        const v_TIE    = Math.pow(G * Mbar_kg * a0, 0.25) / km;
+        const a_obs    = a_bar * Math.pow(g.Vflat / v_TIE, 2);
+        logRatios.push(Math.log10(v_TIE / g.Vflat));
+        points.push({ x: a_bar, y: a_obs, name: g.name, Q: g.Q });
+        colors.push(
+            g.Q === 1 ? 'rgba(91,200,245,0.8)' :
+            g.Q === 2 ? 'rgba(255,215,0,0.65)' :
+                        'rgba(160,160,176,0.45)'
+        );
+    });
+    chartInstance.data.datasets.push({
+        label: 'Real SPARC (Q=1 blue · Q=2 gold · Q=3 gray)',
+        data: points,
+        backgroundColor: colors,
+        borderColor: colors,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        borderWidth: 1
+    });
+    chartInstance.update();
 
-    function resetSystem() {
-        scatterData = []; tieCurve = [];
-        chartInstance.destroy(); initChart();
-        document.getElementById('val-count').textContent   = '0';
-        document.getElementById('val-error').textContent   = '--';
-        document.getElementById('val-r2').textContent      = '--';
-        document.getElementById('val-r2').style.color      = 'var(--dim)';
-        document.getElementById('val-curve').textContent   = 'INACTIVE';
-        document.getElementById('val-curve').style.color   = 'var(--dim)';
-        document.getElementById('eq-overlay').style.display = 'none';
-    }
+    const mean  = logRatios.reduce((a, b) => a + b, 0) / logRatios.length;
+    const sigma = Math.sqrt(logRatios.reduce((s, v) => s + (v - mean) ** 2, 0) / (logRatios.length - 1));
+    const rms   = Math.sqrt(
+        SPARC_DATA.reduce((s, g) => {
+            const Mbar_kg = g.M_bar * 1e9 * Msun;
+            const v_TIE   = Math.pow(G * Mbar_kg * a0, 0.25) / km;
+            return s + (v_TIE - g.Vflat) ** 2;
+        }, 0) / SPARC_DATA.length
+    );
 
-    window.onload = initChart;
+    document.getElementById('val-count').textContent = `${SPARC_DATA.length} galaxies`;
+    document.getElementById('val-error').textContent = sigma.toFixed(4) + ' dex';
+    document.getElementById('val-rms').textContent   = rms.toFixed(1) + ' km/s';
+    document.getElementById('val-r2').textContent    = sigma.toFixed(4);
+    document.getElementById('val-r2').style.color    = sigma < 0.11 ? 'var(--green)' : 'var(--gold)';
+    document.getElementById('stat-n').textContent    = SPARC_DATA.length;
+    loaded = true;
+}
+
+function plotTIECurve() {
+    if (curveActive) return;
+    if (!loaded) { alert('First load the SPARC data.'); return; }
+    const tieCurve = [];
+    for (let i = -14; i <= -7; i += 0.05) {
+        const abar = Math.pow(10, i);
+        tieCurve.push({ x: abar, y: Math.sqrt(abar * (abar + a0)) });
+    }
+    chartInstance.data.datasets.push({
+        label: 'TIE prediction — 0 free parameters',
+        data: tieCurve,
+        showLine: true,
+        borderColor: '#FFD700',
+        backgroundColor: 'transparent',
+        pointRadius: 0,
+        borderWidth: 3,
+        tension: 0.4
+    });
+    chartInstance.update();
+    const sigma = document.getElementById('val-error').textContent.replace(' dex', '');
+    document.getElementById('eq-overlay').style.display  = 'block';
+    document.getElementById('overlay-sigma').textContent = sigma;
+    document.getElementById('val-curve').textContent     = 'ACTIVE';
+    document.getElementById('val-curve').style.color     = 'var(--green)';
+    curveActive = true;
+}
+
+function resetSystem() {
+    loaded = false; curveActive = false;
+    chartInstance.destroy(); initChart();
+    document.getElementById('val-count').textContent  = '0';
+    document.getElementById('val-error').textContent  = '--';
+    document.getElementById('val-rms').textContent    = '--';
+    document.getElementById('val-r2').textContent     = '--';
+    document.getElementById('val-r2').style.color     = 'var(--dim)';
+    document.getElementById('val-curve').textContent  = 'INACTIVE';
+    document.getElementById('val-curve').style.color  = 'var(--dim)';
+    document.getElementById('eq-overlay').style.display = 'none';
+    document.getElementById('stat-n').textContent     = '135';
+}
+
+initChart();
 </script>
 <script src="axon-widget.js"></script>
 </body>

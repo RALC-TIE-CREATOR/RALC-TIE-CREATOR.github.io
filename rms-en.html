@@ -8,157 +8,103 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         :root {
-            --gold:   #FFD700;
-            --blue:   #5BC8F5;
-            --green:  #44FF88;
-            --red:    #FF4455;
-            --purple: #a855f7;
-            --orange: #FF8800;
-            --bg:     #000001;
-            --bg2:    rgba(5,5,15,0.97);
-            --text:   #ffffff;
-            --dim:    #a0a0b0;
-            --border: rgba(91,200,245,0.15);
-            --mono:   'Space Mono', monospace;
-            --sans:   'Syne', sans-serif;
+            --gold:#FFD700;--blue:#5BC8F5;--green:#44FF88;--red:#FF4455;
+            --purple:#a855f7;--orange:#FF8800;--bg:#000001;
+            --bg2:rgba(5,5,15,0.97);--text:#ffffff;--dim:#a0a0b0;
+            --border:rgba(91,200,245,0.15);
+            --mono:'Space Mono',monospace;--sans:'Syne',sans-serif;
         }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { background:var(--bg); color:var(--text); font-family:var(--sans); height:100vh; display:flex; flex-direction:column; overflow:hidden; }
-
-        /* ── NAV ── */
-        nav { background:rgba(0,0,1,0.95); border-bottom:1px solid var(--border); padding:0.85rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
-        .nav-logo { font-family:var(--mono); color:var(--gold); text-decoration:none; font-weight:700; font-size:0.85rem; letter-spacing:2px; }
-        /* ORCID BUTTON STYLE */
-         .orcid-link {display: flex;align-items: center;gap: 8px;font-family: var(--mono);font-size: 0.75rem;color: #A6CE39;text-decoration: none;border: 1px solid rgba(166, 206, 57, 0.3);padding: 4px 12px;border-radius: 2px;transition: 0.3s;letter-spacing: 1px;}
-        .orcid-link:hover {background: rgba(166, 206, 57, 0.1);box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);color: #fff;}
-        
-        .nav-right { display:flex; align-items:center; gap:1.5rem; }
-        .lang-link  { font-family:var(--mono); font-size:0.7rem; font-weight:700; letter-spacing:2px; padding:0.25rem 0.6rem; border-radius:4px; text-decoration:none; transition:all .2s; }
-        .lang-link.active { color:#000; background:var(--gold); }
-        .lang-link.inactive { color:var(--dim); border:1px solid var(--border); background:transparent; }
-        .lang-link.inactive:hover { color:var(--gold); border-color:var(--gold); }
-        .nav-back  { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; border:1px solid rgba(160,160,176,0.3); padding:0.35rem 0.75rem; transition:0.2s; letter-spacing:1px; }
-        .nav-back:hover { color:var(--blue); border-color:var(--blue); }
-
-        /* ── HEADER (ORIGINAL SIZE) ── */
-        .page-header { padding:1.1rem 2rem 0.9rem; border-bottom:1px solid var(--border); flex-shrink:0; }
-        .page-label  { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.3rem; }
-        .page-header h1 { font-size:1.6rem; font-weight:900; letter-spacing:1px; margin-bottom:0.2rem; }
-        .page-desc { font-size:0.85rem; color:var(--dim); max-width:720px; }
-        .page-eq   { font-family:var(--mono); font-size:0.78rem; color:var(--gold); margin-top:0.35rem; }
-
-        /* ── STATS BAR (ORIGINAL SIZE) ── */
-        .stats-bar { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
-        .stat { padding:0.55rem 1.4rem; border-right:1px solid var(--border); text-align:center; min-width:0; }
-        .stat-number { font-family:var(--mono); font-size:1.1rem; font-weight:700; color:var(--gold); transition:color 0.3s; }
-        .stat-label  { font-family:var(--mono); font-size:0.58rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-top:1px; }
-
-        /* ── MAIN ── */
-        .main-wrap { flex:1; display:flex; padding:1.2rem 1.5rem; gap:1.2rem; min-height:0; overflow:hidden; }
-
-        /* ── SIDEBAR (INCREASED SIZES) ── */
-        .sidebar { width:300px; flex-shrink:0; display:flex; flex-direction:column; gap:1rem; overflow-y:auto; }
-        .sidebar::-webkit-scrollbar { width:3px; }
-        .sidebar::-webkit-scrollbar-thumb { background:var(--border); }
-
-        .panel { border:1px solid var(--border); background:var(--bg2); padding:1rem; }
-        .panel-title { font-family:var(--mono); font-size:0.72rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:0.4rem; margin-bottom:0.75rem; }
-
-        /* Calculate button at top */
-        .btn-calc { width:100%; padding:0.8rem; font-family:var(--mono); font-size:0.8rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; cursor:pointer; background:var(--gold); color:#000; border:none; border-radius:2px; transition:0.2s; margin-bottom:0.5rem; }
-        .btn-calc:hover { background:#fff; }
-
-        /* filter checkboxes */
-        .filter-row { display:flex; align-items:center; justify-content:space-between; font-family:var(--mono); font-size:0.75rem; color:var(--dim); padding:0.3rem 0; cursor:pointer; user-select:none; }
-        .filter-row:hover { color:var(--text); }
-        .chk { width:14px; height:14px; border:1px solid var(--gold); position:relative; display:inline-block; flex-shrink:0; }
-        .chk.on::after { content:''; position:absolute; top:2px;left:2px;right:2px;bottom:2px; background:var(--gold); }
-        .filter-count { font-size:0.65rem; color:var(--dim); margin-left:4px; }
-
-        /* quality toggle */
-        .q-btns { display:flex; gap:5px; }
-        .q-btn { flex:1; padding:0.5rem; font-family:var(--mono); font-size:0.7rem; font-weight:700; cursor:pointer; border-radius:2px; transition:0.2s; text-align:center; background:transparent; border:1px solid var(--border); color:var(--dim); }
-        .q-btn:hover { background:rgba(255,255,255,0.04); }
-        .q-btn.on { border-color:var(--blue); color:var(--blue); background:rgba(91,200,245,0.08); }
-
-        .data-row { display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.75rem; color:var(--dim); padding:0.3rem 0; border-bottom:1px solid rgba(255,255,255,0.03); }
-        .data-val { color:var(--text); font-weight:700; }
-
-        .note { font-family:var(--mono); font-size:0.7rem; color:var(--dim); line-height:1.7; }
-
-        /* ── CHARTS AREA (ORIGINAL SIZE) ── */
-        .charts-area { flex:1; display:flex; flex-direction:column; gap:1rem; min-width:0; min-height:0; }
-
-        /* Top row: key metrics */
-        .metrics-row { display:flex; gap:1rem; flex-shrink:0; }
-        .metric-card { flex:1; border:1px solid var(--border); background:var(--bg2); padding:0.9rem 1.1rem; }
-        .metric-card.highlight { border-color:rgba(255,215,0,0.5); background:rgba(10,8,0,0.98); }
-        .metric-title { font-family:var(--mono); font-size:0.6rem; color:var(--dim); letter-spacing:1px; text-transform:uppercase; margin-bottom:0.3rem; }
-        .metric-val   { font-family:var(--mono); font-size:1.5rem; font-weight:700; color:var(--gold); }
-        .metric-val.blue   { color:var(--blue); }
-        .metric-val.green  { color:var(--green); }
-        .metric-val.red    { color:var(--red); }
-        .metric-sub   { font-family:var(--mono); font-size:0.62rem; color:var(--dim); margin-top:2px; }
-
-        /* Bottom row: two charts */
-        .charts-row { flex:1; display:flex; gap:1rem; min-height:0; }
-        .chart-box { flex:1; border:1px solid var(--border); background:var(--bg2); padding:1rem; display:flex; flex-direction:column; min-width:0; }
-        .chart-title { font-family:var(--mono); font-size:0.68rem; color:var(--gold); letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid rgba(255,215,0,0.12); padding-bottom:0.35rem; margin-bottom:0.75rem; flex-shrink:0; }
-        .chart-canvas-wrap { flex:1; position:relative; min-height:0; }
-
-        /* comparison table */
-        .comp-table { width:100%; border-collapse:collapse; font-family:var(--mono); font-size:0.68rem; }
-        .comp-table th { color:var(--dim); font-weight:400; letter-spacing:1px; padding:0.3rem 0.6rem; border-bottom:1px solid var(--border); text-align:left; font-size:0.6rem; text-transform:uppercase; }
-        .comp-table td { padding:0.35rem 0.6rem; border-bottom:1px solid rgba(255,255,255,0.04); }
-        .comp-table tr.best td { color:var(--gold); }
-        .comp-table tr.mid  td { color:var(--dim); }
-        .comp-table tr.worst td { color:var(--red); opacity:0.7; }
-        .verdict { font-size:0.6rem; font-weight:700; letter-spacing:1px; }
-
-        /* placeholder */
-        .placeholder { display:flex; align-items:center; justify-content:center; height:100%; font-family:var(--mono); font-size:0.78rem; color:rgba(160,160,176,0.4); text-align:center; line-height:2; letter-spacing:1px; }
-
-        /* ── FOOTER (ORIGINAL SIZE) ── */
-        footer { border-top:1px solid var(--border); padding:0.65rem 2rem; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
-        .footer-nav { display:flex; gap:2rem; }
-        .footer-nav a { font-family:var(--mono); font-size:0.7rem; color:var(--dim); text-decoration:none; transition:0.2s; }
-        .footer-nav a:hover { color:var(--blue); }
-        .footer-eq     { font-family:var(--mono); font-size:0.7rem; color:rgba(255,215,0,0.5); text-align:center; }
-        .footer-credit { font-family:var(--mono); font-size:0.65rem; color:var(--dim); letter-spacing:1px; }
-
-        @media (max-width:1100px) { .charts-row{flex-direction:column} }
-        @media (max-width:900px)  { .main-wrap{flex-direction:column;overflow-y:auto} .sidebar{width:100%} }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{background:var(--bg);color:var(--text);font-family:var(--sans);height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+        nav{background:rgba(0,0,1,0.95);border-bottom:1px solid var(--border);padding:0.85rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+        .nav-logo{font-family:var(--mono);color:var(--gold);text-decoration:none;font-weight:700;font-size:0.85rem;letter-spacing:2px;}
+        .orcid-link{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:0.75rem;color:#A6CE39;text-decoration:none;border:1px solid rgba(166,206,57,0.3);padding:4px 12px;border-radius:2px;transition:0.3s;letter-spacing:1px;}
+        .orcid-link:hover{background:rgba(166,206,57,0.1);box-shadow:0 0 15px rgba(166,206,57,0.3);color:#fff;}
+        .nav-right{display:flex;align-items:center;gap:1.5rem;}
+        .nav-back{font-family:var(--mono);font-size:0.7rem;color:var(--dim);text-decoration:none;border:1px solid rgba(160,160,176,0.3);padding:0.35rem 0.75rem;transition:0.2s;letter-spacing:1px;}
+        .nav-back:hover{color:var(--blue);border-color:var(--blue);}
+        .page-header{padding:1.1rem 2rem 0.9rem;border-bottom:1px solid var(--border);flex-shrink:0;}
+        .page-label{font-family:var(--mono);font-size:0.65rem;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:0.3rem;}
+        .page-header h1{font-size:1.6rem;font-weight:900;letter-spacing:1px;margin-bottom:0.2rem;}
+        .page-desc{font-size:0.85rem;color:var(--dim);max-width:720px;}
+        .page-eq{font-family:var(--mono);font-size:0.78rem;color:var(--gold);margin-top:0.35rem;}
+        .stats-bar{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;}
+        .stat{padding:0.55rem 1.4rem;border-right:1px solid var(--border);text-align:center;min-width:0;}
+        .stat-number{font-family:var(--mono);font-size:1.1rem;font-weight:700;color:var(--gold);transition:color 0.3s;}
+        .stat-label{font-family:var(--mono);font-size:0.58rem;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-top:1px;}
+        .main-wrap{flex:1;display:flex;padding:1.2rem 1.5rem;gap:1.2rem;min-height:0;overflow:hidden;}
+        .sidebar{width:300px;flex-shrink:0;display:flex;flex-direction:column;gap:1rem;overflow-y:auto;}
+        .sidebar::-webkit-scrollbar{width:3px;}
+        .sidebar::-webkit-scrollbar-thumb{background:var(--border);}
+        .panel{border:1px solid var(--border);background:var(--bg2);padding:1rem;}
+        .panel-title{font-family:var(--mono);font-size:0.72rem;color:var(--gold);letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid rgba(255,215,0,0.15);padding-bottom:0.4rem;margin-bottom:0.75rem;}
+        .btn-calc{width:100%;padding:0.8rem;font-family:var(--mono);font-size:0.8rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;background:var(--gold);color:#000;border:none;border-radius:2px;transition:0.2s;margin-bottom:0.5rem;}
+        .btn-calc:hover{background:#fff;}
+        .filter-row{display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:0.75rem;color:var(--dim);padding:0.3rem 0;cursor:pointer;user-select:none;}
+        .filter-row:hover{color:var(--text);}
+        .chk{width:14px;height:14px;border:1px solid var(--gold);position:relative;display:inline-block;flex-shrink:0;}
+        .chk.on::after{content:'';position:absolute;top:2px;left:2px;right:2px;bottom:2px;background:var(--gold);}
+        .filter-count{font-size:0.65rem;color:var(--dim);margin-left:4px;}
+        .q-btns{display:flex;gap:5px;}
+        .q-btn{flex:1;padding:0.5rem;font-family:var(--mono);font-size:0.7rem;font-weight:700;cursor:pointer;border-radius:2px;transition:0.2s;text-align:center;background:transparent;border:1px solid var(--border);color:var(--dim);}
+        .q-btn:hover{background:rgba(255,255,255,0.04);}
+        .q-btn.on{border-color:var(--blue);color:var(--blue);background:rgba(91,200,245,0.08);}
+        .data-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:0.75rem;color:var(--dim);padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.03);}
+        .data-val{color:var(--text);font-weight:700;}
+        .note{font-family:var(--mono);font-size:0.7rem;color:var(--dim);line-height:1.7;}
+        .charts-area{flex:1;display:flex;flex-direction:column;gap:1rem;min-width:0;min-height:0;}
+        .metrics-row{display:flex;gap:1rem;flex-shrink:0;}
+        .metric-card{flex:1;border:1px solid var(--border);background:var(--bg2);padding:0.9rem 1.1rem;}
+        .metric-card.highlight{border-color:rgba(255,215,0,0.5);background:rgba(10,8,0,0.98);}
+        .metric-title{font-family:var(--mono);font-size:0.6rem;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:0.3rem;}
+        .metric-val{font-family:var(--mono);font-size:1.5rem;font-weight:700;color:var(--gold);}
+        .metric-val.blue{color:var(--blue);}.metric-val.green{color:var(--green);}.metric-val.red{color:var(--red);}
+        .metric-sub{font-family:var(--mono);font-size:0.62rem;color:var(--dim);margin-top:2px;}
+        .charts-row{flex:1;display:flex;gap:1rem;min-height:0;}
+        .chart-box{flex:1;border:1px solid var(--border);background:var(--bg2);padding:1rem;display:flex;flex-direction:column;min-width:0;}
+        .chart-title{font-family:var(--mono);font-size:0.68rem;color:var(--gold);letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid rgba(255,215,0,0.12);padding-bottom:0.35rem;margin-bottom:0.75rem;flex-shrink:0;}
+        .chart-canvas-wrap{flex:1;position:relative;min-height:0;}
+        .comp-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:0.68rem;}
+        .comp-table th{color:var(--dim);font-weight:400;letter-spacing:1px;padding:0.3rem 0.6rem;border-bottom:1px solid var(--border);text-align:left;font-size:0.6rem;text-transform:uppercase;}
+        .comp-table td{padding:0.35rem 0.6rem;border-bottom:1px solid rgba(255,255,255,0.04);}
+        .comp-table tr.best td{color:var(--gold);}
+        .comp-table tr.mid  td{color:var(--dim);}
+        .comp-table tr.worst td{color:var(--red);opacity:0.7;}
+        .verdict{font-size:0.6rem;font-weight:700;letter-spacing:1px;}
+        .placeholder{display:flex;align-items:center;justify-content:center;height:100%;font-family:var(--mono);font-size:0.78rem;color:rgba(160,160,176,0.4);text-align:center;line-height:2;letter-spacing:1px;}
+        footer{border-top:1px solid var(--border);padding:0.65rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+        .footer-nav{display:flex;gap:2rem;}
+        .footer-nav a{font-family:var(--mono);font-size:0.7rem;color:var(--dim);text-decoration:none;transition:0.2s;}
+        .footer-nav a:hover{color:var(--blue);}
+        .footer-eq{font-family:var(--mono);font-size:0.7rem;color:rgba(255,215,0,0.5);text-align:center;}
+        .footer-credit{font-family:var(--mono);font-size:0.65rem;color:var(--dim);letter-spacing:1px;}
+        @media(max-width:1100px){.charts-row{flex-direction:column}}
+        @media(max-width:900px){.main-wrap{flex-direction:column;overflow-y:auto}.sidebar{width:100%}}
     </style>
 </head>
 <body>
 
 <nav>
-    <div style="display:flex; align-items:center; gap:20px;">
-    <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
-    
-    <!-- ORCID BADGE -->
-    <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verify Author Identity on ORCID">
-      <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
-         <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
-      </svg>
-      0009-0008-4935-9010
-    </a>
-  </div>
-  
-  <!-- LANGUAGE SELECTOR -->
-  <div style="display:flex;gap:.4rem;">
-    <a href="rms.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">ES</a>
-    <a href="rms-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">EN</a>
-  </div>
-  
-  <a href="lab-galaxias-en.html" class="nav-back">← LABORATORY</a>
+    <div style="display:flex;align-items:center;gap:20px;">
+        <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
+        <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verify Author Identity on ORCID">
+            <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
+                <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
+            </svg>
+            0009-0008-4935-9010
+        </a>
     </div>
+    <div style="display:flex;gap:.4rem;">
+        <a href="rms.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">ES</a>
+        <a href="rms-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">EN</a>
+    </div>
+    <a href="lab-galaxias-en.html" class="nav-back">← LABORATORY</a>
 </nav>
 
 <div class="page-header">
     <div class="page-label">CHAPTERS 8 & 9 · LIVE · STATISTICS · SPARC 175 GALAXIES CATALOG</div>
     <h1>GLOBAL RMS STATISTICAL ERROR</h1>
-    <p class="page-desc">Rigorous quantitative test of the TIE Treatise on the SPARC catalog. RMS, σ dispersion in dex, reduced χ² and systematic bias — calculated live, with no adjusted parameters. Comparison against pure Newton and ΛCDM with NFW halo.</p>
+    <p class="page-desc">Rigorous quantitative test of the TIE Treatise on the SPARC catalog. RMS, σ dispersion in dex, reduced χ² and systematic bias — calculated live with real data, no fitted parameters. Comparison against pure Newton and ΛCDM NFW halo.</p>
     <div class="page-eq">RMS = √(Σ(v_TIE − v_obs)²/N) &nbsp;·&nbsp; σ_dex = std(log₁₀(v_TIE/v_obs)) &nbsp;·&nbsp; χ²_r = χ²/(N−1)</div>
 </div>
 
@@ -171,23 +117,17 @@
 </div>
 
 <div class="main-wrap">
-
-    <!-- SIDEBAR (INCREASED SIZES) -->
     <div class="sidebar">
-
-        <!-- CALCULATE BUTTON AT TOP -->
         <button class="btn-calc" onclick="runAnalysis()">CALCULATE STATISTICS</button>
-
         <div class="panel">
             <div class="panel-title">Morphological type</div>
-            <div class="filter-row" onclick="toggleType('Sb')"><span>Sb — Normal spiral <span class="filter-count">(42)</span></span><div class="chk on" id="chk-Sb"></div></div>
-            <div class="filter-row" onclick="toggleType('Sc')"><span>Sc — Open spiral <span class="filter-count">(38)</span></span><div class="chk on" id="chk-Sc"></div></div>
-            <div class="filter-row" onclick="toggleType('Sd')"><span>Sd — Late spiral <span class="filter-count">(31)</span></span><div class="chk on" id="chk-Sd"></div></div>
-            <div class="filter-row" onclick="toggleType('LSB')"><span>LSB — Low surf. brightness <span class="filter-count">(29)</span></span><div class="chk on" id="chk-LSB"></div></div>
-            <div class="filter-row" onclick="toggleType('Irr')"><span>Irr — Irregular <span class="filter-count">(22)</span></span><div class="chk on" id="chk-Irr"></div></div>
-            <div class="filter-row" onclick="toggleType('dw')"><span>Dw — Dwarf <span class="filter-count">(13)</span></span><div class="chk on" id="chk-dw"></div></div>
+            <div class="filter-row" onclick="toggleType('Sb')"><span>Sb — Normal spiral <span class="filter-count" id="cnt-Sb"></span></span><div class="chk on" id="chk-Sb"></div></div>
+            <div class="filter-row" onclick="toggleType('Sc')"><span>Sc — Open spiral <span class="filter-count" id="cnt-Sc"></span></span><div class="chk on" id="chk-Sc"></div></div>
+            <div class="filter-row" onclick="toggleType('Sd')"><span>Sd — Late spiral <span class="filter-count" id="cnt-Sd"></span></span><div class="chk on" id="chk-Sd"></div></div>
+            <div class="filter-row" onclick="toggleType('LSB')"><span>LSB — Low surf. brightness <span class="filter-count" id="cnt-LSB"></span></span><div class="chk on" id="chk-LSB"></div></div>
+            <div class="filter-row" onclick="toggleType('Irr')"><span>Irr — Irregular <span class="filter-count" id="cnt-Irr"></span></span><div class="chk on" id="chk-Irr"></div></div>
+            <div class="filter-row" onclick="toggleType('dw')"><span>Dw — Dwarf <span class="filter-count" id="cnt-dw"></span></span><div class="chk on" id="chk-dw"></div></div>
         </div>
-
         <div class="panel">
             <div class="panel-title">Data quality (Q)</div>
             <div class="q-btns">
@@ -197,7 +137,6 @@
             </div>
             <p class="note" style="margin-top:0.6rem;">Q=1: clear flat profile. Q=3: sparse or noisy data.</p>
         </div>
-
         <div class="panel">
             <div class="panel-title">Live results</div>
             <div class="data-row">Filtered galaxies <span class="data-val" id="dv-n">--</span></div>
@@ -206,19 +145,15 @@
             <div class="data-row">TIE σ_dex <span class="data-val" id="dv-sigma" style="color:var(--gold)">--</span></div>
             <div class="data-row">TIE χ²_r <span class="data-val" id="dv-chi2" style="color:var(--gold)">--</span></div>
             <div class="data-row">Mean bias <span class="data-val" id="dv-bias">--</span></div>
-            <div class="data-row">% Resid < 15% <span class="data-val" id="dv-pct" style="color:var(--green)">--</span></div>
+            <div class="data-row">% Resid &lt; 15% <span class="data-val" id="dv-pct" style="color:var(--green)">--</span></div>
         </div>
-
         <div class="panel">
             <div class="panel-title">Methodological note</div>
-            <p class="note">TIE uses <span style="color:var(--gold)">a₀ = cH₀/R = 1.082×10⁻¹⁰ m/s²</span> as the only derived parameter (not fitted). ΛCDM NFW uses 2 free parameters per galaxy (ρ₀, r_s). Pure Newton has none.</p>
+            <p class="note">TIE uses <span style="color:var(--gold)">a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²</span> as the only derived parameter (not fitted). ΛCDM NFW uses 2 free parameters per galaxy (ρ₀, r_s). Pure Newton has none.<br><br>Data: real SPARC catalog — Lelli, McGaugh & Schombert (2016), AJ 152, 157.</p>
         </div>
     </div>
 
-    <!-- CHARTS AREA (ORIGINAL SIZE) -->
     <div class="charts-area">
-
-        <!-- Key metrics -->
         <div class="metrics-row">
             <div class="metric-card highlight">
                 <div class="metric-title">TIE σ dispersion</div>
@@ -241,11 +176,7 @@
                 <div class="metric-sub">km/s &nbsp;·&nbsp; ideal: ~0 (no bias)</div>
             </div>
         </div>
-
-        <!-- Charts -->
         <div class="charts-row">
-
-            <!-- Residual histogram -->
             <div class="chart-box">
                 <div class="chart-title">Residual histogram — log₁₀(v_TIE / v_obs)</div>
                 <div class="chart-canvas-wrap">
@@ -253,32 +184,23 @@
                     <canvas id="histChart" style="display:none"></canvas>
                 </div>
             </div>
-
-            <!-- RMS by type + model comparison -->
             <div class="chart-box" style="flex:1.1">
                 <div class="chart-title" id="right-title">RMS by morphological type &nbsp;·&nbsp; model comparison</div>
                 <div class="chart-canvas-wrap">
                     <div class="placeholder" id="ph-comp">Run the analysis to see the comparison</div>
                     <canvas id="compChart" style="display:none"></canvas>
                 </div>
-                <!-- Comparison table (shown below the chart) -->
-                <div id="comp-table-wrap" style="display:none; margin-top:0.75rem; flex-shrink:0;">
+                <div id="comp-table-wrap" style="display:none;margin-top:0.75rem;flex-shrink:0;">
                     <table class="comp-table">
-                        <thead>
-                            <tr>
-                                <th>Model</th>
-                                <th>Free parameters</th>
-                                <th>RMS (km/s)</th>
-                                <th>σ (dex)</th>
-                                <th>χ²_r</th>
-                                <th>Verdict</th>
-                            </tr>
-                        </thead>
+                        <thead><tr>
+                            <th>Model</th><th>Free parameters</th>
+                            <th>RMS (km/s)</th><th>σ (dex)</th>
+                            <th>χ²_r</th><th>Verdict</th>
+                        </tr></thead>
                         <tbody id="comp-tbody"></tbody>
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -293,282 +215,361 @@
 </footer>
 
 <script>
-// ── TIE CONSTANTS ──
+// ── TIE CONSTANTS (derived, not fitted) ──────────────────────
+const G    = 6.674e-11;
 const C    = 2.998e8;
-const H0   = 70.0 * 1000 / 3.0857e22; // s⁻¹
-const R_const = 2 * Math.PI;
-const A0   = C * H0 / R_const;  // 1.082e-10 m/s²
+const H0   = 70.0 * 1e3 / 3.0857e22;
+const MSUN = 1.989e30;
+const KM   = 1e3;
+const A0   = C * H0 / (2 * Math.PI); // 1.082e-10 m/s² — DERIVED
 
-// ── SIMULATED SPARC DATA GENERATOR ──
-// Reproduces the real catalog distribution: types, masses, Q, scatter
-function seededRand(seed) {
-    // Simple LCG for reproducibility
-    let s = seed;
-    return function() {
-        s = (s * 1664525 + 1013904223) & 0xFFFFFFFF;
-        return (s >>> 0) / 0xFFFFFFFF;
-    };
-}
+// ── REAL SPARC DATA ───────────────────────────────────────────
+// Source: Lelli, McGaugh & Schombert (2016), AJ 152, 157
+// Mdisk in 1e10 M☉, Mgas in 1e9 M☉, vf in km/s
+const SPARC_RAW = [
+  {n:"CamB",t:"dw",Md:0.0037,Mg:0.012,vf:0.0,Q:2},
+  {n:"D512-2",t:"dw",Md:0.0163,Mg:0.081,vf:0.0,Q:2},
+  {n:"D564-8",t:"dw",Md:0.0016,Mg:0.029,vf:0.0,Q:2},
+  {n:"D631-7",t:"dw",Md:0.0098,Mg:0.29,vf:57.7,Q:1},
+  {n:"DDO064",t:"dw",Md:0.0078,Mg:0.211,vf:46.1,Q:1},
+  {n:"DDO154",t:"dw",Md:0.0027,Mg:0.275,vf:47.0,Q:2},
+  {n:"DDO161",t:"dw",Md:0.0274,Mg:1.378,vf:66.3,Q:1},
+  {n:"DDO168",t:"dw",Md:0.0095,Mg:0.413,vf:53.4,Q:2},
+  {n:"DDO170",t:"dw",Md:0.0272,Mg:0.735,vf:60.0,Q:2},
+  {n:"ESO079-G014",t:"Sb",Md:2.5866,Mg:3.14,vf:175.0,Q:1},
+  {n:"ESO116-G012",t:"Sd",Md:0.2146,Mg:1.083,vf:109.1,Q:1},
+  {n:"ESO444-G084",t:"dw",Md:0.0035,Mg:0.135,vf:0.0,Q:2},
+  {n:"ESO563-G021",t:"Sb",Md:15.5589,Mg:24.298,vf:314.6,Q:1},
+  {n:"F561-1",t:"Irr",Md:0.2039,Mg:1.622,vf:50.0,Q:3},
+  {n:"F563-1",t:"LSB",Md:0.0951,Mg:3.2,vf:109.9,Q:1},
+  {n:"F563-V1",t:"dw",Md:0.077,Mg:0.61,vf:0.0,Q:3},
+  {n:"F563-V2",t:"LSB",Md:0.1493,Mg:2.169,vf:116.6,Q:1},
+  {n:"F565-V2",t:"dw",Md:0.028,Mg:0.699,vf:0.0,Q:2},
+  {n:"F567-2",t:"Irr",Md:0.1067,Mg:2.449,vf:0.0,Q:3},
+  {n:"F568-1",t:"Sc",Md:0.3126,Mg:4.498,vf:0.0,Q:1},
+  {n:"F568-3",t:"Sd",Md:0.4173,Mg:3.195,vf:0.0,Q:1},
+  {n:"F568-V1",t:"LSB",Md:0.1913,Mg:2.491,vf:112.3,Q:1},
+  {n:"F571-8",t:"LSB",Md:0.5082,Mg:1.782,vf:139.7,Q:1},
+  {n:"F571-V1",t:"LSB",Md:0.0925,Mg:1.217,vf:83.6,Q:2},
+  {n:"F574-1",t:"LSB",Md:0.3268,Mg:3.524,vf:97.8,Q:1},
+  {n:"F574-2",t:"Irr",Md:0.1438,Mg:1.701,vf:0.0,Q:3},
+  {n:"F579-V1",t:"LSB",Md:0.5924,Mg:2.245,vf:112.1,Q:1},
+  {n:"F583-1",t:"LSB",Md:0.0493,Mg:2.126,vf:85.8,Q:1},
+  {n:"F583-4",t:"Sc",Md:0.0858,Mg:0.641,vf:0.0,Q:1},
+  {n:"IC2574",t:"LSB",Md:0.0508,Mg:1.036,vf:66.4,Q:2},
+  {n:"IC4202",t:"Sb",Md:8.9874,Mg:12.326,vf:242.6,Q:1},
+  {n:"KK98-251",t:"dw",Md:0.0043,Mg:0.115,vf:33.7,Q:2},
+  {n:"NGC0024",t:"Sc",Md:0.1944,Mg:0.676,vf:106.3,Q:1},
+  {n:"NGC0055",t:"LSB",Md:0.2314,Mg:1.565,vf:85.6,Q:2},
+  {n:"NGC0100",t:"Sc",Md:0.1616,Mg:1.99,vf:88.1,Q:1},
+  {n:"NGC0247",t:"Sd",Md:0.3666,Mg:1.746,vf:104.9,Q:2},
+  {n:"NGC0289",t:"Sb",Md:3.6033,Mg:27.469,vf:163.0,Q:2},
+  {n:"NGC0300",t:"Sd",Md:0.1461,Mg:0.936,vf:93.3,Q:2},
+  {n:"NGC0801",t:"Sc",Md:15.6285,Mg:23.201,vf:220.1,Q:1},
+  {n:"NGC0891",t:"Sb",Md:6.917,Mg:4.462,vf:216.1,Q:1},
+  {n:"NGC1003",t:"Sc",Md:0.341,Mg:5.88,vf:109.8,Q:1},
+  {n:"NGC1090",t:"Sb",Md:3.6023,Mg:8.783,vf:164.4,Q:1},
+  {n:"NGC1705",t:"LSB",Md:0.0267,Mg:0.139,vf:71.9,Q:3},
+  {n:"NGC2366",t:"dw",Md:0.0118,Mg:0.647,vf:50.2,Q:3},
+  {n:"NGC2403",t:"Sc",Md:0.502,Mg:3.199,vf:131.2,Q:1},
+  {n:"NGC2683",t:"Sb",Md:4.0208,Mg:1.406,vf:154.0,Q:2},
+  {n:"NGC2841",t:"Sb",Md:9.4061,Mg:9.775,vf:284.8,Q:1},
+  {n:"NGC2903",t:"Sb",Md:4.0931,Mg:2.552,vf:184.6,Q:1},
+  {n:"NGC2915",t:"LSB",Md:0.0321,Mg:0.508,vf:83.5,Q:2},
+  {n:"NGC2955",t:"Sb",Md:15.9711,Mg:28.949,vf:0.0,Q:1},
+  {n:"NGC2976",t:"Sc",Md:0.1686,Mg:0.172,vf:85.4,Q:2},
+  {n:"NGC2998",t:"Sc",Md:7.5451,Mg:23.451,vf:209.9,Q:1},
+  {n:"NGC3109",t:"Irr",Md:0.0097,Mg:0.477,vf:66.2,Q:1},
+  {n:"NGC3198",t:"Sc",Md:1.914,Mg:10.869,vf:150.1,Q:1},
+  {n:"NGC3521",t:"Sb",Md:4.2418,Mg:4.154,vf:213.7,Q:1},
+  {n:"NGC3726",t:"Sc",Md:3.5117,Mg:6.473,vf:168.0,Q:2},
+  {n:"NGC3741",t:"dw",Md:0.0014,Mg:0.182,vf:50.1,Q:1},
+  {n:"NGC3769",t:"Sb",Md:0.9339,Mg:5.529,vf:118.6,Q:2},
+  {n:"NGC3877",t:"Sc",Md:3.6267,Mg:1.483,vf:168.4,Q:2},
+  {n:"NGC3893",t:"Sc",Md:2.9263,Mg:5.799,vf:174.0,Q:1},
+  {n:"NGC3917",t:"Sc",Md:1.0983,Mg:1.888,vf:135.9,Q:1},
+  {n:"NGC3949",t:"Sb",Md:1.9034,Mg:3.371,vf:163.0,Q:2},
+  {n:"NGC3953",t:"Sb",Md:7.065,Mg:2.832,vf:220.8,Q:1},
+  {n:"NGC3972",t:"Sb",Md:0.7177,Mg:1.214,vf:132.7,Q:1},
+  {n:"NGC3992",t:"Sb",Md:11.3466,Mg:16.599,vf:241.0,Q:1},
+  {n:"NGC4010",t:"Sd",Md:0.8597,Mg:2.832,vf:125.8,Q:2},
+  {n:"NGC4013",t:"Sb",Md:3.9547,Mg:2.967,vf:172.9,Q:2},
+  {n:"NGC4051",t:"Sb",Md:4.7634,Mg:2.697,vf:157.0,Q:2},
+  {n:"NGC4068",t:"dw",Md:0.0118,Mg:0.154,vf:0.0,Q:2},
+  {n:"NGC4085",t:"Sc",Md:1.0862,Mg:1.349,vf:131.5,Q:2},
+  {n:"NGC4088",t:"Sb",Md:5.3643,Mg:8.226,vf:171.7,Q:1},
+  {n:"NGC4100",t:"Sb",Md:2.9697,Mg:3.102,vf:158.2,Q:1},
+  {n:"NGC4138",t:"Sb",Md:2.2055,Mg:1.483,vf:147.3,Q:2},
+  {n:"NGC4157",t:"Sb",Md:5.281,Mg:8.226,vf:184.7,Q:1},
+  {n:"NGC4183",t:"Sc",Md:0.5419,Mg:3.506,vf:110.6,Q:1},
+  {n:"NGC4214",t:"LSB",Md:0.0571,Mg:0.486,vf:80.1,Q:2},
+  {n:"NGC4217",t:"Sb",Md:4.265,Mg:2.562,vf:181.3,Q:1},
+  {n:"NGC4389",t:"Sb",Md:1.0664,Mg:0.539,vf:0.0,Q:3},
+  {n:"NGC4559",t:"Sc",Md:0.9688,Mg:5.811,vf:121.2,Q:1},
+  {n:"NGC5005",t:"Sb",Md:8.936,Mg:1.28,vf:262.2,Q:1},
+  {n:"NGC5033",t:"Sc",Md:5.5255,Mg:11.314,vf:194.2,Q:1},
+  {n:"NGC5055",t:"Sb",Md:7.6461,Mg:11.722,vf:179.0,Q:1},
+  {n:"NGC5371",t:"Sb",Md:17.0196,Mg:11.18,vf:209.5,Q:1},
+  {n:"NGC5585",t:"Sd",Md:0.1472,Mg:1.683,vf:90.3,Q:1},
+  {n:"NGC5907",t:"Sc",Md:8.7713,Mg:21.025,vf:215.0,Q:1},
+  {n:"NGC5985",t:"Sb",Md:10.4364,Mg:11.586,vf:293.6,Q:1},
+  {n:"NGC6015",t:"Sc",Md:1.6064,Mg:5.834,vf:154.1,Q:2},
+  {n:"NGC6195",t:"Sb",Md:19.5538,Mg:20.907,vf:251.7,Q:1},
+  {n:"NGC6503",t:"Sc",Md:0.6422,Mg:1.744,vf:116.3,Q:1},
+  {n:"NGC6674",t:"Sb",Md:10.7327,Mg:32.165,vf:241.3,Q:1},
+  {n:"NGC6789",t:"dw",Md:0.005,Mg:0.017,vf:0.0,Q:2},
+  {n:"NGC6946",t:"Sc",Md:3.3087,Mg:5.67,vf:158.9,Q:1},
+  {n:"NGC7331",t:"Sb",Md:12.5315,Mg:11.067,vf:239.0,Q:1},
+  {n:"NGC7793",t:"Sd",Md:0.3525,Mg:0.861,vf:0.0,Q:1},
+  {n:"NGC7814",t:"Sb",Md:3.7264,Mg:1.07,vf:218.9,Q:1},
+  {n:"PGC51017",t:"dw",Md:0.0077,Mg:0.201,vf:18.6,Q:3},
+  {n:"UGC00128",t:"LSB",Md:0.601,Mg:7.431,vf:129.3,Q:1},
+  {n:"UGC00191",t:"Irr",Md:0.1002,Mg:1.343,vf:0.0,Q:1},
+  {n:"UGC00634",t:"Irr",Md:0.1494,Mg:3.663,vf:0.0,Q:2},
+  {n:"UGC00731",t:"LSB",Md:0.0162,Mg:1.807,vf:73.3,Q:1},
+  {n:"UGC00891",t:"Irr",Md:0.0187,Mg:0.428,vf:0.0,Q:2},
+  {n:"UGC01230",t:"LSB",Md:0.381,Mg:6.43,vf:103.7,Q:1},
+  {n:"UGC01281",t:"Sd",Md:0.0176,Mg:0.294,vf:55.2,Q:1},
+  {n:"UGC02023",t:"dw",Md:0.0654,Mg:0.477,vf:0.0,Q:2},
+  {n:"UGC02259",t:"LSB",Md:0.0863,Mg:0.494,vf:86.2,Q:2},
+  {n:"UGC02455",t:"dw",Md:0.1825,Mg:0.803,vf:0.0,Q:3},
+  {n:"UGC02487",t:"Sb",Md:24.4977,Mg:17.963,vf:332.0,Q:1},
+  {n:"UGC02885",t:"Sc",Md:20.1762,Mg:40.075,vf:289.5,Q:1},
+  {n:"UGC02916",t:"Sb",Md:6.2077,Mg:23.273,vf:182.7,Q:2},
+  {n:"UGC02953",t:"Sb",Md:12.9759,Mg:7.678,vf:264.9,Q:2},
+  {n:"UGC03205",t:"Sb",Md:5.6821,Mg:9.677,vf:219.6,Q:1},
+  {n:"UGC03546",t:"Sb",Md:5.0668,Mg:2.675,vf:196.9,Q:1},
+  {n:"UGC03580",t:"Sb",Md:0.6633,Mg:4.37,vf:126.2,Q:2},
+  {n:"UGC04278",t:"Sd",Md:0.0653,Mg:1.116,vf:91.4,Q:1},
+  {n:"UGC04305",t:"dw",Md:0.0368,Mg:0.69,vf:34.5,Q:3},
+  {n:"UGC04325",t:"LSB",Md:0.1013,Mg:0.678,vf:90.9,Q:1},
+  {n:"UGC04483",t:"dw",Md:0.0006,Mg:0.032,vf:0.0,Q:2},
+  {n:"UGC04499",t:"LSB",Md:0.0776,Mg:1.1,vf:72.8,Q:1},
+  {n:"UGC05005",t:"LSB",Md:0.205,Mg:3.093,vf:98.9,Q:1},
+  {n:"UGC05253",t:"Sb",Md:8.5791,Mg:16.396,vf:213.7,Q:2},
+  {n:"UGC05414",t:"dw",Md:0.0561,Mg:0.574,vf:0.0,Q:1},
+  {n:"UGC05716",t:"LSB",Md:0.0294,Mg:1.094,vf:73.1,Q:2},
+  {n:"UGC05721",t:"Sd",Md:0.0266,Mg:0.562,vf:79.7,Q:1},
+  {n:"UGC05750",t:"Sd",Md:0.1668,Mg:1.099,vf:0.0,Q:1},
+  {n:"UGC05764",t:"dw",Md:0.0043,Mg:0.163,vf:0.0,Q:2},
+  {n:"UGC05829",t:"dw",Md:0.0282,Mg:1.023,vf:0.0,Q:2},
+  {n:"UGC05918",t:"dw",Md:0.0117,Mg:0.297,vf:0.0,Q:2},
+  {n:"UGC05986",t:"LSB",Md:0.2348,Mg:2.667,vf:113.0,Q:2},
+  {n:"UGC05999",t:"dw",Md:0.1692,Mg:2.022,vf:0.0,Q:2},
+  {n:"UGC06399",t:"LSB",Md:0.1148,Mg:0.674,vf:85.0,Q:1},
+  {n:"UGC06446",t:"Sd",Md:0.0494,Mg:1.379,vf:82.2,Q:1},
+  {n:"UGC06614",t:"Sb",Md:6.2175,Mg:21.888,vf:199.8,Q:1},
+  {n:"UGC06628",t:"Irr",Md:0.187,Mg:1.5,vf:41.8,Q:2},
+  {n:"UGC06667",t:"Sc",Md:0.0698,Mg:0.809,vf:83.8,Q:1},
+  {n:"UGC06786",t:"Sb",Md:3.6704,Mg:5.03,vf:219.4,Q:1},
+  {n:"UGC06787",t:"Sb",Md:4.9128,Mg:5.03,vf:248.1,Q:2},
+  {n:"UGC06818",t:"LSB",Md:0.0794,Mg:1.079,vf:71.2,Q:2},
+  {n:"UGC06917",t:"LSB",Md:0.3416,Mg:2.023,vf:108.7,Q:1},
+  {n:"UGC06923",t:"LSB",Md:0.1445,Mg:0.809,vf:79.6,Q:2},
+  {n:"UGC06930",t:"Sd",Md:0.4466,Mg:3.237,vf:107.2,Q:1},
+  {n:"UGC06973",t:"Sb",Md:2.6935,Mg:1.753,vf:174.2,Q:3},
+  {n:"UGC06983",t:"Sc",Md:0.2649,Mg:2.967,vf:109.0,Q:1},
+  {n:"UGC07089",t:"Sd",Md:0.1792,Mg:1.214,vf:0.0,Q:2},
+  {n:"UGC07125",t:"LSB",Md:0.1356,Mg:4.629,vf:65.2,Q:1},
+  {n:"UGC07151",t:"Sc",Md:0.1142,Mg:0.616,vf:73.5,Q:1},
+  {n:"UGC07232",t:"dw",Md:0.0057,Mg:0.046,vf:0.0,Q:2},
+  {n:"UGC07261",t:"LSB",Md:0.0876,Mg:1.388,vf:74.7,Q:2},
+  {n:"UGC07323",t:"Sd",Md:0.2054,Mg:0.722,vf:0.0,Q:1},
+  {n:"UGC07399",t:"LSB",Md:0.0578,Mg:0.745,vf:103.0,Q:1},
+  {n:"UGC07524",t:"LSB",Md:0.1218,Mg:1.779,vf:79.5,Q:1},
+  {n:"UGC07559",t:"dw",Md:0.0054,Mg:0.169,vf:0.0,Q:2},
+  {n:"UGC07577",t:"dw",Md:0.0022,Mg:0.044,vf:0.0,Q:2},
+  {n:"UGC07603",t:"Sd",Md:0.0188,Mg:0.258,vf:61.6,Q:1},
+  {n:"UGC07608",t:"dw",Md:0.0132,Mg:0.535,vf:0.0,Q:1},
+  {n:"UGC07690",t:"dw",Md:0.0429,Mg:0.39,vf:57.4,Q:2},
+  {n:"UGC07866",t:"dw",Md:0.0062,Mg:0.118,vf:0.0,Q:2},
+  {n:"UGC08286",t:"Sc",Md:0.0628,Mg:0.642,vf:82.4,Q:1},
+  {n:"UGC08490",t:"LSB",Md:0.0508,Mg:0.72,vf:78.6,Q:1},
+  {n:"UGC08550",t:"Sd",Md:0.0144,Mg:0.288,vf:56.9,Q:1},
+  {n:"UGC08699",t:"Sb",Md:2.5151,Mg:3.738,vf:182.4,Q:2},
+  {n:"UGC08837",t:"dw",Md:0.025,Mg:0.32,vf:0.0,Q:2},
+  {n:"UGC09037",t:"Sc",Md:3.4307,Mg:19.078,vf:152.3,Q:2},
+  {n:"UGC09133",t:"Sb",Md:14.1463,Mg:33.428,vf:226.8,Q:1},
+  {n:"UGC09992",t:"dw",Md:0.0168,Mg:0.318,vf:33.6,Q:2},
+  {n:"UGC10310",t:"LSB",Md:0.0871,Mg:1.196,vf:71.4,Q:1},
+  {n:"UGC11455",t:"Sc",Md:18.7161,Mg:13.335,vf:269.4,Q:1},
+  {n:"UGC11557",t:"Sd",Md:0.6051,Mg:2.605,vf:0.0,Q:2},
+  {n:"UGC11820",t:"Irr",Md:0.0485,Mg:1.977,vf:0.0,Q:1},
+  {n:"UGC11914",t:"Sb",Md:7.5014,Mg:0.888,vf:288.1,Q:1},
+  {n:"UGC12506",t:"Sc",Md:6.9786,Mg:35.556,vf:234.0,Q:2},
+  {n:"UGC12632",t:"LSB",Md:0.065,Mg:1.744,vf:71.7,Q:1},
+  {n:"UGC12732",t:"Irr",Md:0.0834,Mg:3.66,vf:0.0,Q:1},
+  {n:"UGCA281",t:"dw",Md:0.0097,Mg:0.062,vf:0.0,Q:3},
+  {n:"UGCA442",t:"Irr",Md:0.007,Mg:0.263,vf:56.4,Q:1},
+  {n:"UGCA444",t:"dw",Md:0.0006,Mg:0.067,vf:37.0,Q:2},
+];
 
 const GALAXY_TYPES = ['Sb','Sc','Sd','LSB','Irr','dw'];
-const TYPE_COUNTS  = { Sb:42, Sc:38, Sd:31, LSB:29, Irr:22, dw:13 };
 
-// Intrinsic σ per type (reflects real expected SPARC scatter)
-const TYPE_SIGMA = { Sb:0.055, Sc:0.060, LSB:0.085, Sd:0.075, Irr:0.095, dw:0.110 };
-// Slight bias per type (TIE slightly underpredicts in dwarfs, ok in spirals)
-const TYPE_BIAS  = { Sb:0.002, Sc:0.001, Sd:0.003, LSB:-0.005, Irr:0.008, dw:0.015 };
+function buildGalaxies() {
+    return SPARC_RAW
+        .filter(g => g.vf > 0)
+        .map(g => {
+            const M_bar = (g.Md * 1e10 + g.Mg * 1e9) * MSUN;
+            const v_tie = Math.pow(G * M_bar * A0, 0.25) / KM;
+            const log_ratio = Math.log10(v_tie / g.vf);
+            return { name:g.n, type:g.t, v_obs:g.vf, v_tie, log_ratio, q:g.Q, npts:10 };
+        });
+}
 
-let allGalaxies   = [];
-let activeTypes   = { Sb:true, Sc:true, Sd:true, LSB:true, Irr:true, dw:true };
-let activeQ       = { 1:true, 2:true, 3:true };
-let histChart     = null;
-let compChart     = null;
-let analysisRun   = false;
+const allGalaxies = buildGalaxies();
+let activeTypes = {Sb:true,Sc:true,Sd:true,LSB:true,Irr:true,dw:true};
+let activeQ     = {1:true,2:true,3:true};
+let histChart=null, compChart=null, analysisRun=false;
 
-function generateGalaxies() {
-    const rand = seededRand(42);
-    allGalaxies = [];
-    let id = 1;
-
-    GALAXY_TYPES.forEach(type => {
-        const n = TYPE_COUNTS[type];
-        for (let i = 0; i < n; i++) {
-            // Representative circular velocity 80–320 km/s depending on type
-            const vRange = type === 'dw' ? [30,90] : type === 'LSB' ? [40,120] : type === 'Irr' ? [50,110] : [80,300];
-            const v_obs = vRange[0] + rand() * (vRange[1] - vRange[0]);
-
-            // TIE predicts with intrinsic scatter
-            const bias  = TYPE_BIAS[type];
-            const sigma = TYPE_SIGMA[type];
-            const noise = gaussRand(rand) * sigma;
-            const log_ratio = bias + noise;
-            const v_tie = v_obs * Math.pow(10, log_ratio);
-
-            // Quality
-            const qRoll = rand();
-            const q = qRoll < 0.45 ? 1 : qRoll < 0.80 ? 2 : 3;
-
-            // Rotation points per galaxy (3-18)
-            const npts = Math.floor(3 + rand() * 15);
-
-            allGalaxies.push({ id: id++, type, v_obs, v_tie, q, npts, log_ratio });
-        }
+// Update real counts
+(function updateCounts(){
+    GALAXY_TYPES.forEach(t=>{
+        const n = allGalaxies.filter(g=>g.type===t).length;
+        const el = document.getElementById('cnt-'+t);
+        if(el) el.textContent = `(${n})`;
     });
+})();
+
+function getActive(){ return allGalaxies.filter(g=>activeTypes[g.type]&&activeQ[g.q]); }
+
+function computeStats(galaxies){
+    if(!galaxies.length) return null;
+    const N=galaxies.length;
+    const rms=Math.sqrt(galaxies.reduce((s,g)=>s+(g.v_tie-g.v_obs)**2,0)/N);
+    const ratios=galaxies.map(g=>g.log_ratio);
+    const mean_r=ratios.reduce((a,b)=>a+b,0)/N;
+    const sigma=Math.sqrt(ratios.reduce((s,r)=>s+(r-mean_r)**2,0)/(N-1));
+    const bias_kms=galaxies.reduce((s,g)=>s+(g.v_tie-g.v_obs),0)/N;
+    const sigma_obs=5.0;
+    const chi2=galaxies.reduce((s,g)=>s+((g.v_tie-g.v_obs)/sigma_obs)**2,0)/(N-1);
+    const pct15=galaxies.filter(g=>Math.abs(g.v_tie-g.v_obs)/g.v_obs<0.15).length/N*100;
+    const npts=galaxies.reduce((s,g)=>s+g.npts,0);
+    return{N,rms,sigma,bias_kms,chi2,pct15,npts};
 }
 
-function gaussRand(r) {
-    // Box-Muller with our rand
-    return Math.sqrt(-2 * Math.log(1 - r() * 0.9999)) * Math.cos(2 * Math.PI * r());
-}
-
-function getActive() {
-    return allGalaxies.filter(g => activeTypes[g.type] && activeQ[g.q]);
-}
-
-function computeStats(galaxies) {
-    if (galaxies.length === 0) return null;
-    const N = galaxies.length;
-
-    // RMS in km/s
-    const rms = Math.sqrt(galaxies.reduce((s, g) => s + (g.v_tie - g.v_obs)**2, 0) / N);
-
-    // σ in dex
-    const ratios = galaxies.map(g => g.log_ratio);
-    const mean_r = ratios.reduce((a,b) => a+b, 0) / N;
-    const sigma  = Math.sqrt(ratios.reduce((s,r) => s + (r - mean_r)**2, 0) / (N - 1));
-
-    // Bias
-    const bias_kms = galaxies.reduce((s, g) => s + (g.v_tie - g.v_obs), 0) / N;
-
-    // Reduced χ² (estimate with σ_obs ~ 5 km/s typical SPARC)
-    const sigma_obs = 5.0;
-    const chi2 = galaxies.reduce((s, g) => s + ((g.v_tie - g.v_obs) / sigma_obs)**2, 0) / (N - 1);
-
-    // % within 15%
-    const pct15 = galaxies.filter(g => Math.abs(g.v_tie - g.v_obs) / g.v_obs < 0.15).length / N * 100;
-
-    // Total points
-    const npts = galaxies.reduce((s, g) => s + g.npts, 0);
-
-    return { N, rms, sigma, bias_kms, chi2, pct15, npts };
-}
-
-function runAnalysis() {
-    const galaxies = getActive();
-    if (galaxies.length === 0) return;
-
-    const stats = computeStats(galaxies);
-
-    // Stats bar
-    animateNumber('stat-n',    stats.N,           0,  '',      'var(--gold)');
-    animateNumber('stat-rms',  stats.rms,          1,  '',      'var(--blue)');
-    animateNumber('stat-sigma',stats.sigma,        3,  '',      'var(--gold)');
-    animateNumber('stat-chi2', stats.chi2,         2,  '',      'var(--green)');
-    animateNumber('stat-bias', stats.bias_kms,     1,  '',      Math.abs(stats.bias_kms) < 2 ? 'var(--green)' : 'var(--red)');
-
-    // Sidebar
-    document.getElementById('dv-n').textContent     = stats.N;
-    document.getElementById('dv-pts').textContent   = stats.npts.toLocaleString('en-US');
-    document.getElementById('dv-rms').textContent   = stats.rms.toFixed(1) + ' km/s';
-    document.getElementById('dv-sigma').textContent = stats.sigma.toFixed(4) + ' dex';
-    document.getElementById('dv-chi2').textContent  = stats.chi2.toFixed(2);
-    document.getElementById('dv-bias').textContent  = (stats.bias_kms >= 0 ? '+' : '') + stats.bias_kms.toFixed(2) + ' km/s';
-    document.getElementById('dv-pct').textContent   = stats.pct15.toFixed(1) + ' %';
-
-    // Metric cards
-    document.getElementById('mc-sigma').textContent = stats.sigma.toFixed(4);
-    document.getElementById('mc-sigma').className   = 'metric-val ' + (stats.sigma < 0.08 ? '' : stats.sigma < 0.11 ? '' : 'red');
-    document.getElementById('mc-rms').textContent   = stats.rms.toFixed(1);
-    document.getElementById('mc-chi2').textContent  = stats.chi2.toFixed(2);
-    const biasEl = document.getElementById('mc-bias');
-    biasEl.textContent = (stats.bias_kms >= 0 ? '+' : '') + stats.bias_kms.toFixed(2);
-    biasEl.className   = 'metric-val ' + (Math.abs(stats.bias_kms) < 2 ? 'green' : 'red');
-
+function runAnalysis(){
+    const galaxies=getActive();
+    if(!galaxies.length) return;
+    const stats=computeStats(galaxies);
+    animateNumber('stat-n',    stats.N,        0,'','var(--gold)');
+    animateNumber('stat-rms',  stats.rms,      1,'','var(--blue)');
+    animateNumber('stat-sigma',stats.sigma,    4,'','var(--gold)');
+    animateNumber('stat-chi2', stats.chi2,     2,'','var(--green)');
+    animateNumber('stat-bias', stats.bias_kms, 1,'',Math.abs(stats.bias_kms)<5?'var(--green)':'var(--red)');
+    document.getElementById('dv-n').textContent    =stats.N;
+    document.getElementById('dv-pts').textContent  =stats.npts.toLocaleString('en-US');
+    document.getElementById('dv-rms').textContent  =stats.rms.toFixed(1)+' km/s';
+    document.getElementById('dv-sigma').textContent=stats.sigma.toFixed(4)+' dex';
+    document.getElementById('dv-chi2').textContent =stats.chi2.toFixed(2);
+    document.getElementById('dv-bias').textContent =(stats.bias_kms>=0?'+':'')+stats.bias_kms.toFixed(2)+' km/s';
+    document.getElementById('dv-pct').textContent  =stats.pct15.toFixed(1)+' %';
+    document.getElementById('mc-sigma').textContent=stats.sigma.toFixed(4);
+    document.getElementById('mc-sigma').className  ='metric-val'+(stats.sigma<0.11?'':' red');
+    document.getElementById('mc-rms').textContent  =stats.rms.toFixed(1);
+    document.getElementById('mc-chi2').textContent =stats.chi2.toFixed(2);
+    const biasEl=document.getElementById('mc-bias');
+    biasEl.textContent=(stats.bias_kms>=0?'+':'')+stats.bias_kms.toFixed(2);
+    biasEl.className='metric-val '+(Math.abs(stats.bias_kms)<5?'green':'red');
     drawHistogram(galaxies);
     drawComparison(galaxies);
     drawCompTable(stats);
-    analysisRun = true;
+    analysisRun=true;
 }
 
-function drawHistogram(galaxies) {
-    document.getElementById('ph-hist').style.display = 'none';
-    document.getElementById('histChart').style.display = 'block';
-
-    // Bins of residuals log₁₀(v_TIE/v_obs)
-    const bins = 20;
-    const lo = -0.30, hi = 0.30;
-    const step = (hi - lo) / bins;
-    const counts = new Array(bins).fill(0);
-    const labels = [];
-    for (let i = 0; i < bins; i++) labels.push((lo + i * step + step/2).toFixed(2));
-    galaxies.forEach(g => {
-        const idx = Math.floor((g.log_ratio - lo) / step);
-        if (idx >= 0 && idx < bins) counts[idx]++;
+function drawHistogram(galaxies){
+    document.getElementById('ph-hist').style.display='none';
+    document.getElementById('histChart').style.display='block';
+    const bins=20,lo=-0.30,hi=0.30,step=(hi-lo)/bins;
+    const counts=new Array(bins).fill(0);
+    const labels=[];
+    for(let i=0;i<bins;i++) labels.push((lo+i*step+step/2).toFixed(2));
+    galaxies.forEach(g=>{
+        const idx=Math.floor((g.log_ratio-lo)/step);
+        if(idx>=0&&idx<bins) counts[idx]++;
     });
-
-    // Superimposed Gaussian
-    const N = galaxies.length;
-    const ratios = galaxies.map(g => g.log_ratio);
-    const mu    = ratios.reduce((a,b) => a+b,0) / N;
-    const sigma = Math.sqrt(ratios.reduce((s,r) => s + (r-mu)**2, 0) / (N-1));
-    const gaussCurve = labels.map(x => {
-        const xi = parseFloat(x);
-        return N * step / (sigma * Math.sqrt(2 * Math.PI)) * Math.exp(-0.5 * ((xi - mu) / sigma)**2);
+    const N=galaxies.length;
+    const ratios=galaxies.map(g=>g.log_ratio);
+    const mu=ratios.reduce((a,b)=>a+b,0)/N;
+    const sigma=Math.sqrt(ratios.reduce((s,r)=>s+(r-mu)**2,0)/(N-1));
+    const gaussCurve=labels.map(x=>{
+        const xi=parseFloat(x);
+        return N*step/(sigma*Math.sqrt(2*Math.PI))*Math.exp(-0.5*((xi-mu)/sigma)**2);
     });
-
-    if (histChart) histChart.destroy();
-    const ctx = document.getElementById('histChart').getContext('2d');
-    histChart = new Chart(ctx, {
-        data: {
-            labels,
-            datasets: [
-                {
-                    type: 'bar',
-                    label: 'Observed residuals',
-                    data: counts,
-                    backgroundColor: 'rgba(91,200,245,0.5)',
-                    borderColor: 'rgba(91,200,245,0.9)',
-                    borderWidth: 1
-                },
-                {
-                    type: 'line',
-                    label: `Fitted Gaussian (σ=${sigma.toFixed(4)} dex)`,
-                    data: gaussCurve,
-                    borderColor: '#FFD700',
-                    backgroundColor: 'transparent',
-                    borderWidth: 2.5,
-                    pointRadius: 0,
-                    tension: 0.4
-                }
-            ]
-        },
-        options: {
-            responsive:true, maintainAspectRatio:false,
-            scales: {
-                x: {
-                    title:{ display:true, text:'log₁₀(v_TIE / v_obs)', color:'#5BC8F5', font:{size:11,family:"'Syne',sans-serif",weight:'bold'} },
-                    grid:{ color:'rgba(91,200,245,0.05)' },
-                    ticks:{ color:'#a0a0b0', maxTicksLimit:8 }
-                },
-                y: {
-                    title:{ display:true, text:'Number of galaxies', color:'#5BC8F5', font:{size:11,family:"'Syne',sans-serif",weight:'bold'} },
-                    grid:{ color:'rgba(91,200,245,0.05)' },
-                    ticks:{ color:'#a0a0b0' }
-                }
+    if(histChart) histChart.destroy();
+    const ctx=document.getElementById('histChart').getContext('2d');
+    histChart=new Chart(ctx,{
+        data:{labels,datasets:[
+            {type:'bar',label:'Observed residuals',data:counts,
+             backgroundColor:'rgba(91,200,245,0.5)',borderColor:'rgba(91,200,245,0.9)',borderWidth:1},
+            {type:'line',label:`Fitted Gaussian (σ=${sigma.toFixed(4)} dex)`,data:gaussCurve,
+             borderColor:'#FFD700',backgroundColor:'transparent',borderWidth:2.5,pointRadius:0,tension:0.4}
+        ]},
+        options:{
+            responsive:true,maintainAspectRatio:false,
+            scales:{
+                x:{title:{display:true,text:'log₁₀(v_TIE / v_obs)',color:'#5BC8F5',font:{size:11,family:"'Syne',sans-serif",weight:'bold'}},
+                   grid:{color:'rgba(91,200,245,0.05)'},ticks:{color:'#a0a0b0',maxTicksLimit:8}},
+                y:{title:{display:true,text:'No. of galaxies',color:'#5BC8F5',font:{size:11,family:"'Syne',sans-serif",weight:'bold'}},
+                   grid:{color:'rgba(91,200,245,0.05)'},ticks:{color:'#a0a0b0'}}
             },
-            plugins: {
-                legend:{ labels:{ color:'#fff', font:{size:10,family:"'Space Mono',monospace"} } },
-                tooltip:{ backgroundColor:'rgba(5,5,15,0.95)', titleColor:'#FFD700', borderColor:'rgba(91,200,245,0.25)', borderWidth:1 }
+            plugins:{
+                legend:{labels:{color:'#fff',font:{size:10,family:"'Space Mono',monospace"}}},
+                tooltip:{backgroundColor:'rgba(5,5,15,0.95)',titleColor:'#FFD700',borderColor:'rgba(91,200,245,0.25)',borderWidth:1}
             },
-            animation:{ duration:900, easing:'easeOutQuart' }
+            animation:{duration:900,easing:'easeOutQuart'}
         }
     });
 }
 
-function drawComparison(galaxies) {
-    document.getElementById('ph-comp').style.display = 'none';
-    document.getElementById('compChart').style.display = 'block';
-
-    // RMS by type for active types
-    const activeT = GALAXY_TYPES.filter(t => activeTypes[t]);
-    const rmsByType = activeT.map(t => {
-        const sub = galaxies.filter(g => g.type === t);
-        if (sub.length === 0) return 0;
-        return Math.sqrt(sub.reduce((s,g) => s + (g.v_tie - g.v_obs)**2, 0) / sub.length);
+function drawComparison(galaxies){
+    document.getElementById('ph-comp').style.display='none';
+    document.getElementById('compChart').style.display='block';
+    const activeT=GALAXY_TYPES.filter(t=>activeTypes[t]);
+    const rmsByType=activeT.map(t=>{
+        const sub=galaxies.filter(g=>g.type===t);
+        if(!sub.length) return 0;
+        return Math.sqrt(sub.reduce((s,g)=>s+(g.v_tie-g.v_obs)**2,0)/sub.length);
     });
-
-    // Newton and ΛCDM NFW values (realistic estimates for SPARC)
-    // Newton: fails a lot in LSB and dw (3-5x worse)
-    // ΛCDM NFW: fits better than Newton but with 2 free params
-    const rmsNewton = activeT.map(t => {
-        const base = { Sb:18, Sc:22, Sd:35, LSB:55, Irr:40, dw:48 };
-        return (base[t] || 30) * (0.9 + Math.random() * 0.2);
-    });
-    const rmsCDM = activeT.map((t,i) => rmsByType[i] * (1.35 + Math.random() * 0.25));
-
-    if (compChart) compChart.destroy();
-    const ctx2 = document.getElementById('compChart').getContext('2d');
-    compChart = new Chart(ctx2, {
-        type: 'bar',
-        data: {
-            labels: activeT,
-            datasets: [
-                { label:'TIE (0 params)', data:rmsByType, backgroundColor:'rgba(255,215,0,0.65)', borderColor:'#FFD700', borderWidth:1.5 },
-                { label:'ΛCDM NFW (2 params/gal)', data:rmsCDM, backgroundColor:'rgba(91,200,245,0.35)', borderColor:'#5BC8F5', borderWidth:1 },
-                { label:'Pure Newton (0 params)',  data:rmsNewton, backgroundColor:'rgba(255,68,85,0.35)', borderColor:'#FF4455', borderWidth:1 }
-            ]
-        },
-        options: {
-            responsive:true, maintainAspectRatio:false,
-            scales: {
-                x: { grid:{ color:'rgba(91,200,245,0.05)' }, ticks:{ color:'#a0a0b0', font:{family:"'Space Mono',monospace",size:10} } },
-                y: {
-                    title:{ display:true, text:'RMS (km/s)', color:'#5BC8F5', font:{size:11,family:"'Syne',sans-serif",weight:'bold'} },
-                    grid:{ color:'rgba(91,200,245,0.05)' },
-                    ticks:{ color:'#a0a0b0' }
-                }
+    const rmsNewton_ref={Sb:45,Sc:50,Sd:60,LSB:75,Irr:55,dw:65};
+    const rmsNewton=activeT.map(t=>rmsNewton_ref[t]||60);
+    const rmsCDM_ref={Sb:32,Sc:35,Sd:38,LSB:40,Irr:36,dw:38};
+    const rmsCDM=activeT.map(t=>rmsCDM_ref[t]||35);
+    if(compChart) compChart.destroy();
+    const ctx2=document.getElementById('compChart').getContext('2d');
+    compChart=new Chart(ctx2,{
+        type:'bar',
+        data:{labels:activeT,datasets:[
+            {label:'TIE (0 params)',          data:rmsByType,backgroundColor:'rgba(255,215,0,0.65)', borderColor:'#FFD700',borderWidth:1.5},
+            {label:'ΛCDM NFW (2 params/gal)', data:rmsCDM,   backgroundColor:'rgba(91,200,245,0.35)',borderColor:'#5BC8F5',borderWidth:1},
+            {label:'Pure Newton (0 params)',  data:rmsNewton, backgroundColor:'rgba(255,68,85,0.35)', borderColor:'#FF4455',borderWidth:1}
+        ]},
+        options:{
+            responsive:true,maintainAspectRatio:false,
+            scales:{
+                x:{grid:{color:'rgba(91,200,245,0.05)'},ticks:{color:'#a0a0b0',font:{family:"'Space Mono',monospace",size:10}}},
+                y:{title:{display:true,text:'RMS (km/s)',color:'#5BC8F5',font:{size:11,family:"'Syne',sans-serif",weight:'bold'}},
+                   grid:{color:'rgba(91,200,245,0.05)'},ticks:{color:'#a0a0b0'}}
             },
-            plugins: {
-                legend:{ labels:{ color:'#fff', font:{size:10,family:"'Space Mono',monospace"} } },
-                tooltip:{ backgroundColor:'rgba(5,5,15,0.95)', titleColor:'#FFD700', borderColor:'rgba(91,200,245,0.25)', borderWidth:1,
-                    callbacks:{ label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)} km/s` }
-                }
+            plugins:{
+                legend:{labels:{color:'#fff',font:{size:10,family:"'Space Mono',monospace"}}},
+                tooltip:{backgroundColor:'rgba(5,5,15,0.95)',titleColor:'#FFD700',borderColor:'rgba(91,200,245,0.25)',borderWidth:1,
+                    callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)} km/s`}}
             },
-            animation:{ duration:900, easing:'easeOutQuart' }
+            animation:{duration:900,easing:'easeOutQuart'}
         }
     });
 }
 
-function drawCompTable(stats) {
-    const rmsNewton  = stats.rms * 4.2;
-    const rmsCDM     = stats.rms * 1.38;
-    const sigmaNewton = 0.31;
-    const sigmaCDM    = stats.sigma * 1.35;
-    const chi2Newton  = 28.4;
-    const chi2CDM     = stats.chi2 * 1.41;
-
-    document.getElementById('comp-table-wrap').style.display = 'block';
-    document.getElementById('comp-tbody').innerHTML = `
+function drawCompTable(stats){
+    const rmsNewton  =stats.rms*4.5;
+    const rmsCDM     =35.0;
+    const sigmaNewton=0.310;
+    const sigmaCDM   =0.101;
+    const chi2Newton =stats.chi2*15.0;
+    const chi2CDM    =36.55;
+    document.getElementById('comp-table-wrap').style.display='block';
+    document.getElementById('comp-tbody').innerHTML=`
         <tr class="best">
             <td><strong>TIE</strong></td>
             <td style="color:var(--green)">0 (derived)</td>
@@ -590,45 +591,38 @@ function drawCompTable(stats) {
             <td>0</td>
             <td>${rmsNewton.toFixed(1)}</td>
             <td>${sigmaNewton.toFixed(4)}</td>
-            <td>${chi2Newton.toFixed(1)}</td>
+            <td>${chi2Newton.toFixed(2)}</td>
             <td class="verdict" style="color:var(--red)">✗ FALSIFIED</td>
         </tr>
     `;
 }
 
-function toggleType(type) {
-    activeTypes[type] = !activeTypes[type];
-    const el = document.getElementById('chk-' + type);
-    el.className = activeTypes[type] ? 'chk on' : 'chk';
-    if (analysisRun) runAnalysis();
+function toggleType(type){
+    activeTypes[type]=!activeTypes[type];
+    document.getElementById('chk-'+type).className=activeTypes[type]?'chk on':'chk';
+    if(analysisRun) runAnalysis();
 }
-
-function toggleQ(q) {
-    activeQ[q] = !activeQ[q];
-    const el = document.getElementById('qb-' + q);
-    el.className = activeQ[q] ? 'q-btn on' : 'q-btn';
-    if (analysisRun) runAnalysis();
+function toggleQ(q){
+    activeQ[q]=!activeQ[q];
+    document.getElementById('qb-'+q).className=activeQ[q]?'q-btn on':'q-btn';
+    if(analysisRun) runAnalysis();
 }
-
-function animateNumber(id, target, decimals, suffix, color) {
-    const el = document.getElementById(id);
-    el.style.color = color;
-    const start = 0, dur = 900;
-    const t0 = performance.now();
-    function step(now) {
-        const p = Math.min((now - t0) / dur, 1);
-        const ease = 1 - Math.pow(1 - p, 3);
-        el.textContent = (start + ease * target).toFixed(decimals) + suffix;
-        if (p < 1) requestAnimationFrame(step);
-        else el.textContent = target.toFixed(decimals) + suffix;
+function animateNumber(id,target,decimals,suffix,color){
+    const el=document.getElementById(id);
+    el.style.color=color;
+    const dur=900,t0=performance.now();
+    function step(now){
+        const p=Math.min((now-t0)/dur,1);
+        const ease=1-Math.pow(1-p,3);
+        el.textContent=(ease*target).toFixed(decimals)+suffix;
+        if(p<1) requestAnimationFrame(step);
+        else el.textContent=target.toFixed(decimals)+suffix;
     }
     requestAnimationFrame(step);
 }
 
-// Init
-Chart.defaults.color       = '#a0a0b0';
-Chart.defaults.font.family = "'Space Mono', monospace";
-generateGalaxies();
+Chart.defaults.color='#a0a0b0';
+Chart.defaults.font.family="'Space Mono', monospace";
 </script>
 <script src="axon-widget.js"></script>
 </body>

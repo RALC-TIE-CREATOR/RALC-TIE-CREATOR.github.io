@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TIE · H-20 · Error Estadístico Global · RMS SPARC</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         :root {
@@ -46,6 +48,8 @@
         .page-header h1 { font-size:1.6rem; font-weight:900; letter-spacing:1px; margin-bottom:0.2rem; }
         .page-desc { font-size:0.85rem; color:var(--dim); max-width:720px; }
         .page-eq   { font-family:var(--mono); font-size:0.78rem; color:var(--gold); margin-top:0.35rem; }
+        /* KaTeX */
+        .katex { font-size: 0.9em !important; }
 
         /* ── STATS BAR (TAMAÑO ORIGINAL) ── */
         .stats-bar { display:flex; border-bottom:1px solid var(--border); flex-shrink:0; }
@@ -159,7 +163,7 @@
     <div class="page-label">CAPÍTULOS 8 Y 9 · EN VIVO · ESTADÍSTICA · CATÁLOGO SPARC 175 GALAXIAS</div>
     <h1>ERROR ESTADÍSTICO GLOBAL RMS</h1>
     <p class="page-desc">Test cuantitativo riguroso del Tratado TIE sobre el catálogo SPARC. RMS, dispersión σ en dex, χ² reducido y sesgo sistemático — calculados en vivo, sin parámetros ajustados. Comparativa contra Newton puro y ΛCDM con halo NFW.</p>
-    <div class="page-eq">RMS = √(Σ(v_TIE − v_obs)²/N) &nbsp;·&nbsp; σ_dex = std(log₁₀(v_TIE/v_obs)) &nbsp;·&nbsp; χ²_r = χ²/(N−1)</div>
+    <div class="page-eq" id="eq-header"></div>
 </div>
 
 <div class="stats-bar">
@@ -288,11 +292,27 @@
         <a href="sparc.html">← Explorador SPARC</a>
         <a href="simrar.html">Simulador RAR →</a>
     </div>
-    <div class="footer-eq">RMS = √(Σ(v_TIE−v_obs)²/N) &nbsp;·&nbsp; σ_dex = std(log₁₀(v_TIE/v_obs)) &nbsp;·&nbsp; 0 parámetros ajustados</div>
-    <div class="footer-credit">Copyright (C) 2026 Rubén Antonio Lecona Curto (R@LC) · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
+    <div class="footer-eq" id="footer-eq"></div>
+    <div class="footer-credit">R@LC 2026 · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 
 <script>
+// ── RENDER KATEX ──────────────────────────────────────────────
+function rk(id, tex, displayMode = false) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    katex.render(tex, el, { throwOnError: false, displayMode });
+}
+
+window.addEventListener('load', () => {
+    rk('eq-header',
+        '\\mathrm{RMS} = \\sqrt{\\dfrac{\\sum(v_{\\text{TIE}}-v_{\\text{obs}})^2}{N}} \\;\\cdot\\; \\sigma_{\\text{dex}} = \\mathrm{std}\\!\\left(\\log_{10}\\dfrac{v_{\\text{TIE}}}{v_{\\text{obs}}}\\right) \\;\\cdot\\; \\chi^2_r = \\dfrac{\\chi^2}{N-1}',
+        false);
+    rk('footer-eq',
+        '\\mathrm{RMS} = \\sqrt{\\sum(v_{\\text{TIE}}-v_{\\text{obs}})^2/N} \\;\\cdot\\; \\sigma_{\\text{dex}} = \\mathrm{std}(\\log_{10}(v_{\\text{TIE}}/v_{\\text{obs}})) \\;\\cdot\\; 0\\text{ parámetros ajustados}',
+        false);
+});
+
 // ── CONSTANTES TIE (derivadas, no ajustadas) ──────────────────
 const G    = 6.674e-11;       // m³ kg⁻¹ s⁻²
 const C    = 2.998e8;         // m/s

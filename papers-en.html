@@ -60,9 +60,7 @@ body::before {
 
 nav {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -81,27 +79,27 @@ nav {
   text-decoration: none;
   font-weight: 700;
 }
-/* ORCID BUTTON STYLE */
+
 .orcid-link {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: #A6CE39;
-    text-decoration: none;
-    border: 1px solid rgba(166, 206, 57, 0.3);
-    padding: 4px 12px;
-    border-radius: 2px;
-    transition: 0.3s;
-    letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: #A6CE39;
+  text-decoration: none;
+  border: 1px solid rgba(166, 206, 57, 0.3);
+  padding: 4px 12px;
+  border-radius: 2px;
+  transition: 0.3s;
+  letter-spacing: 1px;
 }
 .orcid-link:hover {
-    background: rgba(166, 206, 57, 0.1);
-    box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);
-    color: #fff;
+  background: rgba(166, 206, 57, 0.1);
+  box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);
+  color: #fff;
 }
-  
+
 .nav-back {
   font-family: var(--mono);
   font-size: 0.8rem;
@@ -112,13 +110,8 @@ nav {
   border-radius: 30px;
   transition: 0.3s;
 }
+.nav-back:hover { border-color: var(--gold); color: var(--gold); }
 
-.nav-back:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-}
-
-/* ECOSYSTEM LINKS */
 .ecosistema-links {
   display: flex;
   justify-content: center;
@@ -138,13 +131,11 @@ nav {
   transition: 0.3s;
   letter-spacing: 2px;
 }
-
 .ecosistema-link:hover {
   border-color: var(--gold);
   color: var(--gold);
   box-shadow: 0 0 15px rgba(255,215,0,0.2);
 }
-
 .ecosistema-link.lab {
   background: rgba(91,200,245,0.1);
   border-color: var(--blue);
@@ -154,20 +145,6 @@ nav {
   background: var(--blue);
   color: #000;
   border-color: var(--blue);
-}
-
-/* Estilo para la página actual (no clickeable, resaltada) */
-.ecosistema-current {
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  color: var(--green);
-  padding: 0.5rem 1.5rem;
-  border: 1px solid var(--green);
-  border-radius: 40px;
-  letter-spacing: 2px;
-  background: rgba(68,255,136,0.1);
-  cursor: default;
-  box-shadow: 0 0 15px rgba(68,255,136,0.2);
 }
 
 .page {
@@ -207,7 +184,42 @@ nav {
   line-height: 1.6;
 }
 
-/* COMPLETE TREATISE (featured) */
+/* RIGHTS & PATENT BANNER */
+.rights-banner {
+  background: linear-gradient(135deg, rgba(255,215,0,0.05) 0%, rgba(10,10,20,0.9) 100%);
+  border: 1px solid rgba(255,215,0,0.3);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rights-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.rights-icon { font-size: 1.2rem; }
+
+.rights-text {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--dim);
+  line-height: 1.5;
+}
+.rights-text strong {
+  color: var(--gold);
+  display: block;
+  margin-bottom: 0.2rem;
+}
+.rights-text a { color: var(--blue); text-decoration: none; }
+
+/* COMPLETE TREATISE */
 .hero-paper {
   background: linear-gradient(145deg, rgba(68,255,136,0.1) 0%, rgba(10,10,20,0.8) 100%);
   border: 2px solid var(--green);
@@ -220,10 +232,7 @@ nav {
   align-items: center;
 }
 
-.hero-paper-content {
-  flex: 2;
-  min-width: 300px;
-}
+.hero-paper-content { flex: 2; min-width: 300px; }
 
 .hero-paper-tag {
   font-family: var(--mono);
@@ -266,11 +275,7 @@ nav {
   font-size: 0.7rem;
   color: var(--dim);
 }
-
-.hero-paper-meta-item .value {
-  color: var(--green);
-  font-weight: 700;
-}
+.hero-paper-meta-item .value { color: var(--green); font-weight: 700; }
 
 .hero-paper-btn {
   background: transparent;
@@ -281,14 +286,11 @@ nav {
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 2px;
-  cursor: default;
   transition: 0.3s;
   text-decoration: none;
   display: inline-block;
   border-radius: 4px;
-  opacity: 1;
 }
-
 .hero-paper-btn:hover {
   background: rgba(68,255,136,0.1);
   box-shadow: 0 0 30px rgba(68,255,136,0.3);
@@ -299,6 +301,87 @@ nav {
   font-size: 0.7rem;
   color: var(--dim);
   margin-top: 0.5rem;
+}
+
+/* FEATURED PAPER (new — 135 galaxies) */
+.featured-paper {
+  background: linear-gradient(145deg, rgba(91,200,245,0.1) 0%, rgba(10,10,20,0.8) 100%);
+  border: 2px solid var(--blue);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.featured-paper-tag {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--blue);
+  letter-spacing: 2px;
+  margin-bottom: 0.8rem;
+  display: inline-block;
+  background: rgba(91,200,245,0.1);
+  padding: 0.3rem 1rem;
+  border-radius: 30px;
+}
+
+.featured-paper-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 0.8rem;
+  color: var(--blue);
+}
+
+.featured-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.featured-metric {
+  background: rgba(10,10,20,0.8);
+  border: 1px solid rgba(91,200,245,0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.featured-metric-value {
+  font-family: var(--mono);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.featured-metric-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--dim);
+  margin-top: 0.3rem;
+}
+
+.featured-links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.featured-link {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--blue);
+  text-decoration: none;
+  border: 1px solid rgba(91,200,245,0.3);
+  padding: 0.5rem 1.2rem;
+  border-radius: 4px;
+  transition: 0.3s;
+  letter-spacing: 1px;
+}
+.featured-link:hover {
+  background: rgba(91,200,245,0.1);
+  box-shadow: 0 0 15px rgba(91,200,245,0.2);
+  color: #fff;
 }
 
 /* Papers grid */
@@ -317,43 +400,17 @@ nav {
   padding: 2rem;
   transition: 0.3s;
 }
-
 .paper-card:hover {
   border-color: var(--green);
   transform: translateY(-5px);
   box-shadow: 0 10px 30px rgba(68,255,136,0.2);
 }
 
-.paper-icon {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
-.paper-title {
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.paper-authors {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--dim);
-  margin-bottom: 1rem;
-}
-
-.paper-desc {
-  font-size: 0.85rem;
-  color: var(--dim);
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.paper-links {
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
+.paper-icon { font-size: 2rem; margin-bottom: 1rem; }
+.paper-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; }
+.paper-authors { font-family: var(--mono); font-size: 0.7rem; color: var(--dim); margin-bottom: 1rem; }
+.paper-desc { font-size: 0.85rem; color: var(--dim); line-height: 1.6; margin-bottom: 1.5rem; }
+.paper-links { display: flex; gap: 1.5rem; margin-top: 1rem; }
 
 .paper-link {
   font-family: var(--mono);
@@ -363,11 +420,7 @@ nav {
   letter-spacing: 1px;
   transition: 0.3s;
 }
-
-.paper-link:hover {
-  color: #fff;
-  transform: translateX(5px);
-}
+.paper-link:hover { color: #fff; transform: translateX(5px); }
 
 .preprint-item {
   border-bottom: 1px solid var(--border);
@@ -377,16 +430,9 @@ nav {
   justify-content: space-between;
   align-items: center;
 }
+.preprint-item:last-child { border-bottom: none; }
 
-.preprint-item:last-child {
-  border-bottom: none;
-}
-
-.preprint-title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.3rem;
-}
+.preprint-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
 
 .preprint-status {
   font-family: var(--mono);
@@ -397,47 +443,8 @@ nav {
   border-radius: 30px;
   background: rgba(255,255,255,0.05);
 }
-
-.preprint-status.review {
-  background: rgba(255,215,0,0.1);
-  color: var(--gold);
-}
-
-.preprint-status.draft {
-  background: rgba(91,200,245,0.1);
-  color: var(--blue);
-}
-
-.metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin: 2rem 0;
-}
-
-.metric-card {
-  background: rgba(10,10,20,0.8);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1.5rem;
-  text-align: center;
-}
-
-.metric-value {
-  font-family: var(--mono);
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--gold);
-  line-height: 1;
-}
-
-.metric-label {
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  color: var(--dim);
-  margin-top: 0.5rem;
-  letter-spacing: 1px;
-}
+.preprint-status.review { background: rgba(255,215,0,0.1); color: var(--gold); }
+.preprint-status.draft  { background: rgba(91,200,245,0.1); color: var(--blue); }
 
 .cite-box {
   background: rgba(10,10,20,0.8);
@@ -460,7 +467,6 @@ footer {
   background: rgba(0,0,0,0.8);
   backdrop-filter: blur(10px);
 }
-
 .footer-equation {
   font-family: var(--mono);
   font-size: 1rem;
@@ -468,7 +474,6 @@ footer {
   margin-bottom: 0.5rem;
   text-shadow: 0 0 20px rgba(255,215,0,0.3);
 }
-
 .footer-copy {
   font-family: var(--mono);
   font-size: 0.7rem;
@@ -485,22 +490,19 @@ footer {
 <nav>
   <div style="display:flex; align-items:center; gap:20px;">
     <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
-    
-    <!-- ORCID BADGE -->
     <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verify Author Identity on ORCID">
       <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
-         <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
+        <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
       </svg>
       0009-0008-4935-9010
     </a>
   </div>
-  
-  <!-- LANGUAGE SELECTOR -->
+
   <div style="display:flex;gap:.4rem;">
     <a href="papers.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">ES</a>
     <a href="papers-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">EN</a>
   </div>
-  
+
   <a href="lab-en.html" class="nav-back">← LABORATORY</a>
 </nav>
 
@@ -509,16 +511,43 @@ footer {
   <h1 class="page-title">PAPERS & PUBLICATIONS</h1>
   <p class="page-sub">All material verifiable, reproducible and free. No intermediaries. No faith.</p>
 
-  <!-- ECOSYSTEM NAVIGATION BAR - CORREGIDA: PAPERS como span (no enlace) -->
   <div class="ecosistema-links">
     <a href="index-en.html" class="ecosistema-link">← MAIN PAGE</a>
     <a href="lab-en.html" class="ecosistema-link lab">⚡ TIE LABORATORY</a>
-    <a href="https://github.com/ralc-tie-creator" target="_blank" class="ecosistema-link">🔧 GITHUB</a>
+    <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" class="ecosistema-link">🔧 GITHUB</a>
     <a href="predictions-en.html" class="ecosistema-link">✓ PREDICTIONS</a>
     <a href="theory-en.html" class="ecosistema-link">📘 THEORY</a>
   </div>
 
-  <!-- COMPLETE TREATISE (FEATURED) -->
+  <!-- RIGHTS & PATENT BANNER -->
+  <div class="rights-banner">
+    <div class="rights-item">
+      <span class="rights-icon">©</span>
+      <div class="rights-text">
+        <strong>COPYRIGHT</strong>
+        Copyright (C) 2026 Rubén Antonio Lecona Curto (R@LC)<br>
+        ORCID: <a href="https://orcid.org/0009-0008-4935-9010" target="_blank">0009-0008-4935-9010</a> · México
+      </div>
+    </div>
+    <div class="rights-item">
+      <span class="rights-icon">⚖️</span>
+      <div class="rights-text">
+        <strong>PATENT PENDING</strong>
+        Bisturí TIE v2.0 — Dual Diagnosis Method<br>
+        IMPI Exp: MX/a/2026/003397 · Folio: MX/E/2026/020798
+      </div>
+    </div>
+    <div class="rights-item">
+      <span class="rights-icon">📄</span>
+      <div class="rights-text">
+        <strong>PAPERS LICENSE</strong>
+        Creative Commons CC BY 4.0<br>
+        Free academic use with attribution
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPLETE TREATISE -->
   <div class="hero-paper">
     <div class="hero-paper-content">
       <span class="hero-paper-tag">📚 COMPLETE TREATISE ★★★★★</span>
@@ -526,54 +555,91 @@ footer {
       <p class="hero-paper-desc">18 chapters. From postulates to cosmological predictions. The complete formulation of TIE, with all derivations, tables and references.</p>
       <div class="hero-paper-meta">
         <div class="hero-paper-meta-item">
-          <span>📅</span>
-          <span class="value">2026</span>
+          <span>📅</span><span class="value">2026</span>
         </div>
         <div class="hero-paper-meta-item">
-          <span>📖</span>
-          <span class="value">18 chapters</span>
+          <span>📖</span><span class="value">18 chapters</span>
         </div>
         <div class="hero-paper-meta-item">
-          <span>✅</span>
-          <span class="value">Pre-order active</span>
+          <span>✅</span><span class="value">Available</span>
         </div>
       </div>
-      <!-- CORRECTED BUTTON WITH DATE -->
-      <a href="https://www.amazon.com/dp/B0GR2113JR?ref=sp_email" target="_blank" class="hero-paper-btn">🔗 PRE-ORDER · 03/21/2026</a>
-      <div class="hero-paper-note">The book will be available on Amazon from March 21, 2026.</div>
+      <a href="https://www.amazon.com/dp/B0GR2113JR" target="_blank" class="hero-paper-btn">🔗 AMAZON · AVAILABLE</a>
+      <div class="hero-paper-note">Available on Amazon · ISBN: B0GR2113JR</div>
     </div>
   </div>
 
-  <!-- MAIN PUBLICATIONS -->
-  <div class="papers-grid">
-    <!-- Zenodo Paper -->
-    <div class="paper-card">
-      <div class="paper-icon">📄</div>
-      <div class="paper-title">Galactic Rotation Curves</div>
-      <div class="paper-authors">R. Lecona (R@LC) · 2026</div>
-      <div class="paper-desc">6 pages. 1 equation. 6 SPARC galaxies. 7.3× better than Newton. Zero free parameters.</div>
-      <div class="paper-links">
-        <a href="https://zenodo.org/records/18851408" target="_blank" class="paper-link">🔗 DOI: 10.5281/zenodo.18851408</a>
-        <a href="#" class="paper-link">📥 PDF</a>
+  <!-- FEATURED PAPER — 135 GALAXIES -->
+  <div class="featured-paper">
+    <span class="featured-paper-tag">🔬 SCIENTIFIC PAPER · ZENODO · PUBLISHED 03/19/2026</span>
+    <h2 class="featured-paper-title">A Quantitative Test of TIE Against the SPARC Catalogue:<br>Zero Free Parameters and Galactic Rotation Curves</h2>
+    <p style="font-size:0.9rem; color:var(--dim); line-height:1.6; margin-top:0.8rem;">
+      Systematic test of TIE against 135 galaxies from the SPARC catalogue with measured flat rotation velocities.
+      Zero free parameter prediction: v_flat = (G·M_bar·a₀)^(1/4), where a₀ = cH₀/2π is derived
+      from first principles. Outperforms ΛCDM NFW fit using 2 free parameters per galaxy.
+    </p>
+
+    <div class="featured-metrics">
+      <div class="featured-metric">
+        <div class="featured-metric-value">135</div>
+        <div class="featured-metric-label">GALAXIES</div>
+      </div>
+      <div class="featured-metric">
+        <div class="featured-metric-value">0</div>
+        <div class="featured-metric-label">FREE PARAMETERS</div>
+      </div>
+      <div class="featured-metric">
+        <div class="featured-metric-value">29.3</div>
+        <div class="featured-metric-label">RMS (km/s)</div>
+      </div>
+      <div class="featured-metric">
+        <div class="featured-metric-value">0.0854</div>
+        <div class="featured-metric-label">σ_dex</div>
+      </div>
+      <div class="featured-metric">
+        <div class="featured-metric-value">35.0</div>
+        <div class="featured-metric-label">ΛCDM RMS (km/s)</div>
+      </div>
+      <div class="featured-metric">
+        <div class="featured-metric-value">185.5</div>
+        <div class="featured-metric-label">NEWTON RMS ✗</div>
       </div>
     </div>
 
-    <!-- GitHub Code -->
+    <div class="featured-links">
+      <a href="https://zenodo.org/records/19120085" target="_blank" class="featured-link">🔗 DOI: 10.5281/zenodo.19120085</a>
+      <a href="https://zenodo.org/records/19120085/files/TIE_SPARC_FINAL_EN.pdf" target="_blank" class="featured-link">📥 PDF (EN)</a>
+      <a href="https://zenodo.org/records/19120085/files/TIE_SPARC_FINAL_ES.pdf" target="_blank" class="featured-link">📥 PDF (ES)</a>
+      <a href="https://github.com/RALC-TIE-CREATOR/TIE-SPARC-Analysis" target="_blank" class="featured-link">💻 PYTHON CODE</a>
+    </div>
+  </div>
+
+  <!-- PREVIOUS PUBLICATIONS -->
+  <h2 style="font-size:1.8rem; margin:3rem 0 1rem;">📂 PREVIOUS PUBLICATIONS</h2>
+  <div class="papers-grid">
+    <div class="paper-card">
+      <div class="paper-icon">📄</div>
+      <div class="paper-title">Galactic Rotation Curves (v1)</div>
+      <div class="paper-authors">R. Lecona (R@LC) · 2026</div>
+      <div class="paper-desc">6 pages. 1 equation. 6 SPARC galaxies. 7.3× better than Newton. Initial version — superseded by the 135-galaxy paper.</div>
+      <div class="paper-links">
+        <a href="https://zenodo.org/records/18851408" target="_blank" class="paper-link">🔗 DOI: 10.5281/zenodo.18851408</a>
+      </div>
+    </div>
+
     <div class="paper-card">
       <div class="paper-icon">💻</div>
-      <div class="paper-title">TIE Rotation Curves</div>
-      <div class="paper-authors">Open source · MIT License</div>
-      <div class="paper-desc">Python + numpy + matplotlib. Reproduces all paper figures in 30 seconds.</div>
+      <div class="paper-title">TIE SPARC Analysis</div>
+      <div class="paper-authors">Open source · Scientific Reproducibility License</div>
+      <div class="paper-desc">Python + numpy + matplotlib. Unified script H-02, H-20, H-06. Exactly reproduces paper results. ddof=1 documented.</div>
       <div class="paper-links">
-        <a href="https://github.com/RALC-TIE-CREATOR/TIE-rotation-curves" target="_blank" class="paper-link">🔗 GitHub</a>
-        <a href="#" class="paper-link">📁 Forks: 0</a>
+        <a href="https://github.com/RALC-TIE-CREATOR/TIE-SPARC-Analysis" target="_blank" class="paper-link">🔗 GitHub</a>
       </div>
     </div>
   </div>
 
   <!-- PREPRINTS -->
   <h2 style="font-size:1.8rem; margin:3rem 0 1rem;">📋 PREPRINTS UNDER REVIEW</h2>
-  
   <div style="background: rgba(5,5,15,0.7); backdrop-filter:blur(10px); border:1px solid var(--border); border-radius:12px; padding:2rem;">
     <div class="preprint-item">
       <div>
@@ -582,7 +648,6 @@ footer {
       </div>
       <a href="#" class="paper-link" style="color:var(--dim);">arXiv pending →</a>
     </div>
-
     <div class="preprint-item">
       <div>
         <div class="preprint-title">Black Holes in TIE: No singularities, falsifiable prediction</div>
@@ -590,7 +655,6 @@ footer {
       </div>
       <span style="font-family:var(--mono); font-size:0.7rem; color:var(--dim);">—</span>
     </div>
-
     <div class="preprint-item">
       <div>
         <div class="preprint-title">Cosmological Constant from First Principles: Λ = 2H₀²/c²</div>
@@ -602,32 +666,49 @@ footer {
 
   <!-- HOW TO CITE -->
   <h2 style="font-size:1.8rem; margin:3rem 0 1rem;">📝 HOW TO CITE</h2>
-  <div class="cite-box">
-@book{lecona2026tie,<br>
-&nbsp;&nbsp;title={R@LC Spatial Infrastructure Theory (TIE)},<br>
-&nbsp;&nbsp;author={Lecona, Rubén (R@LC)},<br>
-&nbsp;&nbsp;year={2026},<br>
-&nbsp;&nbsp;publisher={Independent Research},<br>
-&nbsp;&nbsp;note={Kindle pre-order available}<br>
-}
-  </div>
+
+  <p style="font-family:var(--mono); font-size:0.75rem; color:var(--dim); margin-bottom:1rem;">Paper (135 galaxies — current version):</p>
+  <div class="cite-box">Lecona, R. (R@LC). (2026). A Quantitative Test of the Spatial Infrastructure Theory (TIE)
+Against the SPARC Catalogue: Zero Free Parameters and Galactic Rotation Curves.
+Zenodo. DOI: 10.5281/zenodo.19120085</div>
+
+  <p style="font-family:var(--mono); font-size:0.75rem; color:var(--dim); margin-bottom:1rem;">Complete treatise:</p>
+  <div class="cite-box">Lecona, R. (R@LC). (2026). R@LC Spatial Infrastructure Theory (TIE):
+Unification of the Four Fundamental Forces through Elimination of Artificial T²
+and Zero Free Parameters. Independent Researcher, México.
+Available at: https://www.amazon.com/dp/B0GR2113JR</div>
+
+  <p style="font-family:var(--mono); font-size:0.75rem; color:var(--dim); margin-bottom:1rem;">BibTeX:</p>
+  <div class="cite-box">@article{lecona2026sparc,
+  title   = {A Quantitative Test of the Spatial Infrastructure Theory (TIE)
+             Against the SPARC Catalogue: Zero Free Parameters and
+             Galactic Rotation Curves},
+  author  = {Lecona, Rub{\'e}n Antonio (R@LC)},
+  year    = {2026},
+  doi     = {10.5281/zenodo.19120085},
+  url     = {https://zenodo.org/records/19120085},
+  note    = {Preprint. Zenodo.}
+}</div>
+
 </div>
 
 <footer>
   <div class="footer-equation">All TIE knowledge is open and verifiable</div>
   <div class="footer-copy">Copyright (C) 2026 Rubén Antonio Lecona Curto (R@LC) · MEXICO · INDEPENDENT RESEARCHER</div>
+  <div style="margin-top:0.5rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,215,0,0.4);">
+    Bisturí TIE v2.0 — Dual Diagnosis Method · Patent pending IMPI · Exp. MX/a/2026/003397
+  </div>
   <div style="margin-top:1rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">
-    <a href="index-en.html" style="color:inherit; text-decoration:none;">HOME</a> · 
-    <a href="lab-en.html" style="color:inherit; text-decoration:none;">LAB</a> · 
-    <span style="color:var(--green);">PAPERS</span> · 
-    <a href="predictions-en.html" style="color:inherit; text-decoration:none;">PREDICTIONS</a> · 
-    <a href="theory-en.html" style="color:inherit; text-decoration:none;">THEORY</a> · 
-    <a href="https://github.com/ralc-tie-creator" target="_blank" style="color:inherit; text-decoration:none;">GITHUB</a>
+    <a href="index-en.html" style="color:inherit; text-decoration:none;">HOME</a> ·
+    <a href="lab-en.html" style="color:inherit; text-decoration:none;">LAB</a> ·
+    <a href="papers-en.html" style="color:inherit; text-decoration:none;">PAPERS</a> ·
+    <a href="predictions-en.html" style="color:inherit; text-decoration:none;">PREDICTIONS</a> ·
+    <a href="theory-en.html" style="color:inherit; text-decoration:none;">THEORY</a> ·
+    <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" style="color:inherit; text-decoration:none;">GITHUB</a>
   </div>
 </footer>
 
 <script>
-// ===== 3D GALAXY (full code) =====
 const canvas = document.getElementById('galaxy-canvas');
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -636,21 +717,14 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 
 const parameters = {
-  count: 50000,
-  size: 0.03,
-  radius: 20,
-  branches: 4,
-  spin: 1.2,
-  randomness: 0.4,
-  randomnessPower: 2,
-  insideColor: 0xffaa00,
-  outsideColor: 0x1b3984
+  count: 50000, size: 0.03, radius: 20, branches: 4,
+  spin: 1.2, randomness: 0.4, randomnessPower: 2,
+  insideColor: 0xffaa00, outsideColor: 0x1b3984
 };
 
 const galaxyGeometry = new THREE.BufferGeometry();
 const positions = new Float32Array(parameters.count * 3);
 const colors = new Float32Array(parameters.count * 3);
-
 const colorInside = new THREE.Color(parameters.insideColor);
 const colorOutside = new THREE.Color(parameters.outsideColor);
 
@@ -659,50 +733,33 @@ for (let i = 0; i < parameters.count; i++) {
   const r = Math.random() * parameters.radius;
   const spinAngle = r * parameters.spin;
   const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
-  
   const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
   const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
   const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * r;
-  
-  const x = Math.cos(branchAngle + spinAngle) * r + randomX;
-  const y = randomY * 0.5;
-  const z = Math.sin(branchAngle + spinAngle) * r + randomZ;
-  
-  positions[i3] = x;
-  positions[i3 + 1] = y;
-  positions[i3 + 2] = z;
-  
+  positions[i3]     = Math.cos(branchAngle + spinAngle) * r + randomX;
+  positions[i3 + 1] = randomY * 0.5;
+  positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * r + randomZ;
   const mixedColor = colorInside.clone().lerp(colorOutside, r / parameters.radius);
-  colors[i3] = mixedColor.r;
-  colors[i3 + 1] = mixedColor.g;
-  colors[i3 + 2] = mixedColor.b;
+  colors[i3] = mixedColor.r; colors[i3+1] = mixedColor.g; colors[i3+2] = mixedColor.b;
 }
 
 galaxyGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 galaxyGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
 const galaxyMaterial = new THREE.PointsMaterial({
-  size: parameters.size,
-  sizeAttenuation: true,
-  depthWrite: false,
-  blending: THREE.AdditiveBlending,
-  vertexColors: true,
-  transparent: true,
-  opacity: 0.8
+  size: parameters.size, sizeAttenuation: true, depthWrite: false,
+  blending: THREE.AdditiveBlending, vertexColors: true, transparent: true, opacity: 0.8
 });
 
 const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
 scene.add(galaxy);
-
 camera.position.set(10, 5, 25);
 camera.lookAt(0, 0, 0);
 
-let mouseX = 0;
-let mouseY = 0;
-
-document.addEventListener('mousemove', (event) => {
-  mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
-  mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+let mouseX = 0, mouseY = 0;
+document.addEventListener('mousemove', (e) => {
+  mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
 });
 
 function animate() {
@@ -713,7 +770,6 @@ function animate() {
   galaxy.rotation.x += mouseY * 0.0002;
   renderer.render(scene, camera);
 }
-
 animate();
 
 window.addEventListener('resize', () => {

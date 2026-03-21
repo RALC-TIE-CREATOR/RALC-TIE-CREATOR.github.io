@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TIE · PAPERS & PUBLICATIONS</title>
+<title>TIE · PAPERS AND PUBLICATIONS</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -60,7 +60,9 @@ body::before {
 
 nav {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -110,7 +112,10 @@ nav {
   border-radius: 30px;
   transition: 0.3s;
 }
-.nav-back:hover { border-color: var(--gold); color: var(--gold); }
+.nav-back:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
 
 .ecosistema-links {
   display: flex;
@@ -184,7 +189,6 @@ nav {
   line-height: 1.6;
 }
 
-/* RIGHTS & PATENT BANNER */
 .rights-banner {
   background: linear-gradient(135deg, rgba(255,215,0,0.05) 0%, rgba(10,10,20,0.9) 100%);
   border: 1px solid rgba(255,215,0,0.3);
@@ -212,14 +216,18 @@ nav {
   color: var(--dim);
   line-height: 1.5;
 }
+
 .rights-text strong {
   color: var(--gold);
   display: block;
   margin-bottom: 0.2rem;
 }
-.rights-text a { color: var(--blue); text-decoration: none; }
 
-/* COMPLETE TREATISE */
+.rights-text a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
 .hero-paper {
   background: linear-gradient(145deg, rgba(68,255,136,0.1) 0%, rgba(10,10,20,0.8) 100%);
   border: 2px solid var(--green);
@@ -275,7 +283,11 @@ nav {
   font-size: 0.7rem;
   color: var(--dim);
 }
-.hero-paper-meta-item .value { color: var(--green); font-weight: 700; }
+
+.hero-paper-meta-item .value {
+  color: var(--green);
+  font-weight: 700;
+}
 
 .hero-paper-btn {
   background: transparent;
@@ -286,6 +298,7 @@ nav {
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 2px;
+  cursor: default;
   transition: 0.3s;
   text-decoration: none;
   display: inline-block;
@@ -303,7 +316,6 @@ nav {
   margin-top: 0.5rem;
 }
 
-/* FEATURED PAPER (new — 135 galaxies) */
 .featured-paper {
   background: linear-gradient(145deg, rgba(91,200,245,0.1) 0%, rgba(10,10,20,0.8) 100%);
   border: 2px solid var(--blue);
@@ -384,7 +396,6 @@ nav {
   color: #fff;
 }
 
-/* Papers grid */
 .papers-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -410,6 +421,7 @@ nav {
 .paper-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; }
 .paper-authors { font-family: var(--mono); font-size: 0.7rem; color: var(--dim); margin-bottom: 1rem; }
 .paper-desc { font-size: 0.85rem; color: var(--dim); line-height: 1.6; margin-bottom: 1.5rem; }
+
 .paper-links { display: flex; gap: 1.5rem; margin-top: 1rem; }
 
 .paper-link {
@@ -503,46 +515,46 @@ footer {
     <a href="papers-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">EN</a>
   </div>
 
-  <a href="lab-en.html" class="nav-back">← LABORATORY</a>
+  <a href="labs.html" class="nav-back">&larr; LABORATORY</a>
 </nav>
 
 <div class="page">
   <div class="page-tag">SCIENTIFIC PUBLICATIONS</div>
-  <h1 class="page-title">PAPERS & PUBLICATIONS</h1>
-  <p class="page-sub">All material verifiable, reproducible and free. No intermediaries. No faith.</p>
+  <h1 class="page-title">PAPERS &amp; PUBLICATIONS</h1>
+  <p class="page-sub">All material is verifiable, reproducible and open. No intermediaries. No faith.</p>
 
   <div class="ecosistema-links">
-    <a href="index-en.html" class="ecosistema-link">← MAIN PAGE</a>
-    <a href="lab-en.html" class="ecosistema-link lab">⚡ TIE LABORATORY</a>
-    <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" class="ecosistema-link">🔧 GITHUB</a>
-    <a href="predictions-en.html" class="ecosistema-link">✓ PREDICTIONS</a>
-    <a href="theory-en.html" class="ecosistema-link">📘 THEORY</a>
+    <a href="index-en.html" class="ecosistema-link">&larr; HOME</a>
+    <a href="labs.html" class="ecosistema-link lab">&olarr; TIE LABORATORY</a>
+    <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" class="ecosistema-link">&#x1F527; GITHUB</a>
+    <a href="predictions-en.html" class="ecosistema-link">&check; PREDICTIONS</a>
+    <a href="teoria.html" class="ecosistema-link">&#x1F4D8; THEORY</a>
   </div>
 
-  <!-- RIGHTS & PATENT BANNER -->
+  <!-- RIGHTS AND PATENT BANNER -->
   <div class="rights-banner">
     <div class="rights-item">
-      <span class="rights-icon">©</span>
+      <span class="rights-icon">&copy;</span>
       <div class="rights-text">
         <strong>COPYRIGHT</strong>
-        Copyright (C) 2026 Rubén Antonio Lecona Curto (R@LC)<br>
-        ORCID: <a href="https://orcid.org/0009-0008-4935-9010" target="_blank">0009-0008-4935-9010</a> · México
+        Copyright (C) 2026 Rub&eacute;n Antonio Lecona Curto (R@LC)<br>
+        ORCID: <a href="https://orcid.org/0009-0008-4935-9010" target="_blank">0009-0008-4935-9010</a> &middot; M&eacute;xico
       </div>
     </div>
     <div class="rights-item">
-      <span class="rights-icon">⚖️</span>
+      <span class="rights-icon">&#x2696;&#xFE0F;</span>
       <div class="rights-text">
         <strong>PATENT PENDING</strong>
-        Bisturí TIE v2.0 — Dual Diagnosis Method<br>
-        IMPI Exp: MX/a/2026/003397 · Folio: MX/E/2026/020798
+        Bistur&iacute; TIE v2.0 &mdash; Dual Diagnostic Method<br>
+        IMPI Exp: MX/a/2026/003397 &middot; File: MX/E/2026/020798
       </div>
     </div>
     <div class="rights-item">
-      <span class="rights-icon">📄</span>
+      <span class="rights-icon">&#x1F4C4;</span>
       <div class="rights-text">
         <strong>PAPERS LICENSE</strong>
         Creative Commons CC BY 4.0<br>
-        Free academic use with attribution
+        Cite with attribution &mdash; free academic use
       </div>
     </div>
   </div>
@@ -550,40 +562,87 @@ footer {
   <!-- COMPLETE TREATISE -->
   <div class="hero-paper">
     <div class="hero-paper-content">
-      <span class="hero-paper-tag">📚 COMPLETE TREATISE ★★★★★</span>
-      <h2 class="hero-paper-title">R@LC: Spatial Infrastructure Theory (TIE)</h2>
+      <span class="hero-paper-tag">&#x1F4DA; COMPLETE TREATISE &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</span>
+      <h2 class="hero-paper-title">R@LC: Theory of Spatial Infrastructure (TIE)</h2>
       <p class="hero-paper-desc">18 chapters. From postulates to cosmological predictions. The complete formulation of TIE, with all derivations, tables and references.</p>
       <div class="hero-paper-meta">
         <div class="hero-paper-meta-item">
-          <span>📅</span><span class="value">2026</span>
+          <span>&#x1F4C5;</span><span class="value">2026</span>
         </div>
         <div class="hero-paper-meta-item">
-          <span>📖</span><span class="value">18 chapters</span>
+          <span>&#x1F4D6;</span><span class="value">18 chapters</span>
         </div>
         <div class="hero-paper-meta-item">
-          <span>✅</span><span class="value">Available</span>
+          <span>&#x2705;</span><span class="value">Available</span>
         </div>
       </div>
       <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:0.5rem;">
-        <a href="https://www.amazon.co.uk/dp/B0GT8MNQ4F" target="_blank" class="hero-paper-btn" style="border-color:#00247d; color:#00247d; background:rgba(0,36,125,0.05);">
-          🇬🇧 English Version
+        <a href="https://www.amazon.com/dp/B0GR2113JR" target="_blank" class="hero-paper-btn" style="border-color:#c8102e; color:#c8102e;">
+          &#x1F1F2;&#x1F1FD; Spanish Version
         </a>
-        <a href="https://www.amazon.com/dp/B0GR2113JR" target="_blank" class="hero-paper-btn" style="border-color:#c8102e; color:#c8102e; background:rgba(200,16,46,0.05);">
-          🇲🇽 Versión Español
+        <a href="https://www.amazon.com/dp/B0GT8MNQ4F" target="_blank" class="hero-paper-btn" style="border-color:#9b59b6; color:#9b59b6; background:rgba(155,89,182,0.05);">
+          &#x1F1EC;&#x1F1E7; English Version
         </a>
       </div>
-      <div class="hero-paper-note">Available on Amazon · EN: B0GT8MNQ4F &nbsp;·&nbsp; ES: B0GR2113JR</div>
+      <div class="hero-paper-note">Available on Amazon &middot; ES: B0GR2113JR &nbsp;&middot;&nbsp; EN: B0GT8MNQ4F</div>
     </div>
   </div>
 
-  <!-- FEATURED PAPER — 135 GALAXIES -->
-  <div class="featured-paper">
-    <span class="featured-paper-tag">🔬 SCIENTIFIC PAPER · ZENODO · PUBLISHED 03/19/2026</span>
-    <h2 class="featured-paper-title">A Quantitative Test of TIE Against the SPARC Catalogue:<br>Zero Free Parameters and Galactic Rotation Curves</h2>
+  <!-- DARK MATTER PAPER — NEW · ZENODO · PUBLISHED 21/03/2026 -->
+  <div class="featured-paper" style="border-color: var(--gold); background: linear-gradient(145deg, rgba(255,215,0,0.08) 0%, rgba(10,10,20,0.8) 100%);">
+    <span class="featured-paper-tag" style="color: var(--gold); background: rgba(255,215,0,0.1);">&#x1F30C; SCIENTIFIC PAPER &middot; ZENODO &middot; PUBLISHED 21/03/2026 &middot; NEW</span>
+    <h2 class="featured-paper-title" style="color: var(--gold);">Dark Matter as a Missing Factor of 2&pi;:<br>A Zero-Parameter Derivation of the 84.1% Fraction</h2>
     <p style="font-size:0.9rem; color:var(--dim); line-height:1.6; margin-top:0.8rem;">
-      Systematic test of TIE against 135 galaxies from the SPARC catalogue with measured flat rotation velocities.
-      Zero free parameter prediction: v_flat = (G·M_bar·a₀)^(1/4), where a₀ = cH₀/2π is derived
-      from first principles. Outperforms ΛCDM NFW fit using 2 free parameters per galaxy.
+      Within TIE, the dark matter fraction (84.1%) is derived as 1 &minus; 1/2&pi; &mdash; an algebraic
+      consequence of a factor of 2&pi; omitted in the mass-energy relation. The factor 2&pi; is the
+      topological invariant of a complete phase cycle (S&sup1;). Verified against Planck 2018
+      (0.1% agreement), 135 SPARC galaxies (&sigma; = 0.0854 dex, BIC > 1300 vs &Lambda;CDM),
+      and galaxy clusters. Four falsifiability conditions. Reproducible Python code.
+    </p>
+
+    <div class="featured-metrics">
+      <div class="featured-metric" style="border-color: rgba(255,215,0,0.2);">
+        <div class="featured-metric-value" style="color: var(--gold);">84.1%</div>
+        <div class="featured-metric-label">DARK FRACTION</div>
+      </div>
+      <div class="featured-metric" style="border-color: rgba(255,215,0,0.2);">
+        <div class="featured-metric-value" style="color: var(--gold);">0.1%</div>
+        <div class="featured-metric-label">ERROR vs PLANCK</div>
+      </div>
+      <div class="featured-metric" style="border-color: rgba(255,215,0,0.2);">
+        <div class="featured-metric-value" style="color: var(--gold);">0</div>
+        <div class="featured-metric-label">FREE PARAMETERS</div>
+      </div>
+      <div class="featured-metric" style="border-color: rgba(255,215,0,0.2);">
+        <div class="featured-metric-value" style="color: var(--gold);">0.0854</div>
+        <div class="featured-metric-label">&sigma;_dex SPARC</div>
+      </div>
+      <div class="featured-metric" style="border-color: rgba(255,215,0,0.2);">
+        <div class="featured-metric-value" style="color: var(--gold);">1324</div>
+        <div class="featured-metric-label">&Delta;BIC vs &Lambda;CDM</div>
+      </div>
+      <div class="featured-metric" style="border-color: rgba(255,215,0,0.2);">
+        <div class="featured-metric-value" style="color: var(--gold);">12/16</div>
+        <div class="featured-metric-label">PREDICTIONS &check;</div>
+      </div>
+    </div>
+
+    <div class="featured-links">
+      <a href="https://zenodo.org/records/19143650" target="_blank" class="featured-link" style="color: var(--gold); border-color: rgba(255,215,0,0.3);">&#x1F517; DOI: 10.5281/zenodo.19143650</a>
+      <a href="https://zenodo.org/records/19143650/files/TIE_Dark_Matter_2pi_Lecona_2026_EN_v8.pdf" target="_blank" class="featured-link" style="color: var(--gold); border-color: rgba(255,215,0,0.3);">&#x1F4E5; PDF (EN)</a>
+      <a href="https://zenodo.org/records/19143650/files/TIE_Materia_Oscura_2pi_Lecona_2026_ES_v8.pdf" target="_blank" class="featured-link" style="color: var(--gold); border-color: rgba(255,215,0,0.3);">&#x1F4E5; PDF (ES)</a>
+      <a href="https://github.com/RALC-TIE-CREATOR/TIE-Dark-Matter" target="_blank" class="featured-link" style="color: var(--gold); border-color: rgba(255,215,0,0.3);">&#x1F4BB; PYTHON CODE</a>
+    </div>
+  </div>
+
+  <!-- SPARC PAPER — 135 GALAXIES -->
+  <div class="featured-paper">
+    <span class="featured-paper-tag">&#x1F52C; SCIENTIFIC PAPER &middot; ZENODO &middot; PUBLISHED 19/03/2026</span>
+    <h2 class="featured-paper-title">Quantitative Test of TIE Against the SPARC Catalogue:<br>Zero Free Parameters and Galactic Rotation Curves</h2>
+    <p style="font-size:0.9rem; color:var(--dim); line-height:1.6; margin-top:0.8rem;">
+      Systematic test of TIE on 135 SPARC galaxies with measured flat velocities.
+      Zero-parameter prediction: v_flat = (G&middot;M_bar&middot;a&#x2080;)^(1/4), where a&#x2080; = cH&#x2080;/2&pi; is derived
+      from first principles. Outperforms &Lambda;CDM NFW fits that use 2 free parameters per galaxy.
     </p>
 
     <div class="featured-metrics">
@@ -601,93 +660,119 @@ footer {
       </div>
       <div class="featured-metric">
         <div class="featured-metric-value">0.0854</div>
-        <div class="featured-metric-label">σ_dex</div>
+        <div class="featured-metric-label">&sigma;_dex</div>
       </div>
       <div class="featured-metric">
         <div class="featured-metric-value">35.0</div>
-        <div class="featured-metric-label">ΛCDM RMS (km/s)</div>
+        <div class="featured-metric-label">RMS &Lambda;CDM (km/s)</div>
       </div>
       <div class="featured-metric">
         <div class="featured-metric-value">185.5</div>
-        <div class="featured-metric-label">NEWTON RMS ✗</div>
+        <div class="featured-metric-label">RMS NEWTON &cross;</div>
       </div>
     </div>
 
     <div class="featured-links">
-      <a href="https://zenodo.org/records/19120085" target="_blank" class="featured-link">🔗 DOI: 10.5281/zenodo.19120085</a>
-      <a href="https://zenodo.org/records/19120085/files/TIE_SPARC_FINAL_EN.pdf" target="_blank" class="featured-link">📥 PDF (EN)</a>
-      <a href="https://zenodo.org/records/19120085/files/TIE_SPARC_FINAL_ES.pdf" target="_blank" class="featured-link">📥 PDF (ES)</a>
-      <a href="https://github.com/RALC-TIE-CREATOR/TIE-SPARC-Analysis" target="_blank" class="featured-link">💻 PYTHON CODE</a>
+      <a href="https://zenodo.org/records/19120085" target="_blank" class="featured-link">&#x1F517; DOI: 10.5281/zenodo.19120085</a>
+      <a href="https://zenodo.org/records/19120085/files/TIE_SPARC_FINAL_EN.pdf" target="_blank" class="featured-link">&#x1F4E5; PDF (EN)</a>
+      <a href="https://zenodo.org/records/19120085/files/TIE_SPARC_FINAL_ES.pdf" target="_blank" class="featured-link">&#x1F4E5; PDF (ES)</a>
+      <a href="https://github.com/RALC-TIE-CREATOR/TIE-SPARC-Analysis" target="_blank" class="featured-link">&#x1F4BB; PYTHON CODE</a>
     </div>
   </div>
 
   <!-- PREVIOUS PUBLICATIONS -->
-  <h2 style="font-size:1.8rem; margin:3rem 0 1rem;">📂 PREVIOUS PUBLICATIONS</h2>
+  <h2 style="font-size:1.8rem; margin:3rem 0 1rem;">&#x1F4C2; PREVIOUS PUBLICATIONS</h2>
   <div class="papers-grid">
     <div class="paper-card">
-      <div class="paper-icon">📄</div>
-      <div class="paper-title">Galactic Rotation Curves (v1)</div>
-      <div class="paper-authors">R. Lecona (R@LC) · 2026</div>
-      <div class="paper-desc">6 pages. 1 equation. 6 SPARC galaxies. 7.3× better than Newton. Initial version — superseded by the 135-galaxy paper.</div>
+      <div class="paper-icon">&#x1F4C4;</div>
+      <div class="paper-title">Galaxy Rotation Curves (v1)</div>
+      <div class="paper-authors">R. Lecona (R@LC) &middot; 2026</div>
+      <div class="paper-desc">6 pages. 1 equation. 6 SPARC galaxies. 7.3&times; better than Newton. Initial version &mdash; superseded by the 135-galaxy paper.</div>
       <div class="paper-links">
-        <a href="https://zenodo.org/records/18851408" target="_blank" class="paper-link">🔗 DOI: 10.5281/zenodo.18851408</a>
+        <a href="https://zenodo.org/records/18851408" target="_blank" class="paper-link">&#x1F517; DOI: 10.5281/zenodo.18851408</a>
       </div>
     </div>
 
     <div class="paper-card">
-      <div class="paper-icon">💻</div>
+      <div class="paper-icon">&#x1F4BB;</div>
       <div class="paper-title">TIE SPARC Analysis</div>
-      <div class="paper-authors">Open source · Scientific Reproducibility License</div>
-      <div class="paper-desc">Python + numpy + matplotlib. Unified script H-02, H-20, H-06. Exactly reproduces paper results. ddof=1 documented.</div>
+      <div class="paper-authors">Open source &middot; Scientific Reproducibility License</div>
+      <div class="paper-desc">Python + numpy + matplotlib. Unified script H-02, H-20, H-06. Reproduces exactly the paper results. ddof=1 documented.</div>
       <div class="paper-links">
-        <a href="https://github.com/RALC-TIE-CREATOR/TIE-SPARC-Analysis" target="_blank" class="paper-link">🔗 GitHub</a>
+        <a href="https://github.com/RALC-TIE-CREATOR/TIE-SPARC-Analysis" target="_blank" class="paper-link">&#x1F517; GitHub</a>
+      </div>
+    </div>
+
+    <div class="paper-card">
+      <div class="paper-icon">&#x1F4BB;</div>
+      <div class="paper-title">TIE Dark Matter Verification</div>
+      <div class="paper-authors">Open source &middot; Scientific Reproducibility License</div>
+      <div class="paper-desc">Python. 135 SPARC galaxies embedded. Reproduces all 9 predictions from the dark matter paper. Zero external dependencies.</div>
+      <div class="paper-links">
+        <a href="https://github.com/RALC-TIE-CREATOR/TIE-Dark-Matter" target="_blank" class="paper-link">&#x1F517; GitHub</a>
       </div>
     </div>
   </div>
 
   <!-- PREPRINTS -->
-  <h2 style="font-size:1.8rem; margin:3rem 0 1rem;">📋 PREPRINTS UNDER REVIEW</h2>
+  <h2 style="font-size:1.8rem; margin:3rem 0 1rem;">&#x1F4CB; PREPRINTS UNDER REVIEW</h2>
   <div style="background: rgba(5,5,15,0.7); backdrop-filter:blur(10px); border:1px solid var(--border); border-radius:12px; padding:2rem;">
     <div class="preprint-item">
       <div>
-        <div class="preprint-title">The T² Scalpel — Detection of artificial T² in classical equations</div>
-        <span class="preprint-status review">⏳ Under review</span>
+        <div class="preprint-title">The T&sup2; Scalpel &mdash; Detection of Artificial T&sup2; in Classical Equations</div>
+        <span class="preprint-status review">&#x23F3; Under review</span>
       </div>
-      <a href="#" class="paper-link" style="color:var(--dim);">arXiv pending →</a>
+      <a href="#" class="paper-link" style="color:var(--dim);">arXiv pending &rarr;</a>
     </div>
     <div class="preprint-item">
       <div>
-        <div class="preprint-title">Black Holes in TIE: No singularities, falsifiable prediction</div>
-        <span class="preprint-status draft">📝 Draft</span>
+        <div class="preprint-title">Black Holes in TIE: No Singularities, with Falsifiable Prediction</div>
+        <span class="preprint-status draft">&#x1F4DD; Draft</span>
       </div>
-      <span style="font-family:var(--mono); font-size:0.7rem; color:var(--dim);">—</span>
+      <span style="font-family:var(--mono); font-size:0.7rem; color:var(--dim);">&mdash;</span>
     </div>
     <div class="preprint-item">
       <div>
-        <div class="preprint-title">Cosmological Constant from First Principles: Λ = 2H₀²/c²</div>
-        <span class="preprint-status review">⏳ Under review</span>
+        <div class="preprint-title">Cosmological Constant from First Principles: &Lambda; = 2H&#x2080;&sup2;/c&sup2;</div>
+        <span class="preprint-status review">&#x23F3; Under review</span>
       </div>
-      <a href="#" class="paper-link" style="color:var(--dim);">viXra ref. 17854448 →</a>
+      <a href="#" class="paper-link" style="color:var(--dim);">viXra ref. 17854448 &rarr;</a>
     </div>
   </div>
 
   <!-- HOW TO CITE -->
-  <h2 style="font-size:1.8rem; margin:3rem 0 1rem;">📝 HOW TO CITE</h2>
+  <h2 style="font-size:1.8rem; margin:3rem 0 1rem;">&#x1F4DD; HOW TO CITE</h2>
 
-  <p style="font-family:var(--mono); font-size:0.75rem; color:var(--dim); margin-bottom:1rem;">Paper (135 galaxies — current version):</p>
+  <p style="font-family:var(--mono); font-size:0.75rem; color:var(--dim); margin-bottom:1rem;">Paper (Dark Matter &mdash; 2&pi;):</p>
+  <div class="cite-box">Lecona, R. (R@LC). (2026). Dark Matter as a Missing Factor of 2&pi;:
+A Zero-Parameter Derivation of the 84.1% Fraction from TIE.
+Zenodo. DOI: 10.5281/zenodo.19143650</div>
+
+  <p style="font-family:var(--mono); font-size:0.75rem; color:var(--dim); margin-bottom:1rem;">Paper (135 galaxies &mdash; current version):</p>
   <div class="cite-box">Lecona, R. (R@LC). (2026). A Quantitative Test of the Spatial Infrastructure Theory (TIE)
 Against the SPARC Catalogue: Zero Free Parameters and Galactic Rotation Curves.
 Zenodo. DOI: 10.5281/zenodo.19120085</div>
 
-  <p style="font-family:var(--mono); font-size:0.75rem; color:var(--dim); margin-bottom:1rem;">Complete treatise:</p>
-  <div class="cite-box">Lecona, R. (R@LC). (2026). R@LC Spatial Infrastructure Theory (TIE):
-Unification of the Four Fundamental Forces through Elimination of Artificial T²
-and Zero Free Parameters. Independent Researcher, México.
-Available at (EN): https://www.amazon.co.uk/dp/B0GT8MNQ4F
-Available at (ES): https://www.amazon.com/dp/B0GR2113JR</div>
+  <p style="font-family:var(--mono); font-size:0.75rem; color:var(--dim); margin-bottom:1rem;">Complete Treatise:</p>
+  <div class="cite-box">Lecona, R. (R@LC). (2026). R@LC Theory of Spatial Infrastructure (TIE):
+Unification of the Four Fundamental Forces through Elimination of the
+Artificial T&sup2; and Zero Free Parameters. Independent Researcher, M&eacute;xico.
+Available (ES): https://www.amazon.com/dp/B0GR2113JR
+Available (EN): https://www.amazon.com/dp/B0GT8MNQ4F</div>
 
   <p style="font-family:var(--mono); font-size:0.75rem; color:var(--dim); margin-bottom:1rem;">BibTeX:</p>
-  <div class="cite-box">@article{lecona2026sparc,
+  <div class="cite-box">@article{lecona2026darkmatter,
+  title   = {Dark Matter as a Missing Factor of $2\pi$:
+             A Zero-Parameter Derivation of the 84.1\%
+             Fraction from TIE},
+  author  = {Lecona, Rub{\'e}n Antonio (R@LC)},
+  year    = {2026},
+  doi     = {10.5281/zenodo.19143650},
+  url     = {https://zenodo.org/records/19143650},
+  note    = {Preprint. Zenodo.}
+}
+
+@article{lecona2026sparc,
   title   = {A Quantitative Test of the Spatial Infrastructure Theory (TIE)
              Against the SPARC Catalogue: Zero Free Parameters and
              Galactic Rotation Curves},
@@ -702,16 +787,16 @@ Available at (ES): https://www.amazon.com/dp/B0GR2113JR</div>
 
 <footer>
   <div class="footer-equation">All TIE knowledge is open and verifiable</div>
-  <div class="footer-copy">Copyright (C) 2026 Rubén Antonio Lecona Curto (R@LC) · MEXICO · INDEPENDENT RESEARCHER</div>
+  <div class="footer-copy">Copyright (C) 2026 Rub&eacute;n Antonio Lecona Curto (R@LC) &middot; M&Eacute;XICO &middot; INDEPENDENT RESEARCHER</div>
   <div style="margin-top:0.5rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,215,0,0.4);">
-    Bisturí TIE v2.0 — Dual Diagnosis Method · Patent pending IMPI · Exp. MX/a/2026/003397
+    Bistur&iacute; TIE v2.0 &mdash; Dual Diagnostic Method &middot; Patent pending IMPI &middot; Exp. MX/a/2026/003397
   </div>
   <div style="margin-top:1rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">
-    <a href="index-en.html" style="color:inherit; text-decoration:none;">HOME</a> ·
-    <a href="lab-en.html" style="color:inherit; text-decoration:none;">LAB</a> ·
-    <a href="papers-en.html" style="color:inherit; text-decoration:none;">PAPERS</a> ·
-    <a href="predictions-en.html" style="color:inherit; text-decoration:none;">PREDICTIONS</a> ·
-    <a href="theory-en.html" style="color:inherit; text-decoration:none;">THEORY</a> ·
+    <a href="index-en.html" style="color:inherit; text-decoration:none;">HOME</a> &middot;
+    <a href="labs.html" style="color:inherit; text-decoration:none;">LAB</a> &middot;
+    <a href="papers-en.html" style="color:inherit; text-decoration:none;">PAPERS</a> &middot;
+    <a href="predictions-en.html" style="color:inherit; text-decoration:none;">PREDICTIONS</a> &middot;
+    <a href="teoria.html" style="color:inherit; text-decoration:none;">THEORY</a> &middot;
     <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" style="color:inherit; text-decoration:none;">GITHUB</a>
   </div>
 </footer>

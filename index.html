@@ -85,7 +85,6 @@ nav {
   text-shadow: 0 0 15px rgba(255,215,0,0.5);
 }
 
-/* ESTILO PARA EL BOTÓN ORCID */
 .orcid-link {
   display: flex;
   align-items: center;
@@ -106,7 +105,6 @@ nav {
   color: #fff;
 }
 
-/* SELECTOR DE IDIOMA */
 .lang-selector {
   display: flex;
   gap: 0.8rem;
@@ -599,11 +597,20 @@ footer {
   text-shadow: 0 0 20px rgba(255,215,0,0.3);
 }
 
+.footer-equation-second {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--dim);
+  margin-top: 0.2rem;
+  letter-spacing: 1px;
+}
+
 .footer-copy {
   font-family: var(--mono);
   font-size: 0.7rem;
   color: var(--dim);
   letter-spacing: 2px;
+  margin-top: 1rem;
 }
 
 @keyframes fadeInUp {
@@ -626,8 +633,6 @@ footer {
 <nav>
   <div style="display:flex; align-items:center; gap:20px;">
     <a href="index.html" class="nav-logo">TIE / R@LC</a>
-    
-    <!-- INYECCIÓN DEL PASAPORTE ORCID -->
     <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
       <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
          <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
@@ -636,37 +641,31 @@ footer {
     </a>
   </div>
   
-  <!-- SELECTOR DE IDIOMA -->
   <div style="display:flex;gap:.4rem;">
     <a href="index.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">ES</a>
     <a href="index-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">EN</a>
   </div>
-  
-
 </nav>
 
 <section class="hero">
-  <!-- TÍTULO PRINCIPAL -->
   <div class="hero-title">TIE · TEORÍA DE LA INFRAESTRUCTURA ESPACIAL</div>
   
-  <!-- CARRUSEL DE FRASES -->
   <div class="hero-rotator">
     <div id="rotating-phrase" class="rotating-phrase">EL ESPACIO ES INFRAESTRUCTURA.</div>
   </div>
 
-  <!-- ESTADÍSTICAS -->
   <div class="stats-container">
     <div class="stat-item">
-      <span class="stat-number">7.3×</span>
-      <span class="stat-label">MEJOR QUE NEWTON</span>
+      <span class="stat-number">2π = 6.2832</span>
+      <span class="stat-label">R = CONSTANTE RALC</span>
     </div>
     <div class="stat-item">
       <span class="stat-number">84.1%</span>
-      <span class="stat-label">LA "MATERIA OSCURA"</span>
+      <span class="stat-label">MATERIA OSCURA</span>
     </div>
     <div class="stat-item">
-      <span class="stat-number">5.0%</span>
-      <span class="stat-label">ERROR EN Λ</span>
+      <span class="stat-number">Λ = 2H₀²/c²</span>
+      <span class="stat-label">ERROR 5.0% vs PLANCK</span>
     </div>
     <div class="stat-item">
       <span class="stat-number">0</span>
@@ -674,36 +673,34 @@ footer {
     </div>
   </div>
 
-  <!-- BOTONES PRINCIPALES COMO CUADROS -->
   <div class="hero-actions">
-    <a href="teoriaX.html" class="action-card purple">
+    <a href="teoria.html" class="action-card purple">
       <span class="action-tag">FUNDAMENTOS</span>
       <div class="action-title">La Teoría TIE</div>
-      <div class="action-desc">4 postulados · El Bisturí T² · Constantes · 10 fórmulas reinterpretadas.</div>
+      <div class="action-desc">5 postulados · Bisturí TIE v3.0 · Cero parámetros · Unificación de las 4 fuerzas.</div>
       <span class="action-link">→ EXPLORAR</span>
     </a>
     
     <a href="labs.html" class="action-card lab">
       <span class="action-tag">LABORATORIO</span>
       <div class="action-title">Entrar al Laboratorio</div>
-      <div class="action-desc">10 herramientas interactivas para verificar TIE por ti mismo.</div>
+      <div class="action-desc">20 herramientas interactivas para verificar TIE por ti mismo.</div>
       <span class="action-link">→ ACCEDER</span>
     </a>
   </div>
 
-  <!-- 3 CUADROS INFERIORES -->
   <div class="hero-cards">
     <a href="papers.html" class="info-card papers">
       <span class="info-tag">papers</span>
       <div class="info-title">Papers</div>
-      <div class="info-desc">Zenodo DOI · Tratado completo · Todo abierto y verificable.</div>
+      <div class="info-desc">Libros 0 y 1 · Zenodo DOI · Tratado completo · Todo abierto y verificable.</div>
       <span class="info-link">→ ACCEDER</span>
     </a>
     
     <a href="predicciones.html" class="info-card predictions">
       <span class="info-tag">VERIFICACIÓN</span>
       <div class="info-title">Predicciones</div>
-      <div class="info-desc">11 predicciones · 8 confirmadas · 3 pendientes · Semáforo.</div>
+      <div class="info-desc">16 predicciones · 12 confirmadas · 4 pendientes · Semáforo TIE.</div>
       <span class="info-link">→ VER ESTADO</span>
     </a>
 
@@ -718,10 +715,10 @@ footer {
 
 <footer>
   <div class="footer-equation">a₀ = c·H₀/2π</div>
+  <div class="footer-equation-second">v₀ = c/2π · E = m<sub>obs</sub>·c²/2π</div>
   <div class="footer-copy">Copyright (C) 2026 Rubén Antonio Lecona Curto (R@LC) · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
 </footer>
 
-<!-- Three.js -->
 <script>
 // ===== GALAXIA 3D =====
 const canvas = document.getElementById('galaxy-canvas');
@@ -818,17 +815,19 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// ===== CARRUSEL DE FRASES =====
+// ===== CARRUSEL DE FRASES (actualizado) =====
 const frases = [
   "EL ESPACIO ES INFRAESTRUCTURA.",
-  "84.1% MATERIA OBSCURA ?.",
-  "UNA ECUACIÓN. CERO PARÁMETROS.",
-  "2π ES EL CICLO DEL UNIVERSO.",
-  "175 GALAXIAS VERIFICADAS.",
-  "7.3× MEJOR QUE NEWTON.", 
+  "R = 2π · CONSTANTE RALC.",
+  "m_TIE = 2π·m_obs",
+  "84.1% MATERIA OSCURA.",
+  "δ∫dφ = 0 · UN PRINCIPIO",
+  "135 GALAXIAS SPARC.",
+  "a₀ = c·H₀/2π",
+  "Λ = 2H₀²/c² · ERROR 5.0%",
   "EL UNIVERSO ES UN PROCESADOR DE PAQUETES-ħ.",
-  "NO HAY SINGULARIDADES. HAY SATURACIÓN.",
-  ];
+  "NO HAY SINGULARIDADES. HAY SATURACIÓN."
+];
 
 let index = 0;
 const phraseElement = document.getElementById('rotating-phrase');
@@ -836,7 +835,6 @@ const phraseElement = document.getElementById('rotating-phrase');
 function rotatePhrase() {
   index = (index + 1) % frases.length;
   phraseElement.style.opacity = '0';
-  
   setTimeout(() => {
     phraseElement.textContent = frases[index];
     phraseElement.style.opacity = '1';

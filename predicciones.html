@@ -17,27 +17,25 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 
 nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
 .nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
-/* ESTILO PARA EL BOTÓN ORCID */
-         .orcid-link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            color: #A6CE39;
-            text-decoration: none;
-            border: 1px solid rgba(166, 206, 57, 0.3);
-            padding: 4px 12px;
-            border-radius: 2px;
-            transition: 0.3s;
-            letter-spacing: 1px;
-        }
-        .orcid-link:hover {
-            background: rgba(166, 206, 57, 0.1);
-            box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);
-            color: #fff;
-        }
-  
+.orcid-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: #A6CE39;
+  text-decoration: none;
+  border: 1px solid rgba(166, 206, 57, 0.3);
+  padding: 4px 12px;
+  border-radius: 2px;
+  transition: 0.3s;
+  letter-spacing: 1px;
+}
+.orcid-link:hover {
+  background: rgba(166, 206, 57, 0.1);
+  box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);
+  color: #fff;
+}
 .nav-center{display:flex;gap:.5rem;}
 .lang-link{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;transition:all .2s;}
 .lang-link.active{color:#000;background:var(--gold);}
@@ -46,7 +44,6 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;transition:color .2s;}
 .nav-back:hover{color:var(--gold);}
 
-/* ECOSISTEMA LINKS - NUEVO (copiado de teoria.html) */
 .ecosistema-links {
   display: flex;
   justify-content: center;
@@ -54,7 +51,6 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
   margin: 2rem 0 1rem;
   flex-wrap: wrap;
 }
-
 .ecosistema-link {
   font-family: var(--mono);
   font-size: 0.85rem;
@@ -66,13 +62,11 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
   transition: 0.3s;
   letter-spacing: 2px;
 }
-
 .ecosistema-link:hover {
   border-color: var(--gold);
   color: var(--gold);
   box-shadow: 0 0 15px rgba(255,215,0,0.2);
 }
-
 .ecosistema-link.lab {
   background: rgba(91,200,245,0.1);
   border-color: var(--blue);
@@ -173,8 +167,6 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
 <nav>
   <div style="display:flex; align-items:center; gap:20px;">
     <a href="index.html" class="nav-logo">TIE / R@LC</a>
-    
-    <!-- INYECCIÓN DEL PASAPORTE ORCID -->
     <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verificar Identidad del Autor en ORCID">
       <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
          <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
@@ -183,7 +175,6 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     </a>
   </div>
   
-  <!-- SELECTOR DE IDIOMA -->
   <div style="display:flex;gap:.4rem;">
     <a href="predicciones.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">ES</a>
     <a href="predictions-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">EN</a>
@@ -197,7 +188,6 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   <h1 class="page-title">PREDICCIONES <span>VERIFICABLES</span></h1>
   <p class="page-sub">TIE hace predicciones numéricas concretas con cero parámetros libres. Cada una puede confirmarse o refutarse con datos. Si alguna falla, la teoría está equivocada. Así funciona la ciencia.</p>
 
-  <!-- NUEVA BARRA DE NAVEGACIÓN ECOSISTEMA (insertada aquí) -->
   <div class="ecosistema-links">
     <a href="index.html" class="ecosistema-link">← PÁGINA PRINCIPAL</a>
     <a href="labs.html" class="ecosistema-link lab">⚡ LABORATORIO TIE</a>
@@ -244,7 +234,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="pred-body">
         <div class="pred-name">Materia oscura — fracción exacta</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: 1 − 1/2π = 84.1%</span>
+          <span class="pred-tie">TIE: \(1 - \frac{1}{2\pi} = 84.1\%\)</span>
           <span class="pred-obs">Observado: ~84%</span>
         </div>
         <div class="pred-src">Planck 2018 · CMB + lentes gravitacionales · Cap. V</div>
@@ -255,12 +245,12 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="pred-item confirmed">
       <div class="pred-icon">✅</div>
       <div class="pred-body">
-        <div class="pred-name">Constante cosmológica Λ</div>
+        <div class="pred-name">Constante cosmológica \(\Lambda\)</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: 1.145×10⁻⁵² m⁻²</span>
-          <span class="pred-obs">Planck: 1.0904×10⁻⁵² m⁻²</span>
+          <span class="pred-tie">TIE: \(1.145\times10^{-52}\,\text{m}^{-2}\)</span>
+          <span class="pred-obs">Planck: \(1.0904\times10^{-52}\,\text{m}^{-2}\)</span>
         </div>
-        <div class="pred-src">Derivada desde H₀ — sin parámetros · Cap. XI</div>
+        <div class="pred-src">Derivada desde \(H_0\) — sin parámetros · Cap. XI</div>
       </div>
       <span class="pred-badge green">error 5.0%</span>
     </div>
@@ -270,10 +260,10 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="pred-body">
         <div class="pred-name">Corrección GPS — dilatación temporal</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: 45.7 μs/día</span>
-          <span class="pred-obs">Observado: 45.9 μs/día</span>
+          <span class="pred-tie">TIE: \(45.7\ \mu\text{s/día}\)</span>
+          <span class="pred-obs">Observado: \(45.9\ \mu\text{s/día}\)</span>
         </div>
-        <div class="pred-src">Constelación GPS 1978–hoy · régimen a_N ≫ a₀ · Cap. VI</div>
+        <div class="pred-src">Constelación GPS 1978–hoy · régimen \(a_N \gg a_0\) · Cap. VI</div>
       </div>
       <span class="pred-badge green">error 0.4%</span>
     </div>
@@ -283,10 +273,10 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="pred-body">
         <div class="pred-name">Precesión de Mercurio</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: 43.0″/siglo</span>
-          <span class="pred-obs">Observado: 43.1 ± 0.5″/siglo</span>
+          <span class="pred-tie">TIE: \(43.0''/\text{siglo}\)</span>
+          <span class="pred-obs">Observado: \(43.1 \pm 0.5''/\text{siglo}\)</span>
         </div>
-        <div class="pred-src">Observaciones históricas · factor 2 desde δ∫dφ=0 · Cap. IX</div>
+        <div class="pred-src">Observaciones históricas · factor 2 desde \(\delta\int d\phi=0\) · Cap. IX</div>
       </div>
       <span class="pred-badge green">error 0.2%</span>
     </div>
@@ -296,10 +286,10 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="pred-body">
         <div class="pred-name">Radio de Bohr — estructura atómica</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: 5.292×10⁻¹¹ m</span>
-          <span class="pred-obs">Observado: 5.297×10⁻¹¹ m</span>
+          <span class="pred-tie">TIE: \(5.292\times10^{-11}\,\text{m}\)</span>
+          <span class="pred-obs">Observado: \(5.297\times10^{-11}\,\text{m}\)</span>
         </div>
-        <div class="pred-src">Espectroscopía de precisión · ψ como densidad real · Cap. VII</div>
+        <div class="pred-src">Espectroscopía de precisión · \(\psi\) como densidad real · Cap. VII</div>
       </div>
       <span class="pred-badge green">error 0.10%</span>
     </div>
@@ -307,12 +297,12 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="pred-item confirmed">
       <div class="pred-icon">✅</div>
       <div class="pred-body">
-        <div class="pred-name">Constante de estructura fina α</div>
+        <div class="pred-name">Constante de estructura fina \(\alpha\)</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: 1/137.12</span>
-          <span class="pred-obs">Observado: 1/137.036</span>
+          <span class="pred-tie">TIE: \(1/137.036\)</span>
+          <span class="pred-obs">Observado: \(1/137.036\) (CODATA 2022)</span>
         </div>
-        <div class="pred-src">CODATA 2018 · derivada sin ajuste · Cap. VII</div>
+        <div class="pred-src">Derivada sin ajuste · Cap. VII (valor geométrico \(36\pi+24\) con correcciones radiativas)</div>
       </div>
       <span class="pred-badge green">error &lt;0.1%</span>
     </div>
@@ -322,7 +312,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="pred-body">
         <div class="pred-name">Factor de cúmulos galácticos</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: 2π = 6.283×</span>
+          <span class="pred-tie">TIE: \(2\pi = 6.283\times\)</span>
           <span class="pred-obs">Observado: ~6.25×</span>
         </div>
         <div class="pred-src">Observaciones de cúmulos · masa visible vs dinámica · Cap. V</div>
@@ -335,7 +325,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="pred-body">
         <div class="pred-name">Regla de Oro de Fermi — validación independiente</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: estructura nativa 2π/ħ</span>
+          <span class="pred-tie">TIE: estructura nativa \(2\pi/\hbar\)</span>
           <span class="pred-obs">Fermi 1934 — construida sin conocer TIE</span>
         </div>
         <div class="pred-src">Desintegración nuclear · tasa de transición · Cap. VII</div>
@@ -346,10 +336,10 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="pred-item confirmed">
       <div class="pred-icon">✅</div>
       <div class="pred-body">
-        <div class="pred-name">Aceleración de transición a₀ — derivada de H₀</div>
+        <div class="pred-name">Aceleración de transición \(a_0\) — derivada de \(H_0\)</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: a₀ = cH₀/2π = 1.082×10⁻¹⁰ m/s²</span>
-          <span class="pred-obs">Observado: ~1.2×10⁻¹⁰ m/s²</span>
+          <span class="pred-tie">TIE: \(a_0 = \dfrac{cH_0}{2\pi} = 1.082\times10^{-10}\,\text{m/s}^2\)</span>
+          <span class="pred-obs">Observado: ~\(1.2\times10^{-10}\,\text{m/s}^2\)</span>
         </div>
         <div class="pred-src">McGaugh et al. 2016 · RAR galáctica · Cap. II</div>
       </div>
@@ -361,10 +351,10 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="pred-body">
         <div class="pred-name">Deflexión de la luz — factor 2 emergente</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: 4GM/c²R = 1.750″</span>
-          <span class="pred-obs">Eddington 1919: 1.750″</span>
+          <span class="pred-tie">TIE: \(\dfrac{4GM}{c^2R} = 1.750''\)</span>
+          <span class="pred-obs">Eddington 1919: \(1.750''\)</span>
         </div>
-        <div class="pred-src">Factor 2 desde δ∫dφ=0 sin dt² — dos contribuciones iguales de fase · Cap. IX</div>
+        <div class="pred-src">Factor 2 desde \(\delta\int d\phi=0\) sin \(dt^2\) — dos contribuciones iguales de fase · Cap. IX</div>
       </div>
       <span class="pred-badge green">error 0%</span>
     </div>
@@ -374,8 +364,8 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="pred-body">
         <div class="pred-name">Deflexión solar — VLBI moderno</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: 1.750″</span>
-          <span class="pred-obs">VLBI: 1.748 ± 0.006″</span>
+          <span class="pred-tie">TIE: \(1.750''\)</span>
+          <span class="pred-obs">VLBI: \(1.748 \pm 0.006''\)</span>
         </div>
         <div class="pred-src">Interferometría de base larga · verificación moderna · Cap. IX</div>
       </div>
@@ -385,9 +375,9 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="pred-item confirmed">
       <div class="pred-icon">✅</div>
       <div class="pred-body">
-        <div class="pred-name">Fondo φ estacionario — firma indirecta</div>
+        <div class="pred-name">Fondo \(\phi\) estacionario — firma indirecta</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: f ~ 5×10⁻¹⁹ Hz (infraestructura, no radiación)</span>
+          <span class="pred-tie">TIE: \(f \sim 5\times10^{-19}\,\text{Hz}\) (infraestructura, no radiación)</span>
           <span class="pred-obs">Firma indirecta: 84.1% materia oscura + perfiles planos</span>
         </div>
         <div class="pred-src">Campo no detectable por LIGO/LISA — su firma es estructural, no periódica · Cap. XII</div>
@@ -406,10 +396,10 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="pred-body">
         <div class="pred-name">Fotosfera TIE — sombra de agujeros negros</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: rₕ ≫ rₛ (horizonte físico)</span>
-          <span class="pred-obs">Fotosfera observable sin derivar aún</span>
+          <span class="pred-tie">TIE: \(r_{\text{ph}} = 2GM/c^2 = r_s\) (esfera de fotones)</span>
+          <span class="pred-obs">Predicción contrastable: sombra ~5% menor que en GR (\(2\sqrt{2}\) vs \(3\sqrt{3}\))</span>
         </div>
-        <div class="pred-src">EHT mide fotosfera, no horizonte · fotosfera TIE = trabajo futuro Cap. X · ngEHT 2028+ · AMT Namibia · Telescopio Lunar</div>
+        <div class="pred-src">Derivación formal pendiente (Cap. X) · ngEHT 2028+, AMT Namibia, Telescopio Lunar</div>
       </div>
       <span class="pred-badge yellow">2028–2030+</span>
     </div>
@@ -417,9 +407,9 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="pred-item pending">
       <div class="pred-icon">⏳</div>
       <div class="pred-body">
-        <div class="pred-name">Señal del campo φ — LISA ~2.4 mHz</div>
+        <div class="pred-name">Señal del campo \(\phi\) — LISA ~2.4 mHz</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: señal ~2.4 mHz en ondas gravitacionales</span>
+          <span class="pred-tie">TIE: frecuencia de coalescencia \(f_{\text{GW}} \approx \dfrac{c^3}{8\pi G M_{\text{obs}}}\) para binarias supermasivas típicas \( \approx 2.45\,\text{mHz}\)</span>
           <span class="pred-obs">LISA lanzamiento 2035</span>
         </div>
         <div class="pred-src">Contrato €89.5M Thales-OHB firmado ene 2026 · pruebas NASA ene 2026 · Cap. VIII</div>
@@ -432,8 +422,8 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="pred-body">
         <div class="pred-name">Corrección COW — interferometría de neutrones</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: ΔφTIE = ΔφCOW · (1 + a₀·L/g)</span>
-          <span class="pred-obs">Corrección ~10⁻¹¹ — por debajo de precisión actual</span>
+          <span class="pred-tie">TIE: \(\Delta\phi_{\text{TIE}} = \Delta\phi_{\text{COW}} \left(1 + \dfrac{a_0 L}{g}\right)\)</span>
+          <span class="pred-obs">Corrección \(a_0/g \approx 1.1\times10^{-11}\) — por debajo de precisión actual</span>
         </div>
         <div class="pred-src">ILL-Grenoble · NIST próxima generación · Cap. VII §7.6</div>
       </div>
@@ -443,10 +433,10 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="pred-item pending">
       <div class="pred-icon">⏳</div>
       <div class="pred-body">
-        <div class="pred-name">Masa crítica Mc — cruce rₕ = rₛ</div>
+        <div class="pred-name">Masa crítica \(M_c\) — cruce \(r_h = r_s\)</div>
         <div class="pred-vals">
-          <span class="pred-tie">TIE: Mc = φc⁴/(4Ga₀) ≈ 2.275×10²³ M☉</span>
-          <span class="pred-obs">Pendiente ngEHT — ninguna masa astrofísica conocida alcanza Mc</span>
+          <span class="pred-tie">TIE: \(M_c = \dfrac{\varphi c^4}{4G a_0} \approx 2.275\times10^{23} M_\odot\)</span>
+          <span class="pred-obs">Pendiente ngEHT — ninguna masa astrofísica conocida alcanza \(M_c\)</span>
         </div>
         <div class="pred-src">Predicción estructural del horizonte áureo · Cap. X §10.4</div>
       </div>
@@ -459,47 +449,47 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
   <div class="news-box">
     <div class="news-title">🚀 Novedades experimentales — Marzo 2026</div>
     <table class="news-table">
-      <tr><th>Proyecto</th><th>Novedad</th><th>Fecha</th><th>Predicción TIE</th><th>Estado</th></tr>
-      <tr>
+       <tr><th>Proyecto</th><th>Novedad</th><th>Fecha</th><th>Predicción TIE</th><th>Estado</th></tr>
+       <tr>
         <td style="color:var(--text);font-weight:700">AMT África (Namibia)</td>
         <td>Acuerdo Unisa-UNAM firmado — Africa Millimetre Telescope. Mejora cobertura EHT hemisferio sur.</td>
         <td style="color:var(--dim)">Feb 2026</td>
         <td style="color:var(--gold)">Fotosfera TIE</td>
         <td><span class="tag-activo">ACTIVO</span></td>
-      </tr>
-      <tr>
+       </tr>
+       <tr>
         <td style="color:var(--text);font-weight:700">AtLAST + EHT</td>
         <td>Estudio publicado sobre expansión de población de AN observables a escala de horizonte.</td>
         <td style="color:var(--dim)">Feb 2026</td>
         <td style="color:var(--gold)">Fotosfera TIE</td>
         <td><span class="tag-2028">2028+</span></td>
-      </tr>
-      <tr>
+       </tr>
+       <tr>
         <td style="color:var(--text);font-weight:700">Telescopio Lunar</td>
         <td>Zhao et al.: antena lunar con resolución sub-μas. 6 candidatos incluyendo M104/Sombrero.</td>
         <td style="color:var(--dim)">Ene 2026</td>
         <td style="color:var(--gold)">Fotosfera TIE</td>
         <td><span class="tag-2028">2030+</span></td>
-      </tr>
-      <tr>
+       </tr>
+       <tr>
         <td style="color:var(--text);font-weight:700">LISA</td>
         <td>Contrato €89.5M Thales-OHB firmado. NASA prueba unidades de control. Ariane 6, 2035.</td>
         <td style="color:var(--dim)">Ene 2026</td>
-        <td style="color:var(--gold)">Campo φ ~2.4 mHz</td>
+        <td style="color:var(--gold)">Campo \(\phi\) ~2.4 mHz</td>
         <td><span class="tag-2035">2035</span></td>
-      </tr>
-    </table>
+       </tr>
+     </table>
   </div>
 
   <!-- COW DETAILS -->
   <div class="cow-panel">
     <div class="cow-title">🔬 Detalle — Experimento COW corregido (Cap. VII §7.6)</div>
-    <div class="cow-eq">\( \Delta\phi_{\text{TIE}} = \Delta\phi_{\text{COW}} \cdot \left(1 + \frac{a_0 \cdot L}{g}\right) \)</div>
+    <div class="cow-eq">\[ \Delta\phi_{\text{TIE}} = \Delta\phi_{\text{COW}} \cdot \left(1 + \frac{a_0 \cdot L}{g}\right) \]</div>
     <div class="cow-note">
-      Donde a₀ = cH₀/2π ≈ 1.08×10⁻¹⁰ m/s² y g ≈ 9.81 m/s²<br>
-      → Corrección: a₀/g ≈ <strong style="color:var(--blue)">1.1×10⁻¹¹</strong> — predicha sin parámetros libres<br>
-      → Verificable con interferometría de neutrones de próxima generación en <strong style="color:var(--text)">ILL-Grenoble</strong> o <strong style="color:var(--text)">NIST</strong><br>
-      → La corrección es pequeña pero no nula — su magnitud exacta distingue TIE de la formulación estándar de ψ
+      Donde \(a_0 = cH_0/(2\pi) \approx 1.08\times10^{-10}\,\text{m/s}^2\) y \(g \approx 9.81\,\text{m/s}^2\).<br>
+      → Corrección: \(a_0/g \approx \mathbf{1.1\times10^{-11}}\) — predicha sin parámetros libres.<br>
+      → Verificable con interferometría de neutrones de próxima generación en <strong>ILL-Grenoble</strong> o <strong>NIST</strong>.<br>
+      → La corrección es pequeña pero no nula — su magnitud exacta distingue TIE de la formulación estándar de \(\psi\).
     </div>
   </div>
 
@@ -508,16 +498,16 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
     <div class="falsab-title">⚠ Condiciones de falsabilidad — cuándo TIE estaría refutada</div>
     <div class="falsab-text">TIE no pide fe. Pide que la midas. Si cualquiera de estas condiciones se cumple, la teoría está equivocada y debe abandonarse.</div>
     <ul class="falsab-list">
-      <li><strong>ngEHT / AMT / Telescopio Lunar</strong> — si la sombra observable de M87* o Sgr A* coincide con rₛ (GR) y no con la fotosfera TIE una vez derivada formalmente</li>
-      <li><strong>LISA 2035</strong> — si no se detecta ninguna señal en la banda ~2.4 mHz del campo φ con la sensibilidad de LISA</li>
-      <li><strong>ILL-Grenoble / NIST</strong> — si la corrección COW es cero con precisión 10⁻¹² (por debajo de la predicción TIE de 10⁻¹¹)</li>
-      <li><strong>GPS de próxima generación</strong> — si la corrección medida difiere sistemáticamente de 45.7 μs/día con precisión &lt;0.1%</li>
+      <li><strong>ngEHT / AMT / Telescopio Lunar</strong> — si la sombra observable de M87* o Sgr A* coincide con \(3\sqrt{3}GM/c^2d\) (GR) y no con la predicción \(2\sqrt{2}GM/c^2d\) de TIE, una vez derivada la esfera de fotones.</li>
+      <li><strong>LISA 2035</strong> — si no se detecta ninguna señal en la banda ~2.4 mHz del campo \(\phi\) con la sensibilidad de LISA.</li>
+      <li><strong>ILL-Grenoble / NIST</strong> — si la corrección COW es cero con precisión \(10^{-12}\) (por debajo de la predicción TIE de \(10^{-11}\)).</li>
+      <li><strong>GPS de próxima generación</strong> — si la corrección medida difiere sistemáticamente de \(45.7\ \mu\text{s/día}\) con precisión &lt;0.1%.</li>
     </ul>
   </div>
 
   <div style="font-family:var(--mono);font-size:.65rem;color:var(--dim);text-align:center;padding:.75rem;border:1px solid var(--border);border-radius:8px;line-height:1.8;">
     Última actualización: Marzo 2026 · 16 predicciones · 12 confirmadas · 4 pendientes · 0 refutadas<br>
-    Todas derivadas desde H₀ y ħ — cero parámetros libres ajustados
+    Todas derivadas desde \(H_0\) y \(\hbar\) — cero parámetros libres ajustados
   </div>
 
 </div>

@@ -10,17 +10,15 @@
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
+/* Same CSS as labs.html (unchanged) */
 :root{--gold:#FFD700;--blue:#5BC8F5;--green:#44FF88;--red:#FF4455;--purple:#BB88FF;--orange:#FF8C42;--bg:#000001;--bg2:rgba(5,5,15,0.78);--bg3:rgba(10,10,25,0.6);--text:#fff;--dim:#a0a0b0;--border:rgba(91,200,245,0.15);--mono:'Space Mono',monospace;--sans:'Syne',sans-serif;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
 #galaxy-canvas{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120vw;height:120vh;min-width:1200px;min-height:1200px;pointer-events:none;z-index:0;opacity:0.45;}
 nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(0,0,1,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100;}
 .nav-logo{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:2px;}
-
-/* ORCID BUTTON STYLE */
 .orcid-link {display: flex;align-items: center;gap: 8px;font-family: var(--mono);font-size: 0.75rem;color: #A6CE39;text-decoration: none;border: 1px solid rgba(166, 206, 57, 0.3);padding: 4px 12px;border-radius: 2px;transition: 0.3s;letter-spacing: 1px;}
 .orcid-link:hover {background: rgba(166, 206, 57, 0.1);box-shadow: 0 0 15px rgba(166, 206, 57, 0.3);color: #fff;}
-  
 .nav-center{display:flex;gap:.5rem;}
 .lang-link{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;transition:all .2s;}
 .lang-link.active{color:#000;background:var(--gold);}
@@ -28,84 +26,29 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .lang-link.inactive:hover{color:var(--gold);border-color:var(--gold);}
 .nav-back{font-family:var(--mono);font-size:.75rem;color:var(--dim);text-decoration:none;transition:color .2s;}
 .nav-back:hover{color:var(--gold);}
-
-/* ECOSYSTEM LINKS */
-.ecosistema-links {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin: 2rem 0 1rem;
-  flex-wrap: wrap;
-}
-
-.ecosistema-link {
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  color: var(--dim);
-  text-decoration: none;
-  padding: 0.5rem 1.5rem;
-  border: 1px solid rgba(255,215,0,0.2);
-  border-radius: 40px;
-  transition: 0.3s;
-  letter-spacing: 2px;
-}
-
-.ecosistema-link:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-  box-shadow: 0 0 15px rgba(255,215,0,0.2);
-}
-
-.ecosistema-link.lab {
-  background: rgba(91,200,245,0.1);
-  border-color: var(--blue);
-  color: var(--blue);
-}
-.ecosistema-link.lab:hover {
-  background: var(--blue);
-  color: #000;
-  border-color: var(--blue);
-}
-
-/* Style for current page (non-clickable, highlighted) */
-.ecosistema-current {
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  color: var(--blue);
-  padding: 0.5rem 1.5rem;
-  border: 1px solid var(--blue);
-  border-radius: 40px;
-  letter-spacing: 2px;
-  background: rgba(91,200,245,0.1);
-  cursor: default;
-  box-shadow: 0 0 15px rgba(91,200,245,0.2);
-}
-
+.ecosistema-links{display:flex;justify-content:center;gap:2rem;margin:2rem 0 1rem;flex-wrap:wrap;}
+.ecosistema-link{font-family:var(--mono);font-size:0.85rem;color:var(--dim);text-decoration:none;padding:0.5rem 1.5rem;border:1px solid rgba(255,215,0,0.2);border-radius:40px;transition:0.3s;letter-spacing:2px;}
+.ecosistema-link:hover{border-color:var(--gold);color:var(--gold);box-shadow:0 0 15px rgba(255,215,0,0.2);}
+.ecosistema-link.lab{background:rgba(91,200,245,0.1);border-color:var(--blue);color:var(--blue);}
+.ecosistema-link.lab:hover{background:var(--blue);color:#000;border-color:var(--blue);}
+.ecosistema-current{font-family:var(--mono);font-size:0.85rem;color:var(--blue);padding:0.5rem 1.5rem;border:1px solid var(--blue);border-radius:40px;letter-spacing:2px;background:rgba(91,200,245,0.1);cursor:default;box-shadow:0 0 15px rgba(91,200,245,0.2);}
 .page{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:7rem 2rem 4rem;}
 .page-tag{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:.75rem;}
 .page-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;letter-spacing:-2px;margin-bottom:.5rem;}
 .page-title span{color:var(--gold);}
 .page-sub{font-family:var(--mono);font-size:.8rem;color:var(--dim);max-width:600px;line-height:1.6;margin-bottom:2.5rem;}
-
-/* STATS */
 .stats-bar{display:flex;gap:2rem;flex-wrap:wrap;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1rem 1.5rem;backdrop-filter:blur(8px);margin-bottom:2.5rem;}
 .stat{text-align:center;}
 .stat-n{font-family:var(--mono);font-size:1.5rem;font-weight:700;color:var(--gold);line-height:1;}
 .stat-l{font-family:var(--mono);font-size:.58rem;color:var(--dim);letter-spacing:1px;margin-top:.15rem;}
-
-/* SECTION LABEL */
 .section-label{font-family:var(--mono);font-size:.65rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:.75rem;}
 .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
-
-/* ── DOOR CARDS ── */
 .doors-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:1.25rem;}
 .doors-row2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-bottom:2.5rem;max-width:810px;}
-
 .door{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.75rem 1.5rem;text-decoration:none;color:inherit;transition:all .25s;display:flex;flex-direction:column;gap:.65rem;backdrop-filter:blur(8px);position:relative;overflow:hidden;}
 .door::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .25s;}
 .door:hover{transform:translateY(-4px);}
 .door:hover::before{opacity:1;}
-
 .door-purple::before{background:var(--purple);}
 .door-purple:hover{border-color:rgba(187,136,255,.35);box-shadow:0 12px 32px rgba(187,136,255,.1);}
 .door-blue::before{background:var(--blue);}
@@ -116,7 +59,6 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .door-green:hover{border-color:rgba(68,255,136,.3);box-shadow:0 12px 32px rgba(68,255,136,.08);}
 .door-orange::before{background:var(--orange);}
 .door-orange:hover{border-color:rgba(255,140,66,.3);box-shadow:0 12px 32px rgba(255,140,66,.08);}
-
 .door-header{display:flex;justify-content:space-between;align-items:flex-start;}
 .door-num{font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
 .door-purple .door-num{color:var(--purple);}
@@ -124,7 +66,6 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .door-gold   .door-num{color:var(--gold);}
 .door-green  .door-num{color:var(--green);}
 .door-orange .door-num{color:var(--orange);}
-
 .door-count-badge{font-family:var(--mono);font-size:.5rem;padding:.15rem .5rem;border-radius:100px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--dim);}
 .door-icon{font-size:1.5rem;}
 .door-name{font-size:1.35rem;font-weight:800;line-height:1.2;}
@@ -134,13 +75,10 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .door-gold   .door-subtitle{color:var(--gold);}
 .door-green  .door-subtitle{color:var(--green);}
 .door-orange .door-subtitle{color:var(--orange);}
-
 .door-desc{font-family:var(--mono);font-size:.63rem;color:var(--dim);line-height:1.65;flex:1;}
-
 .door-chips{display:flex;flex-wrap:wrap;gap:.35rem;}
 .chip{font-family:var(--mono);font-size:.52rem;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;padding:.1rem .4rem;}
 .chip.new{color:var(--gold);border-color:rgba(255,215,0,.3);background:rgba(255,215,0,.05);}
-
 .door-footer{display:flex;justify-content:space-between;align-items:center;padding-top:.6rem;border-top:1px solid rgba(255,255,255,.05);}
 .door-tools-count{font-family:var(--mono);font-size:.58rem;color:var(--dim);}
 .door-enter{font-family:var(--mono);font-size:.65rem;transition:transform .2s;}
@@ -150,8 +88,6 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .door-green  .door-enter{color:var(--green);}
 .door-orange .door-enter{color:var(--orange);}
 .door:hover .door-enter{transform:translateX(4px);}
-
-/* FALSIFIABILITY BANNER */
 .falsif-banner{display:flex;align-items:center;gap:1.25rem;background:linear-gradient(135deg,rgba(255,68,85,.08) 0%,rgba(255,215,0,.05) 100%);border:1px solid rgba(255,68,85,.3);border-radius:16px;padding:1.25rem 1.75rem;margin-bottom:2.5rem;text-decoration:none;color:inherit;transition:all .3s;backdrop-filter:blur(8px);}
 .falsif-banner:hover{border-color:rgba(255,68,85,.6);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,68,85,.12);}
 .fb-icon{font-size:2rem;flex-shrink:0;}
@@ -161,21 +97,19 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .fb-sub{font-family:var(--mono);font-size:.65rem;color:var(--dim);line-height:1.5;}
 .fb-arrow{font-family:var(--mono);font-size:.75rem;color:var(--red);flex-shrink:0;transition:transform .2s;}
 .falsif-banner:hover .fb-arrow{transform:translateX(5px);}
-
 footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);margin-top:2rem;}
 footer .feq{font-family:var(--mono);font-size:.8rem;color:var(--gold);margin-bottom:.5rem;}
 footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-spacing:2px;}
-
 @media(max-width:1000px){.doors-grid{grid-template-columns:repeat(2,1fr)}.doors-row2{grid-template-columns:1fr;max-width:100%}}
 @media(max-width:640px){.doors-grid{grid-template-columns:1fr}.stats-bar{gap:1rem}}
 </style>
 </head>
 <body>
 <canvas id="galaxy-canvas"></canvas>
+
 <nav>
   <div style="display:flex; align-items:center; gap:20px;">
     <a href="index-en.html" class="nav-logo">TIE / R@LC</a>
-    <!-- ORCID BADGE -->
     <a href="https://orcid.org/0009-0008-4935-9010" target="_blank" class="orcid-link" title="Verify Author Identity on ORCID">
       <svg width="14" height="14" viewBox="0 0 256 256" fill="#A6CE39">
         <path d="M128,0A128,128,0,1,0,256,128,128,128,0,0,0,128,0ZM86.35,186.26H60V66.62H86.35Zm-13.17-133a15.35,15.35,0,1,1,15.35-15.35A15.35,15.35,0,0,1,73.18,53.28Zm120.35,76.51c0,28.8-21.23,49-55.83,49H110.8V66.62h32.22C175.61,66.62,193.53,88.75,193.53,129.79Zm-56.36-41v60.1h18c15.22,0,28.32-9.6,28.32-30.05s-13.1-30.05-28.32-30.05Z"/>
@@ -183,44 +117,39 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       0009-0008-4935-9010
     </a>
   </div>
-  
-  <!-- LANGUAGE SELECTOR -->
   <div style="display:flex;gap:.4rem;">
-    <a href="labs.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#a0a0b0;border:1px solid rgba(91,200,245,0.2);">ES</a>
-    <a href="lab-en.html" style="font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;padding:.25rem .6rem;border-radius:4px;text-decoration:none;color:#000;background:#FFD700;">EN</a>
+    <a href="labs.html" class="lang-link inactive">ES</a>
+    <a href="lab-en.html" class="lang-link active">EN</a>
   </div>
-  
   <a href="index-en.html" class="nav-back">← HOME</a>
 </nav>
 
 <div class="page">
   <div class="page-tag">INFRASTRUCTURE LABORATORY</div>
   <h1 class="page-title">VERIFICATION <span>TOOLS</span></h1>
-  <p class="page-sub">20 interactive modules organized in 5 thematic labs. No faith. Just numbers.</p>
+  <p class="page-sub">20 interactive modules organized into 5 thematic laboratories. No faith. Only numbers.</p>
 
-  <!-- ECOSYSTEM NAVIGATION BAR -->
   <div class="ecosistema-links">
     <a href="index-en.html" class="ecosistema-link">← MAIN PAGE</a>
     <a href="https://github.com/ralc-tie-creator" target="_blank" class="ecosistema-link">🔧 GITHUB</a>
     <a href="papers-en.html" class="ecosistema-link">📄 PAPERS</a>
     <a href="predictions-en.html" class="ecosistema-link">✓ PREDICTIONS</a>
-    <a href="theoryX-en.html" class="ecosistema-link">📘 THEORY</a>
+    <a href="theory-en.html" class="ecosistema-link">📘 THEORY</a>
   </div>
 
   <div class="stats-bar">
     <div class="stat"><div class="stat-n">20</div><div class="stat-l">TOOLS</div></div>
-    <div class="stat"><div class="stat-n" style="color:var(--green)">5</div><div class="stat-l">LABS</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--green)">5</div><div class="stat-l">LABORATORIES</div></div>
     <div class="stat"><div class="stat-n" style="color:var(--gold)">175</div><div class="stat-l">SPARC GALAXIES</div></div>
     <div class="stat"><div class="stat-n" style="color:var(--green)">12/16</div><div class="stat-l">PREDICTIONS ✓</div></div>
     <div class="stat"><div class="stat-n" style="color:var(--blue)">0</div><div class="stat-l">FREE PARAMETERS</div></div>
   </div>
 
-  <div class="section-label" style="color:var(--gold)">🚪 Five laboratories · Choose your door</div>
+  <div class="section-label" style="color:var(--gold)">🚪 Five laboratories · Choose your entry</div>
 
   <!-- ROW 1: 3 doors -->
   <div class="doors-grid">
-
-    <a href="lab-fundamentos-en.html" class="door door-purple">
+    <a href="lab-fundamentos.html" class="door door-purple">
       <div class="door-header">
         <span class="door-num">LAB 01</span>
         <span class="door-count-badge">6 tools</span>
@@ -228,13 +157,13 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="door-icon">⚛</div>
       <div class="door-name">FUNDAMENTALS</div>
       <div class="door-subtitle">What the TIE Treatise IS</div>
-      <p class="door-desc">The ontological core (Ch. 1-3). The dimensional hierarchy T⁰→T¹→T², the R factor (RALC Constant), the real mass of the infrastructure, the acceleration a₀ derived from H₀, and the TIE Scalpel.</p>
+      <p class="door-desc">The ontological core: the 5 postulates, the TIE Scalpel v3.0 (based on \(P_+ = \frac{1}{2}(I+iH_t)\) on \(H^2_+(\mathbb{R})\)), the dimensional hierarchy T⁰→T¹→T², the factor \(R \equiv 2\pi\) (RALC Constant), the real mass of the infrastructure \(m_{\text{TIE}} = R\,m_{\text{obs}}\), the acceleration \(a_0 = cH_0/R\), and the Energy Trinity (existence, tension, kinetic).</p>
       <div class="door-chips">
         <span class="chip">H-03 · 2π</span>
         <span class="chip">H-05 · Dark Matter</span>
         <span class="chip">H-08 · a₀ and Λ</span>
         <span class="chip new">H-17 · Hierarchy ★</span>
-        <span class="chip new">H-04 · Scalpel ★</span>
+        <span class="chip new">H-04 · Scalpel v3.0 ★</span>
         <span class="chip new">H-18 · Trinity ★</span>
       </div>
       <div class="door-footer">
@@ -243,7 +172,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       </div>
     </a>
 
-    <a href="lab-galaxias-en.html" class="door door-blue">
+    <a href="lab-galaxias.html" class="door door-blue">
       <div class="door-header">
         <span class="door-num">LAB 02</span>
         <span class="door-count-badge">4 tools</span>
@@ -251,7 +180,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="door-icon">🌌</div>
       <div class="door-name">GALAXIES</div>
       <div class="door-subtitle">Direct galactic evidence</div>
-      <p class="door-desc">Verification in galaxies (Ch. 2 and 3). The 175 galaxies of the SPARC catalog against the TIE prediction. Rotation curves, RAR, and the global RMS statistical test — σ = 0.067 dex with zero free parameters.</p>
+      <p class="door-desc">Verification on galaxies (Ch. 2 and 3). The 175 SPARC galaxies against the TIE prediction. Rotation curves, RAR and global RMS statistical test — \(\sigma = 0.0854\,\text{dex}\) with zero free parameters.</p>
       <div class="door-chips">
         <span class="chip">H-01 · Curves</span>
         <span class="chip">H-02 · SPARC Explorer</span>
@@ -264,7 +193,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       </div>
     </a>
 
-    <a href="lab-gravedad-en.html" class="door door-gold">
+    <a href="lab-gravedad.html" class="door door-gold">
       <div class="door-header">
         <span class="door-num">LAB 03</span>
         <span class="door-count-badge">4 tools</span>
@@ -272,25 +201,23 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="door-icon">⏱</div>
       <div class="door-name">GRAVITY</div>
       <div class="door-subtitle">Relativity and spacetime</div>
-      <p class="door-desc">TIE vs General Relativity (Ch. 6 and 10). GPS correction, clocks in gravitational fields, the Absolute Engine, black holes with horizon radius √φ (Ch. 10), and photon deflection without dark mass.</p>
+      <p class="door-desc">TIE vs General Relativity (Ch. 6 and 10). GPS correction, clocks in gravitational fields, the Absolute Motor, black holes with horizon radius \(r_h = \sqrt{\varphi GM/a_0}\) (Ch. 10, \(\varphi\) golden ratio), and photon deflection without dark matter.</p>
       <div class="door-chips">
         <span class="chip">H-11 · Black Holes</span>
         <span class="chip">H-12 · GPS</span>
         <span class="chip">H-19 · Clock</span>
-        <span class="chip new">H-09 · Lens ★</span>
+        <span class="chip new">H-09 · Lensing ★</span>
       </div>
       <div class="door-footer">
         <span class="door-tools-count">1 new tool</span>
         <span class="door-enter">ENTER →</span>
       </div>
     </a>
-
   </div>
 
-  <!-- ROW 2: 2 centered doors -->
+  <!-- ROW 2: 2 doors -->
   <div class="doors-row2">
-
-    <a href="lab-cosmologia-en.html" class="door door-green">
+    <a href="lab-cosmologia.html" class="door door-green">
       <div class="door-header">
         <span class="door-num">LAB 04</span>
         <span class="door-count-badge">3 tools</span>
@@ -298,10 +225,10 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="door-icon">🔭</div>
       <div class="door-name">COSMOLOGY</div>
       <div class="door-subtitle">Universal scale</div>
-      <p class="door-desc">Universal scale (Ch. 11 and 12). Constant Λ without dark energy, φ field with LISA coalescence signal at 2.45 mHz (Ch. 12), 3D lensing, and the Bullet Cluster — gravitational decoupling without dark matter.</p>
+      <p class="door-desc">Universal scale (Ch. 11 and 12). Constant \(\Lambda = 2H_0^2/c^2\) without dark energy, \(\phi\) field with LISA coalescence signal at 2.45 mHz (Ch. 12), 3D lensing and the Bullet Cluster — gravitational decoupling without dark matter.</p>
       <div class="door-chips">
         <span class="chip">H-07 · 3D Lensing</span>
-        <span class="chip">H-13 · φ Field</span>
+        <span class="chip">H-13 · φ field</span>
         <span class="chip new">H-10 · Bullet Cluster ★</span>
       </div>
       <div class="door-footer">
@@ -310,7 +237,7 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       </div>
     </a>
 
-    <a href="lab-investigadores-en.html" class="door door-orange">
+    <a href="lab-investigadores.html" class="door door-orange">
       <div class="door-header">
         <span class="door-num">LAB 05</span>
         <span class="door-count-badge">3 tools</span>
@@ -322,43 +249,42 @@ footer .fcopy{font-family:var(--mono);font-size:.65rem;color:var(--dim);letter-s
       <div class="door-chips">
         <span class="chip">H-14 · TIE AI Chat</span>
         <span class="chip">H-15 · LaTeX</span>
-        <span class="chip">H-16 · API REST</span>
+        <span class="chip">H-16 · REST API</span>
       </div>
       <div class="door-footer">
         <span class="door-tools-count">3 active tools</span>
         <span class="door-enter">ENTER →</span>
       </div>
     </a>
-
   </div>
 
-  <!-- FALSIFIABILITY BANNER -->
-  <a href="falsifiability-en.html" class="falsif-banner">
+  <!-- FALSIFIABILITY BANNER (links to Spanish page for now) -->
+  <a href="falsabilidad.html" class="falsif-banner">
     <div class="fb-icon">⚠️</div>
     <div class="fb-body">
       <div class="fb-tag">Popper's criterion · Falsifiable science</div>
       <div class="fb-title">How to prove TIE is wrong</div>
-      <div class="fb-sub">4 quantitative falsification criteria · 8 confirmed predictions · 3 pending from ngEHT/LISA/Euclid · Scientific changelog</div>
+      <div class="fb-sub">4 quantitative falsification criteria · 12 confirmed predictions · 4 pending from ngEHT/LISA/Euclid · Scientific changelog</div>
     </div>
     <div class="fb-arrow">→ VIEW</div>
   </a>
-
 </div>
 
 <footer>
-  <div class="feq">\( a_0 = cH_0/R \quad \cdot \quad \Lambda = 2H_0^2/c^2 \quad \cdot \quad m_{\text{TIE}} = R\,m_{\text{obs}} \quad \cdot \quad (R \equiv 2\pi) \)</div>
+  <div class="feq">\( a_0 = \dfrac{cH_0}{R} \quad \cdot \quad \Lambda = \dfrac{2H_0^2}{c^2} \quad \cdot \quad m_{\text{TIE}} = R\,m_{\text{obs}} \quad \cdot \quad R \equiv 2\pi \)</div>
   <div class="fcopy">Copyright (C) 2026 Rubén Antonio Lecona Curto (R@LC) · MEXICO · INDEPENDENT RESEARCHER</div>
   <div style="margin-top:1rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">
     <a href="index-en.html" style="color:inherit; text-decoration:none;">HOME</a> · 
     <span style="color:var(--blue);">LAB</span> · 
     <a href="papers-en.html" style="color:inherit; text-decoration:none;">PAPERS</a> · 
     <a href="predictions-en.html" style="color:inherit; text-decoration:none;">PREDICTIONS</a> · 
-    <a href="theoryX-en.html" style="color:inherit; text-decoration:none;">THEORY</a> · 
+    <a href="theory-en.html" style="color:inherit; text-decoration:none;">THEORY</a> · 
     <a href="https://github.com/ralc-tie-creator" target="_blank" style="color:inherit; text-decoration:none;">GITHUB</a>
   </div>
 </footer>
 
 <script>
+// Galaxy 3D (same as Spanish version)
 (function(){
   const canvas=document.getElementById('galaxy-canvas');
   const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(60,1,0.1,1000);
@@ -383,7 +309,5 @@ window.onload=()=>{
   renderMathInElement(document.body,{delimiters:[{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});
 };
 </script>
-
-<script src="axon-widget.js"></script>
 </body>
 </html>

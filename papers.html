@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TIE · PAPERS Y PUBLICACIONES</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800;900&display=swap" rel="stylesheet">
+
+<!-- KaTeX para fórmulas -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+
 <style>
 :root {
   --gold: #FFD700;
@@ -532,10 +538,10 @@ footer {
     <a href="labs.html" class="ecosistema-link lab">⚡ LABORATORIO TIE</a>
     <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" class="ecosistema-link">🔧 GITHUB</a>
     <a href="predicciones.html" class="ecosistema-link">✓ PREDICCIONES</a>
-    <a href="teoriaX.html" class="ecosistema-link">📘 TEORÍA</a>
+    <a href="teoria.html" class="ecosistema-link">📘 TEORÍA</a>
   </div>
 
-  <!-- BANNER DERECHOS Y PATENTE -->
+  <!-- BANNER DERECHOS Y PATENTE (actualizado a v3.0) -->
   <div class="rights-banner">
     <div class="rights-item">
       <span class="rights-icon">©</span>
@@ -549,8 +555,9 @@ footer {
       <span class="rights-icon">⚖️</span>
       <div class="rights-text">
         <strong>PATENTE EN TRÁMITE</strong>
-        Bisturí TIE v2.0 — Método de Diagnóstico Dual<br>
-        IMPI Exp: MX/a/2026/003397 · Folio: MX/E/2026/020798
+        Bisturí TIE v3.0 — Método de Diagnóstico Dual<br>
+        IMPI Exp: MX/a/2026/003397 · Folio: MX/E/2026/020798<br>
+        <span style="font-size:0.65rem;">Fundamento: Proyección analítica \(P_+ = \frac{1}{2}(I + iH_t)\) sobre \(H^2_+(\mathbb{R})\)</span>
       </div>
     </div>
     <div class="rights-item">
@@ -592,16 +599,21 @@ footer {
     </div>
   </div>
 
-     <!-- PAPER MATERIA OSCURA — NUEVO · ZENODO · PUBLICADO 21/03/2026 -->
+  <!-- PAPER MATERIA OSCURA — NUEVO · ZENODO · PUBLICADO 21/03/2026 (actualizado con concepto de cuanto mínimo a·ħ) -->
   <div class="featured-paper" style="border-color: var(--gold); background: linear-gradient(145deg, rgba(255,215,0,0.08) 0%, rgba(10,10,20,0.8) 100%);">
     <span class="featured-paper-tag" style="color: var(--gold); background: rgba(255,215,0,0.1);">🌌 PAPER CIENTÍFICO · ZENODO · PUBLICADO 21/03/2026 · NUEVO</span>
-    <h2 class="featured-paper-title" style="color: var(--gold);">La Materia Oscura como un Factor Perdido de 2π:<br>Derivación del 84.1% sin Parámetros Libres</h2>
+    <h2 class="featured-paper-title" style="color: var(--gold);">La Materia Oscura como un Factor Perdido de \(2\pi\):<br>Derivación del 84.1% sin Parámetros Libres</h2>
     <p style="font-size:0.9rem; color:var(--dim); line-height:1.6; margin-top:0.8rem;">
-      Dentro de TIE, la fracción de materia oscura (84.1%) se deriva como 1 − 1/2π — una consecuencia
-      algebraica de un factor de 2π omitido en la relación masa-energía. El factor 2π es el invariante
-      topológico de un ciclo completo de fase (S¹). Verificado contra Planck 2018 (concordancia 0.1%),
-      135 galaxias SPARC (σ = 0.0854 dex, BIC > 1300 vs ΛCDM), y cúmulos galácticos.
-      Cuatro condiciones de falsabilidad. Código Python reproducible.
+      Dentro de TIE, la fracción de materia oscura (84.1%) se deriva como \(1 - 1/(2\pi)\) — una consecuencia
+      algebraica de un factor de \(2\pi\) omitido en la relación masa-energía. El factor \(2\pi\) es el invariante
+      topológico de un ciclo completo de fase (\(S^1\)). Verificado contra Planck 2018 (concordancia 0.1%),
+      135 galaxias SPARC (\(\sigma = 0.0854\,\text{dex}\), BIC > 1300 vs \(\Lambda\)CDM), y cúmulos galácticos.
+      Cuatro condiciones de falsabilidad. Código Python reproducible.<br><br>
+      <strong>⚛️ El cuanto mínimo de materia:</strong> En TIE, la masa no es una sustancia independiente.
+      Nace de la propia infraestructura cuando la red cúbica con paso \(a = \sqrt{2\pi}\,\ell_P\) procesa
+      paquetes indivisibles \(a\hbar\) (kg·m³/s). Cada nodo tiene masa fundamental
+      \(m_0 = \hbar/(a c)\) y energía \(E_0 = \hbar c / a\). La masa observada es solo \(1/(2\pi)\) de la masa real,
+      y la diferencia \(1 - 1/(2\pi) = 84.1\%\) es lo que la cosmología llama materia oscura.
     </p>
 
     <div class="featured-metrics">
@@ -645,8 +657,8 @@ footer {
     <h2 class="featured-paper-title">Test Cuantitativo de TIE contra el Catálogo SPARC:<br>Cero Parámetros Libres y Curvas de Rotación Galáctica</h2>
     <p style="font-size:0.9rem; color:var(--dim); line-height:1.6; margin-top:0.8rem;">
       Test sistemático de TIE sobre 135 galaxias del catálogo SPARC con velocidades planas medidas.
-      Predicción sin parámetros libres: v_flat = (G·M_bar·a₀)^(1/4), donde a₀ = cH₀/2π se deriva
-      desde primeros principios. Supera al ajuste ΛCDM NFW que usa 2 parámetros libres por galaxia.
+      Predicción sin parámetros libres: \(v_{\text{flat}} = (G\cdot M_{\text{bar}}\cdot a_0)^{1/4}\), donde \(a_0 = cH_0/(2\pi)\) se deriva
+      desde primeros principios. Supera al ajuste \(\Lambda\)CDM NFW que usa 2 parámetros libres por galaxia.
     </p>
 
     <div class="featured-metrics">
@@ -668,7 +680,7 @@ footer {
       </div>
       <div class="featured-metric">
         <div class="featured-metric-value">35.0</div>
-        <div class="featured-metric-label">RMS ΛCDM (km/s)</div>
+        <div class="featured-metric-label">RMS \(\Lambda\)CDM (km/s)</div>
       </div>
       <div class="featured-metric">
         <div class="featured-metric-value">185.5</div>
@@ -723,7 +735,7 @@ footer {
   <div style="background: rgba(5,5,15,0.7); backdrop-filter:blur(10px); border:1px solid var(--border); border-radius:12px; padding:2rem;">
     <div class="preprint-item">
       <div>
-        <div class="preprint-title">El Bisturí T² — Detección de T² artificial en ecuaciones clásicas</div>
+        <div class="preprint-title">El Bisturí TIE v3.0 — Diagnóstico Dual y Proyección Analítica en el Espacio de Hardy</div>
         <span class="preprint-status review">⏳ En revisión</span>
       </div>
       <a href="#" class="paper-link" style="color:var(--dim);">arXiv pendiente →</a>
@@ -737,18 +749,25 @@ footer {
     </div>
     <div class="preprint-item">
       <div>
-        <div class="preprint-title">Constante Cosmológica desde Primeros Principios: Λ = 2H₀²/c²</div>
+        <div class="preprint-title">Constante Cosmológica desde Primeros Principios: \(\Lambda = 2H_0^2/c^2\)</div>
         <span class="preprint-status review">⏳ En revisión</span>
       </div>
       <a href="#" class="paper-link" style="color:var(--dim);">viXra ref. 17854448 →</a>
+    </div>
+    <div class="preprint-item">
+      <div>
+        <div class="preprint-title">El Cuanto Mínimo de Materia: \(a\hbar\) y el Origen de la Masa en TIE</div>
+        <span class="preprint-status draft">📝 Borrador</span>
+      </div>
+      <span style="font-family:var(--mono); font-size:0.7rem; color:var(--dim);">Próxima publicación</span>
     </div>
   </div>
 
   <!-- CÓMO CITAR -->
   <h2 style="font-size:1.8rem; margin:3rem 0 1rem;">📝 CÓMO CITAR</h2>
 
-  <p style="font-family:var(--mono); font-size:0.75rem; color:var(--dim); margin-bottom:1rem;">Paper (Materia Oscura — 2π):</p>
-  <div class="cite-box">Lecona, R. (R@LC). (2026). Dark Matter as a Missing Factor of 2π:
+  <p style="font-family:var(--mono); font-size:0.75rem; color:var(--dim); margin-bottom:1rem;">Paper (Materia Oscura — \(2\pi\)):</p>
+  <div class="cite-box">Lecona, R. (R@LC). (2026). Dark Matter as a Missing Factor of \(2\pi\):
 A Zero-Parameter Derivation of the 84.1% Fraction from TIE.
 Zenodo. DOI: 10.5281/zenodo.19143650</div>
   
@@ -759,7 +778,7 @@ Zenodo. DOI: 10.5281/zenodo.19120085</div>
 
   <p style="font-family:var(--mono); font-size:0.75rem; color:var(--dim); margin-bottom:1rem;">Tratado completo:</p>
   <div class="cite-box">Lecona, R. (R@LC). (2026). R@LC Teoría de la Infraestructura Espacial (TIE):
-Unificación de las Cuatro Fuerzas Fundamentales mediante Eliminación del T²
+Unificación de las Cuatro Fuerzas Fundamentales mediante Eliminación del \(T^2\)
 Artificial y Cero Parámetros Libres. Investigador Independiente, México.
 Disponible en (ES): https://www.amazon.com/dp/B0GR2113JR
 Disponible en (EN): https://www.amazon.co.uk/dp/B0GT8MNQ4F</div>
@@ -793,14 +812,15 @@ Disponible en (EN): https://www.amazon.co.uk/dp/B0GT8MNQ4F</div>
   <div class="footer-equation">Todo el conocimiento TIE es abierto y verificable</div>
   <div class="footer-copy">Copyright (C) 2026 Rubén Antonio Lecona Curto (R@LC) · MÉXICO · INVESTIGADOR INDEPENDIENTE</div>
   <div style="margin-top:0.5rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,215,0,0.4);">
-    Bisturí TIE v2.0 — Método de Diagnóstico Dual · Patente en trámite IMPI · Exp. MX/a/2026/003397
+    Bisturí TIE v3.0 — Método de Diagnóstico Dual · Patente en trámite IMPI · Exp. MX/a/2026/003397<br>
+    Fundamentado en \(P_+ = \frac{1}{2}(I + iH_t)\) sobre el espacio de Hardy \(H^2_+(\mathbb{R})\)
   </div>
   <div style="margin-top:1rem; font-family:var(--mono); font-size:0.6rem; color:rgba(255,255,255,0.2);">
     <a href="index.html" style="color:inherit; text-decoration:none;">INICIO</a> ·
     <a href="labs.html" style="color:inherit; text-decoration:none;">LAB</a> ·
     <a href="papers.html" style="color:inherit; text-decoration:none;">PAPERS</a> ·
     <a href="predicciones.html" style="color:inherit; text-decoration:none;">PREDICCIONES</a> ·
-    <a href="teoriaX.html" style="color:inherit; text-decoration:none;">TEORÍA</a> ·
+    <a href="teoria.html" style="color:inherit; text-decoration:none;">TEORÍA</a> ·
     <a href="https://github.com/RALC-TIE-CREATOR" target="_blank" style="color:inherit; text-decoration:none;">GITHUB</a>
   </div>
 </footer>
@@ -874,7 +894,20 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+// Inicializar KaTeX después de que el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof renderMathInElement === 'function') {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });
+  }
+});
 </script>
 </body>
 </html>
-
